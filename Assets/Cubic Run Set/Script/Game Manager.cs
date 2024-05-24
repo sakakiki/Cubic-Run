@@ -767,7 +767,6 @@ public class GameManager : MonoBehaviour
                         if (playStateEnter)
                         {
                             playStateEnter = false;
-                            UISet_Play[3].GetComponent<ButtonScript_Quick>().isButtonPushed = false;
                             Time.timeScale = 0;
                             PauseUI.SetActive(true);
                             ScreenCover.GetComponent<SpriteRenderer>().color = new Color(1, 1, 1, 0.8f);
@@ -812,6 +811,7 @@ public class GameManager : MonoBehaviour
                                     Time.timeScale = 1;
                                     Application.targetFrameRate = 60;
                                     countinueCountDown = 4;
+                                    UISet_Play[3].GetComponent<ButtonScript_Quick>().isButtonPushed = false;
                                     ChangePlayState(previousPlayState);
                                     break;
                             }
@@ -824,6 +824,7 @@ public class GameManager : MonoBehaviour
                             PauseButtons[1].GetComponent<ButtonScript_Normal>().isButtonPushed = false;
                             Time.timeScale = 1;
                             connectedMode = GameState.Play;
+                            UISet_Play[3].GetComponent<ButtonScript_Quick>().isButtonPushed = false;
                             ChangeGameState(GameState.EnterMenu);
                         }
                         #endregion
