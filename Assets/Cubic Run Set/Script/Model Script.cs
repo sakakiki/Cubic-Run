@@ -188,8 +188,6 @@ public class ModelScript : MonoBehaviour, IPointerDownHandler
 
 
                 case ModelState.Stop:
-                if(modelStateEnter)
-                    rb.isKinematic = false;
                 if (GameManager.Instance.currentGameState == GameManager.GameState.Menu)
                     ChangeModelState(ModelState.Idle);
                 break;
@@ -199,12 +197,8 @@ public class ModelScript : MonoBehaviour, IPointerDownHandler
             && currentModelState != ModelState.Reset
             && currentModelState != ModelState.Stop)
         {
-            if(currentModelState == ModelState.Idle)
-                rb.velocity = Vector2.up * 5;
-
             ChangeModelState(ModelState.Reset);
         }
-        Debug.Log(currentModelState.ToString());
     }
     public void OnPointerDown(PointerEventData eventData)
     {

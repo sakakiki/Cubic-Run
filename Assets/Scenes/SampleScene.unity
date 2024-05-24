@@ -1763,7 +1763,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2310078274211541191, guid: d8c8b706d34e2a4439957c2ab43ae743, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2399162460253485213, guid: d8c8b706d34e2a4439957c2ab43ae743, type: 3}
       propertyPath: m_text
@@ -2293,9 +2293,9 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 816091091}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0}
-  m_AnchorMax: {x: 0.5, y: 0}
-  m_AnchoredPosition: {x: 0, y: 500}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: -92}
   m_SizeDelta: {x: 1, y: 1}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!50 &284312181
@@ -4510,6 +4510,11 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 472247609}
   m_CullTransparentMesh: 1
+--- !u!1 &499866185 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2310078274211541191, guid: d8c8b706d34e2a4439957c2ab43ae743, type: 3}
+  m_PrefabInstance: {fileID: 1032432583}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &505189028
 GameObject:
   m_ObjectHideFlags: 0
@@ -8646,6 +8651,11 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!1 &947752354 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2310078274211541191, guid: d8c8b706d34e2a4439957c2ab43ae743, type: 3}
+  m_PrefabInstance: {fileID: 672174058}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &983242137
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -8664,7 +8674,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2310078274211541191, guid: d8c8b706d34e2a4439957c2ab43ae743, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2399162460253485213, guid: d8c8b706d34e2a4439957c2ab43ae743, type: 3}
       propertyPath: m_text
@@ -9932,7 +9942,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2310078274211541191, guid: d8c8b706d34e2a4439957c2ab43ae743, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2313954398698659939, guid: d8c8b706d34e2a4439957c2ab43ae743, type: 3}
       propertyPath: m_LocalScale.x
@@ -18224,6 +18234,9 @@ MonoBehaviour:
   - {fileID: 309456513}
   - {fileID: 1113547170}
   - {fileID: 1812771822}
+  SkinSelectButtons:
+  - {fileID: 499866185}
+  - {fileID: 947752354}
   HingeLeft: {fileID: 896890050}
   HingeRight: {fileID: 1672321942}
   HingeUnder: {fileID: 1076603249}
@@ -18255,6 +18268,7 @@ MonoBehaviour:
   - {fileID: 129599998030898204, guid: 35d254e0a93900b499a2a92496897bf2, type: 3}
   SkinName: {fileID: 446945492}
   SkinSelecter: {fileID: 716282368}
+  SkinSelecterWheel: {fileID: 1646418170}
   SkinList:
   - {fileID: 11400000, guid: 1e2449445b54b00448ccebf2c236ecda, type: 2}
   - {fileID: 11400000, guid: 85e218146551c454bab1445befddc180, type: 2}
@@ -18289,7 +18303,7 @@ MonoBehaviour:
   - {fileID: 1474646739}
   - {fileID: 867410190}
   - {fileID: 1033957755}
-  Skin: {fileID: 11400000, guid: 1e2449445b54b00448ccebf2c236ecda, type: 2}
+  UseSkin: {fileID: 11400000, guid: 1e2449445b54b00448ccebf2c236ecda, type: 2}
 --- !u!4 &819880354455887875
 Transform:
   m_ObjectHideFlags: 0
@@ -19618,7 +19632,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2310078274211541191, guid: d8c8b706d34e2a4439957c2ab43ae743, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2399162460253485213, guid: d8c8b706d34e2a4439957c2ab43ae743, type: 3}
       propertyPath: m_text

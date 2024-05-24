@@ -54,6 +54,13 @@ public class GameManager : MonoBehaviour
     2:オプション
     */
 
+    [SerializeField]
+    private GameObject[] SkinSelectButtons;
+    /*
+    0:OK
+    1:キャンセル
+    */
+
     [SerializeField] private GameObject HingeLeft;
     [SerializeField] private GameObject HingeRight;
     [SerializeField] private GameObject HingeUnder;
@@ -91,6 +98,7 @@ public class GameManager : MonoBehaviour
 
     [SerializeField] private TextMeshProUGUI SkinName;
     [SerializeField] private GameObject SkinSelecter;
+    [SerializeField] private GameObject SkinSelecterWheel;
     [SerializeField] private SkinData[] SkinList;
     [SerializeField] private GameObject[] SkinSelecterBoards;
     #endregion
@@ -102,13 +110,17 @@ public class GameManager : MonoBehaviour
     {
         Menu,
         ExitMenu,
+        EnterMenu,
         GameStart,
         Play,
-        SkinSelect
+        SkinSelect,
+        Tutorial,
+        Option
     }
 
     [System.NonSerialized] public GameState currentGameState = GameState.Menu;
     private bool gameStateEnter = true;
+    private GameState connectedMode;
 
     private void ChangeGameState(GameState newGameState)
     {
@@ -142,7 +154,7 @@ public class GameManager : MonoBehaviour
     #endregion
 
     #region ユーザー設定変数
-    [SerializeField] private SkinData Skin;
+    [SerializeField] private SkinData UseSkin;
     [System.NonSerialized] public int skinNumber;
     private GameObject MenuModel;
     private GameObject PlayerObjectSet;
@@ -167,14 +179,6 @@ public class GameManager : MonoBehaviour
     #endregion
 
     #region UI制御用変数
-    private enum NextMode
-    {
-        Play,
-        Tutorial,
-        SkinSelect,
-        Option
-    }
-    private NextMode nextMode;
     private Color colorChange = new Color(0, 0, 0, 1f);
     private TextMeshProUGUI scoreText;
     private TextMeshProUGUI levelText;
@@ -191,6 +195,11 @@ public class GameManager : MonoBehaviour
     private int countinueCounterRectNum = 0;
     private Rigidbody2D modelRb;
     private bool isJumped;
+    private SkinData previewSkin;
+    private int useSkinNumber;
+    private Vector3 selectorEulerAngles;
+    private bool isUseSkin;
+    private Vector3 skinSelectScale;
     #endregion
 
     #region プレイ時処理用変数
@@ -283,30 +292,29 @@ public class GameManager : MonoBehaviour
                     scoreboardRectTransform.anchoredPosition = scoreboardPosition_Menu;
                     pauseButtonRectTransform.anchoredPosition = pauseButtonPosition_Menu;
                     ScreenCover.GetComponent<SpriteRenderer>().color = new Color(1, 1, 1, 0.8f);
-                    switch (Skin.bodyType)
+                    switch (UseSkin.bodyType)
                     {
                         case SkinData.BodyType.Cube: MenuModel = MenuModel_Cube; break;
                         case SkinData.BodyType.Ball: MenuModel = MenuModel_Ball; break;
                     }
-                    MenuModel.transform.Find("Menu Model Skin").GetComponent<SpriteRenderer>().color = Skin.color;
+                    MenuModel.transform.Find("Menu Model Skin").GetComponent<SpriteRenderer>().color = UseSkin.color;
                     modelRb = MenuModel.GetComponent<Rigidbody2D>();
                     MenuModel.SetActive(true);
                     modelRb.isKinematic = true;
                     MenuModel.transform.localScale = Vector3.one;
                     modelRb.velocity = Vector3.zero;
+                    modelRb.gravityScale = 5;
                     MenuModel.GetComponent<RectTransform>().anchoredPosition = Vector3.up * 200;
                     MenuModel.GetComponent<Collider2D>().enabled = true;
-                    SkinName.text = Skin.name;
+                    SkinName.text = UseSkin.name;
                     currentModelState = ModelState.Idle;
                     MenuModelEyeScript.modelScale = 1;
-                    foreach (GameObject obj in ObjectSet_Menu_MoveToLeft)
-                        obj.SetActive(true);
-                    foreach (GameObject obj in ObjectSet_Menu_MoveToRight)
-                        obj.SetActive(true);
                     HingeLeft.transform.eulerAngles = Vector3.zero;
                     HingeRight.transform.eulerAngles = Vector3.zero;
                     HingeUnder.transform.eulerAngles = Vector3.up * 90;
                     HingeUp.transform.eulerAngles = Vector3.up * 90;
+                    foreach (GameObject button in MenuButtons)
+                        button.GetComponent<ButtonScript_Normal>().isButtonPushed = false;
                     ObstacleCreate(0, 0, 25, 1, 8);
                 }
 
@@ -320,10 +328,10 @@ public class GameManager : MonoBehaviour
                         MenuButtons[buttonNum].GetComponent<ButtonScript_Normal>().isButtonPushed = false;
                         switch (buttonNum)
                         {
-                            case 0: nextMode = NextMode.Play; break;
-                            case 1: nextMode = NextMode.Tutorial; break;
-                            case 2: nextMode = NextMode.SkinSelect; break;
-                            case 3: nextMode = NextMode.Option; break;
+                            case 0: connectedMode = GameState.Play; break;
+                            case 1: connectedMode = GameState.Tutorial; break;
+                            case 2: connectedMode = GameState.SkinSelect; break;
+                            case 3: connectedMode = GameState.Option; break;
                         }
                         ChangeGameState(GameState.ExitMenu);
                     }
@@ -333,19 +341,19 @@ public class GameManager : MonoBehaviour
 
 
 
-            #region 画面遷移（メニュー画面オブジェクト除去）
+            #region 画面遷移（メニュー画面から遷移）
             case GameState.ExitMenu:
                 if (gameStateEnter)
                 {
                     gameStateEnter = false;
                     stateEnterTime = Time.time;
                     isJumped = false;
-                    if(nextMode == NextMode.Play || nextMode == NextMode.Tutorial)
+                    if(connectedMode == GameState.Play || connectedMode == GameState.Tutorial)
                         foreach (GameObject obj in obstacles)
                             obj.GetComponent<Rigidbody2D>().velocity = Vector3.left * 20;
                 }
 
-                if (nextMode == NextMode.Play || nextMode == NextMode.Tutorial)
+                if (connectedMode == GameState.Play || connectedMode == GameState.Tutorial)
                     ScreenCover.GetComponent<SpriteRenderer>().color -= colorChange * Time.deltaTime * 0.4f;
 
 
@@ -356,15 +364,23 @@ public class GameManager : MonoBehaviour
                 }
                 else if(Time.time - stateEnterTime > 0.8)
                 {
-                    if (nextMode == NextMode.SkinSelect)
+                    if (connectedMode == GameState.SkinSelect)
                     {
                         if (!isJumped)
                         {
                             isJumped = true;
                             MenuModel.transform.localScale = Vector2.one;
                             modelRb.gravityScale = 2;
-                            modelRb.velocity = Vector2.up * 8.6f;
-                            modelRb.velocity += Vector2.left * (MenuModel.transform.position.x - 10) / 0.8f;
+                            if (modelRb.isKinematic)
+                            {
+                                modelRb.isKinematic = false;
+                                modelRb.velocity = Vector2.up * 7.2f;
+                            }
+                            else
+                            {
+                                modelRb.velocity = Vector2.up * 8.6f;
+                                modelRb.velocity += Vector2.left * (MenuModel.transform.position.x - 10) / 0.8f;
+                            }
                         }
                         MenuModel.transform.localScale *= 1.005f;
                         MenuModelEyeScript.modelScale *= 1.005f;
@@ -380,7 +396,7 @@ public class GameManager : MonoBehaviour
 
                 HingeLeft.transform.eulerAngles += Vector3.down * Time.deltaTime * 90;
                 HingeRight.transform.eulerAngles += Vector3.up * Time.deltaTime * 90;
-                if (nextMode == NextMode.SkinSelect)
+                if (connectedMode == GameState.SkinSelect)
                 {
                     if(HingeUnder.transform.eulerAngles.z > 180 || HingeUnder.transform.eulerAngles.z == 0)
                         HingeUnder.transform.eulerAngles += Vector3.back * Time.deltaTime * ((HingeUnder.transform.eulerAngles.z) % 180 * 3 + 5);
@@ -393,13 +409,13 @@ public class GameManager : MonoBehaviour
                 stageRightEdge = previousObstacle.transform.position.x + previousObstacle.transform.localScale.x;
                 if (stageRightEdge < 25)
                 {
-                    switch (nextMode)
+                    switch (connectedMode)
                     {
-                        case NextMode.Play:
-                        case NextMode.Tutorial: 
+                        case GameState.Play:
+                        case GameState.Tutorial: 
                             ObstacleCreate(0, stageRightEdge, 3, 1, 20); break;
-                        case NextMode.SkinSelect:
-                        case NextMode.Option:
+                        case GameState.SkinSelect:
+                        case GameState.Option:
                             RandomObstacleCreate(8); break;
                     }
                     
@@ -407,11 +423,13 @@ public class GameManager : MonoBehaviour
 
                 if (Time.time - stateEnterTime > 1.6f)
                 {
-                    switch(nextMode)
+                    HingeRight.transform.eulerAngles = Vector3.up * 150;
+                    HingeLeft.transform.eulerAngles = Vector3.down * 150;
+                    switch (connectedMode)
                     {
-                        case NextMode.Play: ChangeGameState(GameState.GameStart); break;
-                        case NextMode.Tutorial: break;
-                        case NextMode.SkinSelect: ChangeGameState(GameState.SkinSelect); break;
+                        case GameState.Play: ChangeGameState(GameState.GameStart); break;
+                        case GameState.Tutorial: break;
+                        case GameState.SkinSelect: ChangeGameState(GameState.SkinSelect); break;
                     }
                 }
                     
@@ -421,18 +439,121 @@ public class GameManager : MonoBehaviour
 
 
 
-            #region 画面遷移（プレイ用オブジェクト生成）
+            #region 画面遷移（メニュー画面へ遷移）
+            case GameState.EnterMenu:
+                if (gameStateEnter)
+                {
+                    gameStateEnter = false;
+                    stateEnterTime = Time.time;
+                    isJumped = false;
+                    if(connectedMode == GameState.SkinSelect) skinSelectScale = MenuModel.transform.localScale;
+                }
+
+                HingeLeft.transform.eulerAngles += Vector3.up * Time.deltaTime * 90;
+                HingeRight.transform.eulerAngles += Vector3.down * Time.deltaTime * 90;
+
+                switch (connectedMode)
+                {
+                    case GameState.SkinSelect:
+                        if (HingeUnder.transform.eulerAngles.z >= 180)
+                            HingeUnder.transform.eulerAngles += Vector3.forward * Time.deltaTime * 125;
+                        else HingeUnder.transform.eulerAngles = Vector3.up * 90;
+                        if (HingeUp.transform.eulerAngles.z <= 180)
+                            HingeUp.transform.eulerAngles += Vector3.back * Time.deltaTime * 125;
+                        else HingeUp.transform.eulerAngles = Vector3.up * 90;
+
+                        if (Time.time - stateEnterTime > 0.4 && Time.time - stateEnterTime < 0.6)
+                        {
+                            MenuModel.transform.localScale -= Vector3.up * Time.deltaTime * 2.6f;
+                            MenuModel.transform.localScale += Vector3.right * Time.deltaTime * 1.3f;
+                        }
+                        else if (Time.time - stateEnterTime > 0.8)
+                        {
+                            MenuModel.transform.localScale /= 1.005f;
+                            MenuModelEyeScript.modelScale /= 1.005f;
+                            if (isUseSkin)
+                            {
+                                if (!isJumped)
+                                {
+                                    isJumped = true;
+                                    modelRb.isKinematic = false;
+                                    modelRb.gravityScale = 2;
+                                    MenuModel.transform.localScale = skinSelectScale;
+                                    modelRb.velocity = Vector2.up * 8.7f;
+                                }
+                            }
+                            else
+                            {
+                                if(Time.time - stateEnterTime < 1.2)
+                                {
+                                    if (!isJumped)
+                                    {
+                                        isJumped = true;
+                                        modelRb.isKinematic = false;
+                                        modelRb.gravityScale = 2;
+                                        MenuModel.transform.localScale = skinSelectScale;
+                                        MenuModel.GetComponent<Collider2D>().enabled = false;
+                                        MenuModel.transform.localScale = skinSelectScale;
+                                        modelRb.velocity = Vector2.up * 50;
+                                    }
+                                }
+                                else
+                                {
+                                    if (isJumped)
+                                    {
+                                        isJumped = false;
+                                        Vector2 modelVelocity = modelRb.velocity;
+                                        MenuModel_Cube.transform.position = MenuModel.transform.position;
+                                        MenuModel_Ball.transform.position = MenuModel.transform.position;
+                                        MenuModel_Cube.transform.localScale = MenuModel.transform.localScale;
+                                        MenuModel_Ball.transform.localScale = MenuModel.transform.localScale;
+                                        if (UseSkin.bodyType != previewSkin.bodyType)
+                                        {
+                                            MenuModel.GetComponent<Collider2D>().enabled = true;
+                                            switch (UseSkin.bodyType)
+                                            {
+                                                case SkinData.BodyType.Cube: MenuModel = MenuModel_Cube; break;
+                                                case SkinData.BodyType.Ball: MenuModel = MenuModel_Ball; break;
+                                            }
+                                            MenuModel_Cube.SetActive(MenuModel == MenuModel_Cube);
+                                            MenuModel_Ball.SetActive(MenuModel == MenuModel_Ball);
+                                        }
+                                        modelRb = MenuModel.GetComponent<Rigidbody2D>();
+                                        modelRb.isKinematic = false;
+                                        modelRb.velocity = -modelVelocity;
+                                        MenuModel.GetComponent<Collider2D>().enabled = false;
+                                        MenuModel.GetComponent<RectTransform>().anchoredPosition += Vector2.up * 32;
+                                        MenuModel.transform.Find("Menu Model Skin").GetComponent<SpriteRenderer>().color = UseSkin.color;
+                                    }
+                                    if (MenuModel.GetComponent<RectTransform>().anchoredPosition.y < 200)
+                                        MenuModel.GetComponent<RectTransform>().anchoredPosition = Vector2.up * 200;
+                                }
+                            }
+                        }
+                        break;
+                }
+
+                if (Time.time - stateEnterTime > 1.6f)
+                {
+                    if (!isUseSkin)
+                    {
+                        SkinSelecterWheel.transform.localEulerAngles = selectorEulerAngles;
+                        SkinSelecter.GetComponent<SkinSelecterScript>().skinNumber = useSkinNumber;
+                    }
+                    ChangeGameState(GameState.Menu);
+                }
+                break;
+            #endregion
+
+
+
+                    #region 画面遷移（プレイ用オブジェクト生成）
             case GameState.GameStart:
                 if (gameStateEnter)
                 {
                     gameStateEnter = false;
                     stateEnterTime = Time.time;
-
                     MenuModel.SetActive(false);
-                    foreach (GameObject obj in ObjectSet_Menu_MoveToLeft)
-                        obj.SetActive(false); 
-                    foreach (GameObject obj in ObjectSet_Menu_MoveToRight)
-                        obj.SetActive(false);
                     ScreenCover.GetComponent<SpriteRenderer>().color = Color.clear;
 
                     foreach (GameObject obj in UISet_Play)
@@ -440,15 +561,15 @@ public class GameManager : MonoBehaviour
                         obj.SetActive(true);
                     }
 
-                    switch (Skin.bodyType)
+                    switch (UseSkin.bodyType)
                     {
                         case SkinData.BodyType.Cube: PlayerObjectSet = PlayerObjectSet_Cube; break;
                         case SkinData.BodyType.Ball: PlayerObjectSet = PlayerObjectSet_Ball; break;
                     }
                     PlayerObjectSet.SetActive(true);
                     Player = PlayerObjectSet.transform.Find("Player").gameObject;
-                    Player.transform.Find("Skin Default").GetComponent<SpriteRenderer>().color = Skin.color;
-                    Player.transform.Find("Skin Attack").GetComponent<SpriteRenderer>().color = Skin.color;
+                    Player.transform.Find("Skin Default").GetComponent<SpriteRenderer>().color = UseSkin.color;
+                    Player.transform.Find("Skin Attack").GetComponent<SpriteRenderer>().color = UseSkin.color;
                     foreach (Transform obj in PlayerObjectSet.transform)
                     {
                         obj.localPosition = Vector3.up * 15;
@@ -581,6 +702,8 @@ public class GameManager : MonoBehaviour
                             UISet_Play[3].GetComponent<ButtonScript_Quick>().isButtonPushed = false;
                             Time.timeScale = 0;
                             PauseUI.SetActive(true);
+                            foreach (GameObject button in PauseButtons)
+                                button.GetComponent<ButtonScript_Normal>().isButtonPushed = false;
                         }
 
                         #region コンティニュー処理
@@ -684,22 +807,48 @@ public class GameManager : MonoBehaviour
                     MenuModel_Cube.transform.localScale = MenuModel.transform.localScale;
                     MenuModel_Ball.transform.localScale = MenuModel.transform.localScale;
                     modelRb.velocity = Vector2.zero;
-                    modelRb.gravityScale = 5;
+                    previewSkin = UseSkin;
+                    useSkinNumber = SkinSelecter.GetComponent<SkinSelecterScript>().skinNumber;
+                    selectorEulerAngles = SkinSelecterWheel.transform.localEulerAngles;
+                    foreach(GameObject button in SkinSelectButtons)
+                        button.GetComponent<ButtonScript_Normal>().isButtonPushed = false;
                 }
 
                 skinNumber = SkinSelecter.GetComponent<SkinSelecterScript>().skinNumber;
-                 if (SkinList[skinNumber] != Skin)
+                 if (SkinList[skinNumber] != previewSkin)
                 {
-                    Skin = SkinList[skinNumber];
-                    SkinName.text = Skin.name;
-                    switch (Skin.bodyType)
+                    if (SkinList[skinNumber].bodyType != previewSkin.bodyType)
                     {
-                        case SkinData.BodyType.Cube: MenuModel = MenuModel_Cube; break;
-                        case SkinData.BodyType.Ball: MenuModel = MenuModel_Ball; break;
+                        switch (SkinList[skinNumber].bodyType)
+                        {
+                            case SkinData.BodyType.Cube: MenuModel = MenuModel_Cube; break;
+                            case SkinData.BodyType.Ball: MenuModel = MenuModel_Ball; break;
+                        }
+                        MenuModel_Cube.SetActive(MenuModel == MenuModel_Cube);
+                        MenuModel_Ball.SetActive(MenuModel == MenuModel_Ball);
                     }
-                    MenuModel.transform.Find("Menu Model Skin").GetComponent<SpriteRenderer>().color = Skin.color;
-                    MenuModel_Cube.SetActive(MenuModel == MenuModel_Cube);
-                    MenuModel_Ball.SetActive(MenuModel == MenuModel_Ball);
+                    modelRb = MenuModel.GetComponent<Rigidbody2D>();
+                    previewSkin = SkinList[skinNumber];
+                    SkinName.text = previewSkin.name;
+                    MenuModel.transform.Find("Menu Model Skin").GetComponent<SpriteRenderer>().color = previewSkin.color;
+                }
+
+                if (SkinSelectButtons[0].GetComponent<ButtonScript_Normal>().isButtonPushed)
+                {
+                    SkinSelectButtons[0].GetComponent<ButtonScript_Normal>().isButtonPushed = false;
+                    isUseSkin = true;
+                    UseSkin = previewSkin;
+                    connectedMode = GameState.SkinSelect;
+                    ChangeGameState(GameState.EnterMenu);
+                    break;
+                }
+                else if (SkinSelectButtons[1].GetComponent<ButtonScript_Normal>().isButtonPushed)
+                {
+                    SkinSelectButtons[1].GetComponent<ButtonScript_Normal>().isButtonPushed = false;
+                    isUseSkin = false;
+                    connectedMode = GameState.SkinSelect;
+                    ChangeGameState(GameState.EnterMenu);
+                    break;
                 }
 
                 RandomObstacleCreate(8);
