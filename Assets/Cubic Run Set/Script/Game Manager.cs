@@ -194,12 +194,13 @@ public class GameManager : MonoBehaviour
     private int countinueCountDown = 4;
     private int countinueCounterRectNum = 0;
     private Rigidbody2D modelRb;
-    private bool isJumped;
+    private bool processFlag;
     private SkinData previewSkin;
     private int useSkinNumber;
     private Vector3 selectorEulerAngles;
     private bool isUseSkin;
     private Vector3 skinSelectScale;
+    private Vector2 modelVelocity;
     #endregion
 
     #region プレイ時処理用変数
@@ -315,7 +316,8 @@ public class GameManager : MonoBehaviour
                     HingeUp.transform.eulerAngles = Vector3.up * 90;
                     foreach (GameObject button in MenuButtons)
                         button.GetComponent<ButtonScript_Normal>().isButtonPushed = false;
-                    ObstacleCreate(0, 0, 25, 1, 8);
+                    if(obstacles.Count == 0)
+                        ObstacleCreate(0, 0, 25, 1, 8);
                 }
 
                 RandomObstacleCreate(8);
@@ -347,14 +349,14 @@ public class GameManager : MonoBehaviour
                 {
                     gameStateEnter = false;
                     stateEnterTime = Time.time;
-                    isJumped = false;
+                    processFlag = false;
                     if(connectedMode == GameState.Play || connectedMode == GameState.Tutorial)
                         foreach (GameObject obj in obstacles)
                             obj.GetComponent<Rigidbody2D>().velocity = Vector3.left * 20;
                 }
 
                 if (connectedMode == GameState.Play || connectedMode == GameState.Tutorial)
-                    ScreenCover.GetComponent<SpriteRenderer>().color -= colorChange * Time.deltaTime * 0.4f;
+                    ScreenCover.GetComponent<SpriteRenderer>().color -= colorChange * Time.deltaTime * 0.5f;
 
 
                 if (Time.time - stateEnterTime > 0.4 && Time.time - stateEnterTime < 0.6)
@@ -366,9 +368,9 @@ public class GameManager : MonoBehaviour
                 {
                     if (connectedMode == GameState.SkinSelect)
                     {
-                        if (!isJumped)
+                        if (!processFlag)
                         {
-                            isJumped = true;
+                            processFlag = true;
                             MenuModel.transform.localScale = Vector2.one;
                             modelRb.gravityScale = 2;
                             if (modelRb.isKinematic)
@@ -385,9 +387,9 @@ public class GameManager : MonoBehaviour
                         MenuModel.transform.localScale *= 1.005f;
                         MenuModelEyeScript.modelScale *= 1.005f;
                     }
-                    else if (!isJumped)
+                    else if (!processFlag)
                     {
-                        isJumped= true;
+                        processFlag= true;
                         MenuModel.transform.localScale = new Vector2(0.9f, 1.1f);
                         MenuModel.GetComponent<Collider2D>().enabled = false;
                         modelRb.velocity = Vector2.up * 50;
@@ -441,20 +443,79 @@ public class GameManager : MonoBehaviour
 
             #region 画面遷移（メニュー画面へ遷移）
             case GameState.EnterMenu:
-                if (gameStateEnter)
-                {
-                    gameStateEnter = false;
-                    stateEnterTime = Time.time;
-                    isJumped = false;
-                    if(connectedMode == GameState.SkinSelect) skinSelectScale = MenuModel.transform.localScale;
-                }
-
-                HingeLeft.transform.eulerAngles += Vector3.up * Time.deltaTime * 90;
-                HingeRight.transform.eulerAngles += Vector3.down * Time.deltaTime * 90;
 
                 switch (connectedMode)
                 {
+
+                    #region 直前画面：プレイ（ポーズ）
+                    case GameState.Play:
+                        if (gameStateEnter)
+                        {
+                            gameStateEnter = false;
+                            processFlag = false;
+                            stateEnterTime = Time.time;
+                            PauseUI.SetActive(false);
+                            ScreenCover.GetComponent<SpriteRenderer>().color = new Color(1f, 1f, 1f, 0f);
+                            foreach (GameObject obj in obstacles)
+                                obj.GetComponent<Rigidbody2D>().velocity = Vector2.zero;
+                            Player.GetComponent<Rigidbody2D>().velocity = Vector2.up * 60;
+                            Player.GetComponent<Collider2D>().enabled = false;
+                            Player.transform.localScale = new Vector3(0.9f, 1.1f, 1);
+                        }
+
+                        switch(Time.time - stateEnterTime)
+                        {
+                            case < 0.2f: break;
+                            case < 0.6f:
+                                if (!processFlag) 
+                                {
+                                    processFlag = true;
+                                }
+                                break;
+                            case < 1.2f:
+                                if (processFlag)
+                                {
+                                    processFlag = false;
+                                    modelVelocity = Player.GetComponent<Rigidbody2D>().velocity;
+                                    PlayerObjectSet.SetActive(false);
+                                    foreach (GameObject obj in obstacles)
+                                        obj.GetComponent<Rigidbody2D>().velocity = Vector2.left * 8;
+                                }
+                                break;
+                            default:
+                                if (!processFlag)
+                                {
+                                    processFlag = true;
+                                    MenuModel.SetActive(true);
+                                    MenuModel.transform.position = Vector2.up * 30 + Vector2.right * 10;
+                                    modelRb.velocity = Vector2.down * 50;
+                                    modelRb.isKinematic = false;
+                                }
+                                if (MenuModel.GetComponent<RectTransform>().anchoredPosition.y < 200)
+                                {
+                                    MenuModel.GetComponent<RectTransform>().anchoredPosition = Vector2.up * 200;
+                                    modelRb.velocity = Vector2.zero;
+                                    modelRb.isKinematic = true;
+                                }
+                                break;
+                        }
+
+                        scoreboardRectTransform.anchoredPosition += scoreboardPosition_Menu * Time.deltaTime * 1.6f;
+                        pauseButtonRectTransform.anchoredPosition += pauseButtonPosition_Menu * Time.deltaTime * 3.2f;
+                        ScreenCover.GetComponent<SpriteRenderer>().color += colorChange * Time.deltaTime * 0.5f;
+
+                        break;
+                    #endregion
+
+                    #region 直前画面：スキン選択
                     case GameState.SkinSelect:
+                        if (gameStateEnter)
+                        {
+                            gameStateEnter = false;
+                            stateEnterTime = Time.time;
+                            processFlag = false;
+                            skinSelectScale = MenuModel.transform.localScale;
+                        }
                         if (HingeUnder.transform.eulerAngles.z >= 180)
                             HingeUnder.transform.eulerAngles += Vector3.forward * Time.deltaTime * 125;
                         else HingeUnder.transform.eulerAngles = Vector3.up * 90;
@@ -473,9 +534,9 @@ public class GameManager : MonoBehaviour
                             MenuModelEyeScript.modelScale /= 1.005f;
                             if (isUseSkin)
                             {
-                                if (!isJumped)
+                                if (!processFlag)
                                 {
-                                    isJumped = true;
+                                    processFlag = true;
                                     modelRb.isKinematic = false;
                                     modelRb.gravityScale = 2;
                                     MenuModel.transform.localScale = skinSelectScale;
@@ -486,9 +547,9 @@ public class GameManager : MonoBehaviour
                             {
                                 if(Time.time - stateEnterTime < 1.2)
                                 {
-                                    if (!isJumped)
+                                    if (!processFlag)
                                     {
-                                        isJumped = true;
+                                        processFlag = true;
                                         modelRb.isKinematic = false;
                                         modelRb.gravityScale = 2;
                                         MenuModel.transform.localScale = skinSelectScale;
@@ -499,10 +560,10 @@ public class GameManager : MonoBehaviour
                                 }
                                 else
                                 {
-                                    if (isJumped)
+                                    if (processFlag)
                                     {
-                                        isJumped = false;
-                                        Vector2 modelVelocity = modelRb.velocity;
+                                        processFlag = false;
+                                        modelVelocity = modelRb.velocity;
                                         MenuModel_Cube.transform.position = MenuModel.transform.position;
                                         MenuModel_Ball.transform.position = MenuModel.transform.position;
                                         MenuModel_Cube.transform.localScale = MenuModel.transform.localScale;
@@ -530,18 +591,24 @@ public class GameManager : MonoBehaviour
                                 }
                             }
                         }
+
+                        if (Time.time - stateEnterTime > 1.6f)
+                        {
+                            if (!isUseSkin)
+                            {
+                                SkinSelecterWheel.transform.localEulerAngles = selectorEulerAngles;
+                                SkinSelecter.GetComponent<SkinSelecterScript>().skinNumber = useSkinNumber;
+                            }
+                        }
                         break;
+                        #endregion
                 }
 
-                if (Time.time - stateEnterTime > 1.6f)
-                {
-                    if (!isUseSkin)
-                    {
-                        SkinSelecterWheel.transform.localEulerAngles = selectorEulerAngles;
-                        SkinSelecter.GetComponent<SkinSelecterScript>().skinNumber = useSkinNumber;
-                    }
-                    ChangeGameState(GameState.Menu);
-                }
+                HingeLeft.transform.eulerAngles += Vector3.up * Time.deltaTime * 90;
+                HingeRight.transform.eulerAngles += Vector3.down * Time.deltaTime * 90;
+                RandomObstacleCreate(8);
+
+                if (Time.time - stateEnterTime > 1.6f) ChangeGameState(GameState.Menu);
                 break;
             #endregion
 
@@ -570,6 +637,7 @@ public class GameManager : MonoBehaviour
                     Player = PlayerObjectSet.transform.Find("Player").gameObject;
                     Player.transform.Find("Skin Default").GetComponent<SpriteRenderer>().color = UseSkin.color;
                     Player.transform.Find("Skin Attack").GetComponent<SpriteRenderer>().color = UseSkin.color;
+                    Player.GetComponent<Collider2D>().enabled = true;
                     foreach (Transform obj in PlayerObjectSet.transform)
                     {
                         obj.localPosition = Vector3.up * 15;
@@ -702,6 +770,7 @@ public class GameManager : MonoBehaviour
                             UISet_Play[3].GetComponent<ButtonScript_Quick>().isButtonPushed = false;
                             Time.timeScale = 0;
                             PauseUI.SetActive(true);
+                            ScreenCover.GetComponent<SpriteRenderer>().color = new Color(1, 1, 1, 0.8f);
                             foreach (GameObject button in PauseButtons)
                                 button.GetComponent<ButtonScript_Normal>().isButtonPushed = false;
                         }
@@ -713,6 +782,7 @@ public class GameManager : MonoBehaviour
                             {
                                 case > 3:
                                     PauseUI.SetActive(false);
+                                    ScreenCover.GetComponent<SpriteRenderer>().color = Color.clear;
                                     CountCircle.SetActive(true);
                                     Application.targetFrameRate = 30;
                                     countinueCountDown = 3;
@@ -753,7 +823,8 @@ public class GameManager : MonoBehaviour
                         {
                             PauseButtons[1].GetComponent<ButtonScript_Normal>().isButtonPushed = false;
                             Time.timeScale = 1;
-                            ResetGame();
+                            connectedMode = GameState.Play;
+                            ChangeGameState(GameState.EnterMenu);
                         }
                         #endregion
 
