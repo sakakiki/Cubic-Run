@@ -9,6 +9,7 @@ public class SkinSelecterScript : MonoBehaviour, IPointerDownHandler, IDragHandl
 {
     [SerializeField]private GameObject SkinSelecterWheel;
     [SerializeField]private GameObject SelectFrame;
+    [SerializeField] private Transform HingeTf;
     [System.NonSerialized] public int skinNumber;
     private bool isDrag;
     private float lastPointerPosY;
@@ -50,27 +51,30 @@ public class SkinSelecterScript : MonoBehaviour, IPointerDownHandler, IDragHandl
     {
         if(!isDrag)
         {
-            SkinSelecterWheel.transform.eulerAngles += Vector3.forward * turnSpeed;
-            turnSpeed *= 0.9f;
-            if(Mathf.Abs(turnSpeed) < 0.2f && turnSpeed != 0)
+            if (turnSpeed != 0)
             {
-                turnSpeed = 0;
-                for(int i = 0; i < 16; i++)
+                SkinSelecterWheel.transform.eulerAngles += Vector3.forward * turnSpeed;
+                turnSpeed *= 0.9f;
+                if (Mathf.Abs(turnSpeed) < 0.2f)
                 {
-                    if (22.5f * i - 11.25f < SkinSelecterWheel.transform.eulerAngles.z && SkinSelecterWheel.transform.eulerAngles.z < 22.5f * i + 11.25f)
+                    turnSpeed = 0;
+                    for (int i = 0; i < 16; i++)
                     {
-                        SkinSelecterWheel.transform.eulerAngles = Vector3.forward * 22.5f * i + Vector3.up * 90;
-                        skinNumber = i;
-                        break;
+                        if (22.5f * i - 11.25f < SkinSelecterWheel.transform.eulerAngles.z && SkinSelecterWheel.transform.eulerAngles.z < 22.5f * i + 11.25f)
+                        {
+                            SkinSelecterWheel.transform.eulerAngles = Vector3.forward * 22.5f * i + Vector3.up * 90;
+                            skinNumber = i;
+                            break;
+                        }
+                        else if (i == 15)
+                        {
+                            skinNumber = 0;
+                            SkinSelecterWheel.transform.eulerAngles = Vector3.up * 90;
+                        }
                     }
-                    else if (i == 15)
-                    {
-                        skinNumber = 0;
-                        SkinSelecterWheel.transform.eulerAngles = Vector3.up * 90;
-                    }
+                    SelectFrame.SetActive(true);
                 }
-                SelectFrame.SetActive(true);
-            }
+            }else SelectFrame.SetActive(HingeTf.localEulerAngles.z == 180);
         }
     }
 }

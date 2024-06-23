@@ -6,6 +6,8 @@ using UnityEngine.EventSystems;
 
 public class ButtonScript_Normal : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, IPointerClickHandler
 {
+    [SerializeField] private GameManager.GameState ActiveGameState;
+
     [NonSerialized] public bool isButtonPushed;
 
     private Vector3 defaultScale;
@@ -17,7 +19,8 @@ public class ButtonScript_Normal : MonoBehaviour, IPointerDownHandler, IPointerU
 
     public void OnPointerDown(PointerEventData eventData)
     {
-        transform.localScale *= 1.05f;
+        if (GameManager.Instance.currentGameState == ActiveGameState) 
+            transform.localScale *= 1.05f;
     }
 
     public void OnPointerUp(PointerEventData eventData)
@@ -27,6 +30,7 @@ public class ButtonScript_Normal : MonoBehaviour, IPointerDownHandler, IPointerU
 
     public void OnPointerClick(PointerEventData eventData)
     {
-        isButtonPushed = true;
+        if (GameManager.Instance.currentGameState == ActiveGameState)
+            isButtonPushed = true;
     }
 }
