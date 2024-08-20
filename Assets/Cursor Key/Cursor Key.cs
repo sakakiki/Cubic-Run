@@ -18,6 +18,8 @@ public class CursorKey : MonoBehaviour
     private bool isPushDown;
     private bool isPushLeft;
     private bool isPushRight;
+
+    int num;
     
     void Update()
     {
@@ -37,5 +39,25 @@ public class CursorKey : MonoBehaviour
 
         if (Input.anyKeyDown)
             audioSource.Play();
+
+
+
+        if (isPushUp == true)
+        {
+            num = 1;
+        }
+        else if (isPushUp == false)
+        {
+            num = 2;
+        }
+
+
+
+        num = isPushUp ? 1 : 2;
+
+
+
+        num *= 16;
+        num <<= 4;
     }
 }

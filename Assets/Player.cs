@@ -21,18 +21,25 @@ public class Player : MonoBehaviour
         {
             if (Input.GetKeyDown(KeyCode.UpArrow))
             {
-                rb.velocity += Vector2.up * 5;
+                rb.velocity += Vector2.up * (Input.GetKey(KeyCode.DownArrow) ? 20 : 30);
                 isJump = true;
             }
         }
         #endregion
 
-        #region しゃがみ処理
+        #region しゃがみ・急降下処理
+        // カーソルキー下の押下を検知
         if (Input.GetKeyDown(KeyCode.DownArrow))
         {
             transform.localScale = new Vector2(1, 0.5f);
+
+            if (isJump)
+            {
+                rb.velocity += Vector2.down * 30;
+            }
         }
 
+        // カーソルキー下の離上を検知
         if (Input.GetKeyUp(KeyCode.DownArrow))
         {
             transform.localScale = Vector2.one;
