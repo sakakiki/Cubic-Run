@@ -997,7 +997,7 @@ Transform:
   m_GameObject: {fileID: 876335762}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 7, y: 3, z: 0}
+  m_LocalPosition: {x: 12, y: -2, z: 0}
   m_LocalScale: {x: 0.4, y: 0.4, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -2088,7 +2088,7 @@ Camera:
   far clip plane: 1000
   field of view: 60
   orthographic: 1
-  orthographic size: 5
+  orthographic size: 5.622821
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
@@ -2113,7 +2113,7 @@ Transform:
   m_GameObject: {fileID: 1947635394}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -10}
+  m_LocalPosition: {x: 5, y: 2, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -2360,6 +2360,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2e9a656cbbf976447b3ec0a3bf417391, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  level: 1
   ObstacleList:
   - {fileID: 118860061023459728, guid: 7791aeefa25cc2d47aa9480dac8090d3, type: 3}
   - {fileID: 249364819742777686, guid: db0aaaf914583964597ec0bc99344b86, type: 3}

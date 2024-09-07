@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.Collections.Generic;
 
 public class GameManager : MonoBehaviour
 {
@@ -13,6 +14,7 @@ public class GameManager : MonoBehaviour
     private float stageRightEdge;
     private float obstacleWidth;
     private float obstacleHeight;
+    private Queue<Transform> obstacleTfQueue = new Queue<Transform>();
 
     void Start()
     {
@@ -20,7 +22,7 @@ public class GameManager : MonoBehaviour
         moveSpeed = 5 + Mathf.Pow(level, 0.7f) * 3;
 
         //初期地面生成
-        CreateObstacle(0, 0, 5, 1, moveSpeed);
+        CreateObstacle(0, 0, 15, 1, moveSpeed);
     }
 
     void Update()
@@ -70,6 +72,9 @@ public class GameManager : MonoBehaviour
             obstacleWidth = Random.Range(level * 0.2f + 6.5f, level * 0.2f + 7.5f);
             CreateObstacle(0, stageRightEdge, obstacleWidth, 1, moveSpeed);
         }
+
+        if (obstacleTfQueue.Peek().position.x < -5)
+            Destroy(obstacleTfQueue.Dequeue().gameObject);
     }
 
     // 障害物生成メソッド
@@ -78,5 +83,6 @@ public class GameManager : MonoBehaviour
         previousObstacleTf = Instantiate(ObstacleList[obstacleNum], Vector2.right * (leftEdgePosX + width), Quaternion.identity).transform;
         previousObstacleTf.localScale = new Vector3(width, height, 1);
         previousObstacleTf.GetComponent<Rigidbody2D>().velocity = Vector3.left * moveSpeed;
+        obstacleTfQueue.Enqueue(previousObstacleTf);
     }
 }
