@@ -180,7 +180,7 @@ public class ModelScript : MonoBehaviour, IPointerDownHandler
                 {
                     transform.eulerAngles = Vector3.zero;
                     rb.freezeRotation = true;
-                    ChangeModelState((GameManager.Instance.currentGameState == GameManager.GameState.ExitMenu || isClick) ? 
+                    ChangeModelState((GameManagerScript.Instance.currentGameState == GameManagerScript.GameState.ExitMenu || isClick) ? 
                         ModelState.Stop : ModelState.LookAround);
                 } 
                 break;
@@ -188,12 +188,12 @@ public class ModelScript : MonoBehaviour, IPointerDownHandler
 
 
                 case ModelState.Stop:
-                if (GameManager.Instance.currentGameState == GameManager.GameState.Menu)
+                if (GameManagerScript.Instance.currentGameState == GameManagerScript.GameState.Menu)
                     ChangeModelState(ModelState.Idle);
                 break;
         }
 
-        if(GameManager.Instance.currentGameState != GameManager.GameState.Menu 
+        if(GameManagerScript.Instance.currentGameState != GameManagerScript.GameState.Menu 
             && currentModelState != ModelState.Reset
             && currentModelState != ModelState.Stop)
         {
@@ -202,7 +202,7 @@ public class ModelScript : MonoBehaviour, IPointerDownHandler
     }
     public void OnPointerDown(PointerEventData eventData)
     {
-        if (GameManager.Instance.currentGameState == GameManager.GameState.Menu)
+        if (GameManagerScript.Instance.currentGameState == GameManagerScript.GameState.Menu)
         {
             isClick = true;
             rb.isKinematic = false;

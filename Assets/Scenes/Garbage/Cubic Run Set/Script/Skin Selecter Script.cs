@@ -31,7 +31,7 @@ public class SkinSelecterScript : MonoBehaviour, IPointerDownHandler, IDragHandl
 
     public void OnDrag(PointerEventData eventData)
     {
-        if(GameManager.Instance.currentGameState == GameManager.GameState.SkinSelect)
+        if(GameManagerScript.Instance.currentGameState == GameManagerScript.GameState.SkinSelect)
         {
             SkinSelecterWheel.transform.eulerAngles += Vector3.forward * (eventData.position.y - lastPointerPosY) / 4;
             for (int i = 4; i > 0; i--)

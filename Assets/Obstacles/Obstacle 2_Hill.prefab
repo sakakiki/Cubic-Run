@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 5721503769158328992}
   - component: {fileID: 1295453147835605213}
   m_Layer: 0
-  m_Name: Obstacle Set 4_Hill
+  m_Name: Obstacle 2_Hill
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -88,7 +88,7 @@ Transform:
   m_GameObject: {fileID: 5369856614366714924}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.5, y: -3, z: 0}
+  m_LocalPosition: {x: -0.5, y: -3, z: 0}
   m_LocalScale: {x: 1.01, y: 8, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []

@@ -10,7 +10,7 @@ public class InvisibleWallScript : MonoBehaviour
     void Start()
     {
         BCol = GetComponent<BoxCollider2D>();
-        Player = GameManager.Instance.Player;
+        Player = GameManagerScript.Instance.Player;
     }
 
 
@@ -19,7 +19,7 @@ public class InvisibleWallScript : MonoBehaviour
         BCol.size = 
             Vector2.one + 
             ((Player.GetComponent<PlayerScript>().currentPlayerState == PlayerScript.PlayerState.Squat
-            || GameManager.Instance.currentPlayState == GameManager.PlayState.GameOver)
+            || GameManagerScript.Instance.currentPlayState == GameManagerScript.PlayState.GameOver)
             ? Vector2.zero : Vector2.up);
     }
 }

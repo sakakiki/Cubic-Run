@@ -213,7 +213,7 @@ public class PlayerScript : MonoBehaviour
 
 
             case PlayerState.Pause:
-                if (GameManager.Instance.currentPlayState != GameManager.PlayState.Pause)
+                if (GameManagerScript.Instance.currentPlayState != GameManagerScript.PlayState.Pause)
                 {
                     if (isInputDownHold) ChangePlayerState(PlayerState.Squat);
                     else if (isInTunnel)
@@ -228,7 +228,7 @@ public class PlayerScript : MonoBehaviour
                 break;
         }
 
-        if(currentPlayerState != PlayerState.Pause && GameManager.Instance.currentPlayState == GameManager.PlayState.Pause)
+        if(currentPlayerState != PlayerState.Pause && GameManagerScript.Instance.currentPlayState == GameManagerScript.PlayState.Pause)
             ChangePlayerState(PlayerState.Pause);
 
         if (currentPlayerState == PlayerState.GameOver && playerStateEnter)

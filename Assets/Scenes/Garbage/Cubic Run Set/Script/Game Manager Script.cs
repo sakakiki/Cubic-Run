@@ -8,9 +8,9 @@ using static Unity.Burst.Intrinsics.X86.Avx;
 using Unity.VisualScripting;
 using static ModelScript;
 
-public class GameManager : MonoBehaviour
+public class GameManagerScript: MonoBehaviour
 {
-    public static GameManager Instance;
+    public static GameManagerScript Instance;
 
 
     private void Awake()
@@ -685,7 +685,7 @@ public class GameManager : MonoBehaviour
                     #region ƒvƒŒƒC’†ˆ—
                     case PlayState.Play:
                         score = (int)((Time.time - playStartTime) * 100);
-                        moveSpeed = 5 + (float)Math.Pow(level, 0.7f) * 3;
+                        moveSpeed = 5 + Mathf.Pow(level, 0.7f) * 3;
 
                         RandomObstacleCreate(moveSpeed);
 

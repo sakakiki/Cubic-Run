@@ -6,7 +6,7 @@ using UnityEngine.EventSystems;
 
 public class ButtonScript_Normal : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, IPointerClickHandler
 {
-    [SerializeField] private GameManager.GameState ActiveGameState;
+    [SerializeField] private GameManagerScript.GameState ActiveGameState;
 
     [NonSerialized] public bool isButtonPushed;
 
@@ -19,7 +19,7 @@ public class ButtonScript_Normal : MonoBehaviour, IPointerDownHandler, IPointerU
 
     public void OnPointerDown(PointerEventData eventData)
     {
-        if (GameManager.Instance.currentGameState == ActiveGameState) 
+        if (GameManagerScript.Instance.currentGameState == ActiveGameState) 
             transform.localScale *= 1.05f;
     }
 
@@ -30,7 +30,7 @@ public class ButtonScript_Normal : MonoBehaviour, IPointerDownHandler, IPointerU
 
     public void OnPointerClick(PointerEventData eventData)
     {
-        if (GameManager.Instance.currentGameState == ActiveGameState)
+        if (GameManagerScript.Instance.currentGameState == ActiveGameState)
             isButtonPushed = true;
     }
 }

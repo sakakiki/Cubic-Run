@@ -20,7 +20,7 @@ public class EnemyScript : MonoBehaviour
 
     private void Update()
     {
-        transform.localPosition = Vector3.up * transform.localPosition.y + Vector3.right * 0.5f;
+        transform.localPosition = Vector3.up * transform.localPosition.y + Vector3.left * 0.5f;
     }
     
 }
