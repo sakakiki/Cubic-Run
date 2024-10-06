@@ -18,6 +18,9 @@ public class GameManager : MonoBehaviour
 
     void Start()
     {
+        //InputManagerインスタンス生成
+        new InputManager();
+
         //速度設定
         moveSpeed = 5 + Mathf.Pow(level, 0.7f) * 3;
 
