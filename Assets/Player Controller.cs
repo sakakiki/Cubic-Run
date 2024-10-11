@@ -5,9 +5,11 @@ public class PlayerController : MonoBehaviour
 {
     private PlayerStateMachine stateMachine;
     [SerializeField] private TouchCheck trigerFoot;
-
+    public Transform tf;
     public Rigidbody2D rb;
     [NonSerialized] public bool isGrounded;
+    public GameObject SkinDefault;
+    public GameObject SkinAttack;
 
     void Start()
     {
