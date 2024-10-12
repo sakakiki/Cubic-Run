@@ -42,8 +42,6 @@ public class GameManager : MonoBehaviour
             previousObstacleNum2 = previousObstacleNum1;
             previousObstacleNum1 = createObstacleNum;
 
-            createObstacleNum = 0;
-
             switch (createObstacleNum)
             {
                 case 1:

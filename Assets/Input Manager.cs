@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class InputManager : MonoBehaviour
+public class InputManager
 {
     public static InputManager Instance { get; private set; }
 
@@ -16,7 +16,6 @@ public class InputManager : MonoBehaviour
     {
         if (Instance == null)
             Instance = this;
-        else Destroy(this);
     }
 
     public void GetInput()

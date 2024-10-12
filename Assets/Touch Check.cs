@@ -1,18 +1,22 @@
+using System;
 using UnityEngine;
 
 public class TouchCheck : MonoBehaviour
 {
-    public bool isTouch;
+    [NonSerialized] public bool isTouch;
+    private int touchCount;
 
     private void OnTriggerEnter2D(Collider2D other)
     {
         if (other.CompareTag("Player")) return;
         isTouch = true;
+        touchCount++;
     }
 
     private void OnTriggerExit2D(Collider2D other)
     {
         if (other.CompareTag("Player")) return;
-        isTouch = false;
+        touchCount--;
+        if(touchCount == 0) isTouch = false;
     }
 }
