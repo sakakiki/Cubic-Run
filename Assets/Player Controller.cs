@@ -10,6 +10,7 @@ public class PlayerController : MonoBehaviour
     [NonSerialized] public bool isGrounded;
     public GameObject SkinDefault;
     public GameObject SkinAttack;
+    public GameObject SkinGameOver;
 
     void Start()
     {
