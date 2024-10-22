@@ -1,12 +1,17 @@
 using UnityEngine;
 using System.Collections.Generic;
+using UnityEngine.Pool;
 
 public class GameManager : MonoBehaviour
 {
+    public static GameManager Instance;
+
     public int level = 1;
     public GameObject[] ObstacleList;
+    public Transform playerTf;
+    public PlayerController playerCon;
 
-    private float moveSpeed = 5;
+    private float moveSpeed;
     private Transform previousObstacleTf;
     private int createObstacleNum;
     private int previousObstacleNum1;
@@ -15,14 +20,33 @@ public class GameManager : MonoBehaviour
     private float obstacleWidth;
     private float obstacleHeight;
     private Queue<Transform> obstacleTfQueue = new Queue<Transform>();
+    private Queue<int> obstacleNumQueue = new Queue<int>();
+
+    private ObjectPool<GameObject>[] pool;
+    private int poolNum;
+
+    private void Awake()
+    {
+        if (Instance == null)
+            Instance = this;
+    }
 
     void Start()
     {
-        //InputManagerインスタンス生成
-        new InputManager();
-
         //速度設定
         moveSpeed = 5 + Mathf.Pow(level, 0.7f) * 3;
+
+        pool = new ObjectPool<GameObject>[ObstacleList.Length];
+        for (int i = 0; i < ObstacleList.Length; i++)
+        {
+            poolNum = i;
+            pool[poolNum] = new ObjectPool<GameObject>(
+                createFunc: () => Instantiate(ObstacleList[poolNum]),
+                actionOnGet: obj => obj.SetActive(true),
+                actionOnRelease: obj => obj.SetActive(false),
+                actionOnDestroy: obj => Destroy(obj),
+                collectionCheck: true);
+        }
 
         //初期地面生成
         CreateObstacle(0, 0, 15, 1, moveSpeed);
@@ -68,6 +92,7 @@ public class GameManager : MonoBehaviour
                     for (int i = 0; i < number; i++)
                     {
                         CreateObstacle(createObstacleNum, stageRightEdge, 1, 1, moveSpeed);
+                        stageRightEdge = previousObstacleTf.position.x;
                     }
                     break;
             }
@@ -83,9 +108,12 @@ public class GameManager : MonoBehaviour
     // 障害物生成メソッド
     private void CreateObstacle(int obstacleNum, float leftEdgePosX, float width, float height, float moveSpeed)
     {
-        previousObstacleTf = Instantiate(ObstacleList[obstacleNum], Vector2.right * (leftEdgePosX + width), Quaternion.identity).transform;
+        poolNum = obstacleNum;
+        previousObstacleTf = pool[poolNum].Get().transform;
+        previousObstacleTf.position = Vector2.right * (leftEdgePosX + width);
         previousObstacleTf.localScale = new Vector3(width, height, 1);
         previousObstacleTf.GetComponent<Rigidbody2D>().velocity = Vector3.left * moveSpeed;
         obstacleTfQueue.Enqueue(previousObstacleTf);
+        obstacleNumQueue.Enqueue(obstacleNum);
     }
 }

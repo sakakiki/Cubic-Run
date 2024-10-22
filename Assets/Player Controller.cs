@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
-    private PlayerStateMachine stateMachine;
+    public PlayerStateMachine stateMachine;
     [SerializeField] private TouchCheck trigerFoot;
     public Transform tf;
     public Rigidbody2D rb;

@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class InputManager
+public class InputManager:MonoBehaviour
 {
     public static InputManager Instance { get; private set; }
 
@@ -12,7 +12,7 @@ public class InputManager
     public bool attackButtonHold { get; private set; }
     public bool attackButtonRelease { get; private set; }
 
-    public InputManager()
+    private void Awake()
     {
         if (Instance == null)
             Instance = this;
