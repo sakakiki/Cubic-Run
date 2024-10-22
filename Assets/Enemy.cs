@@ -4,6 +4,7 @@ public class Enemy : MonoBehaviour
 {
     [SerializeField] private Transform tf;
     [SerializeField] private Rigidbody2D rb;
+    [SerializeField] private Rigidbody2D parentRb;
     private Transform playerTf;
     private PlayerStateMachine playerStMach;
 
@@ -13,13 +14,13 @@ public class Enemy : MonoBehaviour
     {
         playerTf = GameManager.Instance.playerTf;
         playerStMach = GameManager.Instance.playerCon.stateMachine;
-        isActive = true;
     }
 
     private void OnEnable()
     {
         rb.isKinematic = true;
         transform.localPosition = Vector3.left;
+        isActive = true;
     }
 
     void Update()
@@ -28,16 +29,19 @@ public class Enemy : MonoBehaviour
 
         if ((tf.position.x) < (playerTf.localScale.x / 2))
         {
+            //プレイヤーがAttackステートなら倒される
             if (playerStMach.currentState == playerStMach.state_Attack)
             {
                 rb.isKinematic = false;
-                rb.velocity += Vector2.up * 10;
+                rb.velocity = parentRb.velocity + Vector2.up * 10;
             }
+            //それ以外ならプレイヤーをGameOverに
             else
             {
-
+                playerStMach.ChangeState(playerStMach.state_GameOver);
             }
 
+            //実行は1回のみ
             isActive = false;
         } 
     }

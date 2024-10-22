@@ -66,6 +66,8 @@ public class GameManager : MonoBehaviour
             previousObstacleNum2 = previousObstacleNum1;
             previousObstacleNum1 = createObstacleNum;
 
+            //createObstacleNum = 4;
+
             switch (createObstacleNum)
             {
                 case 1:
@@ -115,5 +117,11 @@ public class GameManager : MonoBehaviour
         previousObstacleTf.GetComponent<Rigidbody2D>().velocity = Vector3.left * moveSpeed;
         obstacleTfQueue.Enqueue(previousObstacleTf);
         obstacleNumQueue.Enqueue(obstacleNum);
+    }
+
+    public void StopObstacle()
+    {
+        foreach (Transform obstacleTf in obstacleTfQueue)
+            obstacleTf.GetComponent<Rigidbody2D>().velocity = Vector2.zero;
     }
 }

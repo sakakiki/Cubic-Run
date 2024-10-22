@@ -5,6 +5,7 @@ public class PlayerController : MonoBehaviour
 {
     public PlayerStateMachine stateMachine;
     [SerializeField] private TouchCheck trigerFoot;
+    [SerializeField] private TouchCheck trigerFront;
     public Transform tf;
     public Rigidbody2D rb;
     [NonSerialized] public bool isGrounded;
@@ -21,7 +22,12 @@ public class PlayerController : MonoBehaviour
     void Update()
     {
         InputManager.Instance.GetInput();
+
         isGrounded = trigerFoot.isTouch;
+
+        if (trigerFront.isTouch) 
+            stateMachine.ChangeState(stateMachine.state_GameOver);
+
         stateMachine.Update();
     }
 }
