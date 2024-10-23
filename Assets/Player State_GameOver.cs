@@ -6,7 +6,9 @@ public class PlayerState_GameOver : PlayerStateBase
 
     public override void Enter()
     {
-        tf.localScale = Vector2.one;
+        if (GameManager.Instance.currentObstacleNum == 3)
+            tf.localScale = new Vector2(1, 0.5f);
+        else tf.localScale = Vector2.one;
         playerCon.SkinDefault.SetActive(false);
         playerCon.SkinGameOver.SetActive(true);
         GameManager.Instance.StopObstacle();

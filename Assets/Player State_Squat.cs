@@ -14,7 +14,9 @@ public class PlayerState_Squat : PlayerStateBase
     {
         if (InputManager.Instance.squatButtonRelease)
         {
-            if (InputManager.Instance.attackButtonHold)
+            if (GameManager.Instance.currentObstacleNum == 3)
+                stateMachine.ChangeState(stateMachine.state_GameOver);
+            else if (InputManager.Instance.attackButtonHold)
                 stateMachine.ChangeState(stateMachine.state_Attack);
             else stateMachine.ChangeState(stateMachine.state_Run);
         }

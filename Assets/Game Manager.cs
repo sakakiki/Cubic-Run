@@ -25,6 +25,11 @@ public class GameManager : MonoBehaviour
     private ObjectPool<GameObject>[] pool;
     private int poolNum;
 
+    private Queue<Transform> approachingObstacleTfQueue = new Queue<Transform>();
+    private Queue<int> approachingObstacleNumQueue = new Queue<int>();
+    private Transform currentObstacleTf;
+    public int currentObstacleNum;
+
     private void Awake()
     {
         if (Instance == null)
@@ -49,7 +54,11 @@ public class GameManager : MonoBehaviour
         }
 
         //初期地面生成
-        CreateObstacle(0, 0, 15, 1, moveSpeed);
+        CreateObstacle(0, 0, 5, 1, moveSpeed);
+        CreateObstacle(0, previousObstacleTf.position.x, 5, 1, moveSpeed);
+        CreateObstacle(0, previousObstacleTf.position.x, 5, 1, moveSpeed);
+        UpdateCurrentObstacle();
+        UpdateCurrentObstacle();
     }
 
     void Update()
@@ -103,8 +112,16 @@ public class GameManager : MonoBehaviour
             CreateObstacle(0, stageRightEdge, obstacleWidth, 1, moveSpeed);
         }
 
+        //CheckCurrentObstacleUpdate();
+
+        //プレイヤーの位置の地面の種類の更新必要性の確認
+        if (currentObstacleTf.position.x < playerTf.localScale.x / 2 * (currentObstacleNum == 0 ? 0 : -1))
+            UpdateCurrentObstacle();
+
+        Debug.Log(currentObstacleNum);
+
         if (obstacleTfQueue.Peek().position.x < -5)
-            Destroy(obstacleTfQueue.Dequeue().gameObject);
+            pool[obstacleNumQueue.Dequeue()].Release(obstacleTfQueue.Dequeue().gameObject);
     }
 
     // 障害物生成メソッド
@@ -117,6 +134,57 @@ public class GameManager : MonoBehaviour
         previousObstacleTf.GetComponent<Rigidbody2D>().velocity = Vector3.left * moveSpeed;
         obstacleTfQueue.Enqueue(previousObstacleTf);
         obstacleNumQueue.Enqueue(obstacleNum);
+        approachingObstacleTfQueue.Enqueue(previousObstacleTf);
+        approachingObstacleNumQueue.Enqueue(obstacleNum);
+    }
+
+    /*
+    //プレイヤーの位置の地面の種類の更新必要性の確認
+    public void CheckCurrentObstacleUpdate()
+    {
+
+        switch (currentObstacleNum)
+        {
+            case 0:
+                switch (nextObstacleNum)
+                {
+                    case 0:
+                    case 1:
+                        if (currentObstacleTf.position.x < -playerTf.localScale.x / 2)
+                            UpdateCurrentObstacle();
+                        break;
+
+                    case 2: 
+                    case 3: 
+                    case 4: 
+                    case 5:
+                        if (currentObstacleTf.position.x < playerTf.localScale.x / 2)
+                            UpdateCurrentObstacle();
+                        break;
+                }
+                break;
+
+            case 1:
+                if (currentObstacleTf.position.x < playerTf.localScale.x / 2)
+                    UpdateCurrentObstacle();
+                break;
+
+            case 2: 
+            case 3: 
+            case 4: 
+            case 5:
+                if (currentObstacleTf.position.x < -playerTf.localScale.x / 2)
+                    UpdateCurrentObstacle();
+                break;
+        }
+    }
+    */
+
+    //プレイヤーの位置の地面の種類を更新
+    public void UpdateCurrentObstacle()
+    {
+        currentObstacleTf = approachingObstacleTfQueue.Dequeue();
+        currentObstacleNum = approachingObstacleNumQueue.Dequeue();
     }
 
     public void StopObstacle()
