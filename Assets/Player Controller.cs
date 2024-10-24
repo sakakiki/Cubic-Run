@@ -25,7 +25,7 @@ public class PlayerController : MonoBehaviour
 
         isGrounded = trigerFoot.isTouch;
 
-        if (trigerFront.isTouch) 
+        if (trigerFront.isTouch && stateMachine.currentState != stateMachine.state_GameOver) 
             stateMachine.ChangeState(stateMachine.state_GameOver);
 
         stateMachine.Update();

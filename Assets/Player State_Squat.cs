@@ -10,6 +10,7 @@ public class PlayerState_Squat : PlayerStateBase
     {
         tf.localScale = squatScale;
     }
+
     public override void Update()
     {
         if (InputManager.Instance.squatButtonRelease)
@@ -30,6 +31,7 @@ public class PlayerState_Squat : PlayerStateBase
         else if (!playerCon.isGrounded)
             stateMachine.ChangeState(stateMachine.state_SmallJump);
     }
+
     public override void Exit()
     {
 
