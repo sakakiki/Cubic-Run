@@ -168,6 +168,7 @@ GameObject:
   m_Component:
   - component: {fileID: 178755156215578479}
   - component: {fileID: 7064189409646442077}
+  - component: {fileID: 4867140318194307847}
   m_Layer: 0
   m_Name: Obstacle 3_Tunnel
   m_TagString: Untagged
@@ -219,6 +220,19 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 1
   m_Constraints: 6
+--- !u!114 &4867140318194307847
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6072654106689032333}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 736c4e7a685e5034aa6b458199208871, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  boxCol: {fileID: 5378469986235139144}
 --- !u!1 &8388878078542147090
 GameObject:
   m_ObjectHideFlags: 0
