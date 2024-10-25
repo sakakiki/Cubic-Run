@@ -28,7 +28,7 @@ public class GameManager : MonoBehaviour
     private Queue<Transform> approachingObstacleTfQueue = new Queue<Transform>();
     private Queue<int> approachingObstacleNumQueue = new Queue<int>();
     private Transform currentObstacleTf;
-    public int currentObstacleNum;
+    public int currentObstacleNum { get; private set; }
     private int nextObstacleNum;
 
     private void Awake()

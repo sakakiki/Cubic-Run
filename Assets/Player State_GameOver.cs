@@ -12,8 +12,8 @@ public class PlayerState_GameOver : PlayerStateBase
         if (GameManager.Instance.currentObstacleNum == 3)
             tf.localScale = tunnelScale;
 
-        //トンネル外なら跳ね返り処理
-        else 
+        //トンネル外かつ画面内なら跳ね返り処理
+        else if(tf.position.y > -5)
         {
             tf.localScale = Vector2.one;
             Rigidbody2D playerRb = GameManager.Instance.playerCon.rb;
