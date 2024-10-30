@@ -9,7 +9,7 @@ public class PlayerState_GameOver : PlayerStateBase
     public override void Enter()
     {
         //トンネル内なら専用のスケールに
-        if (GameManager.Instance.currentObstacleNum == 3)
+        if (TerrainManager.Instance.currentTerrainNum == 3)
             tf.localScale = tunnelScale;
 
         //トンネル外かつ画面内なら跳ね返り処理
@@ -18,8 +18,8 @@ public class PlayerState_GameOver : PlayerStateBase
             tf.localScale = Vector2.one;
             Rigidbody2D playerRb = GameManager.Instance.playerCon.rb;
             playerRb.constraints = RigidbodyConstraints2D.None;
-            playerRb.angularVelocity = GameManager.Instance.moveSpeed * 20;
-            playerRb.velocity = Vector2.up * 15 + Vector2.left * GameManager.Instance.moveSpeed * 0.3f;
+            playerRb.angularVelocity = TerrainManager.Instance.moveSpeed * 20;
+            playerRb.velocity = Vector2.up * 15 + Vector2.left * TerrainManager.Instance.moveSpeed * 0.3f;
         }
 
         //ゲームオーバー用スキンに切り替え
@@ -27,7 +27,7 @@ public class PlayerState_GameOver : PlayerStateBase
         playerCon.SkinGameOver.SetActive(true);
 
         //地形の停止
-        GameManager.Instance.StopObstacle();
+        TerrainManager.Instance.StopTerrain();
     }
 
     public override void Update()

@@ -13,8 +13,8 @@ public class PlayStateState_Play : PlayStateStateBase
 
     public override void Update()
     {
-        if (GM.stageRightEdge < 30)
-            GM.CreateObstacleRandom();
+        if (TM.stageRightEdge < 30)
+            TM.CreateTerrainRandom();
     }
 
 

@@ -9,7 +9,7 @@ public class PlayerState_Jump : PlayerStateBase
     public override void Enter()
     {
         //洞窟内で天井に干渉するなら位置を調整
-        if (GameManager.Instance.currentObstacleNum == 5 && GameManager.Instance.playerTf.position.y > 1.6)
+        if (TerrainManager.Instance.currentTerrainNum == 5 && GameManager.Instance.playerTf.position.y > 1.6)
             GameManager.Instance.playerTf.position = Vector2.up * 1.6f;
 
         //ジャンプ用スケールに変更
