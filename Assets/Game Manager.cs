@@ -10,6 +10,7 @@ public class GameManager : MonoBehaviour
     public Transform playerTf;
     public PlayerController playerCon;
 
+    //ステートマシン
     private PlayStateStateMachine stateMachine;
 
 

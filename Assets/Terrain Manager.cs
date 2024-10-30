@@ -7,7 +7,7 @@ public class TerrainManager : MonoBehaviour
     //自身のインスタンス
     public static TerrainManager Instance;
 
-    //インスペクター
+    //インスペクターから登録
     public GameObject[] TerrainList;
 
     //汎用変数
@@ -128,7 +128,7 @@ public class TerrainManager : MonoBehaviour
 
     public void CreateTerrain(int terrainNum, float leftEdgePosX, float width, float height, float moveSpeed)
     {
-        //オブジェクトプールから障害物を生成
+        //オブジェクトプールから地形を生成
         poolNum = terrainNum;
         previousObstacleTf = pool[poolNum].Get().transform;
 
@@ -156,7 +156,7 @@ public class TerrainManager : MonoBehaviour
 
 
 
-    //全ての障害物を停止
+    //全ての地形を停止
     public void StopTerrain()
     {
         foreach (Transform terrainTf in activeTerrainTfQueue)
