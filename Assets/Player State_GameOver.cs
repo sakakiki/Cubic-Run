@@ -25,9 +25,6 @@ public class PlayerState_GameOver : PlayerStateBase
         //ゲームオーバー用スキンに切り替え
         playerCon.SkinDefault.SetActive(false);
         playerCon.SkinGameOver.SetActive(true);
-
-        //地形の停止
-        TerrainManager.Instance.StopTerrain();
     }
 
     public override void Update()

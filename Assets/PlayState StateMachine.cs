@@ -5,6 +5,7 @@ public class PlayStateStateMachine
     public PlayStateStateBase currentState {  get; private set; }
 
     public PlayStateStateBase state_Play;
+    public PlayStateStateBase state_GameOver;
 
 
     public float playTime;
@@ -17,6 +18,7 @@ public class PlayStateStateMachine
         playerTf = GameManager.Instance.playerTf;
 
         state_Play = new PlayStateState_Play(this);
+        state_GameOver = new PlayStateState_GameOver(this);
     }
 
     public void Initialize(PlayStateStateBase firstState)

@@ -3,12 +3,14 @@ using TMPro;
 public class PlayStateState_Play : PlayStateStateBase
 {
     private TextMeshProUGUI score;
+    private PlayerStateMachine playerStateMachine;
 
 
 
     public PlayStateState_Play(PlayStateStateMachine stateMachine) : base(stateMachine)
     {
         score = GameManager.Instance.score;
+        playerStateMachine = playerCon.stateMachine;
     }
 
 
@@ -28,6 +30,10 @@ public class PlayStateState_Play : PlayStateStateBase
             TM.CreateTerrainRandom();
 
         score.SetText("" + (int)(stateMachine.playTime * 100));
+
+        if (playerStateMachine.currentState == 
+            playerStateMachine.state_GameOver)
+            stateMachine.ChangeState(stateMachine.state_GameOver);
     }
 
 
