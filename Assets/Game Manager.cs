@@ -1,3 +1,4 @@
+using TMPro;
 using UnityEngine;
 
 public class GameManager : MonoBehaviour
@@ -9,6 +10,7 @@ public class GameManager : MonoBehaviour
     public int level = 1;
     public Transform playerTf;
     public PlayerController playerCon;
+    public TextMeshProUGUI score;
 
     //ステートマシン
     private PlayStateStateMachine stateMachine;

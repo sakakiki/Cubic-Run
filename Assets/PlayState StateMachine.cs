@@ -7,6 +7,7 @@ public class PlayStateStateMachine
     public PlayStateStateBase state_Play;
 
 
+    public float playTime;
     public TerrainManager TM { get; private set; }
     protected Transform playerTf;
 
@@ -22,6 +23,7 @@ public class PlayStateStateMachine
     {
         currentState = firstState;
         firstState.Enter();
+        playTime = 0;
     }
 
     public void ChangeState(PlayStateStateBase newState)
@@ -36,7 +38,7 @@ public class PlayStateStateMachine
         TM.stageRightEdge = TM.previousObstacleTf.position.x;
 
         //ステートに応じたUpdateの実行
-        if (currentState != null) currentState.Update();
+        if (currentState != null) currentState.Update(Time.deltaTime);
 
         //プレイヤーの位置の地面の種類の更新必要性の確認
         switch (TM.nextTerrainNum)

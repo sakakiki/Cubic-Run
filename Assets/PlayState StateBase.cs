@@ -12,6 +12,6 @@ public abstract class PlayStateStateBase
     }
 
     public abstract void Enter();
-    public abstract void Update();
+    public abstract void Update(float deltaTime);
     public abstract void Exit();
 }

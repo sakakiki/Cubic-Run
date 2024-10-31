@@ -2458,8 +2458,8 @@ MonoBehaviour:
 
 '
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 792ced2636e83fc4885d0163d39274b6, type: 2}
-  m_sharedMaterial: {fileID: 1451299433879383555, guid: 792ced2636e83fc4885d0163d39274b6, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -2594,8 +2594,8 @@ MonoBehaviour:
 
 '
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 3073cd00ec100ac4982a3103851bfe5e, type: 2}
-  m_sharedMaterial: {fileID: 2595600274270692755, guid: 3073cd00ec100ac4982a3103851bfe5e, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -2625,7 +2625,7 @@ MonoBehaviour:
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
   m_fontSizeMax: 72
-  m_fontStyle: 1
+  m_fontStyle: 0
   m_HorizontalAlignment: 2
   m_VerticalAlignment: 512
   m_textAlignment: 65535
@@ -2829,8 +2829,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: Score
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 792ced2636e83fc4885d0163d39274b6, type: 2}
-  m_sharedMaterial: {fileID: 1451299433879383555, guid: 792ced2636e83fc4885d0163d39274b6, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -3843,6 +3843,7 @@ MonoBehaviour:
   level: 1
   playerTf: {fileID: 1938157858}
   playerCon: {fileID: 1938157861}
+  score: {fileID: 1681349253}
 --- !u!1 &2142769522
 GameObject:
   m_ObjectHideFlags: 0
@@ -3934,8 +3935,7 @@ SceneRoots:
   - {fileID: 2137527667}
   - {fileID: 1947635397}
   - {fileID: 1938157858}
-  - {fileID: 1532720846}
-  - {fileID: 876335763}
+  - {fileID: 733571588}
   - {fileID: 30361607}
   - {fileID: 171981424}
   - {fileID: 898592321}
@@ -3946,4 +3946,5 @@ SceneRoots:
   - {fileID: 1766220512}
   - {fileID: 927438974}
   - {fileID: 1383629269}
-  - {fileID: 733571588}
+  - {fileID: 1532720846}
+  - {fileID: 876335763}
