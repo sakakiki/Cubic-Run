@@ -3,11 +3,12 @@ public abstract class PlayStateStateBase
     protected PlayStateStateMachine stateMachine;
     protected PlayerController playerCon;
     protected TerrainManager TM;
+    public static float playTime;
 
     public PlayStateStateBase(PlayStateStateMachine stateMachine)
     {
         this.stateMachine = stateMachine;
-        TM = stateMachine.TM;
+        TM = TerrainManager.Instance;
         playerCon = GameManager.Instance.playerCon;
     }
 

@@ -8,15 +8,9 @@ public class PlayStateStateMachine
     public PlayStateStateBase state_GameOver;
 
 
-    public float playTime;
-    public TerrainManager TM { get; private set; }
-    protected Transform playerTf;
 
     public PlayStateStateMachine()
     {
-        TM = TerrainManager.Instance;
-        playerTf = GameManager.Instance.playerTf;
-
         state_Play = new PlayStateState_Play(this);
         state_GameOver = new PlayStateState_GameOver(this);
     }
@@ -25,7 +19,7 @@ public class PlayStateStateMachine
     {
         currentState = firstState;
         firstState.Enter();
-        playTime = 0;
+        PlayStateStateBase.playTime = 0;
     }
 
     public void ChangeState(PlayStateStateBase newState)
@@ -37,35 +31,7 @@ public class PlayStateStateMachine
 
     public void Update()
     {
-        TM.stageRightEdge = TM.previousObstacleTf.position.x;
-
         //ステートに応じたUpdateの実行
         if (currentState != null) currentState.Update(Time.deltaTime);
-
-        //プレイヤーの位置の地面の種類の更新必要性の確認
-        switch (TM.nextTerrainNum)
-        {
-            case 0:
-            case 1:
-                if (TM.currentTerrainTf.position.x < -playerTf.localScale.x / 2)
-                    TM.UpdateCurrentTerrain();
-                break;
-
-            case 2:
-            case 4:
-            case 5:
-                if (TM.currentTerrainTf.position.x < playerTf.localScale.x / 2)
-                    TM.UpdateCurrentTerrain();
-                break;
-
-            case 3:
-                if (TM.currentTerrainTf.position.x < 0)
-                    TM.UpdateCurrentTerrain();
-                break;
-        }
-
-        //不要Obstacle削除処理
-        if (TM.activeTerrainTfQueue.Peek().position.x < -5)
-            TM.pool[TM.activeTerrainNumQueue.Dequeue()].Release(TM.activeTerrainTfQueue.Dequeue().gameObject);
     }
 }

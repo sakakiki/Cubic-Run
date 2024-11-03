@@ -24,15 +24,17 @@ public class PlayStateState_Play : PlayStateStateBase
 
     public override void Update(float deltaTime)
     {
-        stateMachine.playTime += deltaTime;
+        //プレイ時間加算
+        playTime += deltaTime;
 
-        if (TM.stageRightEdge < 30)
-            TM.CreateTerrainRandom();
+        //移動中の地形を管理
+        TM.ManageMovingTerrain();
 
-        score.SetText("" + (int)(stateMachine.playTime * 100));
+        //スコアテキスト更新
+        score.SetText("" + (int)(playTime * 100));
 
-        if (playerStateMachine.currentState == 
-            playerStateMachine.state_GameOver)
+        //プレイヤーがGameOverステートならGameOverステートに遷移
+        if (playerStateMachine.currentState == playerStateMachine.state_GameOver)
             stateMachine.ChangeState(stateMachine.state_GameOver);
     }
 

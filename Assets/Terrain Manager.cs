@@ -146,6 +146,44 @@ public class TerrainManager : MonoBehaviour
 
 
 
+    public void ManageMovingTerrain()
+    {
+        //ステージ右端の座標を取得
+        stageRightEdge = previousObstacleTf.position.x;
+
+        //ステージの端が近づいていれば地形を追加で生成
+        if (stageRightEdge < 30)
+            CreateTerrainRandom();
+
+        //プレイヤーの位置の地面の種類の更新必要性の確認
+        switch (nextTerrainNum)
+        {
+            case 0:
+            case 1:
+                if (currentTerrainTf.position.x < -playerTf.localScale.x / 2)
+                    UpdateCurrentTerrain();
+                break;
+
+            case 2:
+            case 4:
+            case 5:
+                if (currentTerrainTf.position.x < playerTf.localScale.x / 2)
+                    UpdateCurrentTerrain();
+                break;
+
+            case 3:
+                if (currentTerrainTf.position.x < 0)
+                    UpdateCurrentTerrain();
+                break;
+        }
+
+        //不要Obstacle削除処理
+        if (activeTerrainTfQueue.Peek().position.x < -5)
+            pool[activeTerrainNumQueue.Dequeue()].Release(activeTerrainTfQueue.Dequeue().gameObject);
+    }
+
+
+
     //プレイヤーの位置の地面の種類を更新
     public void UpdateCurrentTerrain()
     {
