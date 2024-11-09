@@ -2,15 +2,17 @@ using TMPro;
 
 public class PlayStateState_Play : PlayStateStateBase
 {
-    private TextMeshProUGUI score;
     private PlayerStateMachine playerStateMachine;
+    private TextMeshProUGUI scoreText;
+    private TextMeshProUGUI levelText;
 
 
 
     public PlayStateState_Play(PlayStateStateMachine stateMachine) : base(stateMachine)
     {
-        score = GameManager.Instance.score;
         playerStateMachine = playerCon.stateMachine;
+        scoreText = GameManager.Instance.scoreText;
+        levelText = GameManager.Instance.levelText;
     }
 
 
@@ -30,8 +32,13 @@ public class PlayStateState_Play : PlayStateStateBase
         //移動中の地形を管理
         TM.ManageMovingTerrain();
 
-        //スコアテキスト更新
-        score.SetText("" + (int)(playTime * 100));
+        //スコア更新
+        GM.score = (int)(playTime * 100);
+        scoreText.SetText("" + GM.score);
+
+        //レベル更新
+        GM.level = GM.score / 1000 + 1;
+        levelText.SetText("Lv." + GM.level);
 
         //プレイヤーがGameOverステートならGameOverステートに遷移
         if (playerStateMachine.currentState == playerStateMachine.state_GameOver)

@@ -49,9 +49,6 @@ public class TerrainManager : MonoBehaviour
         GM = GameManager.Instance;
         playerTf = GM.playerTf;
 
-        //速度設定
-        moveSpeed = 5 + Mathf.Pow(GM.level, 0.7f) * 3;
-
         //オブジェクトプール作成
         pool = new ObjectPool<GameObject>[TerrainList.Length];
         for (int i = 0; i < TerrainList.Length; i++)
@@ -65,6 +62,9 @@ public class TerrainManager : MonoBehaviour
                 collectionCheck: true);
         }
 
+        //初期速度設定
+        moveSpeed = 8;
+
         //初期地面生成
         CreateTerrain(0, 0, 5, 1, moveSpeed);
         CreateTerrain(0, previousObstacleTf.position.x, 5, 1, moveSpeed);
@@ -77,6 +77,9 @@ public class TerrainManager : MonoBehaviour
 
     public void CreateTerrainRandom()
     {
+        //速度設定
+        moveSpeed = 5 + Mathf.Pow(GM.level, 0.7f) * 3;
+
         //生成する障害物の種類を決定
         int createTerrainNum;
         do createTerrainNum = Random.Range(1, TerrainList.Length);

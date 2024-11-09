@@ -2,10 +2,6 @@ using TMPro;
 
 public class PlayStateState_GameOver : PlayStateStateBase
 {
-    private TextMeshProUGUI score;
-
-
-
     public PlayStateState_GameOver(PlayStateStateMachine stateMachine) : base(stateMachine) { }
 
 

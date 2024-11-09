@@ -6,11 +6,13 @@ public class GameManager : MonoBehaviour
     //自身のインスタンス
     public static GameManager Instance;
 
-    //インスペクター
+    //インスペクターから設定可能
+    public int score = 0;
     public int level = 1;
     public Transform playerTf;
     public PlayerController playerCon;
-    public TextMeshProUGUI score;
+    public TextMeshProUGUI scoreText;
+    public TextMeshProUGUI levelText;
 
     //ステートマシン
     private PlayStateStateMachine stateMachine;

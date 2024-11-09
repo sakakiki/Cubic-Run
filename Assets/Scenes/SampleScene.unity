@@ -3906,10 +3906,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e749c643bda60ec49acb9a59775547dc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  score: 0
   level: 1
   playerTf: {fileID: 1938157858}
   playerCon: {fileID: 1938157861}
-  score: {fileID: 1681349253}
+  scoreText: {fileID: 1681349253}
+  levelText: {fileID: 1612368670}
 --- !u!1 &2142769522
 GameObject:
   m_ObjectHideFlags: 0
