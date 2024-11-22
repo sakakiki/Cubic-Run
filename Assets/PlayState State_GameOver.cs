@@ -9,7 +9,7 @@ public class PlayStateState_GameOver : PlayStateStateBase
     public override void Enter()
     {
         //’nŒ`‚Ì’â~
-        TerrainManager.Instance.StopTerrain();
+        TerrainManager.Instance.SetSpeed(0);
     }
 
 

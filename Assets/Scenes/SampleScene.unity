@@ -3863,7 +3863,9 @@ MonoBehaviour:
   - {fileID: 6072654106689032333, guid: 7796e8de8f3517d4ea75790bbe5b8e55, type: 3}
   - {fileID: 129599998030898204, guid: 35d254e0a93900b499a2a92496897bf2, type: 3}
   - {fileID: 8735117085755030662, guid: bbb9bbfd027063b458f85ff28cffb21c, type: 3}
-  previousObstacleTf: {fileID: 0}
+  moveSpeed: 0
+  isCreateObstacle: 0
+  previousTerrainTf: {fileID: 0}
   stageRightEdge: 0
   currentTerrainTf: {fileID: 0}
   nextTerrainNum: 0
@@ -3907,7 +3909,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   score: 0
-  level: 1
+  level: 0
+  levelUpSpan: 1000
   playerTf: {fileID: 1938157858}
   playerCon: {fileID: 1938157861}
   scoreText: {fileID: 1681349253}

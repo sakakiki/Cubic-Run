@@ -6,6 +6,8 @@ public class PlayStateStateMachine
 
     public PlayStateStateBase state_Play;
     public PlayStateStateBase state_GameOver;
+    public PlayStateStateBase state_LevelStart;
+    public PlayStateStateBase state_LevelEnd;
 
 
 
@@ -13,6 +15,8 @@ public class PlayStateStateMachine
     {
         state_Play = new PlayStateState_Play(this);
         state_GameOver = new PlayStateState_GameOver(this);
+        state_LevelStart = new PlayStateState_LevelStart(this);
+        state_LevelEnd = new PlayStateState_LevelEnd(this);
     }
 
     public void Initialize(PlayStateStateBase firstState)

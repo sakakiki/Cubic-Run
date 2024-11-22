@@ -8,7 +8,8 @@ public class GameManager : MonoBehaviour
 
     //インスペクターから設定可能
     public int score = 0;
-    public int level = 1;
+    public int level = 0;
+    public int levelUpSpan = 1000;
     public Transform playerTf;
     public PlayerController playerCon;
     public TextMeshProUGUI scoreText;
@@ -30,7 +31,7 @@ public class GameManager : MonoBehaviour
     void Start()
     {
         stateMachine = new PlayStateStateMachine();
-        stateMachine.Initialize(stateMachine.state_Play);
+        stateMachine.Initialize(stateMachine.state_LevelStart);
     }
 
 

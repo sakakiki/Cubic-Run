@@ -1,27 +1,28 @@
 using TMPro;
 
-public class PlayStateState_Play : PlayStateStateBase
+public class PlayStateState_LevelEnd : PlayStateStateBase
 {
     private PlayerStateMachine playerStateMachine;
+    private int levelUpScore;
     private TextMeshProUGUI scoreText;
-    private TextMeshProUGUI levelText;
-    public int levelEndScore;
 
 
 
-    public PlayStateState_Play(PlayStateStateMachine stateMachine) : base(stateMachine)
+    public PlayStateState_LevelEnd(PlayStateStateMachine stateMachine) : base(stateMachine)
     {
         playerStateMachine = playerCon.stateMachine;
         scoreText = GameManager.Instance.scoreText;
-        levelText = GameManager.Instance.levelText;
     }
 
 
 
     public override void Enter()
     {
-        //障害物生成を有効化
-        TM.isCreateObstacle = true;
+        //レベルが上昇するスコアを算出
+        levelUpScore = GM.level * GM.levelUpSpan;
+
+        //障害物生成を無効化
+        TM.isCreateObstacle = false;
     }
 
 
@@ -38,9 +39,9 @@ public class PlayStateState_Play : PlayStateStateBase
         GM.score = (int)(playTime * 100);
         scoreText.SetText("" + GM.score);
 
-        //基準スコアに到達すればステート遷移
-        if (GM.score > levelEndScore)
-            stateMachine.ChangeState(stateMachine.state_LevelEnd);
+        //スコアがレベル上昇基準を満たせばステート遷移
+        if (GM.score > levelUpScore)
+            stateMachine.ChangeState(stateMachine.state_LevelStart);
 
         //プレイヤーがGameOverステートならGameOverステートに遷移
         if (playerStateMachine.currentState == playerStateMachine.state_GameOver)

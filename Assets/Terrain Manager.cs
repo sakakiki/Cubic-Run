@@ -13,8 +13,9 @@ public class TerrainManager : MonoBehaviour
     //汎用変数
     private GameManager GM;
     private Transform playerTf;
-    public float moveSpeed {  get; private set; }
-    [HideInInspector] public Transform previousObstacleTf;
+    public float moveSpeed;
+    public bool isCreateObstacle;
+    [HideInInspector] public Transform previousTerrainTf;
     [HideInInspector] public float stageRightEdge;
 
     //オブジェクトプール関連変数
@@ -64,11 +65,13 @@ public class TerrainManager : MonoBehaviour
 
         //初期速度設定
         moveSpeed = 8;
+        SetSpeed(moveSpeed);
+
 
         //初期地面生成
         CreateTerrain(0, 0, 5, 1, moveSpeed);
-        CreateTerrain(0, previousObstacleTf.position.x, 5, 1, moveSpeed);
-        CreateTerrain(0, previousObstacleTf.position.x, 5, 1, moveSpeed);
+        CreateTerrain(0, previousTerrainTf.position.x, 5, 1, moveSpeed);
+        CreateTerrain(0, previousTerrainTf.position.x, 5, 1, moveSpeed);
         nextTerrainNum = approachingTerrainNumQueue.Dequeue();
         UpdateCurrentTerrain();
     }
@@ -77,9 +80,6 @@ public class TerrainManager : MonoBehaviour
 
     public void CreateTerrainRandom()
     {
-        //速度設定
-        moveSpeed = 5 + Mathf.Pow(GM.level, 0.7f) * 3;
-
         //生成する障害物の種類を決定
         int createTerrainNum;
         do createTerrainNum = Random.Range(1, TerrainList.Length);
@@ -105,10 +105,10 @@ public class TerrainManager : MonoBehaviour
                 terrainWidth = Random.Range(GM.level * 0.2f + 4.5f, GM.level * 0.2f + 6.5f);
                 terrainHeight = Random.Range(1.0f, 4.0f);
                 CreateTerrain(createTerrainNum, stageRightEdge, terrainWidth, terrainHeight, moveSpeed);
-                stageRightEdge = previousObstacleTf.position.x;
+                stageRightEdge = previousTerrainTf.position.x;
                 terrainWidth = Random.Range(GM.level * 0.2f + 3.0f, GM.level * 0.2f + 6.0f);
                 terrainHeight = Random.Range(2.0f, 4.0f);
-                terrainHeight += (terrainHeight > previousObstacleTf.localScale.y) ? 1 : -1;
+                terrainHeight += (terrainHeight > previousTerrainTf.localScale.y) ? 1 : -1;
                 CreateTerrain(createTerrainNum, stageRightEdge, terrainWidth, terrainHeight, moveSpeed);
                 break;
             case 4:
@@ -116,13 +116,13 @@ public class TerrainManager : MonoBehaviour
                 for (int i = 0; i < number; i++)
                 {
                     CreateTerrain(createTerrainNum, stageRightEdge, 1, 1, moveSpeed);
-                    stageRightEdge = previousObstacleTf.position.x;
+                    stageRightEdge = previousTerrainTf.position.x;
                 }
                 break;
         }
 
         //障害物間の地面を生成
-        stageRightEdge = previousObstacleTf.position.x;
+        stageRightEdge = previousTerrainTf.position.x;
         terrainWidth = Random.Range(GM.level * 0.2f + 6.5f, GM.level * 0.2f + 7.5f);
         CreateTerrain(0, stageRightEdge, terrainWidth, 1, moveSpeed);
     }
@@ -133,17 +133,17 @@ public class TerrainManager : MonoBehaviour
     {
         //オブジェクトプールから地形を生成
         poolNum = terrainNum;
-        previousObstacleTf = pool[poolNum].Get().transform;
+        previousTerrainTf = pool[poolNum].Get().transform;
 
         //位置とスケールを調整し速度を付与
-        previousObstacleTf.position = Vector2.right * (leftEdgePosX + width);
-        previousObstacleTf.localScale = new Vector3(width, height, 1);
-        previousObstacleTf.GetComponent<Rigidbody2D>().velocity = Vector3.left * moveSpeed;
+        previousTerrainTf.position = Vector2.right * (leftEdgePosX + width);
+        previousTerrainTf.localScale = new Vector3(width, height, 1);
+        previousTerrainTf.GetComponent<Rigidbody2D>().velocity = Vector3.left * moveSpeed;
 
         //管理用Queueに登録
-        activeTerrainTfQueue.Enqueue(previousObstacleTf);
+        activeTerrainTfQueue.Enqueue(previousTerrainTf);
         activeTerrainNumQueue.Enqueue(terrainNum);
-        approachingTerrainTfQueue.Enqueue(previousObstacleTf);
+        approachingTerrainTfQueue.Enqueue(previousTerrainTf);
         approachingTerrainNumQueue.Enqueue(terrainNum);
     }
 
@@ -152,11 +152,14 @@ public class TerrainManager : MonoBehaviour
     public void ManageMovingTerrain()
     {
         //ステージ右端の座標を取得
-        stageRightEdge = previousObstacleTf.position.x;
+        stageRightEdge = previousTerrainTf.position.x;
 
         //ステージの端が近づいていれば地形を追加で生成
         if (stageRightEdge < 30)
-            CreateTerrainRandom();
+        {
+            if (isCreateObstacle) CreateTerrainRandom();
+            else CreateTerrain(0, stageRightEdge, 3, 1, moveSpeed);
+        }
 
         //プレイヤーの位置の地面の種類の更新必要性の確認
         switch (nextTerrainNum)
@@ -198,9 +201,9 @@ public class TerrainManager : MonoBehaviour
 
 
     //全ての地形を停止
-    public void StopTerrain()
+    public void SetSpeed(float speed)
     {
         foreach (Transform terrainTf in activeTerrainTfQueue)
-            terrainTf.GetComponent<Rigidbody2D>().velocity = Vector2.zero;
+            terrainTf.GetComponent<Rigidbody2D>().velocity = Vector2.left * speed;
     }
 }
