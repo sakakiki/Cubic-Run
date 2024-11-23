@@ -1,17 +1,22 @@
 using TMPro;
+using UnityEngine;
 
 public class PlayStateState_LevelEnd : PlayStateStateBase
 {
-    private PlayerStateMachine playerStateMachine;
     private int levelUpScore;
-    private TextMeshProUGUI scoreText;
+    private TextMeshProUGUI levelText;
+    private RectTransform levelRtf;
+    private Vector2 centerAPos;
+    private Vector2 levelAPos;
 
 
 
     public PlayStateState_LevelEnd(PlayStateStateMachine stateMachine) : base(stateMachine)
     {
-        playerStateMachine = playerCon.stateMachine;
-        scoreText = GameManager.Instance.scoreText;
+        levelText = GM.levelText;
+        levelRtf = GM.levelRtf;
+        centerAPos = GM.centerAPos_TopLeft;
+        levelAPos = GM.levelAPos;
     }
 
 
@@ -29,23 +34,18 @@ public class PlayStateState_LevelEnd : PlayStateStateBase
 
     public override void Update(float deltaTime)
     {
-        //プレイ時間加算
-        playTime += deltaTime;
+        base.Update(deltaTime);
 
-        //移動中の地形を管理
-        TM.ManageMovingTerrain();
-
-        //スコア更新
-        GM.score = (int)(playTime * 100);
-        scoreText.SetText("" + GM.score);
+        //レベルテキストの位置・大きさ・色調整
+        int shortageScore = levelUpScore - GM.score;
+        levelRtf.anchoredPosition = 
+            Vector2.Lerp(centerAPos, levelAPos, (shortageScore - 150) / 75f);
+        levelText.fontSize = Mathf.Lerp(300, 72, (shortageScore - 150) / 75f);
+        levelText.color = Color.Lerp(Color.clear, Color.black, (shortageScore - 50) / 50f);
 
         //スコアがレベル上昇基準を満たせばステート遷移
         if (GM.score > levelUpScore)
             stateMachine.ChangeState(stateMachine.state_LevelStart);
-
-        //プレイヤーがGameOverステートならGameOverステートに遷移
-        if (playerStateMachine.currentState == playerStateMachine.state_GameOver)
-            stateMachine.ChangeState(stateMachine.state_GameOver);
     }
 
 

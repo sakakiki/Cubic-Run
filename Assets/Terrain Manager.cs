@@ -65,8 +65,6 @@ public class TerrainManager : MonoBehaviour
 
         //初期速度設定
         moveSpeed = 8;
-        SetSpeed(moveSpeed);
-
 
         //初期地面生成
         CreateTerrain(0, 0, 5, 1, moveSpeed);
@@ -155,7 +153,7 @@ public class TerrainManager : MonoBehaviour
         stageRightEdge = previousTerrainTf.position.x;
 
         //ステージの端が近づいていれば地形を追加で生成
-        if (stageRightEdge < 30)
+        if (stageRightEdge < 25)
         {
             if (isCreateObstacle) CreateTerrainRandom();
             else CreateTerrain(0, stageRightEdge, 3, 1, moveSpeed);
@@ -183,7 +181,7 @@ public class TerrainManager : MonoBehaviour
                 break;
         }
 
-        //不要Obstacle削除処理
+        //不要地形削除処理
         if (activeTerrainTfQueue.Peek().position.x < -5)
             pool[activeTerrainNumQueue.Dequeue()].Release(activeTerrainTfQueue.Dequeue().gameObject);
     }
@@ -200,7 +198,7 @@ public class TerrainManager : MonoBehaviour
 
 
 
-    //全ての地形を停止
+    //全ての地形の速度を変更
     public void SetSpeed(float speed)
     {
         foreach (Transform terrainTf in activeTerrainTfQueue)

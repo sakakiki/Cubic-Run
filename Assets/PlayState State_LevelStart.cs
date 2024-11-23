@@ -1,20 +1,23 @@
 using UnityEngine;
 using TMPro;
+using UnityEngine.SocialPlatforms.Impl;
 
 public class PlayStateState_LevelStart : PlayStateStateBase
 {
-    private PlayerStateMachine playerStateMachine;
     private int levelStartScore;
-    private TextMeshProUGUI scoreText;
     private TextMeshProUGUI levelText;
+    private RectTransform levelRtf;
+    private Vector2 centerAPos;
+    private Vector2 levelAPos;
 
 
 
     public PlayStateState_LevelStart(PlayStateStateMachine stateMachine) : base(stateMachine)
     {
-        playerStateMachine = playerCon.stateMachine;
-        scoreText = GameManager.Instance.scoreText;
         levelText = GameManager.Instance.levelText;
+        levelRtf = GM.levelRtf;
+        centerAPos = GM.centerAPos_TopLeft;
+        levelAPos = GM.levelAPos;
     }
 
 
@@ -33,26 +36,26 @@ public class PlayStateState_LevelStart : PlayStateStateBase
 
         //障害物生成を終了するスコアを算出
         ((PlayStateState_Play)stateMachine.state_Play).levelEndScore = 
-            GM.level * GM.levelUpSpan - (int)(300 + 2400 / TM.moveSpeed);
-
-        //プレイヤーがGameOverステートならGameOverステートに遷移
-        if (playerStateMachine.currentState == playerStateMachine.state_GameOver)
-            stateMachine.ChangeState(stateMachine.state_GameOver);
+            GM.level * GM.levelUpSpan - (int)(300 + 3200 / TM.moveSpeed);
+        /*
+            値の詳細
+            GM.level * GM.levelUpSpan　……レベル上昇のタイミング（スコア換算）
+            400　……終了演出に使用する時間（スコア換算）
+            2400 / TM.moveSpeed　……障害物が画面外に移動するのにかかる時間（スコア換算）
+        */
     }
 
 
 
     public override void Update(float deltaTime)
     {
-        //プレイ時間加算
-        playTime += deltaTime;
+        base.Update(deltaTime);
 
-        //移動中の地形を管理
-        TM.ManageMovingTerrain();
-
-        //スコア更新
-        GM.score = (int)(playTime * 100);
-        scoreText.SetText("" + GM.score);
+        //レベルテキストの位置・大きさ・色調整
+        int shortageScore = levelStartScore - GM.score;
+        levelRtf.anchoredPosition = Vector2.Lerp(levelAPos, centerAPos, shortageScore / 75f);
+        levelText.fontSize = Mathf.Lerp(72, 300, shortageScore / 75f);
+        levelText.color = Color.Lerp(Color.black, Color.clear, (shortageScore - 200) / 50f);
 
         //スコアが基準を満たせばステート遷移
         if (GM.score > levelStartScore)
