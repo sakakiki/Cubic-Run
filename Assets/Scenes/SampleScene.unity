@@ -205,8 +205,7 @@ Transform:
   m_LocalScale: {x: 1.0799999, y: 1.0799999, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 2142769523}
-  - {fileID: 768589079}
+  - {fileID: 1320795015}
   m_Father: {fileID: 1938157858}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &136436973
@@ -717,11 +716,11 @@ Transform:
   m_GameObject: {fileID: 768589078}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.1175926, y: 0.106481485, z: 0}
+  m_LocalPosition: {x: -0.2324074, y: 0, z: 0}
   m_LocalScale: {x: 0.10185186, y: 0.20370372, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 109213409}
+  m_Father: {fileID: 1320795015}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &768589080
 SpriteRenderer:
@@ -1597,6 +1596,39 @@ Transform:
   - {fileID: 838946519}
   - {fileID: 220938721}
   m_Father: {fileID: 1938157858}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1320795014
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1320795015}
+  m_Layer: 0
+  m_Name: Player Eye
+  m_TagString: Player
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1320795015
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1320795014}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0.1148148, y: 0.106481485, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 2142769523}
+  - {fileID: 768589079}
+  m_Father: {fileID: 109213409}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1428057494
 GameObject:
@@ -3128,11 +3160,11 @@ Transform:
   m_GameObject: {fileID: 2142769522}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.34722224, y: 0.106481485, z: 0}
+  m_LocalPosition: {x: 0.23240744, y: 0, z: 0}
   m_LocalScale: {x: 0.10185186, y: 0.20370372, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 109213409}
+  m_Father: {fileID: 1320795015}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &2142769524
 SpriteRenderer:
