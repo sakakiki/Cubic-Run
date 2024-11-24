@@ -3,16 +3,18 @@ using TMPro;
 public abstract class PlayStateStateBase
 {
     protected PlayStateStateMachine stateMachine;
-    protected PlayerController playerCon;
-    protected PlayerStateMachine playerStateMachine;
+    protected GameStateStateMachine gameStateMachine;
     protected GameManager GM;
     protected TerrainManager TM;
+    protected PlayerController playerCon;
+    protected PlayerStateMachine playerStateMachine;
     public static float playTime;
     private TextMeshProUGUI scoreText;
 
     public PlayStateStateBase(PlayStateStateMachine stateMachine)
     {
         this.stateMachine = stateMachine;
+        gameStateMachine = stateMachine.gameStateMachine;
         GM = GameManager.Instance;
         TM = TerrainManager.Instance;
         playerCon = GM.playerCon;
@@ -34,9 +36,9 @@ public abstract class PlayStateStateBase
         GM.score = (int)(playTime * 100);
         scoreText.SetText("" + GM.score);
 
-        //プレイヤーがGameOverステートならGameOverステートに遷移
+        //プレイヤーがGameOverステートならGameStateをResultに遷移
         if (playerStateMachine.currentState == playerStateMachine.state_GameOver)
-            stateMachine.ChangeState(stateMachine.state_GameOver);
+            gameStateMachine.ChangeState(gameStateMachine.state_Result);
     }
 
     public abstract void Exit();

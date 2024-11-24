@@ -18,7 +18,7 @@ public class GameManager : MonoBehaviour
     public RectTransform levelRtf;
 
     //ステートマシン
-    private PlayStateStateMachine stateMachine;
+    public GameStateStateMachine gameStateMachine {  get; private set; }
 
     //定数登録・記憶
     public Vector2 centerAPos_TopLeft = new Vector2(1920, -1080);
@@ -36,14 +36,14 @@ public class GameManager : MonoBehaviour
 
     void Start()
     {
-        stateMachine = new PlayStateStateMachine();
-        stateMachine.Initialize(stateMachine.state_LevelStart);
+        gameStateMachine = new GameStateStateMachine();
+        gameStateMachine.Initialize(gameStateMachine.state_Play);
     }
 
 
 
     void Update()
     {
-        stateMachine.Update();
+        gameStateMachine.Update(Time.deltaTime);
     }
 }

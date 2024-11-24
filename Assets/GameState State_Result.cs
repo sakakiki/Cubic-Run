@@ -1,8 +1,6 @@
-using TMPro;
-
-public class PlayStateState_GameOver : PlayStateStateBase
+public class GameStateState_Result : GameStateStateBase
 {
-    public PlayStateState_GameOver(PlayStateStateMachine stateMachine) : base(stateMachine) { }
+    public GameStateState_Result(GameStateStateMachine stateMachine) : base(stateMachine) { }
 
 
 

@@ -2,19 +2,20 @@ using UnityEngine;
 
 public class PlayStateStateMachine
 {
+    public GameStateStateMachine gameStateMachine;
+
     public PlayStateStateBase currentState {  get; private set; }
 
     public PlayStateStateBase state_Play;
-    public PlayStateStateBase state_GameOver;
     public PlayStateStateBase state_LevelStart;
     public PlayStateStateBase state_LevelEnd;
 
 
 
-    public PlayStateStateMachine()
+    public PlayStateStateMachine(GameStateStateMachine gameStateMachine)
     {
+        this.gameStateMachine = gameStateMachine;
         state_Play = new PlayStateState_Play(this);
-        state_GameOver = new PlayStateState_GameOver(this);
         state_LevelStart = new PlayStateState_LevelStart(this);
         state_LevelEnd = new PlayStateState_LevelEnd(this);
     }
@@ -33,9 +34,9 @@ public class PlayStateStateMachine
         newState.Enter();
     }
 
-    public void Update()
+    public void Update(float deltaTime)
     {
         //ステートに応じたUpdateの実行
-        if (currentState != null) currentState.Update(Time.deltaTime);
+        if (currentState != null) currentState.Update(deltaTime);
     }
 }
