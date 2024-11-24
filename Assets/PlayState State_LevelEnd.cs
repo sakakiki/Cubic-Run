@@ -38,8 +38,7 @@ public class PlayStateState_LevelEnd : PlayStateStateBase
 
         //レベルテキストの位置・大きさ・色調整
         int shortageScore = levelUpScore - GM.score;
-        levelRtf.anchoredPosition = 
-            Vector2.Lerp(centerAPos, levelAPos, (shortageScore - 150) / 75f);
+        levelRtf.anchoredPosition = Vector2.Lerp(centerAPos, levelAPos, (shortageScore - 150) / 75f);
         levelText.fontSize = Mathf.Lerp(300, 72, (shortageScore - 150) / 75f);
         levelText.color = Color.Lerp(Color.clear, Color.black, (shortageScore - 50) / 50f);
 

@@ -40,8 +40,8 @@ public class PlayStateState_LevelStart : PlayStateStateBase
         /*
             値の詳細
             GM.level * GM.levelUpSpan　……レベル上昇のタイミング（スコア換算）
-            400　……終了演出に使用する時間（スコア換算）
-            2400 / TM.moveSpeed　……障害物が画面外に移動するのにかかる時間（スコア換算）
+            300　……終了演出に使用する時間（スコア換算）
+            3200 / TM.moveSpeed　……障害物が画面外に移動するのにかかる時間（スコア換算）
         */
     }
 
