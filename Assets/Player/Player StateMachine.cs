@@ -1,14 +1,14 @@
 public class PlayerStateMachine
 {
-    public PlayerStateBase currentState {  get; private set; }
+    public PlayerStateBase_Play currentState {  get; private set; }
     public PlayerController playerController { get; private set; }
 
-    public PlayerStateBase state_Run { get; private set; }
-    public PlayerStateBase state_Jump { get; private set; }
-    public PlayerStateBase state_Squat { get; private set; }
-    public PlayerStateBase state_Attack { get; private set; }
-    public PlayerStateBase state_SmallJump { get; private set; }
-    public PlayerStateBase state_GameOver { get; private set; }
+    public PlayerStateBase_Play state_Run { get; private set; }
+    public PlayerStateBase_Play state_Jump { get; private set; }
+    public PlayerStateBase_Play state_Squat { get; private set; }
+    public PlayerStateBase_Play state_Attack { get; private set; }
+    public PlayerStateBase_Play state_SmallJump { get; private set; }
+    public PlayerStateBase_Play state_GameOver { get; private set; }
 
     public PlayerStateMachine(PlayerController playerController)
     {
@@ -21,13 +21,13 @@ public class PlayerStateMachine
         state_GameOver = new PlayerState_GameOver(this);
     }
 
-    public void Initialize(PlayerStateBase firstState)
+    public void Initialize(PlayerStateBase_Play firstState)
     {
         currentState = firstState;
         firstState.Enter();
     }
 
-    public void ChangeState(PlayerStateBase newState)
+    public void ChangeState(PlayerStateBase_Play newState)
     {
         currentState.Exit();
         currentState = newState;

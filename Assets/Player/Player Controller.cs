@@ -1,14 +1,12 @@
-using System;
 using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
     public PlayerStateMachine stateMachine;
-    [SerializeField] private TouchCheck trigerFoot;
-    [SerializeField] private TouchCheck trigerFront;
+    public TouchCheck trigerFoot;
+    public TouchCheck trigerFront;
     public Transform tf;
     public Rigidbody2D rb;
-    [NonSerialized] public bool isGrounded;
     public GameObject SkinDefault;
     public GameObject SkinAttack;
     public GameObject SkinGameOver;
@@ -19,16 +17,9 @@ public class PlayerController : MonoBehaviour
         stateMachine.Initialize(stateMachine.state_Run);
     }
 
-    void Update()
+    private void Update()
     {
-        InputManager.Instance.GetInput();
-
-        isGrounded = trigerFoot.isTouch;
-
-        if ((trigerFront.isTouch || tf.position.y < -5) 
-            && stateMachine.currentState != stateMachine.state_GameOver) 
-            stateMachine.ChangeState(stateMachine.state_GameOver);
-
+        //ステートに応じたUpdate実行
         stateMachine.Update();
     }
 }

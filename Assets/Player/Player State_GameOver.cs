@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class PlayerState_GameOver : PlayerStateBase
+public class PlayerState_GameOver : PlayerStateBase_Play
 {
     private Vector2 tunnelScale = new Vector2(1.3f, 0.6f);
 

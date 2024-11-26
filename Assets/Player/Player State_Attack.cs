@@ -1,35 +1,50 @@
 using UnityEngine;
 
-public class PlayerState_Attack : PlayerStateBase
+public class PlayerState_Attack : PlayerStateBase_Play
 {
     public PlayerState_Attack(PlayerStateMachine stateMachine) : base(stateMachine) { }
 
     public override void Enter()
     {
+        //スケール修正
         tf.localScale = Vector2.one;
+
+        //スキンの切り替え
         playerCon.SkinDefault.SetActive(false);
         playerCon.SkinAttack.SetActive(true);
     }
+
     public override void Update()
     {
-        if (InputManager.Instance.attackButtonRelease)
+        base.Update();
+
+        //攻撃入力解除時
+        if (IM.attackButtonRelease)
         {
-            if (InputManager.Instance.squatButtonHold) 
+            //しゃがみ入力でSquatステート
+            if (IM.squatButtonHold) 
                 stateMachine.ChangeState(stateMachine.state_Squat);
+
+            //入力なしでRunステート
             else stateMachine.ChangeState(stateMachine.state_Run);
         }
 
-        else if (InputManager.Instance.jumpButtonPush)
+        //ジャンプ処理
+        else if (IM.jumpButtonPush)
             rb.velocity = Vector2.up * 30;
 
-        else if (InputManager.Instance.squatButtonPush)
+        //しゃがみ入力でSquatステートに遷移
+        else if (IM.squatButtonPush)
             stateMachine.ChangeState(stateMachine.state_Squat);
 
-        else if (!playerCon.isGrounded)
+        //空中に出たらJumpステートへ遷移
+        else if (!isGrounded)
             stateMachine.ChangeState(stateMachine.state_Jump);
     }
+
     public override void Exit()
     {
+        //スキンの切り替え
         playerCon.SkinDefault.SetActive(true);
         playerCon.SkinAttack.SetActive(false);
     }
