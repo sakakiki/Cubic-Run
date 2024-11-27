@@ -1,6 +1,5 @@
 using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
@@ -37,7 +36,7 @@ public class GameManager : MonoBehaviour
     void Start()
     {
         gameStateMachine = new GameStateStateMachine();
-        gameStateMachine.Initialize(gameStateMachine.state_Play);
+        gameStateMachine.Initialize(gameStateMachine.state_Menu);
     }
 
 

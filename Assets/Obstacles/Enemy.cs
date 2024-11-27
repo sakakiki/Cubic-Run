@@ -2,18 +2,20 @@ using UnityEngine;
 
 public class Enemy : MonoBehaviour
 {
+    private GameStateStateMachine gameStateMachine;
+    private PlayerStateMachine playerStateMachine;
     [SerializeField] private Transform tf;
     [SerializeField] private Rigidbody2D rb;
     [SerializeField] private Rigidbody2D parentRb;
     private Transform playerTf;
-    private PlayerStateMachine playerStateMachine;
 
     private bool isActive;
 
     void Start()
     {
-        playerTf = GameManager.Instance.playerTf;
+        gameStateMachine = GameManager.Instance.gameStateMachine;
         playerStateMachine = GameManager.Instance.playerCon.stateMachine;
+        playerTf = GameManager.Instance.playerTf;
     }
 
     private void OnEnable()
@@ -25,6 +27,9 @@ public class Enemy : MonoBehaviour
 
     void Update()
     {
+        //ÉvÉåÉCíÜÇ≈Ç»ÇØÇÍÇŒâΩÇ‡ÇµÇ»Ç¢
+        if (gameStateMachine.currentState != gameStateMachine.state_Play) return;
+
         //é¿çsçœÇ›Ç»ÇÁâΩÇ‡ÇµÇ»Ç¢
         if (!isActive) return;
 

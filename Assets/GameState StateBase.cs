@@ -17,10 +17,7 @@ public abstract class GameStateStateBase
 
     public abstract void Enter();
 
-    public virtual void Update(float deltaTime)
-    {
-
-    }
+    public abstract void Update(float deltaTime);
 
     public abstract void Exit();
 }

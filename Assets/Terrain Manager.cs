@@ -15,11 +15,11 @@ public class TerrainManager : MonoBehaviour
     private Transform playerTf;
     public float moveSpeed;
     public bool isCreateObstacle;
-    [HideInInspector] public Transform previousTerrainTf;
-    [HideInInspector] public float stageRightEdge;
+    private Transform previousTerrainTf;
+    private float stageRightEdge;
 
     //オブジェクトプール関連変数
-    [HideInInspector] public ObjectPool<GameObject>[] pool;
+    private ObjectPool<GameObject>[] pool;
     private int poolNum;
 
     //CreateTerrainRandomメソッド用変数
@@ -27,13 +27,13 @@ public class TerrainManager : MonoBehaviour
     private int previousTerrainNum2;
 
     //Terrain管理用変数
-    [HideInInspector] public Queue<Transform> activeTerrainTfQueue = new Queue<Transform>();
-    [HideInInspector] public Queue<int> activeTerrainNumQueue = new Queue<int>();
+    private Queue<Transform> activeTerrainTfQueue = new Queue<Transform>();
+    private Queue<int> activeTerrainNumQueue = new Queue<int>();
     private Queue<Transform> approachingTerrainTfQueue = new Queue<Transform>();
     private Queue<int> approachingTerrainNumQueue = new Queue<int>();
-    [HideInInspector] public Transform currentTerrainTf;
+    private Transform currentTerrainTf;
     public int currentTerrainNum { get; private set; } //ゲームオーバー処理で読み取り
-    [HideInInspector] public int nextTerrainNum;
+    private int nextTerrainNum;
 
 
 
@@ -72,6 +72,47 @@ public class TerrainManager : MonoBehaviour
         CreateTerrain(0, previousTerrainTf.position.x, 5, 1, moveSpeed);
         nextTerrainNum = approachingTerrainNumQueue.Dequeue();
         UpdateCurrentTerrain();
+    }
+
+
+
+    public void ManageMovingTerrain()
+    {
+        //ステージ右端の座標を取得
+        stageRightEdge = previousTerrainTf.position.x;
+
+        //ステージの端が近づいていれば地形を追加で生成
+        if (stageRightEdge < 25)
+        {
+            if (isCreateObstacle) CreateTerrainRandom();
+            else CreateTerrain(0, stageRightEdge, 3, 1, moveSpeed);
+        }
+
+        //プレイヤーの位置の地面の種類の更新必要性の確認
+        switch (nextTerrainNum)
+        {
+            case 0:
+            case 1:
+                if (currentTerrainTf.position.x < -playerTf.localScale.x / 2)
+                    UpdateCurrentTerrain();
+                break;
+
+            case 2:
+            case 4:
+            case 5:
+                if (currentTerrainTf.position.x < playerTf.localScale.x / 2)
+                    UpdateCurrentTerrain();
+                break;
+
+            case 3:
+                if (currentTerrainTf.position.x < 0)
+                    UpdateCurrentTerrain();
+                break;
+        }
+
+        //不要地形削除処理
+        if (activeTerrainTfQueue.Peek().position.x < -5)
+            pool[activeTerrainNumQueue.Dequeue()].Release(activeTerrainTfQueue.Dequeue().gameObject);
     }
 
 
@@ -143,47 +184,6 @@ public class TerrainManager : MonoBehaviour
         activeTerrainNumQueue.Enqueue(terrainNum);
         approachingTerrainTfQueue.Enqueue(previousTerrainTf);
         approachingTerrainNumQueue.Enqueue(terrainNum);
-    }
-
-
-
-    public void ManageMovingTerrain()
-    {
-        //ステージ右端の座標を取得
-        stageRightEdge = previousTerrainTf.position.x;
-
-        //ステージの端が近づいていれば地形を追加で生成
-        if (stageRightEdge < 25)
-        {
-            if (isCreateObstacle) CreateTerrainRandom();
-            else CreateTerrain(0, stageRightEdge, 3, 1, moveSpeed);
-        }
-
-        //プレイヤーの位置の地面の種類の更新必要性の確認
-        switch (nextTerrainNum)
-        {
-            case 0:
-            case 1:
-                if (currentTerrainTf.position.x < -playerTf.localScale.x / 2)
-                    UpdateCurrentTerrain();
-                break;
-
-            case 2:
-            case 4:
-            case 5:
-                if (currentTerrainTf.position.x < playerTf.localScale.x / 2)
-                    UpdateCurrentTerrain();
-                break;
-
-            case 3:
-                if (currentTerrainTf.position.x < 0)
-                    UpdateCurrentTerrain();
-                break;
-        }
-
-        //不要地形削除処理
-        if (activeTerrainTfQueue.Peek().position.x < -5)
-            pool[activeTerrainNumQueue.Dequeue()].Release(activeTerrainTfQueue.Dequeue().gameObject);
     }
 
 

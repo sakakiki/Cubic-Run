@@ -8,14 +8,13 @@ public class GameStateState_Play : GameStateStateBase
     public GameStateState_Play(GameStateStateMachine stateMachine) : base(stateMachine)
     {
         playStateMachine = new PlayStateStateMachine(stateMachine);
-        playStateMachine.Initialize(playStateMachine.state_LevelStart);
     }
 
 
 
     public override void Enter()
     {
-
+        playStateMachine.Initialize(playStateMachine.state_LevelStart);
     }
 
 
@@ -27,8 +26,5 @@ public class GameStateState_Play : GameStateStateBase
 
 
 
-    public override void Exit()
-    {
-
-    }
+    public override void Exit() { }
 }
