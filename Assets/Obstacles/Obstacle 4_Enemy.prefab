@@ -230,7 +230,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3396292376978377463}
   - component: {fileID: 2305507654956679180}
-  m_Layer: 6
+  m_Layer: 0
   m_Name: Enemy Eye _R
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -314,7 +314,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7055124666135977247}
   - component: {fileID: 1271840781626667194}
-  m_Layer: 6
+  m_Layer: 0
   m_Name: Enemy Skin
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -399,7 +399,7 @@ GameObject:
   - component: {fileID: 2836412262258301143}
   - component: {fileID: 3597702320236948361}
   - component: {fileID: 2113134488517706708}
-  m_Layer: 6
+  m_Layer: 0
   m_Name: Enemy
   m_TagString: Enemy
   m_Icon: {fileID: 0}
@@ -479,7 +479,7 @@ GameObject:
   m_Component:
   - component: {fileID: 501543947858098366}
   - component: {fileID: 7245564260591839453}
-  m_Layer: 6
+  m_Layer: 0
   m_Name: Enemy Eye _L
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -721,7 +721,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7811615560287890661}
   - component: {fileID: 7322978782712132576}
-  m_Layer: 6
+  m_Layer: 0
   m_Name: Enemy Mouth _L
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -805,7 +805,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8036889092968553572}
   - component: {fileID: 1160081589086936635}
-  m_Layer: 6
+  m_Layer: 0
   m_Name: Enemy Frame
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -889,7 +889,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3353032655013698656}
   - component: {fileID: 8947711124524584954}
-  m_Layer: 6
+  m_Layer: 0
   m_Name: Enemy Mouth _R
   m_TagString: Untagged
   m_Icon: {fileID: 0}

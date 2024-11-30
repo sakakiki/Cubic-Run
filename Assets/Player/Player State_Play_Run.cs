@@ -1,8 +1,8 @@
 using UnityEngine;
 
-public class PlayerState_Run : PlayerStateBase_Play
+public class PlayerState_Play_Run : PlayerStateBase_Play
 {
-    public PlayerState_Run(PlayerStateMachine stateMachine) : base(stateMachine){ }
+    public PlayerState_Play_Run(PlayerStateMachine stateMachine) : base(stateMachine){ }
 
     public override void Enter()
     {
@@ -20,15 +20,15 @@ public class PlayerState_Run : PlayerStateBase_Play
 
         //しゃがみ入力でSquatステートに遷移
         else if (IM.squatButtonPush)
-            stateMachine.ChangeState(stateMachine.state_Squat);
+            stateMachine.ChangeState(stateMachine.state_Play_Squat);
 
         //攻撃入力でAttackステートに遷移
         else if (IM.attackButtonPush)
-            stateMachine.ChangeState(stateMachine.state_Attack);
+            stateMachine.ChangeState(stateMachine.state_Play_Attack);
 
         //空中に出たらJumpステートへ遷移
         else if (!isGrounded)
-            stateMachine.ChangeState(stateMachine.state_Jump);
+            stateMachine.ChangeState(stateMachine.state_Play_Jump);
     }
 
     public override void Exit() { }

@@ -20,6 +20,7 @@ public class GameManager : MonoBehaviour
     public GameStateStateMachine gameStateMachine {  get; private set; }
 
     //’è”“o˜^E‹L‰¯
+    public Vector2 centerPos_World = new Vector2(5, 3);
     public Vector2 centerAPos_TopLeft = new Vector2(1920, -1080);
     public Vector2 levelAPos = new Vector2(450, -350);
 

@@ -1,10 +1,10 @@
 using UnityEngine;
 
-public class PlayerState_Jump : PlayerStateBase_Play
+public class PlayerState_Play_Jump : PlayerStateBase_Play
 {
     private Vector2 jumpScale = new Vector2(0.9f, 1.1f);
 
-    public PlayerState_Jump(PlayerStateMachine stateMachine) : base(stateMachine) { }
+    public PlayerState_Play_Jump(PlayerStateMachine stateMachine) : base(stateMachine) { }
 
     public override void Enter()
     {
@@ -24,7 +24,7 @@ public class PlayerState_Jump : PlayerStateBase_Play
         if (IM.squatButtonPush)
         {
             if (rb.velocity.y > -25) rb.velocity = Vector2.down * 25;
-            stateMachine.ChangeState(stateMachine.state_SmallJump);
+            stateMachine.ChangeState(stateMachine.state_Play_SmallJump);
         }
 
         //着地したらステート遷移
@@ -32,10 +32,10 @@ public class PlayerState_Jump : PlayerStateBase_Play
         {
             //攻撃ボタンが押されていたらAttackステートへ
             if (IM.attackButtonHold)
-                stateMachine.ChangeState(stateMachine.state_Attack);
+                stateMachine.ChangeState(stateMachine.state_Play_Attack);
 
             //入力が無ければRunステートへ
-            else stateMachine.ChangeState(stateMachine.state_Run);
+            else stateMachine.ChangeState(stateMachine.state_Play_Run);
         }
     }
 

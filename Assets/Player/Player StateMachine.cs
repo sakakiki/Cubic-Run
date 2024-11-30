@@ -1,37 +1,70 @@
 public class PlayerStateMachine
 {
-    public PlayerStateBase_Play currentState {  get; private set; }
+    public PlayerStateBase currentState {  get; private set; }
     public PlayerController playerController { get; private set; }
 
-    public PlayerStateBase_Play state_Run { get; private set; }
-    public PlayerStateBase_Play state_Jump { get; private set; }
-    public PlayerStateBase_Play state_Squat { get; private set; }
-    public PlayerStateBase_Play state_Attack { get; private set; }
-    public PlayerStateBase_Play state_SmallJump { get; private set; }
-    public PlayerStateBase_Play state_GameOver { get; private set; }
+    public PlayerStateBase state_Model_Kinematic { get; private set; }
+    public PlayerStateBase state_Model_LookAround { get; private set; }
+    public PlayerStateBase state_Model_Move { get; private set; }
+    public PlayerStateBase state_Model_Roll { get; private set; }
+    public PlayerStateBase state_Model_ResetRotation { get; private set; }
+    public PlayerStateBase state_Model_Jump { get; private set; }
+    public PlayerStateBase state_Model_Delay { get; private set; }
+    public PlayerStateBase state_Model_Squat { get; private set; }
+    public PlayerStateBase state_Play_Run { get; private set; }
+    public PlayerStateBase state_Play_Jump { get; private set; }
+    public PlayerStateBase state_Play_Squat { get; private set; }
+    public PlayerStateBase state_Play_Attack { get; private set; }
+    public PlayerStateBase state_Play_SmallJump { get; private set; }
+    public PlayerStateBase state_GameOver { get; private set; }
 
     public PlayerStateMachine(PlayerController playerController)
     {
         this.playerController = playerController;
-        state_Run = new PlayerState_Run(this);
-        state_Jump = new PlayerState_Jump(this);
-        state_Squat = new PlayerState_Squat(this);
-        state_Attack = new PlayerState_Attack(this);
-        state_SmallJump = new PlayerState_SmallJump(this);
+        state_Model_Kinematic = new PlayerState_Model_Kinematic(this);
+        state_Model_LookAround = new PlayerState_Model_LookAround(this);
+        state_Model_Move = new PlayerState_Model_Move(this);
+        state_Model_Roll = new PlayerState_Model_Roll(this);
+        state_Model_ResetRotation = new PlayerState_Model_ResetRotation(this);
+        state_Model_Jump = new PlayerState_Model_Jump(this);
+        state_Model_Delay = new PlayerState_Model_Delay(this);
+        state_Model_Squat = new PlayerState_Model_Squat(this);
+        state_Play_Run = new PlayerState_Play_Run(this);
+        state_Play_Jump = new PlayerState_Play_Jump(this);
+        state_Play_Squat = new PlayerState_Play_Squat(this);
+        state_Play_Attack = new PlayerState_Play_Attack(this);
+        state_Play_SmallJump = new PlayerState_Play_SmallJump(this);
         state_GameOver = new PlayerState_GameOver(this);
     }
 
-    public void Initialize(PlayerStateBase_Play firstState)
+    public void Initialize(PlayerStateBase firstState)
     {
         currentState = firstState;
         firstState.Enter();
     }
 
-    public void ChangeState(PlayerStateBase_Play newState)
+    public void ChangeState(PlayerStateBase newState)
     {
         currentState.Exit();
         currentState = newState;
         newState.Enter();
+    }
+
+    public void ChangeStateDelay(PlayerStateBase newState, float delayTime)
+    {
+        ((PlayerState_Model_Delay)state_Model_Delay).nextState = newState;
+        ((PlayerState_Model_Delay)state_Model_Delay).delayTime = delayTime;
+        currentState.Exit();
+        currentState = state_Model_Delay;
+        state_Model_Delay.Enter();
+    }
+
+    public void ChangeStateViaSquat(PlayerStateBase newState)
+    {
+        ((PlayerState_Model_Squat)state_Model_Squat).nextState = newState;
+        currentState.Exit();
+        currentState = state_Model_Squat;
+        state_Model_Squat.Enter();
     }
 
     public void Update()

@@ -37,7 +37,7 @@ public class Enemy : MonoBehaviour
         if ((tf.position.x) < (playerTf.localScale.x / 2))
         {
             //プレイヤーがAttackステートなら倒される
-            if (playerStateMachine.currentState == playerStateMachine.state_Attack)
+            if (playerStateMachine.currentState == playerStateMachine.state_Play_Attack)
             {
                 rb.isKinematic = false;
                 rb.velocity = parentRb.velocity + Vector2.up * 10;

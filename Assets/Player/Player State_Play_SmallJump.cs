@@ -1,10 +1,10 @@
 using UnityEngine;
 
-public class PlayerState_SmallJump : PlayerStateBase_Play
+public class PlayerState_Play_SmallJump : PlayerStateBase_Play
 {
     private Vector2 smallJumpScale = new Vector2(1.2f, 0.8f);
 
-    public PlayerState_SmallJump(PlayerStateMachine stateMachine) : base(stateMachine) { }
+    public PlayerState_Play_SmallJump(PlayerStateMachine stateMachine) : base(stateMachine) { }
 
     public override void Enter()
     {
@@ -21,11 +21,11 @@ public class PlayerState_SmallJump : PlayerStateBase_Play
 
         //しゃがみ入力解除でJumpステートに遷移
         if (IM.squatButtonRelease)
-            stateMachine.ChangeState(stateMachine.state_Jump);
+            stateMachine.ChangeState(stateMachine.state_Play_Jump);
 
         //着地でSquatステートに遷移
         else if (isGrounded)
-            stateMachine.ChangeState(stateMachine.state_Squat);
+            stateMachine.ChangeState(stateMachine.state_Play_Squat);
     }
 
     public override void Exit()

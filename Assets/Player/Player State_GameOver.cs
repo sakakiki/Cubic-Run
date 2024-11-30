@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class PlayerState_GameOver : PlayerStateBase_Play
+public class PlayerState_GameOver : PlayerStateBase
 {
     private Vector2 tunnelScale = new Vector2(1.3f, 0.6f);
 
@@ -27,10 +27,7 @@ public class PlayerState_GameOver : PlayerStateBase_Play
         playerCon.SkinGameOver.SetActive(true);
     }
 
-    public override void Update()
-    {
-
-    }
+    public override void Update() { }
 
     public override void Exit()
     {
