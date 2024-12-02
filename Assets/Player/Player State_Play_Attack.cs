@@ -19,10 +19,10 @@ public class PlayerState_Play_Attack : PlayerStateBase_Play
         base.Update();
 
         //攻撃入力解除時
-        if (IM.attackButtonRelease)
+        if (IM.button_Play_Attack_Release)
         {
             //しゃがみ入力でSquatステート
-            if (IM.squatButtonHold) 
+            if (IM.button_Play_Squat_Hold) 
                 stateMachine.ChangeState(stateMachine.state_Play_Squat);
 
             //入力なしでRunステート
@@ -30,11 +30,11 @@ public class PlayerState_Play_Attack : PlayerStateBase_Play
         }
 
         //ジャンプ処理
-        else if (IM.jumpButtonPush)
+        else if (IM.button_Play_Jump_Push)
             rb.velocity = Vector2.up * 30;
 
         //しゃがみ入力でSquatステートに遷移
-        else if (IM.squatButtonPush)
+        else if (IM.button_Play_Squat_Push)
             stateMachine.ChangeState(stateMachine.state_Play_Squat);
 
         //空中に出たらJumpステートへ遷移

@@ -21,7 +21,7 @@ public class PlayerState_Play_Jump : PlayerStateBase_Play
         base.Update();
 
         //しゃがみボタンが押されたら急降下
-        if (IM.squatButtonPush)
+        if (IM.button_Play_Squat_Push)
         {
             if (rb.velocity.y > -25) rb.velocity = Vector2.down * 25;
             stateMachine.ChangeState(stateMachine.state_Play_SmallJump);
@@ -31,7 +31,7 @@ public class PlayerState_Play_Jump : PlayerStateBase_Play
         else if (isGrounded)
         {
             //攻撃ボタンが押されていたらAttackステートへ
-            if (IM.attackButtonHold)
+            if (IM.button_Play_Attack_Hold)
                 stateMachine.ChangeState(stateMachine.state_Play_Attack);
 
             //入力が無ければRunステートへ

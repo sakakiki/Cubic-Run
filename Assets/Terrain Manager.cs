@@ -67,7 +67,7 @@ public class TerrainManager : MonoBehaviour
         moveSpeed = 8;
 
         //‰Šú’n–Ê¶¬
-        CreateTerrain(0, 0, 5, 1, moveSpeed);
+        CreateTerrain(0, -5, 5, 1, moveSpeed);
         CreateTerrain(0, previousTerrainTf.position.x, 5, 1, moveSpeed);
         CreateTerrain(0, previousTerrainTf.position.x, 5, 1, moveSpeed);
         nextTerrainNum = approachingTerrainNumQueue.Dequeue();

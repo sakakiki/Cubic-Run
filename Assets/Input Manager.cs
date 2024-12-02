@@ -4,13 +4,13 @@ public class InputManager : MonoBehaviour
 {
     public static InputManager Instance { get; private set; }
 
-    public bool jumpButtonPush {  get; private set; }
-    public bool squatButtonPush { get; private set; }
-    public bool squatButtonHold { get; private set; }
-    public bool squatButtonRelease { get; private set; }
-    public bool attackButtonPush { get; private set; }
-    public bool attackButtonHold { get; private set; }
-    public bool attackButtonRelease { get; private set; }
+    public bool button_Play_Jump_Push {  get; private set; }
+    public bool button_Play_Squat_Push { get; private set; }
+    public bool button_Play_Squat_Hold { get; private set; }
+    public bool button_Play_Squat_Release { get; private set; }
+    public bool button_Play_Attack_Push { get; private set; }
+    public bool button_Play_Attack_Hold { get; private set; }
+    public bool button_Play_Attack_Release { get; private set; }
 
     private void Awake()
     {
@@ -18,14 +18,14 @@ public class InputManager : MonoBehaviour
             Instance = this;
     }
 
-    public void GetInput()
+    public void GetInput_Play()
     {
-        jumpButtonPush = Input.GetKeyDown(KeyCode.UpArrow);
-        squatButtonPush = Input.GetKeyDown(KeyCode.DownArrow);
-        squatButtonHold = Input.GetKey(KeyCode.DownArrow);
-        squatButtonRelease = Input.GetKeyUp(KeyCode.DownArrow);
-        attackButtonPush = Input.GetKeyDown(KeyCode.RightArrow);
-        attackButtonHold = Input.GetKey(KeyCode.RightArrow);
-        attackButtonRelease = Input.GetKeyUp(KeyCode.RightArrow);
+        button_Play_Jump_Push = Input.GetKeyDown(KeyCode.UpArrow);
+        button_Play_Squat_Push = Input.GetKeyDown(KeyCode.DownArrow);
+        button_Play_Squat_Hold = Input.GetKey(KeyCode.DownArrow);
+        button_Play_Squat_Release = Input.GetKeyUp(KeyCode.DownArrow);
+        button_Play_Attack_Push = Input.GetKeyDown(KeyCode.RightArrow);
+        button_Play_Attack_Hold = Input.GetKey(KeyCode.RightArrow);
+        button_Play_Attack_Release = Input.GetKeyUp(KeyCode.RightArrow);
     }
 }

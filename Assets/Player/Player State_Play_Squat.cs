@@ -21,14 +21,14 @@ public class PlayerState_Play_Squat : PlayerStateBase_Play
         base.Update();
 
         //しゃがみ入力解除時
-        if (IM.squatButtonRelease)
+        if (IM.button_Play_Squat_Release)
         {
             //トンネル内ならゲームオーバー
             if (TM.currentTerrainNum == 3)
                 stateMachine.ChangeState(stateMachine.state_GameOver);
 
             //攻撃入力があればAttackステート
-            else if (IM.attackButtonHold)
+            else if (IM.button_Play_Attack_Hold)
                 stateMachine.ChangeState(stateMachine.state_Play_Attack);
 
             //入力なしでRunステート
@@ -36,11 +36,11 @@ public class PlayerState_Play_Squat : PlayerStateBase_Play
         }
 
         //ジャンプ処理
-        else if (IM.jumpButtonPush)
+        else if (IM.button_Play_Jump_Push)
             rb.velocity = Vector2.up * 20;
 
         //攻撃入力でAttackステートに遷移
-        else if (IM.attackButtonPush)
+        else if (IM.button_Play_Attack_Push)
             stateMachine.ChangeState(stateMachine.state_Play_Attack);
 
         //空中に出たらJumpステートへ遷移

@@ -29,6 +29,15 @@ public class PlayerState_Model_Kinematic : PlayerStateBase_Model
 
     public override void Update()
     {
+        //撮影用
+        TerrainManager.Instance.moveSpeed = 5;
+        TerrainManager.Instance.SetSpeed(5);
+        //
+
+
+
+
+
         base.Update();
 
         //ステート開始後7秒待機

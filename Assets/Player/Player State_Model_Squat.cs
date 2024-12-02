@@ -23,5 +23,9 @@ public class PlayerState_Model_Squat : PlayerStateBase_Model
             stateMachine.ChangeState(nextState);
     }
 
-    public override void Exit() { }
+    public override void Exit()
+    {
+        //ÉXÉPÅ[Éãí≤êÆ
+        tf.localScale = Vector3.one * 1.5f;
+    }
 }

@@ -10,9 +10,6 @@ public class PlayerState_Model_Jump : PlayerStateBase_Model
     {
         base.Enter();
 
-        //スケール調整
-        tf.localScale = Vector3.one * 1.5f;
-
         //移動時のジャンプのベクトル
         jumpVector = 
             Vector2.up * Random.Range(15f, 25f) + 
