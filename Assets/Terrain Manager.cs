@@ -13,8 +13,8 @@ public class TerrainManager : MonoBehaviour
     //”Ä—p•Ï”
     private GameManager GM;
     private Transform playerTf;
-    public float moveSpeed;
-    public bool isCreateObstacle;
+    [HideInInspector] public float moveSpeed;
+    [HideInInspector] public bool isCreateObstacle;
     private Transform previousTerrainTf;
     private float stageRightEdge;
 

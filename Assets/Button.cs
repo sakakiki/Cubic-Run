@@ -3,7 +3,7 @@ using UnityEngine.EventSystems;
 
 public class Button : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, IPointerClickHandler
 {
-    [HideInInspector] public bool isPushed;
+    private bool isPushed;
     private Vector3 defaultScale;
 
     private void Start()
@@ -36,9 +36,14 @@ public class Button : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, IPo
         isPushed = true;
     }
 
-    public void LateUpdate()
+    public bool GetIsPushed()
     {
+        //返り値を保存
+        bool returnValue = isPushed;
+
         //押下のフラグをリセット
         isPushed = false;
+
+        return returnValue;
     }
 }

@@ -2,6 +2,7 @@ public abstract class GameStateStateBase
 {
     protected GameStateStateMachine stateMachine;
     protected GameManager GM;
+    protected InputManager IM;
     protected TerrainManager TM;
     protected PlayerController playerCon;
     protected PlayerStateMachine playerStateMachine;
@@ -10,6 +11,7 @@ public abstract class GameStateStateBase
     {
         this.stateMachine = stateMachine;
         GM = GameManager.Instance;
+        IM = InputManager.Instance;
         TM = TerrainManager.Instance;
         playerCon = GM.playerCon;
         playerStateMachine = playerCon.stateMachine;

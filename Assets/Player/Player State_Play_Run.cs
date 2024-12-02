@@ -15,15 +15,15 @@ public class PlayerState_Play_Run : PlayerStateBase_Play
         base.Update();
 
         //ジャンプ処理
-        if (IM.button_Play_Jump_Push)
+        if (IM.is_Play_Jump_Push)
             rb.velocity = Vector2.up * 30;
 
         //しゃがみ入力でSquatステートに遷移
-        else if (IM.button_Play_Squat_Push)
+        else if (IM.is_Play_Squat_Push)
             stateMachine.ChangeState(stateMachine.state_Play_Squat);
 
         //攻撃入力でAttackステートに遷移
-        else if (IM.button_Play_Attack_Push)
+        else if (IM.is_Play_Attack_Push)
             stateMachine.ChangeState(stateMachine.state_Play_Attack);
 
         //空中に出たらJumpステートへ遷移

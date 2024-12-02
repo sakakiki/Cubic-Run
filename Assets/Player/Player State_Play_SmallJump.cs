@@ -20,7 +20,7 @@ public class PlayerState_Play_SmallJump : PlayerStateBase_Play
         base.Update();
 
         //しゃがみ入力解除でJumpステートに遷移
-        if (IM.button_Play_Squat_Release)
+        if (IM.is_Play_Squat_Release)
             stateMachine.ChangeState(stateMachine.state_Play_Jump);
 
         //着地でSquatステートに遷移
