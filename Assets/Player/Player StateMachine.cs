@@ -11,6 +11,7 @@ public class PlayerStateMachine
     public PlayerStateBase state_Model_Jump { get; private set; }
     public PlayerStateBase state_Model_Delay { get; private set; }
     public PlayerStateBase state_Model_Squat { get; private set; }
+    public PlayerStateBase state_Model_Dragged { get; private set; }
     public PlayerStateBase state_Play_Run { get; private set; }
     public PlayerStateBase state_Play_Jump { get; private set; }
     public PlayerStateBase state_Play_Squat { get; private set; }
@@ -29,6 +30,7 @@ public class PlayerStateMachine
         state_Model_Jump = new PlayerState_Model_Jump(this);
         state_Model_Delay = new PlayerState_Model_Delay(this);
         state_Model_Squat = new PlayerState_Model_Squat(this);
+        state_Model_Dragged = new PlayerState_Model_Dragged(this);
         state_Play_Run = new PlayerState_Play_Run(this);
         state_Play_Jump = new PlayerState_Play_Jump(this);
         state_Play_Squat = new PlayerState_Play_Squat(this);

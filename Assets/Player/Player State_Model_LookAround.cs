@@ -15,7 +15,7 @@ public class PlayerState_Model_LookAround : PlayerStateBase_Model
         waitTimer = Random.Range(1f, 2.5f);
 
         //Å‰‚ÉŒü‚­•ûŒü‚ğŒˆ’è
-        if (lookDirection == targetDirection)
+        if (lookDirection == targetDirection && targetDirection != 0)
             targetDirection *= -1;
         else targetDirection = Random.Range(0, 2) == 0 ? 0.1f : -0.1f;
     }

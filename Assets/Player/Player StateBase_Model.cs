@@ -17,6 +17,7 @@ public abstract class PlayerStateBase_Model : PlayerStateBase
 
     public override void Enter()
     {
+        //経過時間リセット
         elapsedTime = 0;
     }
 

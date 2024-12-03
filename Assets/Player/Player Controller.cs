@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 public class PlayerController : MonoBehaviour
 {
@@ -14,6 +15,7 @@ public class PlayerController : MonoBehaviour
     public GameObject[] playerColliders;
     public SpriteRenderer[] playerSkins;
     public Transform eyeTf;
+    public GameObject eyeDragged;
     public Vector2 playerPos_GameStart { get; private set; } = Vector2.zero;
     public Vector2 eyePos_Model { get; private set; } = Vector2.up * 0.11f;
     public Vector2 eyePos_Play { get; private set; } = Vector2.one * 0.11f;
@@ -42,5 +44,15 @@ public class PlayerController : MonoBehaviour
         //スキンの描画優先度変更
         for (int i = 0; i < playerSkins.Length; i++)
             playerSkins[i].sortingLayerName = layerName;
+    }
+
+    public void OnMouseDown()
+    {
+        stateMachine.ChangeState(stateMachine.state_Model_Dragged);
+    }
+
+    public void OnMouseUp()
+    {
+        stateMachine.ChangeStateDelay(stateMachine.state_Model_ResetRotation, 3);
     }
 }
