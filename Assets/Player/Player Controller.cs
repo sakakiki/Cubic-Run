@@ -14,6 +14,7 @@ public class PlayerController : MonoBehaviour
     public GameObject SkinGameOver;
     public GameObject[] playerColliders;
     public SpriteRenderer[] playerSkins;
+    public Transform centerTf;
     public Transform eyeTf;
     public GameObject eyeDragged;
     public Vector2 playerPos_GameStart { get; private set; } = Vector2.zero;
@@ -46,11 +47,13 @@ public class PlayerController : MonoBehaviour
             playerSkins[i].sortingLayerName = layerName;
     }
 
+    //タップされたらステート遷移
     public void OnMouseDown()
     {
         stateMachine.ChangeState(stateMachine.state_Model_Dragged);
     }
 
+    //離されたら少し待機して姿勢を戻す
     public void OnMouseUp()
     {
         stateMachine.ChangeStateDelay(stateMachine.state_Model_ResetRotation, 3);

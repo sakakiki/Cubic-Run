@@ -12,11 +12,14 @@ public class PlayerState_Model_Dragged : PlayerStateBase_Model
     private Queue<float> timeQueue = new Queue<float>();
     private Queue<Vector2> posQueue = new Queue<Vector2>();
     private float startAngle;
+    private Transform playerCenterTf;
+    private Vector2 centerOffset;
 
     public PlayerState_Model_Dragged(PlayerStateMachine stateMachine) : base(stateMachine)
     {
         mainCam = Camera.main;
         mainCamTf = mainCam.transform;
+        playerCenterTf = playerCon.centerTf;
     }
 
     public override void Enter()
@@ -46,6 +49,9 @@ public class PlayerState_Model_Dragged : PlayerStateBase_Model
         //ドラッグ開始時の位置・タッチ位置のズレを記憶
         startScreenPoint = mainCam.WorldToScreenPoint(tf.position);
         touchOffset = tf.position - mainCam.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, startScreenPoint.z));
+
+        //プレイヤーの座標と中心の位置のズレを記憶
+        centerOffset = playerCenterTf.position - tf.position;
     }
 
     public override void Update()
@@ -58,12 +64,12 @@ public class PlayerState_Model_Dragged : PlayerStateBase_Model
         Vector3 newPosition = mainCam.ScreenToWorldPoint(currentScreenPoint) + touchOffset;
 
         //画面外に出た場合は補正
-        if (newPosition.y < mainCamTf.position.y) 
-            newPosition.y = mainCamTf.position.y;
-        if (newPosition.x < -5 + tf.localScale.x/2)
-            newPosition.x = -5 + tf.localScale.x/2;
-        else if (newPosition.x > 15 - tf.localScale.x/2)
-            newPosition.x = 15 - tf.localScale.x/2;
+        if (newPosition.y + centerOffset.y - tf.localScale.y / 2 < mainCamTf.position.y) 
+            newPosition.y = mainCamTf.position.y - centerOffset.y + tf.localScale.y / 2;
+        if (newPosition.x + centerOffset.x - tf.localScale.x / 2 < -5)
+            newPosition.x = -5 - centerOffset.x + tf.localScale.x / 2;
+        else if (newPosition.x + centerOffset.x + tf.localScale.x / 2 > 15)
+            newPosition.x = 15 - centerOffset.x - tf.localScale.x / 2;
 
         //現在値の記憶とQueueへの格納
         currentTime = Time.time;

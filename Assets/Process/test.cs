@@ -1,28 +1,11 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.EventSystems;
+using UnityEngine.EventSystems; //イベント系のインターフェースを使うことの宣言
 
-public class test : MonoBehaviour,IPointerDownHandler
+//Canvas上にあるゲームオブジェクトにアタッチ
+public class test : MonoBehaviour, IPointerDownHandler //インターフェースの実装
 {
-    private int count;
-
-    public void OnPointerDown(PointerEventData eventData)
+    public void OnPointerDown(PointerEventData eventData) //インターフェースに応じたメソッド名
     {
-        count++;
-    }
-
-
-    // Start is called before the first frame update
-    void Start()
-    {
-        Application.targetFrameRate = 1;
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        Debug.Log(count);
-        count = 0;
+        //クリック（タップ）時の処理
     }
 }

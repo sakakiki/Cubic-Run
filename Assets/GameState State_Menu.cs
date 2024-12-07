@@ -6,8 +6,8 @@ public class GameStateState_Menu : GameStateStateBase
 
     public override void Enter()
     {
-        //各ボタンの入力フラグをリセット
-        IM.GetInput_Menu();
+        //メニュー画面のUIを有効化
+        IM.InputUISetActive_Menu(true);
 
         //障害物の生成を有効化
         TM.isCreateObstacle = true;
@@ -25,6 +25,7 @@ public class GameStateState_Menu : GameStateStateBase
 
     public override void Exit()
     {
-
+        //メニュー画面のUIを無効化
+        IM.InputUISetActive_Menu(false);
     }
 }

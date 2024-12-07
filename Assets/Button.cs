@@ -46,4 +46,13 @@ public class Button : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, IPo
 
         return returnValue;
     }
+
+    private void OnDisable()
+    {
+        //スケールを基本のスケールに戻す
+        transform.localScale = defaultScale;
+
+        //押下のフラグをリセット
+        isPushed = false;
+    }
 }

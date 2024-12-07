@@ -25,6 +25,13 @@ public class InputManager : MonoBehaviour
             Instance = this;
     }
 
+    public void InputUISetActive_Menu(bool isActive)
+    {
+        button_Menu_Play.enabled = isActive;
+        button_Menu_Skin.enabled = isActive;
+        button_Menu_Tutorial.enabled = isActive;
+    }
+
     public void GetInput_Menu()
     {
         is_Menu_Play = button_Menu_Play.GetIsPushed();
