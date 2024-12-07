@@ -33,7 +33,7 @@ public class PlayerState_Model_Dragged : PlayerStateBase_Model
         rb.velocity = Vector2.zero;
         rb.angularVelocity = 0;
 
-        //回転を記憶
+        //回転量を記憶
         startAngle = tf.eulerAngles.z;
 
         //スケール変更

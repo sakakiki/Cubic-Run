@@ -36,6 +36,8 @@ public class Button : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, IPo
         isPushed = true;
     }
 
+    //Input Manager側から呼び出し
+    //押下の有無を返す
     public bool GetIsPushed()
     {
         //返り値を保存
@@ -47,6 +49,7 @@ public class Button : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, IPo
         return returnValue;
     }
 
+    //スクリプトが無効化されればリセット処理
     private void OnDisable()
     {
         //スケールを基本のスケールに戻す
