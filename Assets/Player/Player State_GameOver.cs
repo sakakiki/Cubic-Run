@@ -8,6 +8,9 @@ public class PlayerState_GameOver : PlayerStateBase
 
     public override void Enter()
     {
+        //ゲームステートの遷移
+        gameStateMachine.ChangeState(gameStateMachine.state_Result);
+
         //トンネル内なら専用のスケールに
         if (TerrainManager.Instance.currentTerrainNum == 3)
             tf.localScale = tunnelScale;

@@ -67,7 +67,7 @@ public class PlayerState_Model_LookAround : PlayerStateBase_Model
 
                     //1/3‚ÌŠm—¦‚ÅƒWƒƒƒ“ƒv
                     case 2:
-                        stateMachine.ChangeStateViaSquat(stateMachine.state_Model_Jump);
+                        stateMachine.ChangeStateDelay(stateMachine.state_Model_Squat, Random.Range(1f, 2.5f));
                         break;
                 }
             }

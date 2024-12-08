@@ -25,19 +25,14 @@ public class PlayerState_Model_Kinematic : PlayerStateBase_Model
 
         //最初に向く方向を決定
         targetDirection = Random.Range(0, 2) == 0 ? 0.1f : -0.1f;
+
+        //当たり判定・描画レイヤー変更
+        playerCon.SetLayer(5);
+        playerCon.SetSortingLayer("Model");
     }
 
     public override void Update()
     {
-        //撮影用
-        TerrainManager.Instance.moveSpeed = 5;
-        TerrainManager.Instance.SetSpeed(5);
-        //
-
-
-
-
-
         base.Update();
 
         //ステート開始後7秒待機

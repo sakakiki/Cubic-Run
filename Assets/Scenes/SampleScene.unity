@@ -213,7 +213,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 74015317}
-  m_Layer: 5
+  m_Layer: 0
   m_Name: Center
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -245,7 +245,7 @@ GameObject:
   m_Component:
   - component: {fileID: 105383145}
   - component: {fileID: 105383146}
-  m_Layer: 5
+  m_Layer: 0
   m_Name: Eye_Dragged
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -329,7 +329,7 @@ GameObject:
   m_Component:
   - component: {fileID: 109213409}
   - component: {fileID: 109213408}
-  m_Layer: 5
+  m_Layer: 0
   m_Name: Skin Default
   m_TagString: Player
   m_Icon: {fileID: 0}
@@ -547,7 +547,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 220938721}
-  m_Layer: 5
+  m_Layer: 0
   m_Name: Player Eye _GameOver_R
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -844,7 +844,7 @@ GameObject:
   m_Component:
   - component: {fileID: 531041548}
   - component: {fileID: 531041547}
-  m_Layer: 5
+  m_Layer: 0
   m_Name: Skin Attack
   m_TagString: Player
   m_Icon: {fileID: 0}
@@ -930,7 +930,7 @@ GameObject:
   - component: {fileID: 650189582}
   - component: {fileID: 650189584}
   - component: {fileID: 650189583}
-  m_Layer: 5
+  m_Layer: 0
   m_Name: Trigger Foot
   m_TagString: Player
   m_Icon: {fileID: 0}
@@ -1125,7 +1125,7 @@ GameObject:
   m_Component:
   - component: {fileID: 768589079}
   - component: {fileID: 768589080}
-  m_Layer: 5
+  m_Layer: 0
   m_Name: Player Eye _L
   m_TagString: Player
   m_Icon: {fileID: 0}
@@ -1209,7 +1209,7 @@ GameObject:
   m_Component:
   - component: {fileID: 793704854}
   - component: {fileID: 793704855}
-  m_Layer: 5
+  m_Layer: 0
   m_Name: Player Eye
   m_TagString: Player
   m_Icon: {fileID: 0}
@@ -1383,7 +1383,7 @@ GameObject:
   - component: {fileID: 833151958}
   - component: {fileID: 833151957}
   - component: {fileID: 833151960}
-  m_Layer: 5
+  m_Layer: 0
   m_Name: Trigger Front
   m_TagString: Player
   m_Icon: {fileID: 0}
@@ -1498,7 +1498,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 838946519}
-  m_Layer: 5
+  m_Layer: 0
   m_Name: Player Eye _GameOver_L
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1860,7 +1860,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1218805879}
   - component: {fileID: 1218805878}
-  m_Layer: 5
+  m_Layer: 0
   m_Name: Skin GameOver
   m_TagString: Player
   m_Icon: {fileID: 0}
@@ -1945,7 +1945,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1320795015}
-  m_Layer: 5
+  m_Layer: 0
   m_Name: Player Eye
   m_TagString: Player
   m_Icon: {fileID: 0}
@@ -2341,7 +2341,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1514044564}
   - component: {fileID: 1514044565}
-  m_Layer: 5
+  m_Layer: 0
   m_Name: Player Eye _GameOver
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2845,7 +2845,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1776930329}
   - component: {fileID: 1776930330}
-  m_Layer: 5
+  m_Layer: 0
   m_Name: Player Eye _GameOver
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2929,7 +2929,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1786459118}
   - component: {fileID: 1786459119}
-  m_Layer: 5
+  m_Layer: 0
   m_Name: Player Eye _GameOver
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3013,7 +3013,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1822461677}
   - component: {fileID: 1822461678}
-  m_Layer: 5
+  m_Layer: 0
   m_Name: Player Eye _GameOver
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3115,7 +3115,7 @@ GameObject:
   - component: {fileID: 1938157859}
   - component: {fileID: 1938157860}
   - component: {fileID: 1938157861}
-  m_Layer: 5
+  m_Layer: 0
   m_Name: Player
   m_TagString: Player
   m_Icon: {fileID: 0}
@@ -3235,7 +3235,9 @@ MonoBehaviour:
   SkinDefault: {fileID: 109213407}
   SkinAttack: {fileID: 531041546}
   SkinGameOver: {fileID: 1218805877}
-  playerColliders: []
+  playerColliders:
+  - {fileID: 1938157856}
+  - {fileID: 650189581}
   playerSkins:
   - {fileID: 109213408}
   - {fileID: 2142769524}
@@ -3584,7 +3586,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2142769523}
   - component: {fileID: 2142769524}
-  m_Layer: 5
+  m_Layer: 0
   m_Name: Player Eye _R
   m_TagString: Player
   m_Icon: {fileID: 0}

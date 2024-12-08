@@ -30,12 +30,15 @@ public class PlayerState_Model_ResetRotation : PlayerStateBase_Model
         rb.rotation = Mathf.Lerp(startEulerAnglesZ, 0, Mathf.Sqrt(elapsedTime * 2));
 
         //一定時間経過でステート遷移
-        if (elapsedTime > 2) 
-            stateMachine.ChangeState(stateMachine.state_Model_LookAround);
+        if (elapsedTime > 0.5) 
+            stateMachine.ChangeStateDelay(stateMachine.state_Model_LookAround, 1.5f);
     }
 
     public override void Exit()
     {
+        //回転のリセット
+        rb.rotation = 0;
+
         //回転を無効化
         rb.freezeRotation = true;
     }

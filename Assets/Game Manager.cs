@@ -30,14 +30,16 @@ public class GameManager : MonoBehaviour
     {
         if (Instance == null)
             Instance = this;
+
+        gameStateMachine = new GameStateStateMachine();
+        gameStateMachine.Initialize(gameStateMachine.state_Menu);
     }
 
 
 
     void Start()
     {
-        gameStateMachine = new GameStateStateMachine();
-        gameStateMachine.Initialize(gameStateMachine.state_Menu);
+
     }
 
 

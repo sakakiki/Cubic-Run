@@ -17,8 +17,15 @@ public class GameStateState_Menu : GameStateStateBase
 
     public override void Update(float deltaTime)
     {
+        //入力の取得
+        IM.GetInput_Menu();
+
         //地形を管理
         TM.ManageMovingTerrain();
+
+        //入力に応じたステート遷移
+        if (IM.is_Menu_Play_Push)
+            stateMachine.ChangeState(stateMachine.state_MenuToPlay);
     }
 
 

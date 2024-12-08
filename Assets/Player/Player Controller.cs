@@ -3,6 +3,7 @@ using UnityEngine;
 public class PlayerController : MonoBehaviour
 {
     public PlayerStateMachine stateMachine;
+    private GameStateStateMachine gameStateMachine;
     public GameObject player;
     public Transform tf;
     public Rigidbody2D rb;
@@ -16,20 +17,25 @@ public class PlayerController : MonoBehaviour
     public Transform centerTf;
     public Transform eyeTf;
     public GameObject eyeDragged;
+    public Vector2 playerPos_Menu { get; private set; } = Vector2.right * 5 + Vector2.up * 3;
     public Vector2 playerPos_GameStart { get; private set; } = Vector2.zero;
     public Vector2 eyePos_Model { get; private set; } = Vector2.up * 0.11f;
     public Vector2 eyePos_Play { get; private set; } = Vector2.one * 0.11f;
 
-    void Start()
+    private void Start()
     {
+        //ステートマシンのインスタンス化・初期化
         stateMachine = new PlayerStateMachine(this);
         stateMachine.Initialize(stateMachine.state_Model_Kinematic);
+
+        //GameStateのステートマシンを登録
+        gameStateMachine = GameManager.Instance.gameStateMachine;
     }
 
     private void Update()
     {
         //ステートに応じたUpdate実行
-        stateMachine.Update();
+        stateMachine.Update(); 
     }
 
     public void SetLayer(int layerNum)
@@ -46,15 +52,17 @@ public class PlayerController : MonoBehaviour
             playerSkins[i].sortingLayerName = layerName;
     }
 
-    //タップされたらステート遷移
+    //メニュー画面でタップされたらステート遷移
     public void OnMouseDown()
     {
-        stateMachine.ChangeState(stateMachine.state_Model_Dragged);
+        if (gameStateMachine.currentState == gameStateMachine.state_Menu)
+            stateMachine.ChangeState(stateMachine.state_Model_Dragged);
     }
 
-    //離されたら少し待機して姿勢を戻す
+    //メニュー画面で離されたら少し待機して姿勢を戻す
     public void OnMouseUp()
     {
-        stateMachine.ChangeStateDelay(stateMachine.state_Model_ResetRotation, 3);
+        if (gameStateMachine.currentState == gameStateMachine.state_Menu)
+            stateMachine.ChangeStateDelay(stateMachine.state_Model_ResetRotation, 3);
     }
 }

@@ -2,8 +2,6 @@ using UnityEngine;
 
 public class PlayerState_Model_Squat : PlayerStateBase_Model
 {
-    public PlayerStateBase nextState;
-
     public PlayerState_Model_Squat(PlayerStateMachine stateMachine) : base(stateMachine) { }
 
     public override void Enter()
@@ -20,7 +18,7 @@ public class PlayerState_Model_Squat : PlayerStateBase_Model
 
         //0.5秒待機後にステート遷移
         if (elapsedTime > 0.5)
-            stateMachine.ChangeState(nextState);
+            stateMachine.ChangeState(stateMachine.state_Model_Jump);
     }
 
     public override void Exit()

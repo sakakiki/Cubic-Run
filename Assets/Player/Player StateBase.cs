@@ -4,6 +4,7 @@ public abstract class PlayerStateBase
 {
     protected PlayerStateMachine stateMachine;
     protected PlayerController playerCon;
+    protected GameStateStateMachine gameStateMachine;
     protected Transform tf;
     protected Rigidbody2D rb;
 
@@ -11,6 +12,7 @@ public abstract class PlayerStateBase
     {
         this.stateMachine = stateMachine;
         playerCon = stateMachine.playerController;
+        gameStateMachine = GameManager.Instance.gameStateMachine;
         tf = playerCon.tf;
         rb = playerCon.rb;
     }

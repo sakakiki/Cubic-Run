@@ -6,8 +6,6 @@ public abstract class PlayStateStateBase
     protected GameStateStateMachine gameStateMachine;
     protected GameManager GM;
     protected TerrainManager TM;
-    protected PlayerController playerCon;
-    protected PlayerStateMachine playerStateMachine;
     public static float playTime;
     private TextMeshProUGUI scoreText;
 
@@ -17,8 +15,6 @@ public abstract class PlayStateStateBase
         gameStateMachine = stateMachine.gameStateMachine;
         GM = GameManager.Instance;
         TM = TerrainManager.Instance;
-        playerCon = GM.playerCon;
-        playerStateMachine = playerCon.stateMachine;
         scoreText = GM.scoreText;
     }
 
@@ -35,10 +31,6 @@ public abstract class PlayStateStateBase
         //スコア更新
         GM.score = (int)(playTime * 100);
         scoreText.SetText("" + GM.score);
-
-        //プレイヤーがGameOverステートならGameStateをResultに遷移
-        if (playerStateMachine.currentState == playerStateMachine.state_GameOver)
-            gameStateMachine.ChangeState(gameStateMachine.state_Result);
     }
 
     public abstract void Exit();

@@ -1,6 +1,6 @@
 public class GameStateState_Play : GameStateStateBase
 {
-    //ステートマシン
+    //プレイ用ステートマシン
     private PlayStateStateMachine playStateMachine;
 
 
@@ -14,6 +14,7 @@ public class GameStateState_Play : GameStateStateBase
 
     public override void Enter()
     {
+        //プレイ用ステートマシンの初期化
         playStateMachine.Initialize(playStateMachine.state_LevelStart);
     }
 
@@ -21,6 +22,7 @@ public class GameStateState_Play : GameStateStateBase
 
     public override void Update(float deltaTime)
     {
+        //プレイ用ステートマシンのUpdateを実行
         playStateMachine.Update(deltaTime);
     }
 

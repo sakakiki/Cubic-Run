@@ -45,5 +45,9 @@ public abstract class PlayerStateBase_Model : PlayerStateBase
             //次回瞬きタイミング設定
             eyeCloseTimer = Random.Range(0.5f, 5.5f);
         }
+
+        //ゲームステートが遷移したならステート遷移
+        if (gameStateMachine.currentState == gameStateMachine.state_MenuToPlay)
+            stateMachine.ChangeState(stateMachine.state_Model_toPlay);
     }
 }
