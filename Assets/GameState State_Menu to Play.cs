@@ -30,7 +30,7 @@ public class GameStateState_MenuToPlay : GameStateStateBase
         TM.ManageMovingTerrain();
 
         //指定時間経過でステート遷移
-        if (elapsedTime > 1.6)
+        if (elapsedTime > 2)
             stateMachine.ChangeState(stateMachine.state_Play);
     }
 

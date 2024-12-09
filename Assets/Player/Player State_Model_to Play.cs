@@ -3,12 +3,21 @@ using UnityEngine;
 public class PlayerState_Model_toPlay : PlayerStateBase_Model
 {
     private float startEulerAnglesZ;
+    private Vector2 startPos;
+    private Vector2 targetPos;
+    private bool isMoving;
 
-    public PlayerState_Model_toPlay(PlayerStateMachine stateMachine) : base(stateMachine) { }
+    public PlayerState_Model_toPlay(PlayerStateMachine stateMachine) : base(stateMachine)
+    {
+        targetPos = playerCon.playerPos_GameStart;
+    }
 
     public override void Enter()
     {
         base.Enter();
+
+        //物理演算の有効化
+        rb.isKinematic = false;
 
         //初期回転量記憶・補正
         startEulerAnglesZ = tf.eulerAngles.z;
@@ -27,11 +36,26 @@ public class PlayerState_Model_toPlay : PlayerStateBase_Model
         //回転
         rb.rotation = Mathf.Lerp(startEulerAnglesZ, 0, Mathf.Sqrt(elapsedTime * 2));
 
-        //回転のリセット
-        rb.rotation = 0;
+        if (elapsedTime < 0.5) return;
 
-        //回転を無効化
-        rb.freezeRotation = true;
+        //スケール調整
+        if (elapsedTime < 1)
+            tf.localScale = (Vector3.one - Vector3.up * (elapsedTime - 0.5f)) * 1.5f;
+        else tf.localScale = Vector3.one * Mathf.Lerp(1.5f, 1, (elapsedTime - 1) * 2);
+
+        if (elapsedTime < 1) return;
+
+        //ジャンプ開始位置記憶
+        if (!isMoving)
+        {
+            isMoving = true;
+            startPos = tf.position;
+        }
+
+        //移動
+        tf.position = 
+            Vector2.Lerp(startPos, targetPos, elapsedTime - 1) + 
+            Vector2.up * Mathf.Sqrt(Mathf.Sin(Mathf.PI * (elapsedTime - 1))) * 5;
 
         //ゲームステートがPlayならステート遷移
         if (gameStateMachine.currentState == gameStateMachine.state_Play)
@@ -46,5 +70,8 @@ public class PlayerState_Model_toPlay : PlayerStateBase_Model
 
         //重力スケール補正
         rb.gravityScale = 10;
+
+        //回転を無効化
+        rb.freezeRotation = true;
     }
 }
