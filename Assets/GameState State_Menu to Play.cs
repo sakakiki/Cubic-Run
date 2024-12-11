@@ -42,16 +42,19 @@ public class GameStateState_MenuToPlay : GameStateStateBase
         //経過時間加算
         elapsedTime += deltaTime;
 
+        //事前計算
+        float lerpValue = (elapsedTime - 1) / 1.5f;
+
         //地形を管理
         TM.ManageMovingTerrain();
 
         //UIを回転
-        menuHingeRtf_L.localEulerAngles = Vector3.Lerp(Vector3.zero, Vector3.up * -180, (elapsedTime -1) / 1.5f);
-        menuHingeRtf_R.localEulerAngles = Vector3.Lerp(Vector3.zero, Vector3.up * 180, (elapsedTime -1) / 1.5f);
-        playHingeRtf_L.localEulerAngles = Vector3.Lerp(Vector3.up * 180, Vector3.zero, (elapsedTime - 1) / 1.5f);
+        menuHingeRtf_L.localEulerAngles = Vector3.Lerp(Vector3.zero, Vector3.up * -180, lerpValue);
+        menuHingeRtf_R.localEulerAngles = Vector3.Lerp(Vector3.zero, Vector3.up * 180, lerpValue);
+        playHingeRtf_L.localEulerAngles = Vector3.Lerp(Vector3.up * 180, Vector3.zero, lerpValue);
 
         //スクリーンカバーの色を変更
-        screenCover.color = Color.Lerp(startCoverColor, targetCoverColor, (elapsedTime - 1) / 1.5f);
+        screenCover.color = Color.Lerp(startCoverColor, targetCoverColor, lerpValue);
 
         //指定時間経過でステート遷移
         if (elapsedTime > 2.5)

@@ -44,20 +44,23 @@ public class PlayerState_Model_toPlay : PlayerStateBase_Model
         //経過時間加算
         elapsedTime += Time.deltaTime;
 
+        //事前計算
+        float lerpValue = (elapsedTime - 1) / 1.5f;
+
         //回転
         rb.rotation = Mathf.Lerp(startEulerAnglesZ, 0, Mathf.Sqrt(elapsedTime * 2));
 
         //目の位置調整
         if (elapsedTime < 0.5)
             eyeTf.localPosition = Vector2.Lerp(eyeStartPos, eyeStandbyPos, elapsedTime * 3);
-        else eyeTf.localPosition = Vector2.Lerp(eyeStandbyPos, eyePlayPos, (elapsedTime - 1) * 2);
+        else eyeTf.localPosition = Vector2.Lerp(eyeStandbyPos, eyePlayPos, lerpValue);
 
         if (elapsedTime < 0.5) return;
 
         //スケール調整
         if (elapsedTime < 1)
             tf.localScale = (Vector3.one - Vector3.up * (elapsedTime - 0.5f)) * 1.5f;
-        else tf.localScale = Vector3.one * Mathf.Lerp(1.5f, 1, (elapsedTime - 1) / 1.5f);
+        else tf.localScale = Vector3.one * Mathf.Lerp(1.5f, 1, lerpValue);
 
         if (elapsedTime < 1) return;
 
@@ -79,7 +82,7 @@ public class PlayerState_Model_toPlay : PlayerStateBase_Model
         //移動関連演算
         velocityY -= gravity * Time.deltaTime;
         posCorrectionY += velocityY * Time.deltaTime;
-        tf.position = Vector2.Lerp(startPos, targetPos, (elapsedTime - 1) / 1.5f) + Vector2.up * posCorrectionY;
+        tf.position = Vector2.Lerp(startPos, targetPos, lerpValue) + Vector2.up * posCorrectionY;
 
         //ゲームステートがPlayならステート遷移
         if (gameStateMachine.currentState == gameStateMachine.state_Play)
