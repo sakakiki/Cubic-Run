@@ -3,15 +3,21 @@ using UnityEngine;
 public class GameStateState_MenuToPlay : GameStateStateBase
 {
     private float elapsedTime;
+    public RectTransform menuHingeRtf_L;
+    public RectTransform menuHingeRtf_R;
+    public RectTransform playHingeRtf_L;
     private SpriteRenderer screenCover;
-    private Color startColor;
-    private Color targetColor;
+    private Color startCoverColor;
+    private Color targetCoverColor;
 
     public GameStateState_MenuToPlay(GameStateStateMachine stateMachine) : base(stateMachine)
     {
+        menuHingeRtf_L = GM.menuHingeRtf_L;
+        menuHingeRtf_R = GM.menuHingeRtf_R;
+        playHingeRtf_L = GM.playHingeRtf_L;
         screenCover = GM.screenCover;
-        startColor = GM.screenCoverColor_Menu;
-        targetColor = GM.screenCoverColor_Play;
+        startCoverColor = GM.screenCoverColor_Menu;
+        targetCoverColor = GM.screenCoverColor_Play;
     }
 
 
@@ -39,11 +45,16 @@ public class GameStateState_MenuToPlay : GameStateStateBase
         //地形を管理
         TM.ManageMovingTerrain();
 
+        //UIを回転
+        menuHingeRtf_L.localEulerAngles = Vector3.Lerp(Vector3.zero, Vector3.up * -180, (elapsedTime -1) / 1.5f);
+        menuHingeRtf_R.localEulerAngles = Vector3.Lerp(Vector3.zero, Vector3.up * 180, (elapsedTime -1) / 1.5f);
+        playHingeRtf_L.localEulerAngles = Vector3.Lerp(Vector3.up * 180, Vector3.zero, (elapsedTime - 1) / 1.5f);
+
         //スクリーンカバーの色を変更
-        screenCover.color = Color.Lerp(startColor, targetColor, elapsedTime - 1);
+        screenCover.color = Color.Lerp(startCoverColor, targetCoverColor, (elapsedTime - 1) / 1.5f);
 
         //指定時間経過でステート遷移
-        if (elapsedTime > 2)
+        if (elapsedTime > 2.5)
             stateMachine.ChangeState(stateMachine.state_Play);
     }
 

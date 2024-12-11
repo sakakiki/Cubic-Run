@@ -8,7 +8,7 @@ public class PlayerState_Model_toPlay : PlayerStateBase_Model
     private bool isMoving;
     private float posCorrectionY;
     private float velocityY;
-    private float gravity = 40;
+    private float gravity = 20;
     private Vector2 eyeStartPos;
     private Vector2 eyeStandbyPos;
     private Vector2 eyePlayPos;
@@ -57,7 +57,7 @@ public class PlayerState_Model_toPlay : PlayerStateBase_Model
         //スケール調整
         if (elapsedTime < 1)
             tf.localScale = (Vector3.one - Vector3.up * (elapsedTime - 0.5f)) * 1.5f;
-        else tf.localScale = Vector3.one * Mathf.Lerp(1.5f, 1, elapsedTime - 1);
+        else tf.localScale = Vector3.one * Mathf.Lerp(1.5f, 1, (elapsedTime - 1) / 1.5f);
 
         if (elapsedTime < 1) return;
 
@@ -73,13 +73,13 @@ public class PlayerState_Model_toPlay : PlayerStateBase_Model
             //移動関連の値を記憶
             startPos = tf.position;
             posCorrectionY = 0;
-            velocityY = 20;
+            velocityY = 15;
         }
 
         //移動関連演算
         velocityY -= gravity * Time.deltaTime;
         posCorrectionY += velocityY * Time.deltaTime;
-        tf.position = Vector2.Lerp(startPos, targetPos, elapsedTime - 1) + Vector2.up * posCorrectionY;
+        tf.position = Vector2.Lerp(startPos, targetPos, (elapsedTime - 1) / 1.5f) + Vector2.up * posCorrectionY;
 
         //ゲームステートがPlayならステート遷移
         if (gameStateMachine.currentState == gameStateMachine.state_Play)

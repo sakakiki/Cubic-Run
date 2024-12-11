@@ -12,6 +12,12 @@ public class GameManager : MonoBehaviour
     public int levelUpSpan = 2000;
     public Transform playerTf;
     public PlayerController playerCon;
+    public RectTransform menuHingeRtf_L;
+    public RectTransform[] menuUIs_L;
+    public RectTransform menuHingeRtf_R;
+    public RectTransform[] menuUIs_R;
+    public RectTransform playHingeRtf_L;
+    public RectTransform[] playUIs_L;
     public TextMeshProUGUI scoreText;
     public TextMeshProUGUI levelText;
     public RectTransform levelRtf;
@@ -42,7 +48,13 @@ public class GameManager : MonoBehaviour
 
     void Start()
     {
-
+        //UIÇHingeÇ…ê⁄ë±
+        for (int i = 0; i < menuUIs_L.Length; i++)
+            menuUIs_L[i].SetParent(menuHingeRtf_L);
+        for (int i = 0; i < menuUIs_R.Length; i++)
+            menuUIs_R[i].SetParent(menuHingeRtf_R);
+        for (int i = 0; i < playUIs_L.Length; i++)
+            playUIs_L[i].SetParent(playHingeRtf_L);
     }
 
 
