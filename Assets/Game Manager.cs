@@ -15,6 +15,7 @@ public class GameManager : MonoBehaviour
     public TextMeshProUGUI scoreText;
     public TextMeshProUGUI levelText;
     public RectTransform levelRtf;
+    public SpriteRenderer screenCover;
 
     //ステートマシン
     public GameStateStateMachine gameStateMachine {  get; private set; }
@@ -23,6 +24,8 @@ public class GameManager : MonoBehaviour
     public Vector2 centerPos_World = new Vector2(5, 3);
     public Vector2 centerAPos_TopLeft = new Vector2(1920, -1080);
     public Vector2 levelAPos = new Vector2(450, -350);
+    public Color screenCoverColor_Menu = Color.white - Color.black * 0.2f;
+    public Color screenCoverColor_Play = Color.clear;
 
 
 

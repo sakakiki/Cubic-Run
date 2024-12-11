@@ -1,8 +1,18 @@
+using UnityEngine;
+
 public class GameStateState_MenuToPlay : GameStateStateBase
 {
     private float elapsedTime;
+    private SpriteRenderer screenCover;
+    private Color startColor;
+    private Color targetColor;
 
-    public GameStateState_MenuToPlay(GameStateStateMachine stateMachine) : base(stateMachine) { }
+    public GameStateState_MenuToPlay(GameStateStateMachine stateMachine) : base(stateMachine)
+    {
+        screenCover = GM.screenCover;
+        startColor = GM.screenCoverColor_Menu;
+        targetColor = GM.screenCoverColor_Play;
+    }
 
 
 
@@ -28,6 +38,9 @@ public class GameStateState_MenuToPlay : GameStateStateBase
 
         //地形を管理
         TM.ManageMovingTerrain();
+
+        //スクリーンカバーの色を変更
+        screenCover.color = Color.Lerp(startColor, targetColor, elapsedTime - 1);
 
         //指定時間経過でステート遷移
         if (elapsedTime > 2)

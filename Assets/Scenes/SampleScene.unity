@@ -3573,9 +3573,12 @@ MonoBehaviour:
   scoreText: {fileID: 1681349253}
   levelText: {fileID: 1612368670}
   levelRtf: {fileID: 1612368669}
+  screenCover: {fileID: 816780383}
   centerPos_World: {x: 5, y: 3}
   centerAPos_TopLeft: {x: 1920, y: -1080}
   levelAPos: {x: 450, y: -350}
+  screenCoverColor_Menu: {r: 1, g: 1, b: 1, a: 0.8}
+  screenCoverColor_Play: {r: 0, g: 0, b: 0, a: 0}
 --- !u!1 &2142769522
 GameObject:
   m_ObjectHideFlags: 0
