@@ -54,7 +54,8 @@ public class GameStateState_MenuToPlay : GameStateStateBase
         playHingeRtf_L.localEulerAngles = Vector3.Lerp(Vector3.up * 180, Vector3.zero, lerpValue);
 
         //スクリーンカバーの色を変更
-        screenCover.color = Color.Lerp(startCoverColor, targetCoverColor, lerpValue);
+        screenCover.color = 
+            startCoverColor - Color.black * Mathf.Lerp(targetCoverColor.a, startCoverColor.a, lerpValue);
 
         //指定時間経過でステート遷移
         if (elapsedTime > 2.5)
