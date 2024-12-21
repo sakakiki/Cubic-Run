@@ -34,7 +34,7 @@ public class Enemy : MonoBehaviour
         if (!isActive) return;
 
         //プレイヤーに接触する位置まで来たとき
-        if ((tf.position.x) < (playerTf.localScale.x / 2))
+        if ((tf.position.x) < (playerTf.localScale.x / 2) && tf.position.x > -5)
         {
             //プレイヤーがAttackステートなら倒される
             if (playerStateMachine.currentState == playerStateMachine.state_Play_Attack)
