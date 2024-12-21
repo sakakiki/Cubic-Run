@@ -1,14 +1,13 @@
 using UnityEngine;
 using TMPro;
-using UnityEngine.SocialPlatforms.Impl;
 
 public class PlayStateState_LevelStart : PlayStateStateBase
 {
     private int levelStartScore;
     private TextMeshProUGUI levelText;
     private RectTransform levelRtf;
-    private Vector2 centerAPos;
-    private Vector2 levelAPos;
+    private Vector3 centerPos;
+    private RectTransform levelMarker;
 
 
 
@@ -16,8 +15,8 @@ public class PlayStateState_LevelStart : PlayStateStateBase
     {
         levelText = GameManager.Instance.levelText;
         levelRtf = GM.levelRtf;
-        centerAPos = GM.centerAPos_TopLeft;
-        levelAPos = GM.levelAPos;
+        centerPos = GM.centerPos_World;
+        levelMarker = GM.levelMarker;
     }
 
 
@@ -53,7 +52,7 @@ public class PlayStateState_LevelStart : PlayStateStateBase
 
         //レベルテキストの位置・大きさ・色調整
         int shortageScore = levelStartScore - GM.score;
-        levelRtf.anchoredPosition = Vector2.Lerp(levelAPos, centerAPos, shortageScore / 75f);
+        levelRtf.position = Vector2.Lerp(levelMarker.position, centerPos, shortageScore / 75f);
         levelText.fontSize = Mathf.Lerp(72, 300, shortageScore / 75f);
         levelText.color = Color.Lerp(Color.black, Color.clear, (shortageScore - 200) / 50f);
 
