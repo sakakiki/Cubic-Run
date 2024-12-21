@@ -8,7 +8,7 @@ public class PlayerState_Model_toPlay : PlayerStateBase_Model
     private bool isMoving;
     private float posCorrectionY;
     private float velocityY;
-    private float gravity = 20;
+    private float gravity = 40;
     private Vector2 eyeStartPos;
     private Vector2 eyeStandbyPos;
     private Vector2 eyePlayPos;
@@ -34,6 +34,9 @@ public class PlayerState_Model_toPlay : PlayerStateBase_Model
 
         //目の位置を記憶
         eyeStartPos = eyeTf.localPosition;
+        
+        //目を開ける
+        eyeTf.localScale = Vector3.one;
 
         //まっすぐ立っていれば小さく、そうでなければ大きくジャンプ
         rb.velocity = Vector2.up * (Mathf.Abs(startEulerAnglesZ) < 1 ? 7 : 12);
@@ -45,7 +48,7 @@ public class PlayerState_Model_toPlay : PlayerStateBase_Model
         elapsedTime += Time.deltaTime;
 
         //事前計算
-        float lerpValue = (elapsedTime - 1) / 1.5f;
+        float lerpValue = elapsedTime - 1;
 
         //回転
         rb.rotation = Mathf.Lerp(startEulerAnglesZ, 0, Mathf.Sqrt(elapsedTime * 2));
@@ -76,7 +79,7 @@ public class PlayerState_Model_toPlay : PlayerStateBase_Model
             //移動関連の値を記憶
             startPos = tf.position;
             posCorrectionY = 0;
-            velocityY = 15;
+            velocityY = 20;
         }
 
         //移動関連演算
@@ -91,6 +94,9 @@ public class PlayerState_Model_toPlay : PlayerStateBase_Model
 
     public override void Exit()
     {
+        //プレイヤーの位置を確定させる
+        tf.position = targetPos;
+
         //プレイヤーの当たり判定・描画レイヤー変更
         playerCon.SetLayer(0);
         playerCon.SetSortingLayer("Player");

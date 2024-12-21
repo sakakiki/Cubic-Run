@@ -43,7 +43,7 @@ public class GameStateState_MenuToPlay : GameStateStateBase
         elapsedTime += deltaTime;
 
         //事前計算
-        float lerpValue = (elapsedTime - 1) / 1.5f;
+        float lerpValue = (elapsedTime - 0.5f) / 1.5f;
 
         //地形を管理
         TM.ManageMovingTerrain();
@@ -58,7 +58,7 @@ public class GameStateState_MenuToPlay : GameStateStateBase
             startCoverColor - Color.black * Mathf.Lerp(targetCoverColor.a, startCoverColor.a, lerpValue);
 
         //指定時間経過でステート遷移
-        if (elapsedTime > 2.5)
+        if (elapsedTime > 2)
             stateMachine.ChangeState(stateMachine.state_Play);
     }
 
