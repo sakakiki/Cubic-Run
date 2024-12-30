@@ -21,8 +21,7 @@ public abstract class PlayerStateBase_Play : PlayerStateBase
         isGrounded = trigerFoot.isTouch;
 
         //ゲームオーバーへの遷移
-        if ((trigerFront.isTouch || tf.position.y < -5)
-            && stateMachine.currentState != stateMachine.state_GameOver)
+        if (trigerFront.isTouch || tf.position.y < -5)
             stateMachine.ChangeState(stateMachine.state_GameOver);
     }
 }

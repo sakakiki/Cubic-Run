@@ -28,6 +28,8 @@ public class PlayerState_GameOver : PlayerStateBase
         //ゲームオーバー用スキンに切り替え
         playerCon.SkinDefault.SetActive(false);
         playerCon.SkinGameOver.SetActive(true);
+
+        Debug.Log(tf.position);
     }
 
     public override void Update() { }

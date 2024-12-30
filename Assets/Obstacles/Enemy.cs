@@ -43,10 +43,7 @@ public class Enemy : MonoBehaviour
                 rb.velocity = parentRb.velocity + Vector2.up * 10;
             }
             //それ以外ならプレイヤーをGameOverに
-            else
-            {
-                playerStateMachine.ChangeState(playerStateMachine.state_GameOver);
-            }
+            else playerStateMachine.ChangeState(playerStateMachine.state_GameOver);
 
             //実行済みにする
             isActive = false;

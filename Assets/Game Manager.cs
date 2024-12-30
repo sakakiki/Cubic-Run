@@ -41,6 +41,17 @@ public class GameManager : MonoBehaviour
 
         gameStateMachine = new GameStateStateMachine();
         gameStateMachine.Initialize(gameStateMachine.state_Menu);
+
+        #region レターボックス
+        // 基準（縦方向）サイズと基準アスペクト比から基準横方向サイズを算出
+        var baseHorizontalSize = 5.622821f * 2560 / 1440;
+        // 基準横方向サイズと対象アスペクト比で対象縦方向サイズを算出
+        var verticalSize = baseHorizontalSize / Camera.main.aspect;
+        Camera.main.orthographicSize = verticalSize;
+        #endregion
+
+        //目標フレームレート設定
+        Application.targetFrameRate = 120;
     }
 
 
