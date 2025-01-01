@@ -4,9 +4,16 @@ public class InputManager : MonoBehaviour
 {
     public static InputManager Instance { get; private set; }
 
-    [SerializeField] private Button button_Menu_Play;
-    [SerializeField] private Button button_Menu_Skin;
-    [SerializeField] private Button button_Menu_Tutorial;
+    [SerializeField] GameObject screenButtonObj;
+    [SerializeField] private Button_Tap button_Screen;
+    [SerializeField] private Button_Push button_Menu_Play;
+    [SerializeField] private Button_Push button_Menu_Skin;
+    [SerializeField] private Button_Push button_Menu_Tutorial;
+    [SerializeField] private Button_Push button_Result_Title;
+    [SerializeField] private Button_Push button_Result_Retry;
+
+    public bool is_Screen_Tap { get; private set; }
+
     public bool is_Menu_Play_Push { get; private set; }
     public bool is_Menu_Skin_Push { get; private set; }
     public bool is_Menu_Tutorial_Push { get; private set; }
@@ -19,10 +26,17 @@ public class InputManager : MonoBehaviour
     public bool is_Play_Attack_Hold { get; private set; }
     public bool is_Play_Attack_Release { get; private set; }
 
+    public bool is_Result_Title_Push { get; private set; }
+    public bool is_Result_Retry_Push { get; private set; }
+
     private void Awake()
     {
         if (Instance == null)
             Instance = this;
+    }
+    public void InputUISetActive_Screen(bool isActive)
+    {
+        screenButtonObj.SetActive(isActive);
     }
 
     public void InputUISetActive_Menu(bool isActive)
@@ -30,6 +44,17 @@ public class InputManager : MonoBehaviour
         button_Menu_Play.enabled = isActive;
         button_Menu_Skin.enabled = isActive;
         button_Menu_Tutorial.enabled = isActive;
+    }
+
+    public void InputUISetActive_Result(bool isActive)
+    {
+        button_Result_Retry.enabled = isActive;
+        button_Result_Title.enabled = isActive;
+    }
+
+    public void GetInput_Screen()
+    {
+        is_Screen_Tap = button_Screen.GetIsTapped();
     }
 
     public void GetInput_Menu()
@@ -48,5 +73,11 @@ public class InputManager : MonoBehaviour
         is_Play_Attack_Push = Input.GetKeyDown(KeyCode.RightArrow);
         is_Play_Attack_Hold = Input.GetKey(KeyCode.RightArrow);
         is_Play_Attack_Release = Input.GetKeyUp(KeyCode.RightArrow);
+    }
+
+    public void GetInput_Result()
+    {
+        is_Result_Title_Push = button_Result_Title.GetIsPushed();
+        is_Result_Retry_Push = button_Result_Retry.GetIsPushed();
     }
 }

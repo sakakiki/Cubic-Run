@@ -16,7 +16,7 @@ public class PlayStateState_LevelEnd : PlayStateStateBase
         levelText = GM.levelText;
         levelRtf = GM.levelRtf;
         centerPos = GM.centerPos_World;
-        levelMarker = GM.levelMarker;
+        levelMarker = GM.levelMarkerRtf;
     }
 
 

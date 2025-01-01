@@ -18,10 +18,15 @@ public class GameManager : MonoBehaviour
     public RectTransform[] menuUIs_R;
     public RectTransform playHingeRtf_L;
     public RectTransform[] playUIs_L;
+    public RectTransform resultHingeRtf_B;
+    public RectTransform[] resultUIs_B;
     public TextMeshProUGUI scoreText;
     public TextMeshProUGUI levelText;
     public RectTransform levelRtf;
-    public RectTransform levelMarker;
+    public Transform scoreSetTf;
+    public RectTransform levelMarkerRtf;
+    public AnimationCurve scorePosY_PlaytoResult;
+    public Transform scoreMarkerTf;
     public SpriteRenderer screenCover;
 
     //ステートマシン
@@ -65,6 +70,8 @@ public class GameManager : MonoBehaviour
             menuUIs_R[i].SetParent(menuHingeRtf_R);
         for (int i = 0; i < playUIs_L.Length; i++)
             playUIs_L[i].SetParent(playHingeRtf_L);
+        for (int i = 0; i < resultUIs_B.Length; i++)
+            resultUIs_B[i].SetParent(resultHingeRtf_B);
     }
 
 

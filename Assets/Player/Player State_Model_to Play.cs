@@ -94,12 +94,12 @@ public class PlayerState_Model_toPlay : PlayerStateBase_Model
 
     public override void Exit()
     {
-        //プレイヤーの位置を確定させる
-        tf.position = targetPos;
-
         //プレイヤーの当たり判定・描画レイヤー変更
         playerCon.SetLayer(0);
         playerCon.SetSortingLayer("Player");
+
+        //プレイヤーの位置を確定させる
+        tf.position = targetPos;
 
         //物理演算の有効化
         rb.isKinematic = false;
@@ -109,5 +109,8 @@ public class PlayerState_Model_toPlay : PlayerStateBase_Model
 
         //回転を無効化
         rb.freezeRotation = true;
+
+        //正面のトリガーの接触判定をリセット
+        playerCon.trigerFront.Initialize();
     }
 }

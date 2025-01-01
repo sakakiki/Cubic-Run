@@ -9,7 +9,7 @@ public class PlayerState_GameOver : PlayerStateBase
     public override void Enter()
     {
         //ゲームステートの遷移
-        gameStateMachine.ChangeState(gameStateMachine.state_Result);
+        gameStateMachine.ChangeState(gameStateMachine.state_PlaytoResult);
 
         //トンネル内なら専用のスケールに
         if (TerrainManager.Instance.currentTerrainNum == 3)
@@ -28,8 +28,6 @@ public class PlayerState_GameOver : PlayerStateBase
         //ゲームオーバー用スキンに切り替え
         playerCon.SkinDefault.SetActive(false);
         playerCon.SkinGameOver.SetActive(true);
-
-        Debug.Log(tf.position);
     }
 
     public override void Update() { }

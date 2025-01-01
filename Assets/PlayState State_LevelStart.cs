@@ -16,7 +16,7 @@ public class PlayStateState_LevelStart : PlayStateStateBase
         levelText = GameManager.Instance.levelText;
         levelRtf = GM.levelRtf;
         centerPos = GM.centerPos_World;
-        levelMarker = GM.levelMarker;
+        levelMarker = GM.levelMarkerRtf;
     }
 
 
@@ -65,6 +65,9 @@ public class PlayStateState_LevelStart : PlayStateStateBase
 
     public override void Exit()
     {
-
+        //レベルのテキストのZ座標を修正
+        Vector3 levelPos = levelRtf.position;
+        levelPos.z = GM.scoreSetTf.position.z;
+        levelRtf.position = levelPos;
     }
 }
