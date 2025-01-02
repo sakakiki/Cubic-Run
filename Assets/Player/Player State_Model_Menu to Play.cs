@@ -24,6 +24,9 @@ public class PlayerState_Model_MenuToPlay : PlayerStateBase_Model
     {
         base.Enter();
 
+        //フラグリセット
+        isMoving = false;
+
         //物理演算の有効化
         rb.isKinematic = false;
 

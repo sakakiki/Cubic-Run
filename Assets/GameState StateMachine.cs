@@ -1,3 +1,5 @@
+using UnityEngine;
+
 public class GameStateStateMachine
 {
     public GameStateStateBase currentState {  get; private set; }

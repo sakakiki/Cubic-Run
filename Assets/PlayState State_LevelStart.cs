@@ -52,7 +52,7 @@ public class PlayStateState_LevelStart : PlayStateStateBase
 
         //レベルテキストの位置・大きさ・色調整
         int shortageScore = levelStartScore - GM.score;
-        levelRtf.position = Vector2.Lerp(levelMarker.position, centerPos, shortageScore / 75f);
+        levelRtf.position = Vector3.Lerp(levelMarker.position, centerPos, shortageScore / 75f);
         levelText.fontSize = Mathf.Lerp(72, 300, shortageScore / 75f);
         levelText.color = Color.Lerp(Color.black, Color.clear, (shortageScore - 200) / 50f);
 

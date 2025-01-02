@@ -26,6 +26,10 @@ public class GameStateState_ResultToMenu : GameStateStateBase
 
         //動作フラグリセット
         isMoveStart = false;
+
+        //プレイヤーが画面外なら演出を早める
+        if (playerCon.tf.position.y < -5 || playerCon.tf.position.x < -6)
+            elapsedTime = 1.5f;
     }
 
 

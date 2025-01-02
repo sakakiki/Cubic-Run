@@ -33,6 +33,14 @@ public class GameStateState_MenuToPlay : GameStateStateBase
         //背景の地形を加速
         TM.moveSpeed = 20;
         TM.SetSpeed(20);
+
+        //スコアのリセット
+        GM.score = 0;
+        GM.scoreText.SetText("0");
+
+        //レベルのリセット
+        GM.level = 0;
+        GM.levelText.SetText("");
     }
 
 
@@ -69,5 +77,10 @@ public class GameStateState_MenuToPlay : GameStateStateBase
         //地形を減速
         TM.moveSpeed = 8;
         TM.SetSpeed(8);
+
+        //レベルテキストの位置・大きさ・色調整
+        GM.levelRtf.position = GM.centerPos_World;
+        GM.levelText.fontSize = 300;
+        GM.levelText.color = Color.clear;
     }
 }
