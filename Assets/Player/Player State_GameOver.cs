@@ -9,7 +9,7 @@ public class PlayerState_GameOver : PlayerStateBase
     public override void Enter()
     {
         //ゲームステートの遷移
-        gameStateMachine.ChangeState(gameStateMachine.state_PlaytoResult);
+        gameStateMachine.ChangeState(gameStateMachine.state_PlayToResult);
 
         //トンネル内なら専用のスケールに
         if (TerrainManager.Instance.currentTerrainNum == 3)
@@ -30,7 +30,12 @@ public class PlayerState_GameOver : PlayerStateBase
         playerCon.SkinGameOver.SetActive(true);
     }
 
-    public override void Update() { }
+    public override void Update()
+    {
+        //ゲームステートの遷移に合わせてステート遷移
+        if (gameStateMachine.currentState == gameStateMachine.state_ResultToMenu)
+            stateMachine.ChangeState(stateMachine.state_Model_ResultToMenu);
+    }
 
     public override void Exit()
     {

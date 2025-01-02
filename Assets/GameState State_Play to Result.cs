@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class GameStateState_PlaytoResult : GameStateStateBase
+public class GameStateState_PlayToResult : GameStateStateBase
 {
     private float elapsedTime;
     private Transform scoreSetTf;
@@ -11,10 +11,10 @@ public class GameStateState_PlaytoResult : GameStateStateBase
     private Color targetCoverColor;
     private RectTransform resultHingeRtf_B;
 
-    public GameStateState_PlaytoResult(GameStateStateMachine stateMachine) : base(stateMachine)
+    public GameStateState_PlayToResult(GameStateStateMachine stateMachine) : base(stateMachine)
     {
         scoreSetTf = GM.scoreSetTf;
-        targetPos = GM.scoreMarkerTf.position;
+        targetPos = GM.scoreMarkerTf_Result.position;
         screenCover = GM.screenCover;
         startCoverColor = GM.screenCoverColor_Play;
         targetCoverColor = GM.screenCoverColor_Menu;
@@ -30,11 +30,11 @@ public class GameStateState_PlaytoResult : GameStateStateBase
         //地形の停止
         TerrainManager.Instance.SetSpeed(0);
 
-        //スコアボードの移動開始位置を記憶
-        startPos = scoreSetTf.position;
-
         //画面タップ検出ボタンの有効化
         IM.InputUISetActive_Screen(true);
+
+        //スコアボードの移動開始位置を記憶
+        startPos = GM.scoreMarkerTf_Play.position;
     }
 
 
@@ -59,7 +59,6 @@ public class GameStateState_PlaytoResult : GameStateStateBase
         scoreSetTf.position = 
             Vector3.Lerp(startPos, targetPos, lerpValue) + 
             Vector3.up * GM.scorePosY_PlaytoResult.Evaluate(lerpValue) * 3;
-        //scoreSetTf.localScale = Vector3.Lerp(Vector3.one, Vector3.one * 1.5f, lerpValue);
 
         //スクリーンカバーの色を変更
         screenCover.color =

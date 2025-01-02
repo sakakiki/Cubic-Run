@@ -26,7 +26,8 @@ public class GameManager : MonoBehaviour
     public Transform scoreSetTf;
     public RectTransform levelMarkerRtf;
     public AnimationCurve scorePosY_PlaytoResult;
-    public Transform scoreMarkerTf;
+    public Transform scoreMarkerTf_Play;
+    public Transform scoreMarkerTf_Result;
     public SpriteRenderer screenCover;
 
     //ステートマシン

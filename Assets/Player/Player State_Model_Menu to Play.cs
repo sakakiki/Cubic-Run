@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class PlayerState_Model_toPlay : PlayerStateBase_Model
+public class PlayerState_Model_MenuToPlay : PlayerStateBase_Model
 {
     private float startEulerAnglesZ;
     private Vector2 startPos;
@@ -13,7 +13,7 @@ public class PlayerState_Model_toPlay : PlayerStateBase_Model
     private Vector2 eyeStandbyPos;
     private Vector2 eyePlayPos;
 
-    public PlayerState_Model_toPlay(PlayerStateMachine stateMachine) : base(stateMachine)
+    public PlayerState_Model_MenuToPlay(PlayerStateMachine stateMachine) : base(stateMachine)
     {
         targetPos = playerCon.playerPos_GameStart;
         eyeStandbyPos = playerCon.eyePos_Model;
