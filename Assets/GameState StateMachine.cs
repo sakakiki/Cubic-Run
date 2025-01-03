@@ -11,6 +11,7 @@ public class GameStateStateMachine
     public GameStateStateBase state_Result { get; private set; }
     public GameStateStateBase state_ResultToMenu { get; private set; }
     public GameStateStateBase state_ResultToPlay { get; private set; }
+    public GameStateStateBase state_PauseToMenu { get; private set; }
 
 
 
@@ -23,6 +24,7 @@ public class GameStateStateMachine
         state_Result = new GameStateState_Result(this);
         state_ResultToMenu = new GameStateState_ResultToMenu(this);
         state_ResultToPlay = new GameStateState_ResultToPlay(this);
+        state_PauseToMenu = new GameStateState_PauseToMenu(this);
     }
 
     public void Initialize(GameStateStateBase firstState)

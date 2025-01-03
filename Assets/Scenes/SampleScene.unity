@@ -2664,7 +2664,7 @@ GameObject:
   m_Component:
   - component: {fileID: 613657932}
   m_Layer: 5
-  m_Name: Score Marker
+  m_Name: Score Marker_Result
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4547,7 +4547,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1020639391}
   m_Layer: 5
-  m_Name: Level Marker
+  m_Name: Level Marker_Play
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -8701,7 +8701,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2111059596}
   m_Layer: 5
-  m_Name: Score Marker
+  m_Name: Score Marker_Play
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -8931,9 +8931,9 @@ MonoBehaviour:
   - {fileID: 518199402}
   scoreText: {fileID: 1681349253}
   levelText: {fileID: 1612368670}
-  levelRtf: {fileID: 1612368669}
+  levelTf: {fileID: 1612368669}
   scoreSetTf: {fileID: 1083899409}
-  levelMarkerRtf: {fileID: 1020639391}
+  levelMarkerRtf_Play: {fileID: 1020639391}
   scorePosY_PlaytoResult:
     serializedVersion: 2
     m_Curve:

@@ -100,7 +100,15 @@ public abstract class PlayStateStateBase
                 }
                 else if (IM.is_Pause_Retire_Push)
                 {
+                    //ポーズ画面UIを非表示・無効化
+                    IM.InputUISetActive_Pause(false);
+                    GM.PauseUI.SetActive(false);
 
+                    //オブジェクトを動かす
+                    Time.timeScale = 1;
+
+                    //メニュー画面へ遷移
+                    gameStateMachine.ChangeState(gameStateMachine.state_PauseToMenu);
                 }
                 break;
 

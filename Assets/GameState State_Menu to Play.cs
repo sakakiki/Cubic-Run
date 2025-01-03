@@ -78,7 +78,7 @@ public class GameStateState_MenuToPlay : GameStateStateBase
     public override void Exit()
     {
         //レベルテキストの位置・大きさ・色調整
-        GM.levelRtf.position = GM.centerPos_World;
+        GM.levelTf.position = GM.centerPos_World;
         GM.levelText.fontSize = 300;
         GM.levelText.color = Color.clear;
     }

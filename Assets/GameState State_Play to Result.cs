@@ -9,6 +9,7 @@ public class GameStateState_PlayToResult : GameStateStateBase
     private SpriteRenderer screenCover;
     private Color startCoverColor;
     private Color targetCoverColor;
+    public RectTransform playHingeRtf_R;
     private RectTransform resultHingeRtf_B;
     private AnimationCurve curveScorePosY;
 
@@ -19,6 +20,7 @@ public class GameStateState_PlayToResult : GameStateStateBase
         screenCover = GM.screenCover;
         startCoverColor = GM.screenCoverColor_Play;
         targetCoverColor = GM.screenCoverColor_Menu;
+        playHingeRtf_R = GM.playHingeRtf_R;
         resultHingeRtf_B = GM.resultHingeRtf_B;
         curveScorePosY = GM.scorePosY_PlaytoResult;
     }
@@ -67,6 +69,7 @@ public class GameStateState_PlayToResult : GameStateStateBase
             targetCoverColor - Color.black * Mathf.Lerp(targetCoverColor.a, startCoverColor.a, lerpValue);
 
         //UIを回転
+        playHingeRtf_R.localEulerAngles = Vector3.Lerp(Vector3.zero, Vector3.up * -180, elapsedTime - 1);
         resultHingeRtf_B.localEulerAngles = Vector3.Lerp(Vector3.right * 180, Vector3.zero, elapsedTime - 2);
 
         //指定時間経過でステート遷移

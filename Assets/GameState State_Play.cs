@@ -16,6 +16,7 @@ public class GameStateState_Play : GameStateStateBase
     {
         //プレイ画面入力UIの有効化
         IM.InputUISetActive_Play(true);
+        IM.InputUISetActive_Player(true);
 
         //プレイ用ステートマシンの初期化
         playStateMachine.Initialize(playStateMachine.state_LevelStart);
@@ -42,5 +43,6 @@ public class GameStateState_Play : GameStateStateBase
     {
         //プレイ画面入力UIの無効化
         IM.InputUISetActive_Play(false);
+        IM.InputUISetActive_Player(false);
     }
 }

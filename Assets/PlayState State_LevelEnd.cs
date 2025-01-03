@@ -5,7 +5,7 @@ public class PlayStateState_LevelEnd : PlayStateStateBase
 {
     private int levelUpScore;
     private TextMeshProUGUI levelText;
-    private RectTransform levelRtf;
+    private Transform levelTf;
     private Vector3 centerPos;
     private RectTransform levelMarker;
 
@@ -14,9 +14,9 @@ public class PlayStateState_LevelEnd : PlayStateStateBase
     public PlayStateState_LevelEnd(PlayStateStateMachine stateMachine) : base(stateMachine)
     {
         levelText = GM.levelText;
-        levelRtf = GM.levelRtf;
+        levelTf = GM.levelTf;
         centerPos = GM.centerPos_World;
-        levelMarker = GM.levelMarkerRtf;
+        levelMarker = GM.levelMarkerRtf_Play;
     }
 
 
@@ -38,7 +38,7 @@ public class PlayStateState_LevelEnd : PlayStateStateBase
 
         //レベルテキストの位置・大きさ・色調整
         int shortageScore = levelUpScore - GM.score;
-        levelRtf.position = Vector2.Lerp(centerPos, levelMarker.position, (shortageScore - 150) / 75f);
+        levelTf.position = Vector2.Lerp(centerPos, levelMarker.position, (shortageScore - 150) / 75f);
         levelText.fontSize = Mathf.Lerp(300, 72, (shortageScore - 150) / 75f);
         levelText.color = Color.Lerp(Color.clear, Color.black, (shortageScore - 50) / 50f);
 

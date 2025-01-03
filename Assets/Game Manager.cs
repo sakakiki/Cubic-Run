@@ -24,9 +24,9 @@ public class GameManager : MonoBehaviour
     public RectTransform[] resultUIs_B;
     public TextMeshProUGUI scoreText;
     public TextMeshProUGUI levelText;
-    public RectTransform levelRtf;
+    public Transform levelTf;
     public Transform scoreSetTf;
-    public RectTransform levelMarkerRtf;
+    public RectTransform levelMarkerRtf_Play;
     public AnimationCurve scorePosY_PlaytoResult;
     public Transform scoreMarkerTf_Play;
     public Transform scoreMarkerTf_Result;

@@ -1,20 +1,27 @@
 using UnityEngine;
+using static UnityEngine.GraphicsBuffer;
 
-public class GameStateState_ResultToMenu : GameStateStateBase
+public class GameStateState_PauseToMenu : GameStateStateBase
 {
     private float elapsedTime;
     private bool isMoveStart;
     public RectTransform menuHingeRtf_L;
     public RectTransform menuHingeRtf_R;
     public RectTransform playHingeRtf_L;
-    private RectTransform resultHingeRtf_B;
+    public RectTransform playHingeRtf_R;
+    private SpriteRenderer screenCover;
+    private Color startCoverColor;
+    private Color targetCoverColor;
 
-    public GameStateState_ResultToMenu(GameStateStateMachine stateMachine) : base(stateMachine)
+    public GameStateState_PauseToMenu(GameStateStateMachine stateMachine) : base(stateMachine)
     {
         menuHingeRtf_L = GM.menuHingeRtf_L;
         menuHingeRtf_R = GM.menuHingeRtf_R;
-        playHingeRtf_L = GM.playHingeRtf_L;
-        resultHingeRtf_B = GM.resultHingeRtf_B;
+        playHingeRtf_L = GM.playHingeRtf_R;
+        playHingeRtf_R = GM.playHingeRtf_L;
+        screenCover = GM.screenCover;
+        startCoverColor = GM.screenCoverColor_Play;
+        targetCoverColor = GM.screenCoverColor_Menu;
     }
 
 
@@ -31,9 +38,9 @@ public class GameStateState_ResultToMenu : GameStateStateBase
         if (TM.currentTerrainNum == 3)
             elapsedTime = 1;
 
-        //プレイヤーが画面外なら演出を早める
-        if (playerCon.tf.position.y < -5 || playerCon.tf.position.x < -6)
-            elapsedTime = 1.5f;
+        //背景の地形を停止
+        TM.moveSpeed = 0;
+        TM.SetSpeed(0);
     }
 
 
@@ -44,7 +51,7 @@ public class GameStateState_ResultToMenu : GameStateStateBase
         elapsedTime += deltaTime;
 
         //1.5秒待機
-        if (elapsedTime < 1.5) return;
+        if (elapsedTime < 1) return;
 
         //UI動作開始処理
         if (!isMoveStart)
@@ -55,10 +62,15 @@ public class GameStateState_ResultToMenu : GameStateStateBase
             //背景の地形を動かす
             TM.moveSpeed = 5;
             TM.SetSpeed(5);
+
+            //レベルのテキストのZ座標を修正
+            Vector3 levelPos = GM.levelTf.position;
+            levelPos.z = GM.scoreSetTf.position.z;
+            GM.levelTf.position = levelPos;
         }
 
         //事前計算
-        float lerpValue = (elapsedTime - 1.5f) / 1.5f;
+        float lerpValue = (elapsedTime - 1) / 1.5f;
 
         //地形を管理
         TM.ManageMovingTerrain();
@@ -67,18 +79,18 @@ public class GameStateState_ResultToMenu : GameStateStateBase
         menuHingeRtf_L.localEulerAngles = Vector3.Lerp(Vector3.up * -180, Vector3.zero, lerpValue);
         menuHingeRtf_R.localEulerAngles = Vector3.Lerp(Vector3.up * 180, Vector3.zero, lerpValue);
         playHingeRtf_L.localEulerAngles = Vector3.Lerp(Vector3.zero, Vector3.up * 180, lerpValue);
-        resultHingeRtf_B.localEulerAngles = Vector3.Lerp(Vector3.zero, Vector3.right * 180, lerpValue);
+        playHingeRtf_R.localEulerAngles = Vector3.Lerp(Vector3.zero, Vector3.up * -180, lerpValue);
+
+        //スクリーンカバーの色を変更
+        screenCover.color =
+            targetCoverColor - Color.black * Mathf.Lerp(targetCoverColor.a, startCoverColor.a, lerpValue);
 
         //指定時間経過でステート遷移
-        if (elapsedTime > 3)
+        if (elapsedTime > 2.5)
             stateMachine.ChangeState(stateMachine.state_Menu);
     }
 
 
 
-    public override void Exit()
-    {
-        //スコアボードの位置を修正
-        GM.scoreSetTf.position = GM.scoreMarkerTf_Play.position;
-    }
+    public override void Exit() { }
 }

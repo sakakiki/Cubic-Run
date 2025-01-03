@@ -44,7 +44,7 @@ public class PlayerState_Model_ResultToPlay : PlayerStateBase_Model
             isResetRotation = true;
 
             //プレイヤーがトンネル内なら演出を早める
-            if (TerrainManager.Instance.currentTerrainNum == 3 || TerrainManager.Instance.currentTerrainNum == 4)
+            if (TerrainManager.Instance.currentTerrainNum == 3)
                 elapsedTime = 1;
             //トンネル外なら初期回転量記憶・補正
             else

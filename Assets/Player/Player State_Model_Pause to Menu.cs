@@ -1,11 +1,9 @@
 using UnityEngine;
 
-public class PlayerState_Model_ResultToMenu : PlayerStateBase_Model
+public class PlayerState_Model_PauseToMenu : PlayerStateBase_Model
 {
-    private float startEulerAnglesZ;
     private Vector2 startPos;
     private Vector2 targetPos;
-    private bool isResetRotation;
     private bool isMoving;
     private float posCorrectionY;
     private float velocityY;
@@ -13,7 +11,7 @@ public class PlayerState_Model_ResultToMenu : PlayerStateBase_Model
     private Vector2 eyeStandbyPos;
     private Vector2 eyePlayPos;
 
-    public PlayerState_Model_ResultToMenu(PlayerStateMachine stateMachine) : base(stateMachine)
+    public PlayerState_Model_PauseToMenu(PlayerStateMachine stateMachine) : base(stateMachine)
     {
         targetPos = playerCon.playerPos_Menu;
         eyeStandbyPos = playerCon.eyePos_Model;
@@ -23,15 +21,17 @@ public class PlayerState_Model_ResultToMenu : PlayerStateBase_Model
     public override void Enter()
     {
         //経過時間に補正をかけてリセット
-        elapsedTime = -0.5f;
+        elapsedTime = -1;
 
         //フラグリセット
-        isResetRotation = false;
         isMoving = false;
 
-        //プレイヤーが画面外なら演出を早める
-        if (playerCon.tf.position.y < -5 || playerCon.tf.position.x < -6)
-            elapsedTime = 1;
+        //スケール調整
+        tf.localScale = Vector3.one;
+
+        //プレイヤーがトンネル内なら演出を早める
+        if (TerrainManager.Instance.currentTerrainNum == 3)
+            elapsedTime = 0;
     }
 
     public override void Update()
@@ -40,51 +40,27 @@ public class PlayerState_Model_ResultToMenu : PlayerStateBase_Model
         elapsedTime += Time.deltaTime;
 
         //0.5秒待機
-        if (elapsedTime < 0) return;
-
-        //姿勢補正開始処理
-        if (!isResetRotation && elapsedTime < 1)
-        {
-            isResetRotation = true;
-
-            //プレイヤーがトンネル内なら演出を早める
-            if (TerrainManager.Instance.currentTerrainNum == 3)
-                elapsedTime = 1;
-            //トンネル外なら初期回転量記憶・補正
-            else
-            {
-                startEulerAnglesZ = tf.eulerAngles.z;
-                if (tf.eulerAngles.z > 180)
-                    startEulerAnglesZ -= 360;
-            }
-
-            //重力スケール補正
-            rb.gravityScale = 5;
-
-            //まっすぐ立っていれば小さく、そうでなければ大きくジャンプ
-            rb.velocity = Vector2.up * (Mathf.Abs(startEulerAnglesZ) < 1 ? 7 : 12);
-        }
+        if (elapsedTime < -0.5) return;
 
         //事前計算
-        float lerpValue = (elapsedTime - 1)/1.5f;
-
-        //回転
-        rb.rotation = Mathf.Lerp(startEulerAnglesZ, 0, Mathf.Sqrt(elapsedTime * 2));
-
-        if (elapsedTime < 0.5) return;
+        float lerpValue = elapsedTime / 1.5f;
 
         //スケール調整
-        if (elapsedTime < 1)
-            tf.localScale = Vector3.one - Vector3.up * (elapsedTime - 0.5f);
+        if (elapsedTime < 0)
+            tf.localScale = Vector3.one - Vector3.up * (elapsedTime + 0.5f);
         else tf.localScale = Vector3.one * Mathf.Lerp(1, 1.5f, lerpValue);
 
-        if (elapsedTime < 1) return;
+        //ジャンプタイミングまで待機
+        if (elapsedTime < 0) return;
 
         //ジャンプ開始処理
         if (!isMoving)
         {
             //処理実行済みのフラグを立てる
             isMoving = true;
+
+            //重力スケール補正
+            rb.gravityScale = 5;
 
             //物理演算を無効化
             rb.isKinematic = true;

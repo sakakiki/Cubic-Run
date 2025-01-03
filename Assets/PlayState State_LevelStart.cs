@@ -5,7 +5,7 @@ public class PlayStateState_LevelStart : PlayStateStateBase
 {
     private int levelStartScore;
     private TextMeshProUGUI levelText;
-    private RectTransform levelRtf;
+    private Transform levelTf;
     private Vector3 centerPos;
     private RectTransform levelMarker;
 
@@ -14,9 +14,9 @@ public class PlayStateState_LevelStart : PlayStateStateBase
     public PlayStateState_LevelStart(PlayStateStateMachine stateMachine) : base(stateMachine)
     {
         levelText = GameManager.Instance.levelText;
-        levelRtf = GM.levelRtf;
+        levelTf = GM.levelTf;
         centerPos = GM.centerPos_World;
-        levelMarker = GM.levelMarkerRtf;
+        levelMarker = GM.levelMarkerRtf_Play;
     }
 
 
@@ -52,7 +52,7 @@ public class PlayStateState_LevelStart : PlayStateStateBase
 
         //レベルテキストの位置・大きさ・色調整
         int shortageScore = levelStartScore - GM.score;
-        levelRtf.position = Vector3.Lerp(levelMarker.position, centerPos, shortageScore / 75f);
+        levelTf.position = Vector3.Lerp(levelMarker.position, centerPos, shortageScore / 75f);
         levelText.fontSize = Mathf.Lerp(72, 300, shortageScore / 75f);
         levelText.color = Color.Lerp(Color.black, Color.clear, (shortageScore - 200) / 50f);
 
@@ -66,8 +66,8 @@ public class PlayStateState_LevelStart : PlayStateStateBase
     public override void Exit()
     {
         //レベルのテキストのZ座標を修正
-        Vector3 levelPos = levelRtf.position;
+        Vector3 levelPos = levelTf.position;
         levelPos.z = GM.scoreSetTf.position.z;
-        levelRtf.position = levelPos;
+        levelTf.position = levelPos;
     }
 }

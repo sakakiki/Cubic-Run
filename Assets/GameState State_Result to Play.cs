@@ -10,6 +10,7 @@ public class GameStateState_ResultToPlay : GameStateStateBase
     private Color startCoverColor;
     private Color targetCoverColor;
     private bool isMoveTerrein;
+    public RectTransform playHingeRtf_R;
     private RectTransform resultHingeRtf_B;
     private bool isResetScore;
 
@@ -20,6 +21,7 @@ public class GameStateState_ResultToPlay : GameStateStateBase
         screenCover = GM.screenCover;
         startCoverColor = GM.screenCoverColor_Menu;
         targetCoverColor = GM.screenCoverColor_Play;
+        playHingeRtf_R = GM.playHingeRtf_R;
         resultHingeRtf_B = GM.resultHingeRtf_B;
     }
 
@@ -38,7 +40,7 @@ public class GameStateState_ResultToPlay : GameStateStateBase
         targetPos = GM.scoreMarkerTf_Play.position;
 
         //プレイヤーがトンネル内なら演出を早める
-        if (TM.currentTerrainNum == 3 || TM.currentTerrainNum == 4)
+        if (TM.currentTerrainNum == 3)
             elapsedTime = 1;
 
         //プレイヤーが画面外なら演出を早める
@@ -97,7 +99,7 @@ public class GameStateState_ResultToPlay : GameStateStateBase
                 GM.levelText.SetText("");
 
                 //レベルテキストの位置・大きさ・色調整
-                GM.levelRtf.position = GM.centerPos_World;
+                GM.levelTf.position = GM.centerPos_World;
                 GM.levelText.fontSize = 300;
                 GM.levelText.color = Color.clear;
             }
@@ -108,6 +110,7 @@ public class GameStateState_ResultToPlay : GameStateStateBase
             startCoverColor - Color.black * Mathf.Lerp(targetCoverColor.a, startCoverColor.a, lerpValue);
 
         //UIを回転
+        playHingeRtf_R.localEulerAngles = Vector3.Lerp(Vector3.up * -180, Vector3.zero, elapsedTime - 2);
         resultHingeRtf_B.localEulerAngles = Vector3.Lerp(Vector3.zero, Vector3.right * 180, elapsedTime - 2);
 
         //指定時間経過でステート遷移
