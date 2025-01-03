@@ -14,6 +14,7 @@ public class PlayerStateMachine
     public PlayerStateBase state_Model_Dragged { get; private set; }
     public PlayerStateBase state_Model_MenuToPlay { get; private set; }
     public PlayerStateBase state_Model_ResultToMenu { get; private set; }
+    public PlayerStateBase state_Model_ResultToPlay { get; private set; }
     public PlayerStateBase state_Play_Run { get; private set; }
     public PlayerStateBase state_Play_Jump { get; private set; }
     public PlayerStateBase state_Play_Squat { get; private set; }
@@ -35,6 +36,7 @@ public class PlayerStateMachine
         state_Model_Dragged = new PlayerState_Model_Dragged(this);
         state_Model_MenuToPlay = new PlayerState_Model_MenuToPlay(this);
         state_Model_ResultToMenu = new PlayerState_Model_ResultToMenu(this);
+        state_Model_ResultToPlay = new PlayerState_Model_ResultToPlay(this);
         state_Play_Run = new PlayerState_Play_Run(this);
         state_Play_Jump = new PlayerState_Play_Jump(this);
         state_Play_Squat = new PlayerState_Play_Squat(this);

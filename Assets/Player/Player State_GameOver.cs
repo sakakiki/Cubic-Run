@@ -35,6 +35,8 @@ public class PlayerState_GameOver : PlayerStateBase
         //ゲームステートの遷移に合わせてステート遷移
         if (gameStateMachine.currentState == gameStateMachine.state_ResultToMenu)
             stateMachine.ChangeState(stateMachine.state_Model_ResultToMenu);
+        else if (gameStateMachine.currentState == gameStateMachine.state_ResultToPlay)
+            stateMachine.ChangeState(stateMachine.state_Model_ResultToPlay);
     }
 
     public override void Exit()

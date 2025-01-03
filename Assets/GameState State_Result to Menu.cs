@@ -28,7 +28,7 @@ public class GameStateState_ResultToMenu : GameStateStateBase
         isMoveStart = false;
 
         //プレイヤーがトンネル内なら演出を早める
-        if (TM.currentTerrainNum == 3)
+        if (TM.currentTerrainNum == 3 || TM.currentTerrainNum == 4)
             elapsedTime = 1;
 
         //プレイヤーが画面外なら演出を早める

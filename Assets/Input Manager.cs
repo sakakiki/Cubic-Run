@@ -26,8 +26,8 @@ public class InputManager : MonoBehaviour
     public bool is_Play_Attack_Hold { get; private set; }
     public bool is_Play_Attack_Release { get; private set; }
 
-    public bool is_Result_Title_Push { get; private set; }
-    public bool is_Result_Retry_Push { get; private set; }
+    public bool is_Result_Title_Tap { get; private set; }
+    public bool is_Result_Retry_Tap { get; private set; }
 
     private void Awake()
     {
@@ -77,7 +77,7 @@ public class InputManager : MonoBehaviour
 
     public void GetInput_Result()
     {
-        is_Result_Title_Push = button_Result_Title.GetIsPushed();
-        is_Result_Retry_Push = button_Result_Retry.GetIsPushed();
+        is_Result_Title_Tap = button_Result_Title.GetIsPushed();
+        is_Result_Retry_Tap = button_Result_Retry.GetIsPushed();
     }
 }

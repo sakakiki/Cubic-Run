@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class PlayerState_Model_ResultToMenu : PlayerStateBase_Model
+public class PlayerState_Model_ResultToPlay : PlayerStateBase_Model
 {
     private float startEulerAnglesZ;
     private Vector2 startPos;
@@ -10,14 +10,10 @@ public class PlayerState_Model_ResultToMenu : PlayerStateBase_Model
     private float posCorrectionY;
     private float velocityY;
     private float gravity = 20;
-    private Vector2 eyeStandbyPos;
-    private Vector2 eyePlayPos;
 
-    public PlayerState_Model_ResultToMenu(PlayerStateMachine stateMachine) : base(stateMachine)
+    public PlayerState_Model_ResultToPlay(PlayerStateMachine stateMachine) : base(stateMachine)
     {
-        targetPos = playerCon.playerPos_Menu;
-        eyeStandbyPos = playerCon.eyePos_Model;
-        eyePlayPos = playerCon.eyePos_Play;
+        targetPos = playerCon.playerPos_GameStart;
     }
 
     public override void Enter()
@@ -73,12 +69,15 @@ public class PlayerState_Model_ResultToMenu : PlayerStateBase_Model
 
         if (elapsedTime < 0.5) return;
 
-        //スケール調整
+        //1.5秒経過までは
         if (elapsedTime < 1)
+        {
+            //スケール調整
             tf.localScale = Vector3.one - Vector3.up * (elapsedTime - 0.5f);
-        else tf.localScale = Vector3.one * Mathf.Lerp(1, 1.5f, lerpValue);
 
-        if (elapsedTime < 1) return;
+            //残りの処理を飛ばす
+            return;
+        }
 
         //ジャンプ開始処理
         if (!isMoving)
@@ -89,27 +88,23 @@ public class PlayerState_Model_ResultToMenu : PlayerStateBase_Model
             //物理演算を無効化
             rb.isKinematic = true;
 
+            //スケール調整
+            tf.localScale = Vector3.one;
+
             //移動関連の値を記憶
             startPos = tf.position;
             posCorrectionY = 0;
             velocityY = 15;
-
-            //プレイヤーの当たり判定・描画レイヤー変更
-            playerCon.SetLayer(5);
-            playerCon.SetSortingLayer("Model");
         }
-
-        //目の位置調整
-        eyeTf.localPosition = Vector2.Lerp(eyePlayPos, eyeStandbyPos, lerpValue);
 
         //移動関連演算
         velocityY -= gravity * Time.deltaTime;
         posCorrectionY += velocityY * Time.deltaTime;
         tf.position = Vector2.Lerp(startPos, targetPos, lerpValue) + Vector2.up * posCorrectionY;
 
-        //ゲームステートがMenuならステート遷移
-        if (gameStateMachine.currentState == gameStateMachine.state_Menu)
-            stateMachine.ChangeState(stateMachine.state_Model_Kinematic);
+        //ゲームステートがPlayならステート遷移
+        if (gameStateMachine.currentState == gameStateMachine.state_Play)
+            stateMachine.ChangeState(stateMachine.state_Play_Run);
     }
 
     public override void Exit()
@@ -120,7 +115,16 @@ public class PlayerState_Model_ResultToMenu : PlayerStateBase_Model
         //速度を0に
         rb.velocity = Vector2.zero;
 
+        //物理演算の有効化
+        rb.isKinematic = false;
+
+        //重力スケール補正
+        rb.gravityScale = 10;
+
         //回転を無効化
         rb.freezeRotation = true;
+
+        //正面のトリガーの接触判定をリセット
+        playerCon.trigerFront.Initialize();
     }
 }

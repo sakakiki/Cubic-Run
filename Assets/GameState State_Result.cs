@@ -18,8 +18,10 @@ public class GameStateState_Result : GameStateStateBase
         IM.GetInput_Result();
 
         //入力に応じたステート遷移
-        if (IM.is_Result_Title_Push)
+        if (IM.is_Result_Title_Tap)
             stateMachine.ChangeState(stateMachine.state_ResultToMenu);
+        else if (IM.is_Result_Retry_Tap)
+            stateMachine.ChangeState(stateMachine.state_ResultToPlay);
     }
 
 

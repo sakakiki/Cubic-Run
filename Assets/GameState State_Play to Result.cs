@@ -10,6 +10,7 @@ public class GameStateState_PlayToResult : GameStateStateBase
     private Color startCoverColor;
     private Color targetCoverColor;
     private RectTransform resultHingeRtf_B;
+    private AnimationCurve curveScorePosY;
 
     public GameStateState_PlayToResult(GameStateStateMachine stateMachine) : base(stateMachine)
     {
@@ -19,6 +20,7 @@ public class GameStateState_PlayToResult : GameStateStateBase
         startCoverColor = GM.screenCoverColor_Play;
         targetCoverColor = GM.screenCoverColor_Menu;
         resultHingeRtf_B = GM.resultHingeRtf_B;
+        curveScorePosY = GM.scorePosY_PlaytoResult;
     }
 
 
@@ -58,7 +60,7 @@ public class GameStateState_PlayToResult : GameStateStateBase
         scoreSetTf.eulerAngles = Vector3.up * Mathf.Lerp(0, 3600, Mathf.Pow((elapsedTime - 1)/3, 0.3f));
         scoreSetTf.position = 
             Vector3.Lerp(startPos, targetPos, lerpValue) + 
-            Vector3.up * GM.scorePosY_PlaytoResult.Evaluate(lerpValue) * 3;
+            Vector3.up * curveScorePosY.Evaluate(lerpValue) * 3;
 
         //スクリーンカバーの色を変更
         screenCover.color =
