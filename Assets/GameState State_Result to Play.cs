@@ -121,9 +121,5 @@ public class GameStateState_ResultToPlay : GameStateStateBase
     {
         //スコアボードの位置を修正
         GM.scoreSetTf.position = GM.scoreMarkerTf_Play.position;
-
-        //地形を減速
-        TM.moveSpeed = 8;
-        TM.SetSpeed(8);
     }
 }

@@ -9,6 +9,10 @@ public class InputManager : MonoBehaviour
     [SerializeField] private Button_Push button_Menu_Play;
     [SerializeField] private Button_Push button_Menu_Skin;
     [SerializeField] private Button_Push button_Menu_Tutorial;
+    [SerializeField] private Button_Tap button_Play_Pause;
+    private bool isInputPlayerActive = true;
+    [SerializeField] private Button_Push button_Pause_Continue;
+    [SerializeField] private Button_Push button_Pause_Retire;
     [SerializeField] private Button_Push button_Result_Title;
     [SerializeField] private Button_Push button_Result_Retry;
 
@@ -18,22 +22,30 @@ public class InputManager : MonoBehaviour
     public bool is_Menu_Skin_Push { get; private set; }
     public bool is_Menu_Tutorial_Push { get; private set; }
 
-    public bool is_Play_Jump_Push {  get; private set; }
-    public bool is_Play_Squat_Push { get; private set; }
-    public bool is_Play_Squat_Hold { get; private set; }
-    public bool is_Play_Squat_Release { get; private set; }
-    public bool is_Play_Attack_Push { get; private set; }
-    public bool is_Play_Attack_Hold { get; private set; }
-    public bool is_Play_Attack_Release { get; private set; }
+    public bool is_Play_Pause_Tap { get; private set; }
+
+    public bool is_Player_Jump_Push {  get; private set; }
+    public bool is_Player_Squat_Push { get; private set; }
+    public bool is_Player_Squat_Hold { get; private set; }
+    public bool is_Player_Squat_Release { get; private set; }
+    public bool is_Player_Attack_Push { get; private set; }
+    public bool is_Player_Attack_Hold { get; private set; }
+    public bool is_Player_Attack_Release { get; private set; }
+
+    public bool is_Pause_Continue_Push { get; private set; }
+    public bool is_Pause_Retire_Push { get; private set; }
 
     public bool is_Result_Title_Tap { get; private set; }
     public bool is_Result_Retry_Tap { get; private set; }
+
 
     private void Awake()
     {
         if (Instance == null)
             Instance = this;
     }
+
+
     public void InputUISetActive_Screen(bool isActive)
     {
         screenButtonObj.SetActive(isActive);
@@ -46,11 +58,28 @@ public class InputManager : MonoBehaviour
         button_Menu_Tutorial.enabled = isActive;
     }
 
+    public void InputUISetActive_Play(bool isActive)
+    {
+        button_Play_Pause.enabled = isActive;
+    }
+
+    public void InputUISetActive_Player(bool isActive)
+    {
+        isInputPlayerActive = isActive;
+    }
+
+    public void InputUISetActive_Pause(bool isActive)
+    {
+        button_Pause_Continue.enabled = isActive;
+        button_Pause_Retire.enabled = isActive;
+    }
+
     public void InputUISetActive_Result(bool isActive)
     {
         button_Result_Retry.enabled = isActive;
         button_Result_Title.enabled = isActive;
     }
+
 
     public void GetInput_Screen()
     {
@@ -66,13 +95,25 @@ public class InputManager : MonoBehaviour
 
     public void GetInput_Play()
     {
-        is_Play_Jump_Push = Input.GetKeyDown(KeyCode.UpArrow);
-        is_Play_Squat_Push = Input.GetKeyDown(KeyCode.DownArrow);
-        is_Play_Squat_Hold = Input.GetKey(KeyCode.DownArrow);
-        is_Play_Squat_Release = Input.GetKeyUp(KeyCode.DownArrow);
-        is_Play_Attack_Push = Input.GetKeyDown(KeyCode.RightArrow);
-        is_Play_Attack_Hold = Input.GetKey(KeyCode.RightArrow);
-        is_Play_Attack_Release = Input.GetKeyUp(KeyCode.RightArrow);
+        is_Play_Pause_Tap = button_Play_Pause.GetIsTapped();
+    }
+
+    public void GetInput_Player()
+    {
+        if (!isInputPlayerActive) return;
+        is_Player_Jump_Push = Input.GetKeyDown(KeyCode.UpArrow);
+        is_Player_Squat_Push = Input.GetKeyDown(KeyCode.DownArrow);
+        is_Player_Squat_Hold = Input.GetKey(KeyCode.DownArrow);
+        is_Player_Squat_Release = Input.GetKeyUp(KeyCode.DownArrow);
+        is_Player_Attack_Push = Input.GetKeyDown(KeyCode.RightArrow);
+        is_Player_Attack_Hold = Input.GetKey(KeyCode.RightArrow);
+        is_Player_Attack_Release = Input.GetKeyUp(KeyCode.RightArrow);
+    }
+
+    public void GetInput_Pause()
+    {
+        is_Pause_Continue_Push = button_Pause_Continue.GetIsPushed();
+        is_Pause_Retire_Push = button_Pause_Retire.GetIsPushed();
     }
 
     public void GetInput_Result()

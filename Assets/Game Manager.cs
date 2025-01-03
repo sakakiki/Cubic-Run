@@ -18,6 +18,8 @@ public class GameManager : MonoBehaviour
     public RectTransform[] menuUIs_R;
     public RectTransform playHingeRtf_L;
     public RectTransform[] playUIs_L;
+    public RectTransform playHingeRtf_R;
+    public RectTransform[] playUIs_R;
     public RectTransform resultHingeRtf_B;
     public RectTransform[] resultUIs_B;
     public TextMeshProUGUI scoreText;
@@ -29,6 +31,7 @@ public class GameManager : MonoBehaviour
     public Transform scoreMarkerTf_Play;
     public Transform scoreMarkerTf_Result;
     public SpriteRenderer screenCover;
+    public GameObject PauseUI;
 
     //ステートマシン
     public GameStateStateMachine gameStateMachine {  get; private set; }
@@ -57,7 +60,7 @@ public class GameManager : MonoBehaviour
         #endregion
 
         //目標フレームレート設定
-        Application.targetFrameRate = 120;
+        Application.targetFrameRate = 60;
     }
 
 
@@ -71,6 +74,8 @@ public class GameManager : MonoBehaviour
             menuUIs_R[i].SetParent(menuHingeRtf_R);
         for (int i = 0; i < playUIs_L.Length; i++)
             playUIs_L[i].SetParent(playHingeRtf_L);
+        for (int i = 0; i < playUIs_R.Length; i++)
+            playUIs_R[i].SetParent(playHingeRtf_R);
         for (int i = 0; i < resultUIs_B.Length; i++)
             resultUIs_B[i].SetParent(resultHingeRtf_B);
     }

@@ -15,7 +15,7 @@ public abstract class PlayerStateBase_Play : PlayerStateBase
     public override void Update()
     {
         //“ü—Íæ“¾
-        IM.GetInput_Play();
+        IM.GetInput_Player();
 
         //Ú’n”»’è
         isGrounded = trigerFoot.isTouch;

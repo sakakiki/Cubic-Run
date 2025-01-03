@@ -6,6 +6,7 @@ public class GameStateState_MenuToPlay : GameStateStateBase
     public RectTransform menuHingeRtf_L;
     public RectTransform menuHingeRtf_R;
     public RectTransform playHingeRtf_L;
+    public RectTransform playHingeRtf_R;
     private SpriteRenderer screenCover;
     private Color startCoverColor;
     private Color targetCoverColor;
@@ -15,6 +16,7 @@ public class GameStateState_MenuToPlay : GameStateStateBase
         menuHingeRtf_L = GM.menuHingeRtf_L;
         menuHingeRtf_R = GM.menuHingeRtf_R;
         playHingeRtf_L = GM.playHingeRtf_L;
+        playHingeRtf_R = GM.playHingeRtf_R;
         screenCover = GM.screenCover;
         startCoverColor = GM.screenCoverColor_Menu;
         targetCoverColor = GM.screenCoverColor_Play;
@@ -60,6 +62,7 @@ public class GameStateState_MenuToPlay : GameStateStateBase
         menuHingeRtf_L.localEulerAngles = Vector3.Lerp(Vector3.zero, Vector3.up * -180, lerpValue);
         menuHingeRtf_R.localEulerAngles = Vector3.Lerp(Vector3.zero, Vector3.up * 180, lerpValue);
         playHingeRtf_L.localEulerAngles = Vector3.Lerp(Vector3.up * 180, Vector3.zero, lerpValue);
+        playHingeRtf_R.localEulerAngles = Vector3.Lerp(Vector3.up * -180, Vector3.zero, lerpValue);
 
         //スクリーンカバーの色を変更
         screenCover.color = 
@@ -74,10 +77,6 @@ public class GameStateState_MenuToPlay : GameStateStateBase
 
     public override void Exit()
     {
-        //地形を減速
-        TM.moveSpeed = 8;
-        TM.SetSpeed(8);
-
         //レベルテキストの位置・大きさ・色調整
         GM.levelRtf.position = GM.centerPos_World;
         GM.levelText.fontSize = 300;
