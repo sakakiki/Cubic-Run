@@ -42,14 +42,24 @@ public class PlayerState_Model_ResultToMenu : PlayerStateBase_Model
         //0.5秒待機
         if (elapsedTime < 0) return;
 
-        if (!isResetRotation)
+        //姿勢補正開始処理
+        if (!isResetRotation && elapsedTime < 1)
         {
             isResetRotation = true;
 
-            //初期回転量記憶・補正
-            startEulerAnglesZ = tf.eulerAngles.z;
-            if (tf.eulerAngles.z > 180)
-                startEulerAnglesZ -= 360;
+            //プレイヤーがトンネル内なら演出を早める
+            if (TerrainManager.Instance.currentTerrainNum == 3)
+                elapsedTime = 1;
+            //トンネル外なら初期回転量記憶・補正
+            else
+            {
+                startEulerAnglesZ = tf.eulerAngles.z;
+                if (tf.eulerAngles.z > 180)
+                    startEulerAnglesZ -= 360;
+            }
+
+            //重力スケール補正
+            rb.gravityScale = 5;
 
             //まっすぐ立っていれば小さく、そうでなければ大きくジャンプ
             rb.velocity = Vector2.up * (Mathf.Abs(startEulerAnglesZ) < 1 ? 7 : 12);
@@ -109,9 +119,6 @@ public class PlayerState_Model_ResultToMenu : PlayerStateBase_Model
 
         //速度を0に
         rb.velocity = Vector2.zero;
-
-        //重力スケール補正
-        rb.gravityScale = 5;
 
         //回転を無効化
         rb.freezeRotation = true;
