@@ -10,6 +10,8 @@ public abstract class PlayStateStateBase
     protected TerrainManager TM;
     public static float playTime;
     private TextMeshProUGUI scoreText;
+    private int countinueCount;
+    private int countinueCircleCount;
     private enum PauseState
     {
         Play,
@@ -52,11 +54,18 @@ public abstract class PlayStateStateBase
                 //ポーズ
                 if (IM.is_Play_Pause_Tap)
                 {
-                    GM.PauseUI.SetActive(true);
+                    //プレイ画面UIを無効化
                     IM.InputUISetActive_Play(false);
                     IM.InputUISetActive_Player(false);
+
+                    //ポーズ画面UIを表示・有効化
+                    GM.PauseUI.SetActive(true);
                     IM.InputUISetActive_Pause(true);
+
+                    //オブジェクトを停止
                     Time.timeScale = 0;
+
+                    //ポーズ状態へ
                     currentPauseState = PauseState.Pause;
                 }
                 break;
@@ -70,12 +79,24 @@ public abstract class PlayStateStateBase
                 //入力に応じた遷移
                 if (IM.is_Pause_Continue_Push)
                 {
+                    //ポーズ画面UIを非表示・無効化
                     IM.InputUISetActive_Pause(false);
-                    IM.InputUISetActive_Play(true);
-                    IM.InputUISetActive_Player(true);
                     GM.PauseUI.SetActive(false);
-                    Time.timeScale = 1;
-                    currentPauseState = PauseState.Play;
+
+                    //目標フレームレートを30に設定
+                    Application.targetFrameRate = 30;
+
+                    //再開までのカウントダウンを3に
+                    countinueCount = 3;
+                    GM.countinueCountText.SetText("" + countinueCount);
+
+                    //カウントサークルの表示
+                    countinueCircleCount = 30;
+                    for (int i = 0; i < GM.countinueCircleSquares.Length; i++)
+                        GM.countinueCircleSquares[i].SetActive(true);
+
+                    //再開のカウントダウンに移行
+                    currentPauseState = PauseState.PauseToPlay;
                 }
                 else if (IM.is_Pause_Retire_Push)
                 {
@@ -84,7 +105,52 @@ public abstract class PlayStateStateBase
                 break;
 
 
-            case PauseState.PauseToPlay: break;
+            case PauseState.PauseToPlay:
+
+                //カウントサークルの数を減らす
+                countinueCircleCount--;
+
+                //まだカウントサークルがあるなら非表示に
+                if (countinueCircleCount >= 0)
+                    GM.countinueCircleSquares[countinueCircleCount].SetActive(false);
+                //カウントサークルが無いなら
+                else
+                {
+                    //再開のカウントダウンを減らす
+                    countinueCount--;
+
+                    //カウントダウンが続くなら
+                    if (countinueCount > 0)
+                    {
+                        //再開のカウントダウンを更新
+                        GM.countinueCountText.SetText("" + countinueCount);
+
+                        //カウントサークルの再表示
+                        countinueCircleCount = 30;
+                        for (int i = 0; i < GM.countinueCircleSquares.Length; i++)
+                            GM.countinueCircleSquares[i].SetActive(true);
+                    }
+                    //カウントダウンが終わるなら
+                    else
+                    {
+                        //再開のカウントダウンを非表示
+                        GM.countinueCountText.SetText("");
+
+                        //目標フレームレートを60に設定
+                        Application.targetFrameRate = 60;
+
+                        //プレイ画面UIを有効化
+                        IM.InputUISetActive_Play(true);
+                        IM.InputUISetActive_Player(true);
+
+                        //オブジェクトを動かす
+                        Time.timeScale = 1;
+
+                        //ポーズ状態を終了
+                        currentPauseState = PauseState.Play;
+                    }
+                }
+                break;
 
 
             default: break;

@@ -32,6 +32,8 @@ public class GameManager : MonoBehaviour
     public Transform scoreMarkerTf_Result;
     public SpriteRenderer screenCover;
     public GameObject PauseUI;
+    public TextMeshProUGUI countinueCountText;
+    public GameObject[] countinueCircleSquares;
 
     //ステートマシン
     public GameStateStateMachine gameStateMachine {  get; private set; }
