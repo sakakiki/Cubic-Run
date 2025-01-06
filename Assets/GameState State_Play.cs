@@ -65,7 +65,7 @@ public class GameStateState_Play : GameStateStateBase
                     IM.InputUISetActive_Player(false);
 
                     //ポーズ画面UIを表示・有効化
-                    GM.PauseUI.SetActive(true);
+                    GM.pauseUI.SetActive(true);
                     IM.InputUISetActive_Pause(true);
 
                     //オブジェクトを停止
@@ -87,7 +87,7 @@ public class GameStateState_Play : GameStateStateBase
                 {
                     //ポーズ画面UIを非表示・無効化
                     IM.InputUISetActive_Pause(false);
-                    GM.PauseUI.SetActive(false);
+                    GM.pauseUI.SetActive(false);
 
                     //目標フレームレートを30に設定
                     Application.targetFrameRate = 30;
@@ -108,7 +108,7 @@ public class GameStateState_Play : GameStateStateBase
                 {
                     //ポーズ画面UIを非表示・無効化
                     IM.InputUISetActive_Pause(false);
-                    GM.PauseUI.SetActive(false);
+                    GM.pauseUI.SetActive(false);
 
                     //オブジェクトを動かす
                     Time.timeScale = 1;

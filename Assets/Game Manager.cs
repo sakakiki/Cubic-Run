@@ -6,10 +6,14 @@ public class GameManager : MonoBehaviour
     //自身のインスタンス
     public static GameManager Instance;
 
-    //インスペクターから設定可能
+    //プレイ中のデータを保持
     public int score = 0;
     public int level = 0;
     public int levelUpSpan = 2000;
+    public bool isTraining {  get; private set; }
+    public int trainingLevel = 1;
+
+    //インスペクターから設定可能
     public Transform playerTf;
     public PlayerController playerCon;
     public RectTransform menuHingeRtf_L;
@@ -31,9 +35,10 @@ public class GameManager : MonoBehaviour
     public Transform scoreMarkerTf_Play;
     public Transform scoreMarkerTf_Result;
     public SpriteRenderer screenCover;
-    public GameObject PauseUI;
+    public GameObject pauseUI;
     public TextMeshProUGUI countinueCountText;
     public GameObject[] countinueCircleSquares;
+    public TextMeshProUGUI playButtonText;
 
     //ステートマシン
     public GameStateStateMachine gameStateMachine {  get; private set; }
@@ -67,7 +72,7 @@ public class GameManager : MonoBehaviour
 
 
 
-    void Start()
+    private void Start()
     {
         //UIをHingeに接続
         for (int i = 0; i < menuUIs_L.Length; i++)
@@ -80,12 +85,43 @@ public class GameManager : MonoBehaviour
             playUIs_R[i].SetParent(playHingeRtf_R);
         for (int i = 0; i < resultUIs_B.Length; i++)
             resultUIs_B[i].SetParent(resultHingeRtf_B);
+
+        //ランキングモードで開始
+        SetTrainingMode(false);
+
+        for (int i = 1; i <= 10; i++)
+            InputManager.Instance.AddLevelPanel(i);
     }
 
 
 
-    void Update()
+    private void Update()
     {
         gameStateMachine.Update(Time.deltaTime);
+    }
+
+
+
+    public void SetTrainingMode(bool isTraining)
+    {
+        //設定を変更
+        this.isTraining = isTraining;
+
+        //ボタンのテキストを変更
+        if (isTraining)
+            playButtonText.SetText("プレイ - Lv." + trainingLevel);
+        else playButtonText.SetText("プレイ");
+    }
+
+
+
+    public void SetTrainingLevel(int level)
+    {
+        //現在の選択を解除
+        InputManager.Instance.button_LevelSelecters[trainingLevel - 1].enabled = true;
+
+        //トレーニングのレベルを更新
+        trainingLevel = level;
+        playButtonText.SetText("プレイ - Lv." + level);
     }
 }
