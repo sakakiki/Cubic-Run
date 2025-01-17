@@ -21,8 +21,13 @@ public class PlayStateState_Play : PlayStateStateBase
         base.Update(deltaTime);
 
         //基準スコアに到達すればステート遷移
-        if (GM.score > levelEndScore)
-            stateMachine.ChangeState(stateMachine.state_LevelEnd);
+        if (GM.score > levelEndScore - scoreCorrection)
+        {
+            if (GM.isTraining)
+                stateMachine.ChangeState(stateMachine.state_TrainingEnd);
+            else 
+                stateMachine.ChangeState(stateMachine.state_LevelEnd);
+        }
     }
 
 

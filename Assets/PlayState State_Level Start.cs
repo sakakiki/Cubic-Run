@@ -42,6 +42,10 @@ public class PlayStateState_LevelStart : PlayStateStateBase
             300　……終了演出に使用する時間（スコア換算）
             3200 / TM.moveSpeed　……障害物が画面外に移動するのにかかる時間（スコア換算）
         */
+
+        //トレーニングモードなら障害物生成終了を遅らせる
+        if (GM.isTraining)
+            ((PlayStateState_Play)stateMachine.state_Play).levelEndScore += 250;
     }
 
 
@@ -51,13 +55,13 @@ public class PlayStateState_LevelStart : PlayStateStateBase
         base.Update(deltaTime);
 
         //レベルテキストの位置・大きさ・色調整
-        int shortageScore = levelStartScore - GM.score;
+        int shortageScore = levelStartScore - scoreCorrection - GM.score;
         levelTf.position = Vector3.Lerp(levelMarker.position, centerPos, shortageScore / 75f);
         levelText.fontSize = Mathf.Lerp(72, 300, shortageScore / 75f);
         levelText.color = Color.Lerp(Color.black, Color.clear, (shortageScore - 200) / 50f);
 
         //スコアが基準を満たせばステート遷移
-        if (GM.score > levelStartScore)
+        if (GM.score > levelStartScore - scoreCorrection)
             stateMachine.ChangeState(stateMachine.state_Play);
     }
 

@@ -10,6 +10,7 @@ public abstract class PlayStateStateBase
     protected TerrainManager TM;
     public static float playTime;
     private TextMeshProUGUI scoreText;
+    public static int scoreCorrection;
 
     public PlayStateStateBase(PlayStateStateMachine stateMachine)
     {

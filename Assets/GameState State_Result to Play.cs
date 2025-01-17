@@ -90,13 +90,16 @@ public class GameStateState_ResultToPlay : GameStateStateBase
             {
                 isResetScore = true;
 
+                //レベルのリセット
+                if (GM.isTraining)
+                    GM.level = GM.trainingLevel - 1;
+                else GM.level = 0;
+                GM.levelText.SetText("");
+
                 //スコアのリセット
                 GM.score = 0;
+                PlayStateStateBase.scoreCorrection = GM.level * 5000;
                 GM.scoreText.SetText("0");
-
-                //レベルのリセット
-                GM.level = 0;
-                GM.levelText.SetText("");
 
                 //レベルテキストの位置・大きさ・色調整
                 GM.levelTf.position = GM.centerPos_World;

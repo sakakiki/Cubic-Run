@@ -14,11 +14,17 @@ public class Button_LevelSelecter: MonoBehaviour, IPointerClickHandler
     //マウス：クリック後にマウスボタンを離したとき、カーソルがオブジェクト上なら実行
     public void OnPointerClick(PointerEventData eventData)
     {
-        //押下状態へ変化
-        rtf.anchoredPosition = pushedApos;
-
         //入力の受け渡し
         GameManager.Instance.SetTrainingLevel(level);
+
+        PushButton();
+    }
+
+    //押下処理
+    public void PushButton()
+    {
+        //表示を押下状態へ変化
+        rtf.anchoredPosition = pushedApos;
 
         //スクリプトを無効化
         this.enabled = false;

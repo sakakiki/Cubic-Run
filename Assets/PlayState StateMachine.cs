@@ -9,6 +9,7 @@ public class PlayStateStateMachine
     public PlayStateStateBase state_Play;
     public PlayStateStateBase state_LevelStart;
     public PlayStateStateBase state_LevelEnd;
+    public PlayStateStateBase state_TrainingEnd;
 
 
 
@@ -18,6 +19,7 @@ public class PlayStateStateMachine
         state_Play = new PlayStateState_Play(this);
         state_LevelStart = new PlayStateState_LevelStart(this);
         state_LevelEnd = new PlayStateState_LevelEnd(this);
+        state_TrainingEnd = new PlayStateState_TrainingEnd(this);
     }
 
     public void Initialize(PlayStateStateBase firstState)

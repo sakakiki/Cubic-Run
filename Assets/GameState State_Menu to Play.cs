@@ -36,13 +36,16 @@ public class GameStateState_MenuToPlay : GameStateStateBase
         TM.moveSpeed = 20;
         TM.SetSpeed(20);
 
+        //レベルのリセット
+        if (GM.isTraining)
+            GM.level = GM.trainingLevel - 1;
+        else GM.level = 0;
+        GM.levelText.SetText("");
+
         //スコアのリセット
         GM.score = 0;
+        PlayStateStateBase.scoreCorrection = GM.level * 5000;
         GM.scoreText.SetText("0");
-
-        //レベルのリセット
-        GM.level = 0;
-        GM.levelText.SetText("");
     }
 
 

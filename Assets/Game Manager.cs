@@ -7,11 +7,12 @@ public class GameManager : MonoBehaviour
     public static GameManager Instance;
 
     //プレイ中のデータを保持
-    public int score = 0;
-    public int level = 0;
-    public int levelUpSpan = 2000;
+    public int score;
+    public int level;
+    public int levelUpSpan;
     public bool isTraining {  get; private set; }
-    public int trainingLevel = 1;
+    public int trainingLevel;
+    public int highestLevel;
 
     //インスペクターから設定可能
     public Transform playerTf;
@@ -89,8 +90,16 @@ public class GameManager : MonoBehaviour
         //ランキングモードで開始
         SetTrainingMode(false);
 
+
+
+        /* 以下開発用 */
+
+        //Lv.10までのトレーニングモードボタンを配置
         for (int i = 1; i <= 10; i++)
             InputManager.Instance.AddLevelPanel(i);
+
+        highestLevel = 10;
+        trainingLevel = highestLevel;
     }
 
 
@@ -107,10 +116,28 @@ public class GameManager : MonoBehaviour
         //設定を変更
         this.isTraining = isTraining;
 
-        //ボタンのテキストを変更
+        //トレーニングモードへ遷移時
         if (isTraining)
+        {
+            //ボタンのテキストを変更
             playButtonText.SetText("プレイ - Lv." + trainingLevel);
-        else playButtonText.SetText("プレイ");
+
+            //トレーニングモードボタンを押下
+            InputManager.Instance.button_LevelSelecters[trainingLevel - 1].PushButton();
+
+            //レベル上昇間隔を変更
+            levelUpSpan = 5000;
+        }
+
+        //ランキングモードへ遷移時
+        else
+        {
+            //ボタンのテキストを変更
+            playButtonText.SetText("プレイ");
+
+            //レベル上昇間隔を変更
+            levelUpSpan = 2000;
+        }
     }
 
 

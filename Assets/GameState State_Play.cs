@@ -1,4 +1,3 @@
-using UnityEditor;
 using UnityEngine;
 
 public class GameStateState_Play : GameStateStateBase
@@ -36,8 +35,8 @@ public class GameStateState_Play : GameStateStateBase
         playStateMachine.Initialize(playStateMachine.state_LevelStart);
 
         //地形を減速
-        TM.moveSpeed = 8;
-        TM.SetSpeed(8);
+        TM.moveSpeed = 5 + Mathf.Pow(GM.level, 0.7f) * 3;
+        TM.SetSpeed(5 + Mathf.Pow(GM.level, 0.7f) * 3);
 
         //ポーズ状態を解除
         InitializePauseState();
