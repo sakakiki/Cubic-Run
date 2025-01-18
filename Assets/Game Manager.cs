@@ -25,6 +25,8 @@ public class GameManager : MonoBehaviour
     public RectTransform[] playUIs_L;
     public RectTransform playHingeRtf_R;
     public RectTransform[] playUIs_R;
+    public RectTransform resultHingeRtf_L;
+    public RectTransform[] resultUIs_L;
     public RectTransform resultHingeRtf_B;
     public RectTransform[] resultUIs_B;
     public TextMeshProUGUI scoreText;
@@ -85,6 +87,8 @@ public class GameManager : MonoBehaviour
             playUIs_L[i].SetParent(playHingeRtf_L);
         for (int i = 0; i < playUIs_R.Length; i++)
             playUIs_R[i].SetParent(playHingeRtf_R);
+        for (int i = 0; i < resultUIs_L.Length; i++)
+            resultUIs_L[i].SetParent(resultHingeRtf_L);
         for (int i = 0; i < resultUIs_B.Length; i++)
             resultUIs_B[i].SetParent(resultHingeRtf_B);
 
@@ -96,7 +100,7 @@ public class GameManager : MonoBehaviour
         /* 以下開発用 */
 
         //到達レベルを設定
-        highestLevel = 3;
+        highestLevel = 5;
         trainingLevel = highestLevel;
 
         //到達レベルまでのトレーニングモードボタンを配置

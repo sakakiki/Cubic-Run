@@ -10,6 +10,7 @@ public class GameStateState_PlayToResult : GameStateStateBase
     private Color startCoverColor;
     private Color targetCoverColor;
     public RectTransform playHingeRtf_R;
+    private RectTransform resultHingeRtf_L;
     private RectTransform resultHingeRtf_B;
     private AnimationCurve curveScorePosY;
 
@@ -21,6 +22,7 @@ public class GameStateState_PlayToResult : GameStateStateBase
         startCoverColor = GM.screenCoverColor_Play;
         targetCoverColor = GM.screenCoverColor_Menu;
         playHingeRtf_R = GM.playHingeRtf_R;
+        resultHingeRtf_L = GM.resultHingeRtf_L;
         resultHingeRtf_B = GM.resultHingeRtf_B;
         curveScorePosY = GM.scorePosY_PlaytoResult;
     }
@@ -55,8 +57,9 @@ public class GameStateState_PlayToResult : GameStateStateBase
         //経過時間の加算
         elapsedTime += deltaTime;
 
-        //地形の管理
-        TM.ManageMovingTerrain();
+        //トレーニングモードクリア時は地形の管理
+        if (GM.score == 5000 && GM.isTraining)
+            TM.ManageMovingTerrain();
 
         //1秒間待機
         if (elapsedTime < 1) return;
@@ -80,6 +83,7 @@ public class GameStateState_PlayToResult : GameStateStateBase
 
         //UIを回転
         playHingeRtf_R.localEulerAngles = Vector3.Lerp(Vector3.zero, Vector3.up * -180, elapsedTime - 1);
+        resultHingeRtf_L.localEulerAngles = Vector3.Lerp(Vector3.up * 120, Vector3.zero, elapsedTime - 2);
         resultHingeRtf_B.localEulerAngles = Vector3.Lerp(Vector3.right * 180, Vector3.zero, elapsedTime - 2);
 
         //指定時間経過でステート遷移
