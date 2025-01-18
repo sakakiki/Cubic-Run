@@ -39,9 +39,10 @@ public abstract class PlayStateStateBase
         scoreText.SetText("" + GM.score);
 
         //スコアゲージ調整
-        scoreGageTf.localScale = 
-            Vector3.right + Vector3.forward + 
-            Vector3.up * (float)(GM.score % GM.levelUpSpan)/ (float)GM.levelUpSpan * 2;
+        if (GM.isTraining)
+            scoreGageTf.localScale = Vector3.right + Vector3.forward + Vector3.up * GM.score / 5000f * 2;
+        else if (GM.highScore != 0)
+            scoreGageTf.localScale = Vector3.right + Vector3.forward + Vector3.up * GM.score / (float)GM.highScore * 2;
     }
 
     public abstract void Exit();

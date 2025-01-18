@@ -87,14 +87,20 @@ public class GameStateState_ResultToPlay : GameStateStateBase
         scoreSetTf.position = Vector3.Lerp(startPos, targetPos, lerpValue);
         scoreSetTf.localScale = Vector3.one * Mathf.Lerp(1.5f, 1, lerpValue);
 
-        //スコアゲージスケール変更
-        scoreGageTf.localScale = Vector3.right + Vector3.forward + Vector3.up * Mathf.Lerp(startGageScale, 0, lerpValue);
-
-        //スコアボードの回転
         if (elapsedTime < 2.25)
+        {
+            //スコアボードの回転
             scoreSetTf.eulerAngles = Vector3.up * Mathf.Lerp(360, 180, lerpValue);
+
+            //スコア減少
+            GM.scoreText.SetText("" + (int)Mathf.Lerp(GM.score, 0, lerpValue * 2));
+
+            //スコアゲージスケール変更
+            scoreGageTf.localScale = Vector3.right + Vector3.forward + Vector3.up * Mathf.Lerp(startGageScale, 0, lerpValue * 2);
+        }
         else
         {
+            //スコアボードの回転
             scoreSetTf.eulerAngles = Vector3.up * Mathf.Lerp(180, 0, lerpValue);
 
             //スコアボードのリセット
@@ -113,6 +119,9 @@ public class GameStateState_ResultToPlay : GameStateStateBase
                 PlayStateStateBase.scoreCorrection = GM.level * 5000;
                 GM.scoreText.SetText("0");
 
+                //スコアゲージリセット
+                scoreGageTf.localScale = Vector3.right + Vector3.forward;
+
                 //レベルテキストの位置・大きさ・色調整
                 GM.levelTf.position = GM.centerPos_World;
                 GM.levelText.fontSize = 300;
@@ -127,7 +136,7 @@ public class GameStateState_ResultToPlay : GameStateStateBase
         //UIを回転
         playHingeRtf_R.localEulerAngles = Vector3.Lerp(Vector3.up * -180, Vector3.zero, elapsedTime - 2);
         resultHingeRtf_L.localEulerAngles = Vector3.Lerp(Vector3.zero, Vector3.up * 180, elapsedTime - 2);
-        resultHingeRtf_B.localEulerAngles = Vector3.Lerp(Vector3.zero, Vector3.right * 180, elapsedTime - 2);
+        resultHingeRtf_B.localEulerAngles = Vector3.Lerp(Vector3.zero, Vector3.right * 180, lerpValue);
 
         //指定時間経過でステート遷移
         if (elapsedTime > 3)

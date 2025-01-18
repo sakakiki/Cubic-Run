@@ -8,6 +8,10 @@ public class GameStateState_Result : GameStateStateBase
     {
         //リザルト画面のUIを有効化
         IM.InputUISetActive_Result(true);
+
+        //ハイスコアの更新
+        if (!GM.isTraining && GM.score > GM.highScore)
+            GM.highScore = GM.score;
     }
 
 

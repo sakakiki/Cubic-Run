@@ -10,6 +10,7 @@ public class GameManager : MonoBehaviour
     public int score;
     public int level;
     public int levelUpSpan;
+    public int highScore;
     public bool isTraining {  get; private set; }
     public int trainingLevel;
     public int highestLevel;
