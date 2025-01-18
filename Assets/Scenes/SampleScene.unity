@@ -7143,6 +7143,17 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &1356522514 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2399162460253485213, guid: ebbe8b8f39c6d4641b6377dab60618a7, type: 3}
+  m_PrefabInstance: {fileID: 934641782}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1401671410
 GameObject:
   m_ObjectHideFlags: 0
@@ -10363,6 +10374,7 @@ MonoBehaviour:
   level: 0
   levelUpSpan: 2000
   trainingLevel: 1
+  highestLevel: 0
   playerTf: {fileID: 1938157858}
   playerCon: {fileID: 1938157861}
   menuHingeRtf_L: {fileID: 1261818050}
@@ -10589,6 +10601,7 @@ MonoBehaviour:
   - {fileID: 2056514592}
   - {fileID: 801154544}
   playButtonText: {fileID: 1062823697}
+  retryButtonText: {fileID: 1356522514}
   centerPos_World: {x: 5, y: 3}
   screenCoverColor_Menu: {r: 1, g: 1, b: 1, a: 0.8}
   screenCoverColor_Play: {r: 0, g: 0, b: 0, a: 0}

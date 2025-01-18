@@ -62,6 +62,7 @@ public class InputManager : MonoBehaviour
         newPanelRtf.SetParent(content_LevelSelecter);
         newPanelRtf.localScale = Vector3.one;
         newPanelRtf.anchoredPosition3D = newPanelRtf.anchoredPosition3D - Vector3.forward * newPanelRtf.anchoredPosition3D.z;
+        newPanelRtf.localEulerAngles = Vector3.zero;
 
         //入力スクリプトを管理可能に
         Button_LevelSelecter button_LevelSelecter = newPanelRtf.GetComponent<Button_LevelSelecter>();

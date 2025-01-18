@@ -23,6 +23,9 @@ public abstract class PlayerStateBase_Play : PlayerStateBase
         //ゲームオーバーへの遷移
         if (trigerFront.isTouch || tf.position.y < -5)
             stateMachine.ChangeState(stateMachine.state_GameOver);
+        //トレーニングモードクリア状態へ遷移
+        else if (gameStateMachine.currentState == gameStateMachine.state_PlayToResult)
+            stateMachine.ChangeState(stateMachine.state_Model_TrainingClear);
         //リタイア状態へ遷移
         else if (gameStateMachine.currentState == gameStateMachine.state_PauseToMenu)
             stateMachine.ChangeState(stateMachine.state_Model_PauseToMenu);

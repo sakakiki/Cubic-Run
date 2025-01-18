@@ -40,6 +40,7 @@ public class GameManager : MonoBehaviour
     public TextMeshProUGUI countinueCountText;
     public GameObject[] countinueCircleSquares;
     public TextMeshProUGUI playButtonText;
+    public TextMeshProUGUI retryButtonText;
 
     //ステートマシン
     public GameStateStateMachine gameStateMachine {  get; private set; }
@@ -94,18 +95,20 @@ public class GameManager : MonoBehaviour
 
         /* 以下開発用 */
 
-        //Lv.10までのトレーニングモードボタンを配置
-        for (int i = 1; i <= 10; i++)
-            InputManager.Instance.AddLevelPanel(i);
-
-        highestLevel = 10;
+        //到達レベルを設定
+        highestLevel = 3;
         trainingLevel = highestLevel;
+
+        //到達レベルまでのトレーニングモードボタンを配置
+        for (int i = 1; i <= highestLevel; i++)
+            InputManager.Instance.AddLevelPanel(i);
     }
 
 
 
     private void Update()
     {
+        //ステートマシンのUpdateを実行
         gameStateMachine.Update(Time.deltaTime);
     }
 

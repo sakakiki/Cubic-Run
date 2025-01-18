@@ -31,8 +31,15 @@ public class GameStateState_PlayToResult : GameStateStateBase
         //経過時間リセット
         elapsedTime = 0;
 
-        //地形の停止
-        TerrainManager.Instance.SetSpeed(0);
+        //トレーニングモードクリア時を除き
+        if (GM.score != 5000 || !GM.isTraining)
+        {
+            //地形の停止
+            TerrainManager.Instance.SetSpeed(0);
+
+            //リトライボタンのテキストを変更
+            GM.retryButtonText.SetText("リトライ");
+        }
 
         //画面タップ検出ボタンの有効化
         IM.InputUISetActive_Screen(true);
@@ -47,6 +54,9 @@ public class GameStateState_PlayToResult : GameStateStateBase
     {
         //経過時間の加算
         elapsedTime += deltaTime;
+
+        //地形の管理
+        TM.ManageMovingTerrain();
 
         //1秒間待機
         if (elapsedTime < 1) return;
@@ -81,6 +91,9 @@ public class GameStateState_PlayToResult : GameStateStateBase
 
     public override void Exit()
     {
+        //地形の停止
+        TerrainManager.Instance.SetSpeed(0);
+
         //画面タップ検出ボタンの無効化
         IM.InputUISetActive_Screen(false);
 

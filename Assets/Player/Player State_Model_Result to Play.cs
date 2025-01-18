@@ -10,10 +10,15 @@ public class PlayerState_Model_ResultToPlay : PlayerStateBase_Model
     private float posCorrectionY;
     private float velocityY;
     private float gravity = 20;
+    private Vector2 eyeStartPos;
+    private Vector2 eyePlayPos;
+    private float startScale;
+    private float targetScale = 1;
 
     public PlayerState_Model_ResultToPlay(PlayerStateMachine stateMachine) : base(stateMachine)
     {
         targetPos = playerCon.playerPos_GameStart;
+        eyePlayPos = playerCon.eyePos_Play;
     }
 
     public override void Enter()
@@ -24,6 +29,12 @@ public class PlayerState_Model_ResultToPlay : PlayerStateBase_Model
         //フラグリセット
         isResetRotation = false;
         isMoving = false;
+
+        //目の位置を記憶
+        eyeStartPos = eyeTf.localPosition;
+
+        //開始時の大きさを記憶
+        startScale = tf.localScale.x;
 
         //プレイヤーが画面外なら演出を早める
         if (playerCon.tf.position.y < -5 || playerCon.tf.position.x < -6)
@@ -57,6 +68,9 @@ public class PlayerState_Model_ResultToPlay : PlayerStateBase_Model
             //重力スケール補正
             rb.gravityScale = 5;
 
+            //物理演算の有効化
+            rb.isKinematic = false;
+
             //まっすぐ立っていれば小さく、そうでなければ大きくジャンプ
             rb.velocity = Vector2.up * (Mathf.Abs(startEulerAnglesZ) < 1 ? 7 : 12);
         }
@@ -73,7 +87,7 @@ public class PlayerState_Model_ResultToPlay : PlayerStateBase_Model
         if (elapsedTime < 1)
         {
             //スケール調整
-            tf.localScale = Vector3.one - Vector3.up * (elapsedTime - 0.5f);
+            tf.localScale = (Vector3.one - Vector3.up * (elapsedTime - 0.5f)) * startScale;
 
             //残りの処理を飛ばす
             return;
@@ -97,6 +111,12 @@ public class PlayerState_Model_ResultToPlay : PlayerStateBase_Model
             velocityY = 15;
         }
 
+        //目の位置調整
+        eyeTf.localPosition = Vector2.Lerp(eyeStartPos, eyePlayPos, lerpValue);
+
+        //スケール調整
+        tf.localScale = Vector3.one * Mathf.Lerp(startScale, targetScale, lerpValue);
+
         //移動関連演算
         velocityY -= gravity * Time.deltaTime;
         posCorrectionY += velocityY * Time.deltaTime;
@@ -109,8 +129,15 @@ public class PlayerState_Model_ResultToPlay : PlayerStateBase_Model
 
     public override void Exit()
     {
+        //プレイヤーの当たり判定・描画レイヤー変更
+        playerCon.SetLayer(0);
+        playerCon.SetSortingLayer("Player");
+
         //プレイヤーの位置を確定させる
         tf.position = targetPos;
+
+        //プレイヤーのスケールを確定させる
+        tf.localScale = Vector3.one;
 
         //速度を0に
         rb.velocity = Vector2.zero;
