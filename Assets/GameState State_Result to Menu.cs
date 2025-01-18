@@ -87,5 +87,6 @@ public class GameStateState_ResultToMenu : GameStateStateBase
     {
         //スコアボードの位置を修正
         GM.scoreSetTf.position = GM.scoreMarkerTf_Play.position;
+        GM.scoreSetTf.localScale = Vector3.one;
     }
 }

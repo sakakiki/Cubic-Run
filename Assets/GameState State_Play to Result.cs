@@ -71,11 +71,12 @@ public class GameStateState_PlayToResult : GameStateStateBase
         //事前計算
         float lerpValue = (elapsedTime - 1) / 2;
 
-        //スコアボードの移動
+        //スコアボードの移動，回転，スケール変更
         scoreSetTf.eulerAngles = Vector3.up * Mathf.Lerp(0, 3600, Mathf.Pow((elapsedTime - 1)/3, 0.3f));
         scoreSetTf.position = 
             Vector3.Lerp(startPos, targetPos, lerpValue) + 
             Vector3.up * curveScorePosY.Evaluate(lerpValue) * 3;
+        scoreSetTf.localScale = Vector3.one * Mathf.Lerp(1, 1.5f, lerpValue);
 
         //スクリーンカバーの色を変更
         screenCover.color =
@@ -84,7 +85,7 @@ public class GameStateState_PlayToResult : GameStateStateBase
         //UIを回転
         playHingeRtf_R.localEulerAngles = Vector3.Lerp(Vector3.zero, Vector3.up * -180, elapsedTime - 1);
         resultHingeRtf_L.localEulerAngles = Vector3.Lerp(Vector3.up * 120, Vector3.zero, elapsedTime - 2);
-        resultHingeRtf_B.localEulerAngles = Vector3.Lerp(Vector3.right * 180, Vector3.zero, elapsedTime - 2);
+        resultHingeRtf_B.localEulerAngles = Vector3.Lerp(Vector3.right * 120, Vector3.zero, elapsedTime - 2);
 
         //指定時間経過でステート遷移
         if (elapsedTime >= 4)

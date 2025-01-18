@@ -11,6 +11,7 @@ public abstract class PlayStateStateBase
     public static float playTime;
     private TextMeshProUGUI scoreText;
     public static int scoreCorrection;
+    private Transform scoreGageTf;
 
     public PlayStateStateBase(PlayStateStateMachine stateMachine)
     {
@@ -20,6 +21,7 @@ public abstract class PlayStateStateBase
         IM = InputManager.Instance;
         TM = TerrainManager.Instance;
         scoreText = GM.scoreText;
+        scoreGageTf = GM.scoreGageTf;
     }
 
     public abstract void Enter();
@@ -35,6 +37,11 @@ public abstract class PlayStateStateBase
         //スコア更新
         GM.score = (int)(playTime * 100);
         scoreText.SetText("" + GM.score);
+
+        //スコアゲージ調整
+        scoreGageTf.localScale = 
+            Vector3.right + Vector3.forward + 
+            Vector3.up * (float)(GM.score % GM.levelUpSpan)/ (float)GM.levelUpSpan * 2;
     }
 
     public abstract void Exit();

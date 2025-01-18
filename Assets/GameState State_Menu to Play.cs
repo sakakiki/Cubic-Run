@@ -46,6 +46,9 @@ public class GameStateState_MenuToPlay : GameStateStateBase
         GM.score = 0;
         PlayStateStateBase.scoreCorrection = GM.level * 5000;
         GM.scoreText.SetText("0");
+
+        //スコアゲージリセット
+        GM.scoreGageTf.localScale = Vector3.right + Vector3.forward;
     }
 
 

@@ -64,7 +64,7 @@ public class TerrainManager : MonoBehaviour
         }
 
         //‰Šú‘¬“xİ’è
-        moveSpeed = 5;
+        moveSpeed = 8;
 
         //‰Šú’n–Ê¶¬
         CreateTerrain(0, -5, 5, 1, moveSpeed);

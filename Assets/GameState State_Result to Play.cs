@@ -14,6 +14,8 @@ public class GameStateState_ResultToPlay : GameStateStateBase
     private RectTransform resultHingeRtf_L;
     private RectTransform resultHingeRtf_B;
     private bool isResetScore;
+    private Transform scoreGageTf;
+    private float startGageScale;
 
     public GameStateState_ResultToPlay(GameStateStateMachine stateMachine) : base(stateMachine)
     {
@@ -25,6 +27,7 @@ public class GameStateState_ResultToPlay : GameStateStateBase
         playHingeRtf_R = GM.playHingeRtf_R;
         resultHingeRtf_L = GM.resultHingeRtf_L;
         resultHingeRtf_B = GM.resultHingeRtf_B;
+        scoreGageTf = GM.scoreGageTf;
     }
 
 
@@ -40,6 +43,9 @@ public class GameStateState_ResultToPlay : GameStateStateBase
 
         //スコアボードの目標位置を記憶
         targetPos = GM.scoreMarkerTf_Play.position;
+
+        //スコアゲージの初期スケールを記憶
+        startGageScale = scoreGageTf.localScale.y;
 
         //プレイヤーがトンネル内なら演出を早める
         if (TM.currentTerrainNum == 3)
@@ -77,8 +83,12 @@ public class GameStateState_ResultToPlay : GameStateStateBase
         //事前計算
         float lerpValue = (elapsedTime - 1.5f) / 1.5f;
 
-        //スコアボードの移動
+        //スコアボードの移動，スケール変更
         scoreSetTf.position = Vector3.Lerp(startPos, targetPos, lerpValue);
+        scoreSetTf.localScale = Vector3.one * Mathf.Lerp(1.5f, 1, lerpValue);
+
+        //スコアゲージスケール変更
+        scoreGageTf.localScale = Vector3.right + Vector3.forward + Vector3.up * Mathf.Lerp(startGageScale, 0, lerpValue);
 
         //スコアボードの回転
         if (elapsedTime < 2.25)

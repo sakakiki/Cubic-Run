@@ -33,6 +33,7 @@ public class GameManager : MonoBehaviour
     public TextMeshProUGUI levelText;
     public Transform levelTf;
     public Transform scoreSetTf;
+    public Transform scoreGageTf;
     public RectTransform levelMarkerRtf_Play;
     public AnimationCurve scorePosY_PlaytoResult;
     public Transform scoreMarkerTf_Play;
@@ -134,6 +135,10 @@ public class GameManager : MonoBehaviour
 
             //レベル上昇間隔を変更
             levelUpSpan = 5000;
+
+            //背景の速度を変更
+            TerrainManager.Instance.SetSpeed(5 + Mathf.Pow(trainingLevel, 0.7f) * 3);
+            TerrainManager.Instance.moveSpeed = 5 + Mathf.Pow(trainingLevel, 0.7f) * 3;
         }
 
         //ランキングモードへ遷移時
@@ -144,6 +149,10 @@ public class GameManager : MonoBehaviour
 
             //レベル上昇間隔を変更
             levelUpSpan = 2000;
+
+            //背景の速度を変更
+            TerrainManager.Instance.SetSpeed(8);
+            TerrainManager.Instance.moveSpeed = 8;
         }
     }
 
@@ -157,5 +166,9 @@ public class GameManager : MonoBehaviour
         //トレーニングのレベルを更新
         trainingLevel = level;
         playButtonText.SetText("プレイ - Lv." + level);
+
+        //背景の速度を変更
+        TerrainManager.Instance.SetSpeed(5 + Mathf.Pow(level, 0.7f) * 3);
+        TerrainManager.Instance.moveSpeed = 5 + Mathf.Pow(level, 0.7f) * 3;
     }
 }
