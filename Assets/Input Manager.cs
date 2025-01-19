@@ -17,10 +17,6 @@ public class InputManager : MonoBehaviour
     [SerializeField] private Button_Push button_Result_Title;
     [SerializeField] private Button_Push button_Result_Retry;
 
-    [SerializeField] private Transform content_LevelSelecter;
-    [SerializeField] private GameObject levelPanelPrefab;
-    [HideInInspector] public List<Button_LevelSelecter> button_LevelSelecters = new List<Button_LevelSelecter>();
-
     public bool is_Screen_Tap { get; private set; }
 
     public bool is_Menu_Play_Push { get; private set; }
@@ -48,26 +44,6 @@ public class InputManager : MonoBehaviour
     {
         if (Instance == null)
             Instance = this;
-    }
-
-
-
-    //LevelSelecterのパネルを追加
-    public void AddLevelPanel(int level)
-    {
-        //パネルのインスタンスを生成
-        RectTransform newPanelRtf = Instantiate(levelPanelPrefab).GetComponent<RectTransform>();
-
-        //スクロールビューの要素に
-        newPanelRtf.SetParent(content_LevelSelecter);
-        newPanelRtf.localScale = Vector3.one;
-        newPanelRtf.anchoredPosition3D = newPanelRtf.anchoredPosition3D - Vector3.forward * newPanelRtf.anchoredPosition3D.z;
-        newPanelRtf.localEulerAngles = Vector3.zero;
-
-        //入力スクリプトを管理可能に
-        Button_LevelSelecter button_LevelSelecter = newPanelRtf.GetComponent<Button_LevelSelecter>();
-        button_LevelSelecter.SetLevel(level);
-        button_LevelSelecters.Add(button_LevelSelecter);
     }
 
 

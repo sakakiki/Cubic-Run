@@ -59,8 +59,16 @@ public class GameStateState_ResultToMenu : GameStateStateBase
             isMoveStart = true;
 
             //”wŒi‚Ì’nŒ`‚ð“®‚©‚·
-            TM.moveSpeed = 5;
-            TM.SetSpeed(5);
+            if (GM.isTraining)
+            {
+                TM.moveSpeed = 5 + Mathf.Pow(GM.trainingLevel, 0.7f) * 3;
+                TM.SetSpeed(5 + Mathf.Pow(GM.trainingLevel, 0.7f) * 3);
+            }
+            else
+            {
+                TM.moveSpeed = 8;
+                TM.SetSpeed(8);
+            }
         }
 
         //Ž–‘OŒvŽZ

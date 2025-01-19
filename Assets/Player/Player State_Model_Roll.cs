@@ -8,7 +8,7 @@ public class PlayerState_Model_Roll : PlayerStateBase_Model
 
     public PlayerState_Model_Roll(PlayerStateMachine stateMachine) : base(stateMachine)
     {
-        centerX = GameManager.Instance.centerPos_World.x;
+        centerX = GameManager.Instance.centerPos_PlayerArea.x;
     }
 
     public override void Enter()

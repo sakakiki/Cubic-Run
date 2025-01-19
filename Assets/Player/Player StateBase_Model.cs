@@ -47,7 +47,8 @@ public abstract class PlayerStateBase_Model : PlayerStateBase
         }
 
         //ゲームステートが遷移したならステート遷移
-        if (gameStateMachine.currentState == gameStateMachine.state_MenuToPlay)
+        if (gameStateMachine.currentState == gameStateMachine.state_MenuToPlay ||
+            gameStateMachine.currentState == gameStateMachine.state_ResultToPlay)
             stateMachine.ChangeState(stateMachine.state_Model_MenuToPlay);
     }
 }

@@ -49,7 +49,7 @@ public class PlayerState_Model_LookAround : PlayerStateBase_Model
             eyeTf.localPosition = Vector2.right * lookDirection + Vector2.up * 0.11f;
 
             //•Ç‘¤‚ðŒü‚¢‚Ä‚¢‚½‚çU‚èŒü‚­
-            if (lookDirection * (tf.position.x - GameManager.Instance.centerPos_World.x) > 0)
+            if (lookDirection * (tf.position.x - GameManager.Instance.centerPos_PlayerArea.x) > 0)
                 stateMachine.ChangeStateDelay(stateMachine.state_Model_LookAround, Random.Range(1f, 2.5f));
             else
             {

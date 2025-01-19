@@ -1,3 +1,4 @@
+using System.Globalization;
 using UnityEngine;
 
 public class GameStateState_PlayToResult : GameStateStateBase
@@ -32,6 +33,16 @@ public class GameStateState_PlayToResult : GameStateStateBase
     {
         //経過時間リセット
         elapsedTime = 0;
+
+        //ゲームモードに応じてUIの切り替え
+        GM.resultTrainingUI.SetActive(GM.isTraining);
+
+        //UIの内容変更
+        if (GM.isTraining)
+        {
+            GM.clearRateText.SetText((GM.score / 5000f * 100).ToString("F1", CultureInfo.CurrentCulture) + "%");
+            GM.clearTimesNumText.SetText("走破回数：" + GM.clearTimesNum[GM.level - 1] + "回");
+        }
 
         //トレーニングモードクリア時を除き
         if (GM.score != 5000 || !GM.isTraining)

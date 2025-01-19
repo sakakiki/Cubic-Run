@@ -9,6 +9,12 @@ public class GameStateState_Result : GameStateStateBase
         //リザルト画面のUIを有効化
         IM.InputUISetActive_Result(true);
 
+        //プレイヤーとUIの干渉防止壁の有効化
+        GM.resultWallCol.enabled = true;
+
+        //プレイヤー移動可能エリアの中心の変更
+        GM.centerPos_PlayerArea = GM.centerPos_PlayerArea_Result;
+
         //ハイスコアの更新
         if (!GM.isTraining && GM.score > GM.highScore)
             GM.highScore = GM.score;
@@ -34,5 +40,11 @@ public class GameStateState_Result : GameStateStateBase
     {
         //リザルト画面のUIを無効化
         IM.InputUISetActive_Result(false);
+
+        //プレイヤーとUIの干渉防止壁の無効化
+        GM.resultWallCol.enabled = false;
+
+        //プレイヤー移動可能エリアの中心の変更
+        GM.centerPos_PlayerArea = GM.centerPos_World;
     }
 }

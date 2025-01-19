@@ -13,7 +13,7 @@ public class PlayerState_Model_TrainingClear: PlayerStateBase_Model
 
     public PlayerState_Model_TrainingClear(PlayerStateMachine stateMachine) : base(stateMachine)
     {
-        targetPos = playerCon.playerPos_Menu;
+        targetPos = playerCon.playerPos_TrainingClear;
         eyeStandbyPos = playerCon.eyePos_Model;
         eyePlayPos = playerCon.eyePos_Play;
     }
@@ -81,10 +81,10 @@ public class PlayerState_Model_TrainingClear: PlayerStateBase_Model
 
         //時間経過でステート遷移
         if (elapsedTime > 1.5)
-            stateMachine.ChangeState(stateMachine.state_Model_TrainingResult);
+            stateMachine.ChangeState(stateMachine.state_Model_Kinematic);
         //演出がスキップされてもステート遷移
         else if (gameStateMachine.currentState == gameStateMachine.state_Result)
-            stateMachine.ChangeState(stateMachine.state_Model_TrainingResult);
+            stateMachine.ChangeState(stateMachine.state_Model_Kinematic);
     }
 
     public override void Exit()

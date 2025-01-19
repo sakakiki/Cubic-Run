@@ -19,6 +19,7 @@ public class PlayerController : MonoBehaviour
     public GameObject eyeDragged;
     public Vector2 playerPos_Menu { get; private set; } = Vector2.right * 5 + Vector2.up * 2.5f;
     public Vector2 playerPos_GameStart { get; private set; } = Vector2.zero;
+    public Vector2 playerPos_TrainingClear { get; private set; } = Vector2.up * 3 + Vector2.left * 2;
     public Vector2 eyePos_Model { get; private set; } = Vector2.up * 0.11f;
     public Vector2 eyePos_Play { get; private set; } = Vector2.one * 0.11f;
 

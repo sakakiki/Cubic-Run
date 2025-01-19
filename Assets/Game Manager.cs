@@ -1,5 +1,7 @@
 using TMPro;
 using UnityEngine;
+using System.Collections.Generic;
+
 
 public class GameManager : MonoBehaviour
 {
@@ -14,6 +16,8 @@ public class GameManager : MonoBehaviour
     public bool isTraining {  get; private set; }
     public int trainingLevel;
     public int highestLevel;
+    public List<int> clearTimesNum = new List<int>();
+    public Vector2 centerPos_PlayerArea;
 
     //インスペクターから設定可能
     public Transform playerTf;
@@ -45,14 +49,22 @@ public class GameManager : MonoBehaviour
     public GameObject[] countinueCircleSquares;
     public TextMeshProUGUI playButtonText;
     public TextMeshProUGUI retryButtonText;
+    public GameObject resultTrainingUI;
+    public TextMeshProUGUI clearRateText;
+    public TextMeshProUGUI clearTimesNumText;
+    public BoxCollider2D resultWallCol;
+    [SerializeField] private Transform content_LevelSelecter;
+    [SerializeField] private GameObject levelPanelPrefab;
+    [HideInInspector] public List<Button_LevelSelecter> button_LevelSelecters = new List<Button_LevelSelecter>();
 
     //ステートマシン
     public GameStateStateMachine gameStateMachine {  get; private set; }
 
     //定数登録・記憶
-    public Vector2 centerPos_World = new Vector2(5, 3);
-    public Color screenCoverColor_Menu = Color.white - Color.black * 0.2f;
-    public Color screenCoverColor_Play = Color.clear;
+    public Vector2 centerPos_World { get; private set; } = new Vector2(5, 3);
+    public Vector2 centerPos_PlayerArea_Result { get; private set; } = new Vector2(-1, 3);
+    public Color screenCoverColor_Menu { get; private set; } = Color.white - Color.black * 0.2f;
+    public Color screenCoverColor_Play { get; private set; } = Color.clear;
 
 
 
@@ -105,9 +117,17 @@ public class GameManager : MonoBehaviour
         highestLevel = 5;
         trainingLevel = highestLevel;
 
-        //到達レベルまでのトレーニングモードボタンを配置
         for (int i = 1; i <= highestLevel; i++)
-            InputManager.Instance.AddLevelPanel(i);
+        {
+            //到達レベルまでのトレーニングモードボタンを配置
+            AddLevelPanel(i);
+
+            //クリア回数保存変数の追加
+            clearTimesNum.Add(0);
+        }
+
+        //プレイヤー移動可能エリアの中心の変更
+        centerPos_PlayerArea = centerPos_World;
     }
 
 
@@ -116,6 +136,26 @@ public class GameManager : MonoBehaviour
     {
         //ステートマシンのUpdateを実行
         gameStateMachine.Update(Time.deltaTime);
+    }
+
+
+
+    //LevelSelecterのパネルを追加
+    public void AddLevelPanel(int level)
+    {
+        //パネルのインスタンスを生成
+        RectTransform newPanelRtf = Instantiate(levelPanelPrefab).GetComponent<RectTransform>();
+
+        //スクロールビューの要素に
+        newPanelRtf.SetParent(content_LevelSelecter);
+        newPanelRtf.localScale = Vector3.one;
+        newPanelRtf.anchoredPosition3D = newPanelRtf.anchoredPosition3D - Vector3.forward * newPanelRtf.anchoredPosition3D.z;
+        newPanelRtf.localEulerAngles = Vector3.zero;
+
+        //入力スクリプトを管理可能に
+        Button_LevelSelecter button_LevelSelecter = newPanelRtf.GetComponent<Button_LevelSelecter>();
+        button_LevelSelecter.SetLevel(level);
+        button_LevelSelecters.Add(button_LevelSelecter);
     }
 
 
@@ -132,7 +172,7 @@ public class GameManager : MonoBehaviour
             playButtonText.SetText("プレイ - Lv." + trainingLevel);
 
             //トレーニングモードボタンを押下
-            InputManager.Instance.button_LevelSelecters[trainingLevel - 1].PushButton();
+            button_LevelSelecters[trainingLevel - 1].PushButton();
 
             //レベル上昇間隔を変更
             levelUpSpan = 5000;
@@ -162,7 +202,7 @@ public class GameManager : MonoBehaviour
     public void SetTrainingLevel(int level)
     {
         //現在の選択を解除
-        InputManager.Instance.button_LevelSelecters[trainingLevel - 1].enabled = true;
+        button_LevelSelecters[trainingLevel - 1].Initialize();
 
         //トレーニングのレベルを更新
         trainingLevel = level;
@@ -171,5 +211,34 @@ public class GameManager : MonoBehaviour
         //背景の速度を変更
         TerrainManager.Instance.SetSpeed(5 + Mathf.Pow(level, 0.7f) * 3);
         TerrainManager.Instance.moveSpeed = 5 + Mathf.Pow(level, 0.7f) * 3;
+    }
+
+
+
+    public void AddTrainingLevel()
+    {
+        //最高到達レベルを更新
+        highestLevel++;
+
+        //トレーニングモードレベル選択パネルを追加
+        AddLevelPanel(highestLevel);
+
+        //トレーニングモードの選択レベルを更新
+        SetTrainingLevel(highestLevel);
+        button_LevelSelecters[highestLevel - 1].PushButton();
+
+        //クリア回数保存変数の追加
+        clearTimesNum.Add(0);
+    }
+
+
+
+    public void AddClearTimesNum(int level)
+    {
+        //クリア回数の加算
+        clearTimesNum[level - 1]++;
+
+        //パネルに表示されている回数の加算
+        button_LevelSelecters[level - 1].clearTimesNumTMP.SetText(clearTimesNum[level - 1] + "回");
     }
 }

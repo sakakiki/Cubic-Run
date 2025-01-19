@@ -47,6 +47,10 @@ public class GameStateState_ResultToPlay : GameStateStateBase
         //スコアゲージの初期スケールを記憶
         startGageScale = scoreGageTf.localScale.y;
 
+        //トレーニングモードクリア状態なら演出を早める
+        if (GM.score == 5000 && GM.isTraining)
+            elapsedTime = 1;
+
         //プレイヤーがトンネル内なら演出を早める
         if (TM.currentTerrainNum == 3)
             elapsedTime = 1;
