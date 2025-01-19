@@ -4418,7 +4418,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &580131036
 RectTransform:
   m_ObjectHideFlags: 0
@@ -13758,10 +13758,6 @@ MonoBehaviour:
   content_LevelSelecter: {fileID: 560127589}
   levelPanelPrefab: {fileID: 2422043123148626786, guid: bc1a69b71ff32914ca23176cedb1b850, type: 3}
   button_LevelSelecters: []
-  centerPos_World: {x: 5, y: 3}
-  centerPos_PlayerArea_Result: {x: -1, y: 3}
-  screenCoverColor_Menu: {r: 1, g: 1, b: 1, a: 0.8}
-  screenCoverColor_Play: {r: 0, g: 0, b: 0, a: 0}
 --- !u!1 &2142769522
 GameObject:
   m_ObjectHideFlags: 0
