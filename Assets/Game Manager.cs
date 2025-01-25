@@ -114,7 +114,7 @@ public class GameManager : MonoBehaviour
         /* 以下開発用 */
 
         //到達レベルを設定
-        highestLevel = 20;
+        highestLevel = 1;
         trainingLevel = highestLevel;
 
         for (int i = 1; i <= highestLevel; i++)
