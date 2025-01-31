@@ -149,8 +149,8 @@ public class GameStateState_Play : GameStateStateBase
                         //再開のカウントダウンを非表示
                         GM.countinueCountText.SetText("");
 
-                        //目標フレームレートを60に設定
-                        Application.targetFrameRate = 60;
+                        //目標フレームレートを戻す
+                        Application.targetFrameRate = GM.defaultFrameRate;
 
                         //プレイ画面UIを有効化
                         IM.InputUISetActive_Play(true);

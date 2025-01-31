@@ -14,6 +14,7 @@ public class PlayerController : MonoBehaviour
     public GameObject SkinGameOver;
     public GameObject[] playerColliders;
     public SpriteRenderer[] playerSkins;
+    public SpriteMask[] playerMasks;
     public Transform centerTf;
     public Transform eyeTf;
     public GameObject eyeDragged;
@@ -51,6 +52,10 @@ public class PlayerController : MonoBehaviour
         //スキンの描画優先度変更
         for (int i = 0; i < playerSkins.Length; i++)
             playerSkins[i].sortingLayerName = layerName;
+
+        //マスクの範囲変更
+        playerMasks[0].backSortingLayerID = playerSkins[0].sortingLayerID;
+        playerMasks[0].frontSortingLayerID = playerSkins[0].sortingLayerID;
     }
 
     //メニュー画面でタップされたらステート遷移

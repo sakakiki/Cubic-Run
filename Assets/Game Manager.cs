@@ -61,6 +61,7 @@ public class GameManager : MonoBehaviour
     public GameStateStateMachine gameStateMachine {  get; private set; }
 
     //定数登録・記憶
+    public int defaultFrameRate = 120;
     public Vector2 centerPos_World { get; private set; } = new Vector2(5, 3);
     public Vector2 centerPos_PlayerArea_Result { get; private set; } = new Vector2(-1, 3);
     public Color screenCoverColor_Menu { get; private set; } = Color.white - Color.black * 0.2f;
@@ -85,7 +86,7 @@ public class GameManager : MonoBehaviour
         #endregion
 
         //目標フレームレート設定
-        Application.targetFrameRate = 60;
+        Application.targetFrameRate = defaultFrameRate;
     }
 
 
