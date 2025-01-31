@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Sphere_Crystal
   m_EditorClassIdentifier: 
   name: Crystal Sphere
-  bodyType: 0
-  skinColor: {r: 0, g: 0, b: 0, a: 0}
-  isEnabledMask: 0
-  UIColor: {r: 0, g: 0, b: 0, a: 0}
+  bodyType: 1
+  skinColor: {r: 1, g: 1, b: 1, a: 1}
+  isEnabledMask: 1
+  UIColor: {r: 0.07450981, g: 0.23529412, b: 0.91764706, a: 1}

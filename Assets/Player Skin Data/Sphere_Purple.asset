@@ -14,5 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   name: Purple Sphere
   bodyType: 1
-  mainColor: {r: 0, g: 0, b: 0, a: 0}
+  skinColor: {r: 0.47843137, g: 0.09411765, b: 0.7882353, a: 1}
   isEnabledMask: 0
+  UIColor: {r: 0.5372549, g: 0, b: 0.9411765, a: 1}

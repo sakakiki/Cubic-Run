@@ -14,5 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   name: Pink Sphere
   bodyType: 1
-  mainColor: {r: 0, g: 0, b: 0, a: 0}
+  skinColor: {r: 0.75686276, g: 0.26666668, b: 0.7490196, a: 1}
   isEnabledMask: 0
+  UIColor: {r: 0.9254902, g: 0.09411765, b: 0.8352941, a: 1}

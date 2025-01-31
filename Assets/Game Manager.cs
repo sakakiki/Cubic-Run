@@ -134,7 +134,7 @@ public class GameManager : MonoBehaviour
         centerPos_PlayerArea = centerPos_World;
 
         //初期スキンで開始
-        usingSkinID = 7;
+        usingSkinID = 0;
         ChangePlayerSkin(usingSkinID);
     }
 

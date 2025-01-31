@@ -16,4 +16,4 @@ MonoBehaviour:
   bodyType: 0
   skinColor: {r: 1, g: 1, b: 1, a: 1}
   isEnabledMask: 1
-  UIColor: {r: 0.21176471, g: 0.21176471, b: 0.8039216, a: 1}
+  UIColor: {r: 0.07450977, g: 0.23616652, b: 0.91764706, a: 1}

@@ -14,4 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   name: Purple Cube
   bodyType: 0
-  color: {r: 0.50980395, g: 0.15686275, b: 0.50980395, a: 1}
+  skinColor: {r: 0.4800456, g: 0.094117664, b: 0.7882353, a: 1}
+  isEnabledMask: 0
+  UIColor: {r: 0.5388987, g: 0, b: 0.9411765, a: 1}
