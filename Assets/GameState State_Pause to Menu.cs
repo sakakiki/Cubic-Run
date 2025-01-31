@@ -60,8 +60,16 @@ public class GameStateState_PauseToMenu : GameStateStateBase
             isMoveStart = true;
 
             //背景の地形を動かす
-            TM.moveSpeed = 5;
-            TM.SetSpeed(5);
+            if (GM.isTraining)
+            {
+                TM.moveSpeed = 5 + Mathf.Pow(GM.trainingLevel, 0.7f) * 3;
+                TM.SetSpeed(5 + Mathf.Pow(GM.trainingLevel, 0.7f) * 3);
+            }
+            else
+            {
+                TM.moveSpeed = 8;
+                TM.SetSpeed(8);
+            }
 
             //レベルのテキストのZ座標を修正
             Vector3 levelPos = GM.levelTf.position;
@@ -69,11 +77,13 @@ public class GameStateState_PauseToMenu : GameStateStateBase
             GM.levelTf.position = levelPos;
         }
 
+        //地形を管理
+        //地形動作開始後0.1秒間はPlayer側の判定のために実行しない
+        if (elapsedTime > 1.6)
+            TM.ManageMovingTerrain();
+
         //事前計算
         float lerpValue = (elapsedTime - 1) / 1.5f;
-
-        //地形を管理
-        TM.ManageMovingTerrain();
 
         //UIを回転
         menuHingeRtf_L.localEulerAngles = Vector3.Lerp(Vector3.up * -180, Vector3.zero, lerpValue);

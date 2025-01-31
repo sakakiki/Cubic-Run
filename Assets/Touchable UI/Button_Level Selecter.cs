@@ -14,7 +14,6 @@ public class Button_LevelSelecter: MonoBehaviour, IPointerClickHandler
     [SerializeField] private Image cover;
     private Color panelColor;
     private Color defaultColor = Color.black;
-    private Color selectedColor = Color.blue;
     private float boardCenterY = -1;
 
     //タップ：タップ後に指が画面から離れたとき、指がオブジェクト上なら実行
@@ -34,8 +33,8 @@ public class Button_LevelSelecter: MonoBehaviour, IPointerClickHandler
     public void PushButton()
     {
         //表示を選択状態へ変化
-        image.color = selectedColor;
-        cover.color = selectedColor - Color.black * 0.95f;
+        image.color = GameManager.Instance.panelSelectedColor;
+        cover.color = GameManager.Instance.panelSelectedColor - Color.black * 0.95f;
 
         //入力を無効化
         isEnable = false;

@@ -153,5 +153,12 @@ public class PlayerState_Model_ResultToPlay : PlayerStateBase_Model
 
         //正面のトリガーの接触判定をリセット
         playerCon.trigerFront.Initialize();
+
+        //スキン形状がスフィアならコライダー変更
+        if (SkinDataBase.Instance.skinData[GameManager.Instance.usingSkinID].bodyType == SkinData.BodyType.Sphere)
+        {
+            playerCon.boxCol.enabled = true;
+            playerCon.capsuleCol.enabled = false;
+        }
     }
 }

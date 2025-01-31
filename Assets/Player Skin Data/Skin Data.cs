@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 [CreateAssetMenu(fileName ="NewSkinData",menuName = "スキンデータ")]
@@ -18,7 +16,13 @@ public class SkinData : ScriptableObject
 
     public BodyType bodyType;
 
+    
+    //スキンカラー
+    public Color skinColor;
 
-    //本体等の色
-    public Color mainColor;
+    //スキンのマスクを有効化するか
+    public bool isEnabledMask;
+
+    //UIのカラー
+    public Color UIColor;
 }

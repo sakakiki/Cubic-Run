@@ -82,7 +82,9 @@ public class GameStateState_ResultToPlay : GameStateStateBase
         }
 
         //地形を管理
-        TM.ManageMovingTerrain();
+        //地形動作開始後0.1秒間はPlayer側の判定のために実行しない
+        if (elapsedTime > 1.6)
+            TM.ManageMovingTerrain();
 
         //事前計算
         float lerpValue = (elapsedTime - 1.5f) / 1.5f;

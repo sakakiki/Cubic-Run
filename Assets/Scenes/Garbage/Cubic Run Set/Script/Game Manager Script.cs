@@ -267,7 +267,7 @@ public class GameManagerScript: MonoBehaviour
 
         for (int i = 0; i < SkinSelecterBoards.Length; i++)
         {
-            SkinSelecterBoards[i].GetComponent<SkinSelecterBoardScript>().modelColor = SkinList[i].mainColor;
+            SkinSelecterBoards[i].GetComponent<SkinSelecterBoardScript>().modelColor = SkinList[i].skinColor;
             SkinSelecterBoards[i].transform.Find("Text (TMP)").GetComponent<TextMeshProUGUI>().text = SkinList[i].name;
         }
     }
@@ -298,7 +298,7 @@ public class GameManagerScript: MonoBehaviour
                         case SkinData.BodyType.Cube: MenuModel = MenuModel_Cube; break;
                         case SkinData.BodyType.Sphere: MenuModel = MenuModel_Ball; break;
                     }
-                    MenuModel.transform.Find("Menu Model Skin").GetComponent<SpriteRenderer>().color = UseSkin.mainColor;
+                    MenuModel.transform.Find("Menu Model Skin").GetComponent<SpriteRenderer>().color = UseSkin.skinColor;
                     modelRb = MenuModel.GetComponent<Rigidbody2D>();
                     MenuModel.SetActive(true);
                     modelRb.isKinematic = true;
@@ -584,7 +584,7 @@ public class GameManagerScript: MonoBehaviour
                                         modelRb.velocity = -modelVelocity;
                                         MenuModel.GetComponent<Collider2D>().enabled = false;
                                         MenuModel.GetComponent<RectTransform>().anchoredPosition += Vector2.up * 32;
-                                        MenuModel.transform.Find("Menu Model Skin").GetComponent<SpriteRenderer>().color = UseSkin.mainColor;
+                                        MenuModel.transform.Find("Menu Model Skin").GetComponent<SpriteRenderer>().color = UseSkin.skinColor;
                                     }
                                     if (MenuModel.GetComponent<RectTransform>().anchoredPosition.y < 200)
                                         MenuModel.GetComponent<RectTransform>().anchoredPosition = Vector2.up * 200;
@@ -635,8 +635,8 @@ public class GameManagerScript: MonoBehaviour
                     }
                     PlayerObjectSet.SetActive(true);
                     Player = PlayerObjectSet.transform.Find("Player").gameObject;
-                    Player.transform.Find("Skin Default").GetComponent<SpriteRenderer>().color = UseSkin.mainColor;
-                    Player.transform.Find("Skin Attack").GetComponent<SpriteRenderer>().color = UseSkin.mainColor;
+                    Player.transform.Find("Skin Default").GetComponent<SpriteRenderer>().color = UseSkin.skinColor;
+                    Player.transform.Find("Skin Attack").GetComponent<SpriteRenderer>().color = UseSkin.skinColor;
                     Player.GetComponent<Collider2D>().enabled = true;
                     foreach (Transform obj in PlayerObjectSet.transform)
                     {
@@ -902,7 +902,7 @@ public class GameManagerScript: MonoBehaviour
                     modelRb = MenuModel.GetComponent<Rigidbody2D>();
                     previewSkin = SkinList[skinNumber];
                     SkinName.text = previewSkin.name;
-                    MenuModel.transform.Find("Menu Model Skin").GetComponent<SpriteRenderer>().color = previewSkin.mainColor;
+                    MenuModel.transform.Find("Menu Model Skin").GetComponent<SpriteRenderer>().color = previewSkin.skinColor;
                 }
 
                 if (SkinSelectButtons[0].GetComponent<ButtonScript_Normal>().isButtonPushed)

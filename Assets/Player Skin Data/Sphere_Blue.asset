@@ -10,8 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b90106689bb5c554c94267c6cf8ee744, type: 3}
-  m_Name: Yellow Cube
+  m_Name: Sphere_Blue
   m_EditorClassIdentifier: 
-  name: Yellow Cube
-  bodyType: 0
-  color: {r: 0.8490566, g: 0.8490566, b: 0.0048059113, a: 1}
+  name: Blue Sphere
+  bodyType: 1
+  skinColor: {r: 0, g: 0, b: 0, a: 0}
+  isEnabledMask: 0
+  UIColor: {r: 0, g: 0, b: 0, a: 0}

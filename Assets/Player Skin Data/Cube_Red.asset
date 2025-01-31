@@ -10,8 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b90106689bb5c554c94267c6cf8ee744, type: 3}
-  m_Name: Orange Cube
+  m_Name: Cube_Red
   m_EditorClassIdentifier: 
-  name: Orange Cube
+  name: Red Cube
   bodyType: 0
-  color: {r: 0.85660374, g: 0.5397826, b: 0.17293696, a: 1}
+  skinColor: {r: 0.7056604, g: 0.24365252, b: 0.24365252, a: 1}
+  isEnabledMask: 0
+  UIColor: {r: 0.78867924, g: 0.1294624, b: 0.1294624, a: 1}

@@ -18,6 +18,8 @@ public class GameManager : MonoBehaviour
     public int highestLevel;
     public List<int> clearTimesNum = new List<int>();
     public Vector2 centerPos_PlayerArea;
+    public Color panelSelectedColor;
+    public int usingSkinID;
 
     //インスペクターから設定可能
     public Transform playerTf;
@@ -44,6 +46,7 @@ public class GameManager : MonoBehaviour
     public Transform scoreMarkerTf_Play;
     public Transform scoreMarkerTf_Result;
     public SpriteRenderer screenCover;
+    public SpriteRenderer scoreGageSprite;
     public GameObject pauseUI;
     public TextMeshProUGUI countinueCountText;
     public GameObject[] countinueCircleSquares;
@@ -115,7 +118,7 @@ public class GameManager : MonoBehaviour
         /* 以下開発用 */
 
         //到達レベルを設定
-        highestLevel = 1;
+        highestLevel = 5;
         trainingLevel = highestLevel;
 
         for (int i = 1; i <= highestLevel; i++)
@@ -129,6 +132,10 @@ public class GameManager : MonoBehaviour
 
         //プレイヤー移動可能エリアの中心の変更
         centerPos_PlayerArea = centerPos_World;
+
+        //初期スキンで開始
+        usingSkinID = 7;
+        ChangePlayerSkin(usingSkinID);
     }
 
 
@@ -161,6 +168,7 @@ public class GameManager : MonoBehaviour
 
 
 
+    //ランキングモード - トレーニングモード切り替え
     public void SetTrainingMode(bool isTraining)
     {
         //設定を変更
@@ -200,6 +208,7 @@ public class GameManager : MonoBehaviour
 
 
 
+    //トレーニングモードのプレイレベルを設定
     public void SetTrainingLevel(int level)
     {
         //現在の選択を解除
@@ -216,6 +225,7 @@ public class GameManager : MonoBehaviour
 
 
 
+    //トレーニングモードのレベルを追加
     public void AddTrainingLevel()
     {
         //最高到達レベルを更新
@@ -234,6 +244,7 @@ public class GameManager : MonoBehaviour
 
 
 
+    //クリア回数の加算
     public void AddClearTimesNum(int level)
     {
         //クリア回数の加算
@@ -241,5 +252,23 @@ public class GameManager : MonoBehaviour
 
         //パネルに表示されている回数の加算
         button_LevelSelecters[level - 1].clearTimesNumTMP.SetText(clearTimesNum[level - 1] + "回");
+    }
+
+
+
+    //スキンを変更
+    public void ChangePlayerSkin(int skinID)
+    {
+        //GameManager側のデータを更新
+        usingSkinID = skinID;
+
+        //スキンの変更
+        playerCon.ChangeSkin(skinID);
+
+        //パネル選択時の色を変更
+        panelSelectedColor = SkinDataBase.Instance.skinData[skinID].UIColor;
+
+        //スコアゲージの色を変更
+        scoreGageSprite.color = SkinDataBase.Instance.skinData[skinID].UIColor - Color.black * 0.4f;
     }
 }

@@ -28,6 +28,13 @@ public class PlayerState_GameOver : PlayerStateBase
         //ゲームオーバー用スキンに切り替え
         playerCon.SkinDefault.SetActive(false);
         playerCon.SkinGameOver.SetActive(true);
+
+        //スキン形状がスフィアならコライダー変更
+        if (SkinDataBase.Instance.skinData[GameManager.Instance.usingSkinID].bodyType == SkinData.BodyType.Sphere)
+        {
+            playerCon.boxCol.enabled = false;
+            playerCon.capsuleCol.enabled = true;
+        }
     }
 
     public override void Update()
