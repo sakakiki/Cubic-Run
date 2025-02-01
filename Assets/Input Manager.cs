@@ -10,6 +10,8 @@ public class InputManager : MonoBehaviour
     [SerializeField] private Button_Push button_Menu_Play;
     [SerializeField] private Button_Push button_Menu_Skin;
     [SerializeField] private Button_Push button_Menu_Tutorial;
+    [SerializeField] private Button_Push button_Skin_OK;
+    [SerializeField] private Button_Push button_Skin_Cancel;
     [SerializeField] private Button_Tap button_Play_Pause;
     private bool isInputPlayerActive = true;
     [SerializeField] private Button_Push button_Pause_Continue;
@@ -22,6 +24,9 @@ public class InputManager : MonoBehaviour
     public bool is_Menu_Play_Push { get; private set; }
     public bool is_Menu_Skin_Push { get; private set; }
     public bool is_Menu_Tutorial_Push { get; private set; }
+
+    public bool is_Skin_OK_Push { get; private set; }
+    public bool is_Skin_Cancel_Push { get; private set; }
 
     public bool is_Play_Pause_Tap { get; private set; }
 
@@ -62,6 +67,12 @@ public class InputManager : MonoBehaviour
         button_Menu_Tutorial.enabled = isActive;
     }
 
+    public void InputUISetActive_Skin(bool isActive)
+    {
+        button_Skin_OK.enabled = isActive;
+        button_Skin_Cancel.enabled = isActive;
+    }
+
     public void InputUISetActive_Play(bool isActive)
     {
         button_Play_Pause.enabled = isActive;
@@ -98,6 +109,12 @@ public class InputManager : MonoBehaviour
         is_Menu_Play_Push = button_Menu_Play.GetIsPushed();
         is_Menu_Skin_Push = button_Menu_Skin.GetIsPushed();
         is_Menu_Tutorial_Push = button_Menu_Tutorial.GetIsPushed();
+    }
+
+    public void GetInput_Skin()
+    {
+        is_Skin_OK_Push = button_Skin_OK.GetIsPushed();
+        is_Skin_Cancel_Push = button_Skin_Cancel.GetIsPushed();
     }
 
     public void GetInput_Play()

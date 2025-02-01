@@ -28,6 +28,9 @@ public class GameManager : MonoBehaviour
     public RectTransform[] menuUIs_L;
     public RectTransform menuHingeRtf_R;
     public RectTransform[] menuUIs_R;
+    public RectTransform skinHingeRtf_U;
+    public RectTransform skinHingeRtf_B;
+    public RectTransform[] skinUIs_B;
     public RectTransform playHingeRtf_L;
     public RectTransform[] playUIs_L;
     public RectTransform playHingeRtf_R;
@@ -59,12 +62,13 @@ public class GameManager : MonoBehaviour
     [SerializeField] private Transform content_LevelSelecter;
     [SerializeField] private GameObject levelPanelPrefab;
     [HideInInspector] public List<Button_LevelSelecter> button_LevelSelecters = new List<Button_LevelSelecter>();
+    public SkinSelecter skinSelecter;
 
     //ステートマシン
     public GameStateStateMachine gameStateMachine {  get; private set; }
 
     //定数登録・記憶
-    public int defaultFrameRate = 120;
+    public int defaultFrameRate { get; private set; } = 120;
     public Vector2 centerPos_World { get; private set; } = new Vector2(5, 3);
     public Vector2 centerPos_PlayerArea_Result { get; private set; } = new Vector2(-1, 3);
     public Color screenCoverColor_Menu { get; private set; } = Color.white - Color.black * 0.2f;
@@ -101,6 +105,8 @@ public class GameManager : MonoBehaviour
             menuUIs_L[i].SetParent(menuHingeRtf_L);
         for (int i = 0; i < menuUIs_R.Length; i++)
             menuUIs_R[i].SetParent(menuHingeRtf_R);
+        for (int i = 0; i < skinUIs_B.Length; i++)
+            skinUIs_B[i].SetParent(skinHingeRtf_B);
         for (int i = 0; i < playUIs_L.Length; i++)
             playUIs_L[i].SetParent(playHingeRtf_L);
         for (int i = 0; i < playUIs_R.Length; i++)
@@ -136,6 +142,7 @@ public class GameManager : MonoBehaviour
         //初期スキンで開始
         usingSkinID = 0;
         ChangePlayerSkin(usingSkinID);
+        skinSelecter.SetWheelAngle(usingSkinID);
     }
 
 
@@ -270,5 +277,8 @@ public class GameManager : MonoBehaviour
 
         //スコアゲージの色を変更
         scoreGageSprite.color = SkinDataBase.Instance.skinData[skinID].UIColor - Color.black * 0.4f;
+
+        //ボタンの色の更新
+        button_LevelSelecters[trainingLevel - 1].PushButton();
     }
 }
