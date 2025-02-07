@@ -20,6 +20,8 @@ public class GameManager : MonoBehaviour
     public Vector2 centerPos_PlayerArea;
     public Color panelSelectedColor;
     public int usingSkinID;
+    public int previousSkinID;
+    public bool[] isSkinActive = new bool[16];
 
     //インスペクターから設定可能
     public Transform playerTf;
@@ -29,6 +31,7 @@ public class GameManager : MonoBehaviour
     public RectTransform menuHingeRtf_R;
     public RectTransform[] menuUIs_R;
     public RectTransform skinHingeRtf_U;
+    public RectTransform[] skinUIs_U;
     public RectTransform skinHingeRtf_B;
     public RectTransform[] skinUIs_B;
     public RectTransform playHingeRtf_L;
@@ -63,6 +66,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] private GameObject levelPanelPrefab;
     [HideInInspector] public List<Button_LevelSelecter> button_LevelSelecters = new List<Button_LevelSelecter>();
     public SkinSelecter skinSelecter;
+    [SerializeField] private TextMeshProUGUI skinNameText;
 
     //ステートマシン
     public GameStateStateMachine gameStateMachine {  get; private set; }
@@ -107,6 +111,8 @@ public class GameManager : MonoBehaviour
             menuUIs_R[i].SetParent(menuHingeRtf_R);
         for (int i = 0; i < skinUIs_B.Length; i++)
             skinUIs_B[i].SetParent(skinHingeRtf_B);
+        for (int i = 0; i < skinUIs_U.Length; i++)
+            skinUIs_U[i].SetParent(skinHingeRtf_U);
         for (int i = 0; i < playUIs_L.Length; i++)
             playUIs_L[i].SetParent(playHingeRtf_L);
         for (int i = 0; i < playUIs_R.Length; i++)
@@ -143,6 +149,28 @@ public class GameManager : MonoBehaviour
         usingSkinID = 0;
         ChangePlayerSkin(usingSkinID);
         skinSelecter.SetWheelAngle(usingSkinID);
+
+        //スキンを全てロック
+        for (int i = 1; i < isSkinActive.Length; i++)
+            isSkinActive[i] = false;
+
+        //スキンをアンロック
+        isSkinActive[0] = true;
+        isSkinActive[1] = true;
+        isSkinActive[2] = true;
+        isSkinActive[3] = true;
+        isSkinActive[4] = true;
+        isSkinActive[5] = true;
+        isSkinActive[6] = true;
+        isSkinActive[7] = true;
+        isSkinActive[8] = true;
+        isSkinActive[9] = true;
+        isSkinActive[10] = true;
+        isSkinActive[11] = true;
+        isSkinActive[12] = true;
+        isSkinActive[13] = true;
+        isSkinActive[14] = true;
+        isSkinActive[15] = true;
     }
 
 
@@ -280,5 +308,8 @@ public class GameManager : MonoBehaviour
 
         //ボタンの色の更新
         button_LevelSelecters[trainingLevel - 1].PushButton();
+
+        //表示スキン名の変更
+        skinNameText.SetText(SkinDataBase.Instance.skinData[skinID].name);
     }
 }

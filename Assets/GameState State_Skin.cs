@@ -17,7 +17,10 @@ public class GameStateState_Skin : GameStateStateBase
         IM.InputUISetActive_Skin(true);
 
         //スキンセレクターの有効化
-        GameManager.Instance.skinSelecter.isActive = true;
+        GM.skinSelecter.isActive = true;
+
+        //変更前のスキンを保存
+        GM.previousSkinID = GM.usingSkinID;
     }
 
 

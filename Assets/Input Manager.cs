@@ -12,6 +12,7 @@ public class InputManager : MonoBehaviour
     [SerializeField] private Button_Push button_Menu_Tutorial;
     [SerializeField] private Button_Push button_Skin_OK;
     [SerializeField] private Button_Push button_Skin_Cancel;
+    public bool isSkinSelect {  get; private set; }
     [SerializeField] private Button_Tap button_Play_Pause;
     private bool isInputPlayerActive = true;
     [SerializeField] private Button_Push button_Pause_Continue;
@@ -115,6 +116,8 @@ public class InputManager : MonoBehaviour
     {
         is_Skin_OK_Push = button_Skin_OK.GetIsPushed();
         is_Skin_Cancel_Push = button_Skin_Cancel.GetIsPushed();
+        if (is_Skin_OK_Push) isSkinSelect = true;
+        else if (is_Skin_Cancel_Push) isSkinSelect = false;
     }
 
     public void GetInput_Play()

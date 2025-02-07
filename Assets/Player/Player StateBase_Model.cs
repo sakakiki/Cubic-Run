@@ -50,5 +50,7 @@ public abstract class PlayerStateBase_Model : PlayerStateBase
         if (gameStateMachine.currentState == gameStateMachine.state_MenuToPlay ||
             gameStateMachine.currentState == gameStateMachine.state_ResultToPlay)
             stateMachine.ChangeState(stateMachine.state_Model_MenuToPlay);
+        else if (gameStateMachine.currentState == gameStateMachine.state_MenuToSkin)
+            stateMachine.ChangeState(stateMachine.state_Model_MenuToSkin);
     }
 }

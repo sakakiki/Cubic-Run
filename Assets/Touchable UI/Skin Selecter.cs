@@ -1,12 +1,23 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using TMPro;
 
 public class SkinSelecter : MonoBehaviour, IPointerDownHandler, IDragHandler, IPointerUpHandler
 {
+    [SerializeField] private GameManager GM;
+    [SerializeField] private InputManager IM;
+    private SkinDataBase skinDataBase;
+    [SerializeField] public Sprite squar;
+    [SerializeField] public Sprite cicle;
     [SerializeField] private Transform wheelTf;
     [SerializeField] private SpriteRenderer[] panels_sprite;
     [SerializeField] private Transform[] panels_tf;
+    [SerializeField] private TextMeshProUGUI[] panels_skinName;
+    [SerializeField] private SpriteRenderer[] panels_skinModel;
+    [SerializeField] private SpriteRenderer[] panels_skinEyes_L;
+    [SerializeField] private SpriteRenderer[] panels_skinEyes_R;
+    [SerializeField] GameObject buttonOK;
     private float wheelEulerAnglesX;
     private bool isDragged;
     private float angleVelocityX;
@@ -16,9 +27,23 @@ public class SkinSelecter : MonoBehaviour, IPointerDownHandler, IDragHandler, IP
     private Queue<float> timeQueue = new Queue<float>();
     private bool isSnapping;
     private float targetAngleX;
-    [SerializeField] private int frontSkinID;
+    private int frontSkinID;
     public bool isStop;
     public bool isActive;
+
+
+
+    public void Start()
+    {
+        //パネルの生成
+        skinDataBase = SkinDataBase.Instance;
+        for (int ID = 0; ID < skinDataBase.skinData.Count; ID++)
+        {
+            panels_skinName[ID].SetText(skinDataBase.skinData[ID].name);
+            if (ID == 7 || ID == 15) continue;    //Crystalスキンは例外処理
+            panels_skinModel[ID].sprite = skinDataBase.skinData[ID].bodyType == SkinData.BodyType.Cube ? squar : cicle;
+        }
+    }
 
 
 
@@ -27,6 +52,9 @@ public class SkinSelecter : MonoBehaviour, IPointerDownHandler, IDragHandler, IP
         //フラグの初期化
         isStop = false;
         isActive = false;
+
+        //OKボタンの有効化
+        buttonOK.SetActive(true);
     }
 
 
@@ -38,6 +66,9 @@ public class SkinSelecter : MonoBehaviour, IPointerDownHandler, IDragHandler, IP
 
         //回転状態に変化
         isDragged = true;
+
+        //ボタンの無効化
+        IM.InputUISetActive_Skin(false);
 
         //現在値の記憶とQueueへの格納
         currentPointY = eventData.position.y;
@@ -117,7 +148,12 @@ public class SkinSelecter : MonoBehaviour, IPointerDownHandler, IDragHandler, IP
                 float temp = (1 - panels_tf[ID].forward.z + (wheelTf.position.z - 90) / 25) * 5;
 
                 //透明度変更
-                panels_sprite[ID].color = Color.white - Color.black * temp;
+                Color tempColor = Color.white - Color.black * temp;
+                panels_sprite[ID].color = tempColor;
+                panels_skinName[ID].color = Color.black * (1 - temp);
+                panels_skinModel[ID].color = skinDataBase.skinData[ID].skinColor - Color.black * temp;
+                panels_skinEyes_L[ID].color = tempColor;
+                panels_skinEyes_R[ID].color = tempColor;
 
                 //スケール変更
                 panels_tf[ID].localScale = Vector3.one * (1 - temp / 5);
@@ -197,11 +233,23 @@ public class SkinSelecter : MonoBehaviour, IPointerDownHandler, IDragHandler, IP
                 //停止状態に
                 isStop = true;
 
-                //スキン変更処理
-                GameManager.Instance.ChangePlayerSkin(frontSkinID);
+                //スキンが有効なら
+                if (GM.isSkinActive[frontSkinID])
+                {
+                    //スキン変更処理
+                    GM.ChangePlayerSkin(frontSkinID);
+
+                    //OKボタンの有効化
+                    buttonOK.SetActive(true);
+                }
+                //スキンが無効ならOKボタンの無効化
+                else buttonOK.SetActive(false);
 
                 //パネルのスケール変更
                 panels_tf[frontSkinID].localScale = Vector3.one * 1.03f;
+
+                //ボタンの有効化
+                IM.InputUISetActive_Skin(true);
             }
         }
     }
@@ -215,6 +263,7 @@ public class SkinSelecter : MonoBehaviour, IPointerDownHandler, IDragHandler, IP
         frontSkinID = usingSkinID;
 
         //セレクターを回転
+        targetAngleX = 22.5f * usingSkinID;
         wheelEulerAnglesX = 22.5f * usingSkinID;
         wheelTf.localEulerAngles = wheelEulerAnglesX * Vector3.right;
     }

@@ -9,6 +9,7 @@ public class GameStateState_SkinToMenu : GameStateStateBase
     public RectTransform skinHingeRtf_B;
     private SkinSelecter skinSelecter;
     private bool isMoving;
+    private bool isReset;
 
     public GameStateState_SkinToMenu(GameStateStateMachine stateMachine) : base(stateMachine)
     {
@@ -28,6 +29,7 @@ public class GameStateState_SkinToMenu : GameStateStateBase
 
         //フラグリセット
         isMoving = false;
+        isReset = IM.isSkinSelect;
     }
 
 
@@ -45,7 +47,10 @@ public class GameStateState_SkinToMenu : GameStateStateBase
 
         //スキンセレクタースクリプトの再有効化（Skinステートにて無効化）
         if (!isMoving)
+        {
+            isMoving = true;
             skinSelecter.enabled = true;
+        }
 
         //事前計算
         float lerpValue = (elapsedTime - 0.5f) / 1.5f;
@@ -56,6 +61,19 @@ public class GameStateState_SkinToMenu : GameStateStateBase
         skinHingeRtf_U.localEulerAngles = Vector3.Lerp(Vector3.zero, Vector3.right * -180, lerpValue);
         skinHingeRtf_B.localEulerAngles = Vector3.Lerp(Vector3.zero, Vector3.right * 180, Mathf.Pow(lerpValue, 1.7f));
 
+        //1.5秒経過まで残りの処理を飛ばす
+        if (elapsedTime < 1.5) return;
+
+        //リセットの必要があるなら
+        if (!isReset)
+        {
+            //リセット済みフラグを立てる
+            isReset = true;
+
+            //スキンの色を戻す
+            GM.ChangePlayerSkin(GM.previousSkinID);
+        }
+
         //指定時間経過でステート遷移
         if (elapsedTime > 2)
             stateMachine.ChangeState(stateMachine.state_Menu);
@@ -65,6 +83,10 @@ public class GameStateState_SkinToMenu : GameStateStateBase
 
     public override void Exit()
     {
+        //必要に応じてスキンセレクターを回転
+        if (!IM.isSkinSelect)
+            skinSelecter.SetWheelAngle(GM.previousSkinID);
+
         //スキンセレクタースクリプトの無効化
         skinSelecter.enabled = false;
     }

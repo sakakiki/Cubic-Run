@@ -17,6 +17,9 @@ public class PlayerStateMachine
     public PlayerStateBase state_Model_ResultToPlay { get; private set; }
     public PlayerStateBase state_Model_PauseToMenu { get; private set; }
     public PlayerStateBase state_Model_TrainingClear { get; private set; }
+    public PlayerStateBase state_Model_MenuToSkin { get; private set; }
+    public PlayerStateBase state_Model_Skin { get; private set; }
+    public PlayerStateBase state_Model_SkinToMenu { get; private set; }
     public PlayerStateBase state_Play_Run { get; private set; }
     public PlayerStateBase state_Play_Jump { get; private set; }
     public PlayerStateBase state_Play_Squat { get; private set; }
@@ -41,6 +44,9 @@ public class PlayerStateMachine
         state_Model_ResultToPlay = new PlayerState_Model_ResultToPlay(this);
         state_Model_PauseToMenu = new PlayerState_Model_PauseToMenu(this);
         state_Model_TrainingClear = new PlayerState_Model_TrainingClear(this);
+        state_Model_MenuToSkin = new PlayerState_Model_MenuToSkin(this);
+        state_Model_Skin = new PlayerState_Model_Skin(this);
+        state_Model_SkinToMenu = new PlayerState_Model_SkinToMenu(this);
         state_Play_Run = new PlayerState_Play_Run(this);
         state_Play_Jump = new PlayerState_Play_Jump(this);
         state_Play_Squat = new PlayerState_Play_Squat(this);
