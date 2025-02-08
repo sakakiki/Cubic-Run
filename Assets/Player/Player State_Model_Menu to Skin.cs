@@ -15,7 +15,7 @@ public class PlayerState_Model_MenuToSkin : PlayerStateBase_Model
 
     public PlayerState_Model_MenuToSkin(PlayerStateMachine stateMachine) : base(stateMachine)
     {
-        targetPos = playerCon.playerPos_Skin;
+        targetPos = playerCon.playerPos_Menu;
         eyeStandbyPos = playerCon.eyePos_Model;
         eyePlayPos = playerCon.eyePos_Play;
     }

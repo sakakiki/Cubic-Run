@@ -134,7 +134,7 @@ public class GameManager : MonoBehaviour
         /* 以下開発用 */
 
         //到達レベルを設定
-        highestLevel = 5;
+        highestLevel = 1;
         trainingLevel = highestLevel;
 
         for (int i = 1; i <= highestLevel; i++)
@@ -160,15 +160,15 @@ public class GameManager : MonoBehaviour
 
         //スキンをアンロック
         UnlockSkin(0);
-        UnlockSkin(1);
-        UnlockSkin(2);
+        //UnlockSkin(1);
+        //UnlockSkin(2);
         //UnlockSkin(3);
         //UnlockSkin(4);
         //UnlockSkin(5);
         //UnlockSkin(6);
         //UnlockSkin(7);
-        UnlockSkin(8);
-        UnlockSkin(9);
+        //UnlockSkin(8);
+        //UnlockSkin(9);
         //UnlockSkin(10);
         //UnlockSkin(11);
         //UnlockSkin(12);
@@ -355,30 +355,32 @@ public class GameManager : MonoBehaviour
             condition += "プレイヤーランク";
             switch(skinID)
             {
-                case 0: condition += "0　到達"; break;
-                case 1: condition += "1　到達"; break;
-                case 2: condition += "10　到達"; break;
-                case 3: condition += "20　到達"; break;
-                case 4: condition += "30　到達"; break;
-                case 5: condition += "40　到達"; break;
-                case 6: condition += "50　到達"; break;
-                case 7: condition += "100　到達"; break;
+                case 0: condition += "0"; break;
+                case 1: condition += "1"; break;
+                case 2: condition += "10"; break;
+                case 3: condition += "20"; break;
+                case 4: condition += "30"; break;
+                case 5: condition += "40"; break;
+                case 6: condition += "50"; break;
+                case 7: condition += "100"; break;
             }
+            condition += "　到達";
         }
         else
         {
             condition += "トレーニングモードLv.";
             switch (skinID)
             {
-                case 8: condition += "1　クリア"; break;
-                case 9: condition += "2　クリア"; break;
-                case 10: condition += "3　クリア"; break;
-                case 11: condition += "5　クリア"; break;
-                case 12: condition += "7　クリア"; break;
-                case 13: condition += "10　クリア"; break;
-                case 14: condition += "15　クリア"; break;
-                case 15: condition += "20　クリア"; break;
+                case 8: condition += "1"; break;
+                case 9: condition += "2"; break;
+                case 10: condition += "3"; break;
+                case 11: condition += "5"; break;
+                case 12: condition += "7"; break;
+                case 13: condition += "10"; break;
+                case 14: condition += "15"; break;
+                case 15: condition += "20"; break;
             }
+            condition += "　クリア";
         }
 
         return condition;
