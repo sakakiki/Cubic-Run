@@ -160,7 +160,7 @@ public class GameManager : MonoBehaviour
 
         //スキンをアンロック
         UnlockSkin(0);
-        //UnlockSkin(1);
+        UnlockSkin(1);
         //UnlockSkin(2);
         //UnlockSkin(3);
         //UnlockSkin(4);
