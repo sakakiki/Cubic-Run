@@ -67,6 +67,7 @@ public class GameManager : MonoBehaviour
     [HideInInspector] public List<Button_LevelSelecter> button_LevelSelecters = new List<Button_LevelSelecter>();
     public SkinSelecter skinSelecter;
     [SerializeField] private TextMeshProUGUI skinNameText;
+    [SerializeField] private GameObject skinModelCover;
 
     //ステートマシン
     public GameStateStateMachine gameStateMachine {  get; private set; }
@@ -125,6 +126,9 @@ public class GameManager : MonoBehaviour
         //ランキングモードで開始
         SetTrainingMode(false);
 
+        //スキンパネルの生成
+        skinSelecter.CreateSkinPanel();
+
 
 
         /* 以下開発用 */
@@ -155,22 +159,22 @@ public class GameManager : MonoBehaviour
             isSkinActive[i] = false;
 
         //スキンをアンロック
-        isSkinActive[0] = true;
-        isSkinActive[1] = true;
-        isSkinActive[2] = true;
-        isSkinActive[3] = true;
-        isSkinActive[4] = true;
-        isSkinActive[5] = true;
-        isSkinActive[6] = true;
-        isSkinActive[7] = true;
-        isSkinActive[8] = true;
-        isSkinActive[9] = true;
-        isSkinActive[10] = true;
-        isSkinActive[11] = true;
-        isSkinActive[12] = true;
-        isSkinActive[13] = true;
-        isSkinActive[14] = true;
-        isSkinActive[15] = true;
+        UnlockSkin(0);
+        UnlockSkin(1);
+        UnlockSkin(2);
+        //UnlockSkin(3);
+        //UnlockSkin(4);
+        //UnlockSkin(5);
+        //UnlockSkin(6);
+        //UnlockSkin(7);
+        UnlockSkin(8);
+        UnlockSkin(9);
+        //UnlockSkin(10);
+        //UnlockSkin(11);
+        //UnlockSkin(12);
+        //UnlockSkin(13);
+        //UnlockSkin(14);
+        //UnlockSkin(15);
     }
 
 
@@ -297,6 +301,9 @@ public class GameManager : MonoBehaviour
         //GameManager側のデータを更新
         usingSkinID = skinID;
 
+        //プレビューのモデルを隠さない
+        skinModelCover.SetActive(false);
+
         //スキンの変更
         playerCon.ChangeSkin(skinID);
 
@@ -311,5 +318,69 @@ public class GameManager : MonoBehaviour
 
         //表示スキン名の変更
         skinNameText.SetText(SkinDataBase.Instance.skinData[skinID].name);
+
+        //Crystalスキンロック時の例外処理
+        if (!isSkinActive[skinID])
+            if (skinID % 8 == 7)
+            {
+                //プレビューのモデルを隠す
+                skinModelCover.SetActive(true);
+
+                //名前を表示しない
+                skinNameText.SetText("？？？");
+            }
+    }
+
+
+
+    //スキンのアンロック
+    public void UnlockSkin(int skinID)
+    {
+        //アンロックを保存
+        isSkinActive[skinID] = true;
+
+        //スキンパネルのアンロック
+        skinSelecter.UnlockPanel(skinID);
+    }
+
+
+
+    //スキンのロック解除条件を生成
+    public string GetUnlockSkinCondition(int skinID)
+    {
+        string condition = "アンロック条件：\n";
+
+        if (skinID < 8)
+        {
+            condition += "プレイヤーランク";
+            switch(skinID)
+            {
+                case 0: condition += "0　到達"; break;
+                case 1: condition += "1　到達"; break;
+                case 2: condition += "10　到達"; break;
+                case 3: condition += "20　到達"; break;
+                case 4: condition += "30　到達"; break;
+                case 5: condition += "40　到達"; break;
+                case 6: condition += "50　到達"; break;
+                case 7: condition += "100　到達"; break;
+            }
+        }
+        else
+        {
+            condition += "トレーニングモードLv.";
+            switch (skinID)
+            {
+                case 8: condition += "1　クリア"; break;
+                case 9: condition += "2　クリア"; break;
+                case 10: condition += "3　クリア"; break;
+                case 11: condition += "5　クリア"; break;
+                case 12: condition += "7　クリア"; break;
+                case 13: condition += "10　クリア"; break;
+                case 14: condition += "15　クリア"; break;
+                case 15: condition += "20　クリア"; break;
+            }
+        }
+
+        return condition;
     }
 }
