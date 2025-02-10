@@ -5,7 +5,6 @@ public class PlayerState_Model_SkinToMenu : PlayerStateBase_Model
     private float startEulerAnglesZ;
     private Vector2 startPos;
     private Vector2 targetPos;
-    private bool isResetRotation;
     private bool isMoving;
     private float posCorrectionY;
     private float velocityY;
@@ -26,7 +25,6 @@ public class PlayerState_Model_SkinToMenu : PlayerStateBase_Model
         elapsedTime = 0;
 
         //フラグリセット
-        isResetRotation = false;
         isMoving = false;
 
         //物理演算の有効化

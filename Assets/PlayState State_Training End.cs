@@ -32,7 +32,7 @@ public class PlayStateState_TrainingEnd: PlayStateStateBase
             GM.AddClearTimesNum(GM.level);
 
             //トレーニングモードの最高レベルをクリアしたなら
-            if (GM.trainingLevel == GM.highestLevel)
+            if (GM.trainingLevel == GM.highestTrainingLevel)
             {
                 //トレーニングモードのレベルを追加
                 GM.AddTrainingLevel();

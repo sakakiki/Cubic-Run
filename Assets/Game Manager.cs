@@ -12,16 +12,23 @@ public class GameManager : MonoBehaviour
     public int score;
     public int level;
     public int levelUpSpan;
-    public int highScore;
-    public bool isTraining {  get; private set; }
-    public int trainingLevel;
-    public int highestLevel;
-    public List<int> clearTimesNum = new List<int>();
-    public Vector2 centerPos_PlayerArea;
-    public Color panelSelectedColor;
-    public int usingSkinID;
     public int previousSkinID;
-    public bool[] isSkinActive = new bool[16];
+    public Color panelSelectedColor;
+    public Vector2 centerPos_PlayerArea;
+
+    //プレイヤー情報のキャッシュ（Firebase上に保存）
+    public string playerName = "Noname";
+    public int playerRank;
+    public int totalExp;
+    public int highScore = 0;
+    public int highestTrainingLevel = 1;
+    public List<int> clearTimesNum = new List<int>();
+    public int usingSkinID = 0;
+    public bool[] isSkinUnlocked = new bool[16];
+
+    //情報のキャッシュ（ローカルに保存）
+    public bool isTraining { get; private set; }
+    public int trainingLevel;
 
     //インスペクターから設定可能
     public Transform playerTf;
@@ -134,10 +141,10 @@ public class GameManager : MonoBehaviour
         /* 以下開発用 */
 
         //到達レベルを設定
-        highestLevel = 1;
-        trainingLevel = highestLevel;
+        highestTrainingLevel = 1;
+        trainingLevel = highestTrainingLevel;
 
-        for (int i = 1; i <= highestLevel; i++)
+        for (int i = 1; i <= highestTrainingLevel; i++)
         {
             //到達レベルまでのトレーニングモードボタンを配置
             AddLevelPanel(i);
@@ -155,8 +162,8 @@ public class GameManager : MonoBehaviour
         skinSelecter.SetWheelAngle(usingSkinID);
 
         //スキンを全てロック
-        for (int i = 1; i < isSkinActive.Length; i++)
-            isSkinActive[i] = false;
+        for (int i = 1; i < isSkinUnlocked.Length; i++)
+            isSkinUnlocked[i] = false;
 
         //スキンをアンロック
         UnlockSkin(0);
@@ -268,14 +275,14 @@ public class GameManager : MonoBehaviour
     public void AddTrainingLevel()
     {
         //最高到達レベルを更新
-        highestLevel++;
+        highestTrainingLevel++;
 
         //トレーニングモードレベル選択パネルを追加
-        AddLevelPanel(highestLevel);
+        AddLevelPanel(highestTrainingLevel);
 
         //トレーニングモードの選択レベルを更新
-        SetTrainingLevel(highestLevel);
-        button_LevelSelecters[highestLevel - 1].PushButton();
+        SetTrainingLevel(highestTrainingLevel);
+        button_LevelSelecters[highestTrainingLevel - 1].PushButton();
 
         //クリア回数保存変数の追加
         clearTimesNum.Add(0);
@@ -320,7 +327,7 @@ public class GameManager : MonoBehaviour
         skinNameText.SetText(SkinDataBase.Instance.skinData[skinID].name);
 
         //Crystalスキンロック時の例外処理
-        if (!isSkinActive[skinID])
+        if (!isSkinUnlocked[skinID])
             if (skinID % 8 == 7)
             {
                 //プレビューのモデルを隠す
@@ -337,7 +344,7 @@ public class GameManager : MonoBehaviour
     public void UnlockSkin(int skinID)
     {
         //アンロックを保存
-        isSkinActive[skinID] = true;
+        isSkinUnlocked[skinID] = true;
 
         //スキンパネルのアンロック
         skinSelecter.UnlockPanel(skinID);

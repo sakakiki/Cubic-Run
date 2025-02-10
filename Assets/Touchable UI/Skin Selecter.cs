@@ -145,7 +145,7 @@ public class SkinSelecter : MonoBehaviour, IPointerDownHandler, IDragHandler, IP
                 Color tempColor_black = Color.black - Color.black * temp;
                 panels_sprite[ID].color = tempColor_white;
                 panels_skinName[ID].color = tempColor_black;
-                if (GM.isSkinActive[ID] || ID % 8 != 7)
+                if (GM.isSkinUnlocked[ID] || ID % 8 != 7)
                 {
                     panels_skinModel[ID].color = skinDataBase.skinData[ID].skinColor - Color.black * temp;
                     panels_skinEyes_L[ID].color = tempColor_white;
@@ -158,7 +158,7 @@ public class SkinSelecter : MonoBehaviour, IPointerDownHandler, IDragHandler, IP
                     panels_skinModelText[ID/8].color = tempColor_white * 0.5f;
                 }
                 //ロック中のパネルの処理
-                if (!GM.isSkinActive[ID])
+                if (!GM.isSkinUnlocked[ID])
                 {
                     panels_lockPanel[ID].color = tempColor_black * 0.8f;
                     panels_lockText[ID].color = tempColor_white;
@@ -247,7 +247,7 @@ public class SkinSelecter : MonoBehaviour, IPointerDownHandler, IDragHandler, IP
                 GM.ChangePlayerSkin(frontSkinID);
 
                 //スキンが有効なら
-                if (GM.isSkinActive[frontSkinID])
+                if (GM.isSkinUnlocked[frontSkinID])
                 {
 
                     //OKボタンの有効化

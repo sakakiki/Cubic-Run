@@ -16405,6 +16405,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 43a0d6f4124585e4bbeefb241ec41c00, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isSaveMode: 0
+  playerName: Test Player
+  higghScore: 10000
+  playerExp: 100
 --- !u!212 &1931832114 stripped
 SpriteRenderer:
   m_CorrespondingSourceObject: {fileID: 6610272386781562310, guid: d3ad720fc3eb9a84a9658acaa43ee559, type: 3}
@@ -17709,15 +17713,18 @@ MonoBehaviour:
   score: 0
   level: 0
   levelUpSpan: 2000
-  highScore: 0
-  trainingLevel: 1
-  highestLevel: 0
-  clearTimesNum: 
-  centerPos_PlayerArea: {x: 0, y: 0}
-  panelSelectedColor: {r: 0, g: 0, b: 0, a: 0}
-  usingSkinID: 0
   previousSkinID: 0
-  isSkinActive: 00000000000000000000000000000000
+  panelSelectedColor: {r: 0, g: 0, b: 0, a: 0}
+  centerPos_PlayerArea: {x: 0, y: 0}
+  playerName: 
+  playerRank: 0
+  totalExp: 0
+  highScore: 0
+  highestTrainingLevel: 0
+  clearTimesNum: 
+  usingSkinID: 0
+  isSkinUnlocked: 00000000000000000000000000000000
+  trainingLevel: 1
   playerTf: {fileID: 1938157858}
   playerCon: {fileID: 1938157861}
   menuHingeRtf_L: {fileID: 1261818050}

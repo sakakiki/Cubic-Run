@@ -14,7 +14,6 @@ public class Button_LevelSelecter: MonoBehaviour, IPointerClickHandler
     [SerializeField] private Image cover;
     private Color panelColor;
     private Color defaultColor = Color.black;
-    private float boardCenterY = -1;
 
     //タップ：タップ後に指が画面から離れたとき、指がオブジェクト上なら実行
     //マウス：クリック後にマウスボタンを離したとき、カーソルがオブジェクト上なら実行
