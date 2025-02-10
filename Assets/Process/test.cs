@@ -7,6 +7,7 @@ public class test : MonoBehaviour, IPointerDownHandler //インターフェースの実装
 {
     [SerializeField] bool isSaveMode;
     [SerializeField] private string playerName;
+    [SerializeField] private int playerRank;
     [SerializeField] private int higghScore;
     [SerializeField] private int playerExp;
 
@@ -25,6 +26,7 @@ public class test : MonoBehaviour, IPointerDownHandler //インターフェースの実装
         if (isSaveMode)
         {
             await FSM.SavePlayerName(playerName);
+            await FSM.SavePlayerRank(playerRank);
             await FSM.SaveHighScore(higghScore);
             await FSM.SaveExperience(playerExp);
             await FSM.MergeSkinUnlocks();
@@ -32,6 +34,7 @@ public class test : MonoBehaviour, IPointerDownHandler //インターフェースの実装
         else
         {
             await FSM.LoadPlayerName();
+            await FSM.LoadPlayerRank();
             await FSM.LoadHighScore();
             await FSM.LoadExperience();
             await FSM.MergeSkinUnlocks();

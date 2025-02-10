@@ -16407,6 +16407,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isSaveMode: 0
   playerName: Test Player
+  playerRank: 0
   higghScore: 10000
   playerExp: 100
 --- !u!212 &1931832114 stripped
@@ -17716,12 +17717,14 @@ MonoBehaviour:
   previousSkinID: 0
   panelSelectedColor: {r: 0, g: 0, b: 0, a: 0}
   centerPos_PlayerArea: {x: 0, y: 0}
-  playerName: 
+  playerName: Noname
   playerRank: 0
   totalExp: 0
   highScore: 0
+  rankingTotalScore: 0
+  rankingPlayCount: 0
   highestTrainingLevel: 0
-  clearTimesNum: 
+  trainingClearCounts: 
   usingSkinID: 0
   isSkinUnlocked: 00000000000000000000000000000000
   trainingLevel: 1

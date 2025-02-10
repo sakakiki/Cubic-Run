@@ -14,6 +14,8 @@ public class AuthManager : MonoBehaviour
     {
         if (Instance == null)
             Instance = this;
+
+        auth = FirebaseAuth.DefaultInstance;
     }
 
 
@@ -21,8 +23,7 @@ public class AuthManager : MonoBehaviour
 
     public void Start()
     {
-        auth = FirebaseAuth.DefaultInstance;
-
+        //自動ログイン
         if (auth.CurrentUser != null)
         {
             Debug.Log("自動ログイン成功: " + auth.CurrentUser.Email);
@@ -42,6 +43,10 @@ public class AuthManager : MonoBehaviour
     {
         var result = await auth.CreateUserWithEmailAndPasswordAsync(email, password);
         user = result.User;
+
+        //Firestoreに新規データを作成
+        await FirestoreManager.Instance.SaveNewPlayerData(playerName);
+
         Debug.Log("新規登録成功: " + user.Email);
     }
 

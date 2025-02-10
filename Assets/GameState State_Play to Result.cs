@@ -41,7 +41,7 @@ public class GameStateState_PlayToResult : GameStateStateBase
         if (GM.isTraining)
         {
             GM.clearRateText.SetText((GM.score / 5000f * 100).ToString("F1", CultureInfo.CurrentCulture) + "%");
-            GM.clearTimesNumText.SetText("走破回数：" + GM.clearTimesNum[GM.level - 1] + "回");
+            GM.clearTimesNumText.SetText("走破回数：" + GM.trainingClearCounts[GM.level - 1] + "回");
         }
 
         //トレーニングモードクリア時を除き

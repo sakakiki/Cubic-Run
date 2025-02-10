@@ -8,6 +8,11 @@ public class GameManager : MonoBehaviour
     //自身のインスタンス
     public static GameManager Instance;
 
+    //Manager系
+    private TerrainManager TM;
+    private FirestoreManager FSM;
+    private SkinDataBase SDB;
+
     //プレイ中のデータを保持
     public int score;
     public int level;
@@ -21,12 +26,14 @@ public class GameManager : MonoBehaviour
     public int playerRank;
     public int totalExp;
     public int highScore = 0;
-    public int highestTrainingLevel = 1;
-    public List<int> clearTimesNum = new List<int>();
-    public int usingSkinID = 0;
+    public int playerScore = 0;//
+    public int highestTrainingLevel = 1;//
+    public List<int> trainingClearCounts = new List<int>();//
+    public int usingSkinID = 0;//
     public bool[] isSkinUnlocked = new bool[16];
 
     //情報のキャッシュ（ローカルに保存）
+    public Queue<int> rankngScore = new Queue<int>();   //playerScoreに未反映のランキングモードのスコア
     public bool isTraining { get; private set; }
     public int trainingLevel;
 
@@ -110,8 +117,17 @@ public class GameManager : MonoBehaviour
 
 
 
-    private void Start()
+    private async void Start()
     {
+        //Managerのインスタンス格納
+        TM = TerrainManager.Instance;
+        FSM = FirestoreManager.Instance;
+        SDB = SkinDataBase.Instance;
+
+        //データのロード
+        //await FSM.SaveNewPlayerData(playerName);  //新規アカウント作成
+        await FSM.LoadAll();
+
         //UIをHingeに接続
         for (int i = 0; i < menuUIs_L.Length; i++)
             menuUIs_L[i].SetParent(menuHingeRtf_L);
@@ -150,7 +166,7 @@ public class GameManager : MonoBehaviour
             AddLevelPanel(i);
 
             //クリア回数保存変数の追加
-            clearTimesNum.Add(0);
+            trainingClearCounts.Add(0);
         }
 
         //プレイヤー移動可能エリアの中心の変更
@@ -233,8 +249,8 @@ public class GameManager : MonoBehaviour
             levelUpSpan = 5000;
 
             //背景の速度を変更
-            TerrainManager.Instance.SetSpeed(5 + Mathf.Pow(trainingLevel, 0.7f) * 3);
-            TerrainManager.Instance.moveSpeed = 5 + Mathf.Pow(trainingLevel, 0.7f) * 3;
+            TM.SetSpeed(5 + Mathf.Pow(trainingLevel, 0.7f) * 3);
+            TM.moveSpeed = 5 + Mathf.Pow(trainingLevel, 0.7f) * 3;
         }
 
         //ランキングモードへ遷移時
@@ -247,8 +263,8 @@ public class GameManager : MonoBehaviour
             levelUpSpan = 2000;
 
             //背景の速度を変更
-            TerrainManager.Instance.SetSpeed(8);
-            TerrainManager.Instance.moveSpeed = 8;
+            TM.SetSpeed(8);
+            TM.moveSpeed = 8;
         }
     }
 
@@ -265,8 +281,8 @@ public class GameManager : MonoBehaviour
         playButtonText.SetText("プレイ - Lv." + level);
 
         //背景の速度を変更
-        TerrainManager.Instance.SetSpeed(5 + Mathf.Pow(level, 0.7f) * 3);
-        TerrainManager.Instance.moveSpeed = 5 + Mathf.Pow(level, 0.7f) * 3;
+        TM.SetSpeed(5 + Mathf.Pow(level, 0.7f) * 3);
+        TM.moveSpeed = 5 + Mathf.Pow(level, 0.7f) * 3;
     }
 
 
@@ -285,7 +301,7 @@ public class GameManager : MonoBehaviour
         button_LevelSelecters[highestTrainingLevel - 1].PushButton();
 
         //クリア回数保存変数の追加
-        clearTimesNum.Add(0);
+        trainingClearCounts.Add(0);
     }
 
 
@@ -294,10 +310,10 @@ public class GameManager : MonoBehaviour
     public void AddClearTimesNum(int level)
     {
         //クリア回数の加算
-        clearTimesNum[level - 1]++;
+        trainingClearCounts[level - 1]++;
 
         //パネルに表示されている回数の加算
-        button_LevelSelecters[level - 1].clearTimesNumTMP.SetText(clearTimesNum[level - 1] + "回");
+        button_LevelSelecters[level - 1].clearTimesNumTMP.SetText(trainingClearCounts[level - 1] + "回");
     }
 
 
@@ -315,16 +331,16 @@ public class GameManager : MonoBehaviour
         playerCon.ChangeSkin(skinID);
 
         //パネル選択時の色を変更
-        panelSelectedColor = SkinDataBase.Instance.skinData[skinID].UIColor;
+        panelSelectedColor = SDB.skinData[skinID].UIColor;
 
         //スコアゲージの色を変更
-        scoreGageSprite.color = SkinDataBase.Instance.skinData[skinID].UIColor - Color.black * 0.4f;
+        scoreGageSprite.color = SDB.skinData[skinID].UIColor - Color.black * 0.4f;
 
         //ボタンの色の更新
         button_LevelSelecters[trainingLevel - 1].PushButton();
 
         //表示スキン名の変更
-        skinNameText.SetText(SkinDataBase.Instance.skinData[skinID].name);
+        skinNameText.SetText(SDB.skinData[skinID].name);
 
         //Crystalスキンロック時の例外処理
         if (!isSkinUnlocked[skinID])
