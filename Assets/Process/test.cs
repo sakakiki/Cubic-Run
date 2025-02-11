@@ -26,18 +26,23 @@ public class test : MonoBehaviour, IPointerDownHandler //インターフェースの実装
         if (isSaveMode)
         {
             await FSM.SavePlayerName(playerName);
-            await FSM.SavePlayerRank(playerRank);
             await FSM.SaveHighScore(higghScore);
             await FSM.SaveExperience(playerExp);
-            await FSM.MergeSkinUnlocks();
+            await FSM.SavePlayerScore();
+            for (int i = 1; i <= 15; i++)
+                await FSM.SaveTrainingClearCount(i);
+            await FSM.SaveUsingSkin();
+            await FSM.SaveRunDistance(playerExp/10);
         }
         else
         {
             await FSM.LoadPlayerName();
-            await FSM.LoadPlayerRank();
             await FSM.LoadHighScore();
             await FSM.LoadExperience();
-            await FSM.MergeSkinUnlocks();
+            await FSM.LoadPlayerScore();
+            await FSM.LoadTrainingClearCounts();
+            await FSM.LoadUsingSkin();
+            await FSM.LoadRunDistance();
         }
 
 

@@ -13,31 +13,39 @@ public class GameManager : MonoBehaviour
     private FirestoreManager FSM;
     private SkinDataBase SDB;
 
-    //プレイ中のデータを保持
+    [Header("情報のキャッシュ（Firebase保存データ）")]
+    public string playerName = "Noname";
+    public int totalExp = 0;
+    public int playerScore = 0;
+    public List<int> trainingClearCounts = new List<int>();
+    public int usingSkinID = 0;
+    public int totalRunDistance = 0;
+    [Space(30)]
+
+    [Header("情報のキャッシュ（Firebase上とローカルの両方に保存）")]
+    public int highScore = 0;
+    [Space(30)]
+
+    [Header("情報のキャッシュ（ローカル保存データ）")]
+    public bool isUnsavedHighScore;
+    public Queue<int> rankingScoreQueue = new Queue<int>();   //playerScoreに未反映のランキングモードのスコア
+    public bool isTraining { get; private set; }
+    public int trainingLevel;
+    [Space(30)]
+
+    [Header("プレイ中のデータを保持")]
     public int score;
     public int level;
     public int levelUpSpan;
+    public int playerRank = 0;  //totalExpから算出
+    public int highestTrainingLevel = 1;    // = trainingClearCounts.Count;
+    public bool[] isSkinUnlocked = new bool[16];    //totalExpとhighestTrainingLevelから算出
     public int previousSkinID;
     public Color panelSelectedColor;
     public Vector2 centerPos_PlayerArea;
+    [Space(30)]
 
-    //プレイヤー情報のキャッシュ（Firebase上に保存）
-    public string playerName = "Noname";
-    public int playerRank;
-    public int totalExp;
-    public int highScore = 0;
-    public int playerScore = 0;//
-    public int highestTrainingLevel = 1;//
-    public List<int> trainingClearCounts = new List<int>();//
-    public int usingSkinID = 0;//
-    public bool[] isSkinUnlocked = new bool[16];
-
-    //情報のキャッシュ（ローカルに保存）
-    public Queue<int> rankngScore = new Queue<int>();   //playerScoreに未反映のランキングモードのスコア
-    public bool isTraining { get; private set; }
-    public int trainingLevel;
-
-    //インスペクターから設定可能
+    [Header("インスペクターから設定")]
     public Transform playerTf;
     public PlayerController playerCon;
     public RectTransform menuHingeRtf_L;
@@ -166,14 +174,14 @@ public class GameManager : MonoBehaviour
             AddLevelPanel(i);
 
             //クリア回数保存変数の追加
-            trainingClearCounts.Add(0);
+            //trainingClearCounts.Add(0);
         }
 
         //プレイヤー移動可能エリアの中心の変更
         centerPos_PlayerArea = centerPos_World;
 
         //初期スキンで開始
-        usingSkinID = 0;
+        //usingSkinID = 0;
         ChangePlayerSkin(usingSkinID);
         skinSelecter.SetWheelAngle(usingSkinID);
 
@@ -290,6 +298,9 @@ public class GameManager : MonoBehaviour
     //トレーニングモードのレベルを追加
     public void AddTrainingLevel()
     {
+        //クリア回数保存変数の追加
+        trainingClearCounts.Add(0);
+
         //最高到達レベルを更新
         highestTrainingLevel++;
 
@@ -299,21 +310,21 @@ public class GameManager : MonoBehaviour
         //トレーニングモードの選択レベルを更新
         SetTrainingLevel(highestTrainingLevel);
         button_LevelSelecters[highestTrainingLevel - 1].PushButton();
-
-        //クリア回数保存変数の追加
-        trainingClearCounts.Add(0);
     }
 
 
 
     //クリア回数の加算
-    public void AddClearTimesNum(int level)
+    public async void AddClearTimesNum(int level)
     {
         //クリア回数の加算
         trainingClearCounts[level - 1]++;
 
         //パネルに表示されている回数の加算
         button_LevelSelecters[level - 1].clearTimesNumTMP.SetText(trainingClearCounts[level - 1] + "回");
+
+        // Firestoreに即時反映
+        await FSM.SaveTrainingClearCount(level);
     }
 
 
