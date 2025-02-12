@@ -29,7 +29,7 @@ public class PlayStateState_TrainingEnd: PlayStateStateBase
             GM.scoreGageTf.localScale = Vector3.one * 2;
 
             //クリア回数を加算
-            GM.AddClearTimesNum(GM.level);
+            GM.AddClearCount(GM.level);
 
             //トレーニングモードの最高レベルをクリアしたなら
             if (GM.trainingLevel == GM.highestTrainingLevel)

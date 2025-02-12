@@ -1,6 +1,7 @@
 using TMPro;
 using UnityEngine;
 using System.Collections.Generic;
+using static UnityEngine.InputManagerEntry;
 
 
 public class GameManager : MonoBehaviour
@@ -36,10 +37,10 @@ public class GameManager : MonoBehaviour
     [Header("プレイ中のデータを保持")]
     public int score;
     public int level;
-    public int levelUpSpan;
-    public int playerRank = 0;  //totalExpから算出
-    public int highestTrainingLevel = 1;    // = trainingClearCounts.Count;
-    public bool[] isSkinUnlocked = new bool[16];    //totalExpとhighestTrainingLevelから算出
+    public int levelUpSpan {  get; private set; }
+    public int playerRank { get; private set; } = 0;  //totalExpから算出
+    public int highestTrainingLevel { get; private set; } = 1;    // = trainingClearCounts.Count;
+    public bool[] isSkinUnlocked { get; private set; } = new bool[16];    //totalExpとhighestTrainingLevelから算出
     public int previousSkinID;
     public Color panelSelectedColor;
     public Vector2 centerPos_PlayerArea;
@@ -132,10 +133,6 @@ public class GameManager : MonoBehaviour
         FSM = FirestoreManager.Instance;
         SDB = SkinDataBase.Instance;
 
-        //データのロード
-        //await FSM.SaveNewPlayerData(playerName);  //新規アカウント作成
-        await FSM.LoadAll();
-
         //UIをHingeに接続
         for (int i = 0; i < menuUIs_L.Length; i++)
             menuUIs_L[i].SetParent(menuHingeRtf_L);
@@ -160,52 +157,47 @@ public class GameManager : MonoBehaviour
         //スキンパネルの生成
         skinSelecter.CreateSkinPanel();
 
-
-
-        /* 以下開発用 */
-
-        //到達レベルを設定
-        highestTrainingLevel = 1;
-        trainingLevel = highestTrainingLevel;
-
-        for (int i = 1; i <= highestTrainingLevel; i++)
-        {
-            //到達レベルまでのトレーニングモードボタンを配置
-            AddLevelPanel(i);
-
-            //クリア回数保存変数の追加
-            //trainingClearCounts.Add(0);
-        }
-
         //プレイヤー移動可能エリアの中心の変更
         centerPos_PlayerArea = centerPos_World;
 
-        //初期スキンで開始
-        //usingSkinID = 0;
+
+
+        /* 以下LoginステートのExit等に移動 */
+
+        //データのロード
+        //await FSM.SaveNewPlayerData(playerName);  //新規アカウント作成
+        await FSM.LoadAll();
+
+
+        //プレイヤーランク算出
+        playerRank = CalculatePlayerRank(totalExp);
+
+
+        //トレーニングモード到達レベルを算出
+        highestTrainingLevel = trainingClearCounts.Count;
+        trainingLevel = highestTrainingLevel;
+
+        //到達レベルまでのトレーニングモードボタンを配置
+        for (int i = 1; i <= highestTrainingLevel; i++)
+            AddLevelPanel(i);
+
+        //クリア回数表示を更新
+        UpdatePanelCount();
+
+
+        //表示スキンとスキンセレクター回転量の変更
         ChangePlayerSkin(usingSkinID);
         skinSelecter.SetWheelAngle(usingSkinID);
 
         //スキンを全てロック
-        for (int i = 1; i < isSkinUnlocked.Length; i++)
+        for (int i = 0; i < isSkinUnlocked.Length; i++)
             isSkinUnlocked[i] = false;
 
-        //スキンをアンロック
+        //初期スキンのロック解除
         UnlockSkin(0);
-        UnlockSkin(1);
-        //UnlockSkin(2);
-        //UnlockSkin(3);
-        //UnlockSkin(4);
-        //UnlockSkin(5);
-        //UnlockSkin(6);
-        //UnlockSkin(7);
-        //UnlockSkin(8);
-        //UnlockSkin(9);
-        //UnlockSkin(10);
-        //UnlockSkin(11);
-        //UnlockSkin(12);
-        //UnlockSkin(13);
-        //UnlockSkin(14);
-        //UnlockSkin(15);
+
+        //条件を満たしているスキンのロック解除
+        CheckSkinUnlock();
     }
 
 
@@ -315,7 +307,7 @@ public class GameManager : MonoBehaviour
 
 
     //クリア回数の加算
-    public async void AddClearTimesNum(int level)
+    public async void AddClearCount(int level)
     {
         //クリア回数の加算
         trainingClearCounts[level - 1]++;
@@ -370,6 +362,9 @@ public class GameManager : MonoBehaviour
     //スキンのアンロック
     public void UnlockSkin(int skinID)
     {
+        //既にロック解除済みなら何もしない
+        if (isSkinUnlocked[skinID]) return;
+
         //アンロックを保存
         isSkinUnlocked[skinID] = true;
 
@@ -418,5 +413,55 @@ public class GameManager : MonoBehaviour
         }
 
         return condition;
+    }
+
+
+
+    //総獲得経験値からプレイヤーランクを算出
+    public int CalculatePlayerRank(int totalExp)
+    {
+        int playerRank = 0;
+
+        while (totalExp > 0)
+        {
+            playerRank++;
+            totalExp -= playerRank * 100;
+        }
+
+        return playerRank;
+    }
+
+
+
+    //スキンアンロック状態のチェック
+    public void CheckSkinUnlock()
+    {
+        //Cubeスキンのチェック
+        if (playerRank >= 1) UnlockSkin(1);
+        if (playerRank >= 10) UnlockSkin(2);
+        if (playerRank >= 20) UnlockSkin(3);
+        if (playerRank >= 30) UnlockSkin(4);
+        if (playerRank >= 40) UnlockSkin(5);
+        if (playerRank >= 50) UnlockSkin(6);
+        if (playerRank >= 100) UnlockSkin(7);
+
+        //Sphereスキンのチェック
+        if (highestTrainingLevel > 1) UnlockSkin(8);
+        if (highestTrainingLevel > 2) UnlockSkin(9);
+        if (highestTrainingLevel > 3) UnlockSkin(10);
+        if (highestTrainingLevel > 5) UnlockSkin(11);
+        if (highestTrainingLevel > 7) UnlockSkin(12);
+        if (highestTrainingLevel > 10) UnlockSkin(13);
+        if (highestTrainingLevel > 15) UnlockSkin(14);
+        if (highestTrainingLevel > 20) UnlockSkin(15);
+    }
+
+
+
+    //トレーニングモードパネルのクリア回数の更新
+    public void UpdatePanelCount()
+    {
+        for (int levelIndex = 0; levelIndex < highestTrainingLevel; levelIndex++)
+            button_LevelSelecters[levelIndex].clearTimesNumTMP.SetText(trainingClearCounts[levelIndex] + "回");
     }
 }

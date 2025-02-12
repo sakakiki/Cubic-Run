@@ -1,6 +1,7 @@
 using Firebase.Auth;
 using UnityEngine;
 using System.Threading.Tasks;
+using Firebase;
 
 public class AuthManager : MonoBehaviour
 {
@@ -10,52 +11,162 @@ public class AuthManager : MonoBehaviour
     private FirebaseUser user;
 
 
+
     private void Awake()
     {
         if (Instance == null)
             Instance = this;
 
         auth = FirebaseAuth.DefaultInstance;
+
+        // 認証状態の変更を監視
+        auth.StateChanged += AuthStateChanged;
     }
 
 
 
-
-    public void Start()
+    private void OnDestroy()
     {
-        //自動ログイン
-        if (auth.CurrentUser != null)
+        // イベントハンドラの解除（メモリリーク防止）
+        if (auth != null)
         {
-            Debug.Log("自動ログイン成功: " + auth.CurrentUser.Email);
+            auth.StateChanged -= AuthStateChanged;
         }
+    }
 
 
 
-        /*----開発用----*/
-        else if (Application.isEditor)
+    private void Start()
+    {
+        // `auth.CurrentUser` のチェックはせず、Firebase の `AuthStateChanged` を待つ
+        Debug.Log("AuthManager initialized. Waiting for authentication state...");
+    }
+
+
+
+    private async void AuthStateChanged(object sender, System.EventArgs eventArgs)
+    {
+        user = auth.CurrentUser;
+        if (user != null)
         {
-            SignInAnonymously(); // Unityエディタ用の匿名ログイン
+            Debug.Log($"ログイン済み: {user.Email}");
         }
-        /*--------------*/
+        else
+        {
+            Debug.Log("ログインしていません");
+
+            // Unityエディタの場合のみ匿名ログイン
+            if (Application.isEditor)
+            {
+                await SignInAnonymously();
+            }
+        }
     }
 
-    public async Task Register(string email, string password, string playerName)
+
+
+    public async Task<bool> Register(string email, string password, string playerName)
     {
-        var result = await auth.CreateUserWithEmailAndPasswordAsync(email, password);
-        user = result.User;
+        try
+        {
+            var result = await auth.CreateUserWithEmailAndPasswordAsync(email, password);
+            user = result.User;
 
-        //Firestoreに新規データを作成
-        await FirestoreManager.Instance.SaveNewPlayerData(playerName);
+            // Firestoreに新規データを作成
+            await FirestoreManager.Instance.SaveNewPlayerData(playerName);
 
-        Debug.Log("新規登録成功: " + user.Email);
+            Debug.Log("新規登録成功: " + user.Email);
+            return true; // 登録成功
+        }
+        catch (FirebaseException e)
+        {
+            Debug.LogError($"登録エラー: {e.Message}");
+
+            // エラーコードごとのメッセージ処理
+            switch (e.ErrorCode)
+            {
+                case (int)AuthError.MissingEmail:
+                    Debug.LogError("メールアドレスを入力してください。");
+                    break;
+                case (int)AuthError.MissingPassword:
+                    Debug.LogError("パスワードを入力してください。");
+                    break;
+                case (int)AuthError.WeakPassword:
+                    Debug.LogError("パスワードが短すぎます。より強力なパスワードを設定してください。");
+                    break;
+                case (int)AuthError.InvalidEmail:
+                    Debug.LogError("メールアドレスの形式が正しくありません。");
+                    break;
+                case (int)AuthError.EmailAlreadyInUse:
+                    Debug.LogError("このメールアドレスは既に登録されています。");
+                    break;
+                case (int)AuthError.NetworkRequestFailed:
+                    Debug.LogError("ネットワークエラーが発生しました。インターネット接続を確認してください。");
+                    break;
+                case (int)AuthError.TooManyRequests:
+                    Debug.LogError("試行回数が多すぎます。しばらく待ってから再試行してください。");
+                    break;
+                default:
+                    Debug.LogError("登録に失敗しました。");
+                    break;
+            }
+
+            return false; // 登録失敗
+        }
     }
 
-    public async Task Login(string email, string password)
+
+
+    public async Task<bool> Login(string email, string password)
     {
-        var result = await auth.SignInWithEmailAndPasswordAsync(email, password);
-        user = result.User;
-        Debug.Log("ログイン成功: " + user.Email);
+        try
+        {
+            var result = await auth.SignInWithEmailAndPasswordAsync(email, password);
+            user = result.User;
+            Debug.Log("ログイン成功: " + user.Email);
+            return true; // ログイン成功
+        }
+        catch (FirebaseException e)
+        {
+            Debug.LogError($"ログインエラー: {e.Message}");
+
+            // エラーコードに応じたメッセージを出力
+            switch (e.ErrorCode)
+            {
+                case (int)AuthError.MissingEmail:
+                    Debug.LogError("メールアドレスを入力してください。");
+                    break;
+                case (int)AuthError.MissingPassword:
+                    Debug.LogError("パスワードを入力してください。");
+                    break;
+                case (int)AuthError.InvalidEmail:
+                    Debug.LogError("メールアドレスの形式が正しくありません。");
+                    break;
+                case (int)AuthError.WrongPassword:
+                    Debug.LogError("パスワードが間違っています。");
+                    break;
+                case (int)AuthError.UserNotFound:
+                    Debug.LogError("このメールアドレスのユーザーは登録されていません。");
+                    break;
+                case (int)AuthError.NetworkRequestFailed:
+                    Debug.LogError("ネットワークエラーが発生しました。インターネット接続を確認してください。");
+                    break;
+                case (int)AuthError.TooManyRequests:
+                    Debug.LogError("試行回数が多すぎます。しばらく待ってから再試行してください。");
+                    break;
+                case (int)AuthError.UserDisabled:
+                    Debug.LogError("このアカウントは無効化されています。");
+                    break;
+                default:
+                    Debug.LogError("ログインに失敗しました。");
+                    break;
+            }
+
+            return false; // ログイン失敗
+        }
     }
+
+
 
     public void Logout()
     {
@@ -63,9 +174,19 @@ public class AuthManager : MonoBehaviour
         Debug.Log("ログアウトしました");
     }
 
-    private async void SignInAnonymously()
+
+
+    private async Task SignInAnonymously()
     {
-        var result = await auth.SignInAnonymouslyAsync();
-        Debug.Log("エディタ用の匿名ログイン成功");
+        try
+        {
+            var result = await auth.SignInAnonymouslyAsync();
+            Debug.Log("エディタ用の匿名ログイン成功");
+        }
+        catch (FirebaseException e)
+        {
+            Debug.LogError($"匿名ログインエラー: {e.Message}");
+        }
     }
+
 }

@@ -5,8 +5,6 @@ using UnityEngine;
 using System.Threading.Tasks;
 using System.Collections.Generic;
 using System;
-using System.Linq;
-using static UnityEngine.InputManagerEntry;
 
 public class FirestoreManager : MonoBehaviour
 {
@@ -36,10 +34,6 @@ public class FirestoreManager : MonoBehaviour
     void Start()
     {
         GM = GameManager.Instance;
-
-        //キャッシュクリア
-        //開発用
-        //db.ClearPersistenceAsync();
     }
 
 
