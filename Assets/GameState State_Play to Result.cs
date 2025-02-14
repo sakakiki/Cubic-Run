@@ -59,6 +59,9 @@ public class GameStateState_PlayToResult : GameStateStateBase
 
         //スコアボードの移動開始位置を記憶
         startPos = GM.scoreMarkerTf_Play.position;
+
+        //プレイ結果のセーブ
+        GM.SaveResult();
     }
 
 

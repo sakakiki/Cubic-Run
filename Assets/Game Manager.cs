@@ -1,7 +1,6 @@
 using TMPro;
 using UnityEngine;
 using System.Collections.Generic;
-using static UnityEngine.InputManagerEntry;
 
 
 public class GameManager : MonoBehaviour
@@ -164,7 +163,18 @@ public class GameManager : MonoBehaviour
 
         /* 以下LoginステートのExit等に移動 */
 
-        //データのロード
+        //ローカルデータのロード
+        highScore = HighScoreManager.Load();
+        rankingScoreQueue = RankingScoreManager.Load();
+        isUnsavedHighScore = UnsavedHighScoreFlagManager.Load();
+
+        //未反映のデータがあれば反映
+        if (isUnsavedHighScore)
+            await FSM.SaveHighScore(highScore);
+        if (rankingScoreQueue.Count > 0)
+            await FSM.SavePlayerScore();
+
+        //クラウドデータのロード
         //await FSM.SaveNewPlayerData(playerName);  //新規アカウント作成
         await FSM.LoadAll();
 
@@ -172,6 +182,10 @@ public class GameManager : MonoBehaviour
         //プレイヤーランク算出
         playerRank = CalculatePlayerRank(totalExp);
 
+
+        //未クリアのトレーニングモードのレベルのCountを確保
+        if (trainingClearCounts[trainingClearCounts.Count - 1] > 0)
+            trainingClearCounts.Add(0);
 
         //トレーニングモード到達レベルを算出
         highestTrainingLevel = trainingClearCounts.Count;
@@ -195,9 +209,6 @@ public class GameManager : MonoBehaviour
 
         //初期スキンのロック解除
         UnlockSkin(0);
-
-        //条件を満たしているスキンのロック解除
-        CheckSkinUnlock();
     }
 
 
@@ -463,5 +474,57 @@ public class GameManager : MonoBehaviour
     {
         for (int levelIndex = 0; levelIndex < highestTrainingLevel; levelIndex++)
             button_LevelSelecters[levelIndex].clearTimesNumTMP.SetText(trainingClearCounts[levelIndex] + "回");
+    }
+
+
+
+    //プレイ結果のセーブ
+    public void SaveResult()
+    {
+        #region 走行距離の加算
+        int addDistance = 0;
+        //ランキングモードの場合はLV.1からの距離も加算
+        if (!isTraining)
+            for (int calcLevel = 1; calcLevel < level; calcLevel++)
+                addDistance += (int)((5 + Mathf.Pow(calcLevel, 0.7f) * 3) * 20);
+
+        //最終レベルの走行距離を加算
+        addDistance += (int)((5 + Mathf.Pow(level, 0.7f) * 3) * (isTraining ? score / 100 : (score - (level - 1) * 2000) / 100));
+
+        //クラウドに保存
+        FSM.SaveRunDistance(addDistance);
+        #endregion
+
+        #region 経験値の加算
+        //クラウドに保存
+        FSM.SaveExperience(isTraining ? addDistance/10 : addDistance);
+        #endregion
+
+        //トレーニングモードなら処理終了
+        if (isTraining) return;
+
+        #region ハイスコアの保存
+        //ハイスコアを更新していれば
+        if (score > highScore)
+        {
+            //ハイスコアの更新
+            highScore = score;
+
+            //ローカルに保存
+            HighScoreManager.Save(highScore);
+
+            //クラウドに保存（失敗すればフラグが立つ）
+            FSM.SaveHighScore(highScore);
+        }
+        #endregion
+
+        #region プレイヤースコアの保存
+        //Queueにスコアを格納
+        rankingScoreQueue.Enqueue(score);
+
+        //クラウドに保存
+        //ローカルへの保存はメソッド内
+        FSM.SavePlayerScore();
+        #endregion
     }
 }

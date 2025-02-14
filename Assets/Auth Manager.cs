@@ -176,6 +176,86 @@ public class AuthManager : MonoBehaviour
 
 
 
+    public async Task UpdateUserEmail(string newEmail)
+    {
+        if (auth.CurrentUser == null)
+        {
+            Debug.LogError("ユーザーが認証されていません");
+            return;
+        }
+
+        try
+        {
+            await auth.CurrentUser.SendEmailVerificationAsync();
+            Debug.Log("確認メールを送信しました: " + newEmail);
+        }
+        catch (FirebaseException e)
+        {
+            Debug.LogError("メールアドレスの更新に失敗しました: " + e.Message);
+        }
+    }
+
+
+
+
+    public async Task UpdatePassword(string newPassword)
+    {
+        if (auth.CurrentUser == null)
+        {
+            Debug.LogError("ユーザーが認証されていません");
+            return;
+        }
+
+        try
+        {
+            await auth.CurrentUser.UpdatePasswordAsync(newPassword);
+            Debug.Log("パスワード変更成功");
+        }
+        catch (FirebaseException e)
+        {
+            Debug.LogError("パスワード変更失敗: " + e.Message);
+        }
+    }
+
+
+
+    public async Task SendPasswordResetEmail(string email)
+    {
+        try
+        {
+            await auth.SendPasswordResetEmailAsync(email);
+            Debug.Log("パスワードリセットメール送信成功: " + email);
+        }
+        catch (FirebaseException e)
+        {
+            Debug.LogError("パスワードリセットメール送信失敗: " + e.Message);
+        }
+    }
+
+
+
+    public async Task Reauthenticate(string email, string password)
+    {
+        if (auth.CurrentUser == null)
+        {
+            Debug.LogError("ユーザーが認証されていません");
+            return;
+        }
+
+        try
+        {
+            var credential = Firebase.Auth.EmailAuthProvider.GetCredential(email, password);
+            await auth.CurrentUser.ReauthenticateAsync(credential);
+            Debug.Log("再認証成功");
+        }
+        catch (FirebaseException e)
+        {
+            Debug.LogError("再認証失敗: " + e.Message);
+        }
+    }
+
+
+
     private async Task SignInAnonymously()
     {
         try

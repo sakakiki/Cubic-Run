@@ -14,10 +14,6 @@ public class GameStateState_Result : GameStateStateBase
 
         //プレイヤー移動可能エリアの中心の変更
         GM.centerPos_PlayerArea = GM.centerPos_PlayerArea_Result;
-
-        //ハイスコアの更新
-        if (!GM.isTraining && GM.score > GM.highScore)
-            GM.highScore = GM.score;
     }
 
 

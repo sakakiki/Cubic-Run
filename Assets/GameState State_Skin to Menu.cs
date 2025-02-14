@@ -81,7 +81,7 @@ public class GameStateState_SkinToMenu : GameStateStateBase
 
 
 
-    public override void Exit()
+    public override async void Exit()
     {
         //必要に応じてスキンセレクターを回転
         if (!IM.isSkinSelect)
@@ -89,5 +89,8 @@ public class GameStateState_SkinToMenu : GameStateStateBase
 
         //スキンセレクタースクリプトの無効化
         skinSelecter.enabled = false;
+
+        //使用中のスキン情報をクラウドに保存
+        await FirestoreManager.Instance.SaveUsingSkin();
     }
 }

@@ -25,6 +25,9 @@ public class GameStateState_MenuToSkin : GameStateStateBase
 
         //スキンセレクタースクリプトの有効化
         GameManager.Instance.skinSelecter.enabled = true;
+
+        //条件を満たしているスキンのロック解除
+        GM.CheckSkinUnlock();
     }
 
 

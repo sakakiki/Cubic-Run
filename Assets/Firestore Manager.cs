@@ -26,7 +26,6 @@ public class FirestoreManager : MonoBehaviour
 
         // Firestoreのオフラインキャッシュを有効化 
         db.Settings.PersistenceEnabled = true;
-        Debug.Log("Firestoreのオフラインキャッシュが有効になりました。");
     }
 
 
@@ -124,10 +123,18 @@ public class FirestoreManager : MonoBehaviour
                     transaction.Set(docRef, new { highScore = newScore }, SetOptions.MergeAll);
                 }
             });
+
+            //クラウドに未反映のフラグをおろす
+            GM.isUnsavedHighScore = false;
+            UnsavedHighScoreFlagManager.Save(false);
         }
         catch (Exception e)
         {
             Debug.LogError("ハイスコアの保存に失敗: " + e.Message);
+
+            //クラウドに未反映のフラグを立てる
+            GM.isUnsavedHighScore = true;
+            UnsavedHighScoreFlagManager.Save(true);
         }
     }
 
@@ -148,28 +155,46 @@ public class FirestoreManager : MonoBehaviour
 
         try
         {
-            //未反映のデータがある限り繰り返し
+            // 未反映のデータがある限り繰り返し
             while (GM.rankingScoreQueue.Count > 0)
             {
-                //データを1つ参照（取り出しはしない）
+                // データを1つ参照（取り出しはしない）
                 int resultScore = GM.rankingScoreQueue.Peek();
 
-                //排他制御
-                await db.RunTransactionAsync(async transaction =>
+                // 排他制御
+                bool transactionSuccess = await db.RunTransactionAsync(async transaction =>
                 {
                     DocumentSnapshot snapshot = await transaction.GetSnapshotAsync(docRef);
                     int currentPlayerScore = snapshot.Exists ? snapshot.GetValue<int>("playerScore") : 0;
                     int newPlayerScore = currentPlayerScore + (int)((resultScore - currentPlayerScore) / 10f);
                     transaction.Set(docRef, new { playerScore = newPlayerScore }, SetOptions.MergeAll);
+
+                    return true;
                 });
 
-                //データの反映が完了したらQueueから削除
-                GM.rankingScoreQueue.Dequeue();
+                // トランザクションが成功した場合のみ
+                if (transactionSuccess)
+                {
+                    //Dequeue() を実行
+                    GM.rankingScoreQueue.Dequeue();
+                    Debug.Log("保存：" + resultScore);
+
+                    //ローカルのQueueの内容を更新
+                    RankingScoreManager.Save(GM.rankingScoreQueue);
+                    Debug.Log("Queueの情報をローカルストレージに保存しました");
+                }
             }
+
+            // 保存したプレイヤースコアをローカルにも同期
+            await LoadPlayerScore();
         }
         catch (Exception e)
         {
-            Debug.LogError("プレイヤースコアの更新に失敗: " + e.Message);
+            Debug.LogError($"プレイヤースコアの更新に失敗: {e.Message}");
+
+            //ローカルのQueueの内容を更新
+            RankingScoreManager.Save(GM.rankingScoreQueue);
+            Debug.Log("Queueの情報をローカルストレージに保存しました");
         }
     }
 
@@ -269,7 +294,8 @@ public class FirestoreManager : MonoBehaviour
 
     /// <summary>
     /// 全てのデータをロード
-    /// [クラウドデータ優先，クラウドデータ・キャッシュデータ両取得（比較含む）]
+    /// [クラウドデータ優先]
+    /// ローカルデータとの比較も含む
     /// </summary>
     public async Task LoadAll()
     {
@@ -283,8 +309,22 @@ public class FirestoreManager : MonoBehaviour
         {
             DocumentReference docRef = db.Collection("users").Document(auth.CurrentUser.UserId);
 
-            #region クラウドのsnapshotを取得
-            DocumentSnapshot snapshot = await docRef.GetSnapshotAsync();
+            #region snapshotを取得（クラウドを優先し、失敗すればキャッシュを取得）
+
+            DocumentSnapshot snapshot;
+
+            try
+            {
+                // クラウドの最新データを取得（通信が発生）
+                snapshot = await docRef.GetSnapshotAsync(Source.Server);
+            }
+            catch (Exception e)
+            {
+                Debug.LogWarning($"クラウドデータの取得に失敗: {e.Message}。キャッシュデータを使用します。");
+
+                // クラウド取得に失敗した場合、キャッシュから取得（オフライン対応）
+                snapshot = await docRef.GetSnapshotAsync(Source.Cache);
+            }
 
             //データの存在をチェック
             if (!snapshot.Exists)
@@ -307,6 +347,28 @@ public class FirestoreManager : MonoBehaviour
             {
                 //ローカルキャッシュに同期
                 GM.totalExp = snapshot.GetValue<int>("experience");
+            }
+            #endregion
+
+            #region highScoreのロード
+
+            int serverHighScore = 0;
+
+            // 次にFirestoreの最新データを取得
+            if (snapshot.Exists && snapshot.ContainsField("highScore"))
+            {
+                serverHighScore = snapshot.GetValue<int>("highScore");
+            }
+
+            // クラウドデータとローカルデータの値を比較して高い方をローカルに同期
+            GM.highScore = Math.Max(GM.highScore, serverHighScore);
+            #endregion
+
+            #region playerExpのロード
+            if (snapshot.ContainsField("playerScore"))
+            {
+                //ローカルキャッシュに同期
+                GM.playerScore = snapshot.GetValue<int>("playerScore");
             }
             #endregion
 
@@ -348,39 +410,6 @@ public class FirestoreManager : MonoBehaviour
             }
             #endregion
 
-
-            #region キャッシュのsnapshotを取得
-            DocumentSnapshot cacheSnapshot = await docRef.GetSnapshotAsync(Source.Cache);
-
-            //キャッシュデータの存在をチェック
-            if (!cacheSnapshot.Exists)
-            {
-                Debug.LogWarning("[Cache] プレイヤーデータが存在しません");
-                return;
-            }
-            #endregion
-
-            #region highScoreのロード
-
-            int cachedHighScore = 0;
-            int serverHighScore = 0;
-
-            // まずキャッシュから取得
-            if (cacheSnapshot.ContainsField("highScore"))
-            {
-                cachedHighScore = cacheSnapshot.GetValue<int>("highScore");
-            }
-
-            // 次にFirestoreの最新データを取得
-            if (snapshot.Exists && snapshot.ContainsField("highScore"))
-            {
-                serverHighScore = snapshot.GetValue<int>("highScore");
-            }
-
-            // キャッシュとFirestoreの値を比較して高い方をローカルキャッシュに同期
-            GM.highScore = Math.Max(cachedHighScore, serverHighScore);
-            #endregion
-
         }
         catch (Exception e)
         {
@@ -392,7 +421,7 @@ public class FirestoreManager : MonoBehaviour
 
     /// <summary>
     /// プレイヤー名をロード
-    /// [クラウドデータ優先]
+    /// [キャッシュデータ]
     /// </summary>
     public async Task LoadPlayerName()
     {
@@ -405,7 +434,7 @@ public class FirestoreManager : MonoBehaviour
         try
         {
             DocumentReference docRef = db.Collection("users").Document(auth.CurrentUser.UserId);
-            DocumentSnapshot snapshot = await docRef.GetSnapshotAsync();
+            DocumentSnapshot snapshot = await docRef.GetSnapshotAsync(Source.Cache);
 
             if (snapshot.Exists && snapshot.ContainsField("name"))
             {
@@ -424,7 +453,7 @@ public class FirestoreManager : MonoBehaviour
 
     /// <summary>
     /// 経験値をロード
-    /// [クラウドデータ優先]
+    /// [キャッシュデータ]
     /// </summary>
     public async Task LoadExperience()
     {
@@ -437,7 +466,7 @@ public class FirestoreManager : MonoBehaviour
         try
         {
             DocumentReference docRef = db.Collection("users").Document(auth.CurrentUser.UserId);
-            DocumentSnapshot snapshot = await docRef.GetSnapshotAsync();
+            DocumentSnapshot snapshot = await docRef.GetSnapshotAsync(Source.Cache);
 
             if (snapshot.Exists && snapshot.ContainsField("experience"))
             {
@@ -456,8 +485,8 @@ public class FirestoreManager : MonoBehaviour
 
     /// <summary>
     /// ハイスコアをロード
-    /// [クラウドデータ・キャッシュデータ両取得]
-    /// 両取得時は値の比較も実行（高い方を採用）
+    /// [キャッシュデータ]
+    /// ローカルデータとの比較も実行（高い方を採用）
     /// </summary>
     public async Task LoadHighScore()
     {
@@ -469,7 +498,6 @@ public class FirestoreManager : MonoBehaviour
 
         DocumentReference docRef = db.Collection("users").Document(auth.CurrentUser.UserId);
         int cachedHighScore = 0;
-        int serverHighScore = 0;
 
         try
         {
@@ -485,28 +513,14 @@ public class FirestoreManager : MonoBehaviour
             Debug.LogWarning($"[キャッシュ] ハイスコアの取得に失敗: {e.Message}");
         }
 
-        try
-        {
-            // 次にFirestoreの最新データを取得
-            DocumentSnapshot serverSnapshot = await docRef.GetSnapshotAsync(Source.Server);
-            if (serverSnapshot.Exists && serverSnapshot.ContainsField("highScore"))
-            {
-                serverHighScore = serverSnapshot.GetValue<int>("highScore");
-            }
-        }
-        catch (Exception e)
-        {
-            Debug.LogWarning($"[Firestore] ハイスコアの取得に失敗: {e.Message}");
-        }
-
-        // キャッシュとFirestoreの値を比較して高い方をローカルキャッシュに同期
-        GM.highScore = Math.Max(cachedHighScore, serverHighScore);
+        // キャッシュとローカルの値を比較して高い方をローカルキャッシュに同期
+        GM.highScore = Math.Max(cachedHighScore, GM.highScore);
         return;
     }
 
     /// <summary>
     /// プレイヤースコアをロード
-    /// [クラウドデータ優先]
+    /// [クラウドデータ]
     /// </summary>
     public async Task LoadPlayerScore()
     {
@@ -519,7 +533,7 @@ public class FirestoreManager : MonoBehaviour
         try
         {
             DocumentReference docRef = db.Collection("users").Document(auth.CurrentUser.UserId);
-            DocumentSnapshot snapshot = await docRef.GetSnapshotAsync();
+            DocumentSnapshot snapshot = await docRef.GetSnapshotAsync(Source.Server);
 
             if (snapshot.Exists && snapshot.ContainsField("playerScore"))
             {
@@ -538,7 +552,7 @@ public class FirestoreManager : MonoBehaviour
 
     /// <summary>
     /// トレーニングモードレベルクリア回数をロード
-    /// [クラウドデータ優先]
+    /// [キャッシュデータ]
     /// </summary>
     public async Task LoadTrainingClearCounts()
     {
@@ -552,7 +566,7 @@ public class FirestoreManager : MonoBehaviour
 
         try
         {
-            DocumentSnapshot snapshot = await docRef.GetSnapshotAsync();
+            DocumentSnapshot snapshot = await docRef.GetSnapshotAsync(Source.Cache);
             if (snapshot.Exists && snapshot.ContainsField("trainingCount"))
             {
                 Dictionary<string, object> rawData = snapshot.GetValue<Dictionary<string, object>>("trainingCount");
@@ -581,7 +595,7 @@ public class FirestoreManager : MonoBehaviour
 
     /// <summary>
     /// 使用中のスキンをロード
-    /// [クラウドデータ優先]
+    /// [キャッシュデータ]
     /// </summary>
     public async Task LoadUsingSkin()
     {
@@ -594,7 +608,7 @@ public class FirestoreManager : MonoBehaviour
         try
         {
             DocumentReference docRef = db.Collection("users").Document(auth.CurrentUser.UserId);
-            DocumentSnapshot snapshot = await docRef.GetSnapshotAsync();
+            DocumentSnapshot snapshot = await docRef.GetSnapshotAsync(Source.Cache);
 
             if (snapshot.Exists && snapshot.ContainsField("usingSkin"))
             {
@@ -613,7 +627,7 @@ public class FirestoreManager : MonoBehaviour
 
     /// <summary>
     /// 走行距離をロード
-    /// [クラウドデータ優先]
+    /// [キャッシュデータ]
     /// </summary>
     public async Task LoadRunDistance()
     {
@@ -626,7 +640,7 @@ public class FirestoreManager : MonoBehaviour
         try
         {
             DocumentReference docRef = db.Collection("users").Document(auth.CurrentUser.UserId);
-            DocumentSnapshot snapshot = await docRef.GetSnapshotAsync();
+            DocumentSnapshot snapshot = await docRef.GetSnapshotAsync(Source.Cache);
 
             if (snapshot.Exists && snapshot.ContainsField("runDistance"))
             {

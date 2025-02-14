@@ -21,6 +21,7 @@ public class test : MonoBehaviour, IPointerDownHandler //インターフェースの実装
 
     public async void OnPointerDown(PointerEventData eventData) //インターフェースに応じたメソッド名
     {
+        /*
         Debug.Log("click");
 
         if (isSaveMode)
@@ -44,7 +45,7 @@ public class test : MonoBehaviour, IPointerDownHandler //インターフェースの実装
             await FSM.LoadUsingSkin();
             await FSM.LoadRunDistance();
         }
-
+        */
 
     }
 }
