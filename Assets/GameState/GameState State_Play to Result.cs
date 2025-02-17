@@ -1,4 +1,5 @@
 using System.Globalization;
+using TMPro;
 using UnityEngine;
 
 public class GameStateState_PlayToResult : GameStateStateBase
@@ -14,6 +15,13 @@ public class GameStateState_PlayToResult : GameStateStateBase
     private RectTransform resultHingeRtf_L;
     private RectTransform resultHingeRtf_B;
     private AnimationCurve curveScorePosY;
+    private RectTransform playerRankScaleRtf;
+    private TextMeshProUGUI playerRankText;
+    private TextMeshProUGUI addExpText;
+    private TextMeshProUGUI requiredExpText;
+    private int beforePlayRequiredExp;
+    private int addExp;
+    private int beforePlayRank;
 
     public GameStateState_PlayToResult(GameStateStateMachine stateMachine) : base(stateMachine)
     {
@@ -26,6 +34,10 @@ public class GameStateState_PlayToResult : GameStateStateBase
         resultHingeRtf_L = GM.resultHingeRtf_L;
         resultHingeRtf_B = GM.resultHingeRtf_B;
         curveScorePosY = GM.scorePosY_PlaytoResult;
+        playerRankScaleRtf = GM.playerRankScaleRtf;
+        playerRankText = GM.playerRankText;
+        addExpText = GM.addExpText;
+        requiredExpText = GM.requiredExpText;
     }
 
 
@@ -60,8 +72,26 @@ public class GameStateState_PlayToResult : GameStateStateBase
         //スコアボードの移動開始位置を記憶
         startPos = GM.scoreMarkerTf_Play.position;
 
+        //プレイ前のランクアップまでに必要な経験値量を記憶
+        beforePlayRequiredExp = GM.requiredExp;
+
+        //プレイ前の経験値量を記憶
+        int beforePlaytotalExp = GM.totalExp;
+
+        //プレイ前のプレイヤーランクを記憶・表示
+        beforePlayRank = GM.playerRank; 
+        playerRankText.SetText("プレイヤーランク　" + beforePlayRank);
+
+        //経験値に関する表示の更新
+        requiredExpText.SetText("" + GM.requiredExp);
+        playerRankScaleRtf.localScale = Vector3.one - Vector3.right * (GM.requiredExp / (float)((GM.playerRank+1) * 100));
+
         //プレイ結果のセーブ
         GM.SaveResult();
+
+        //獲得経験値量の算出・表示
+        addExp = GM.totalExp - beforePlaytotalExp;
+        addExpText.SetText("+" + addExp + "Exp");
     }
 
 
@@ -101,6 +131,25 @@ public class GameStateState_PlayToResult : GameStateStateBase
         resultHingeRtf_L.localEulerAngles = Vector3.Lerp(Vector3.up * 120, Vector3.zero, elapsedTime - 2);
         resultHingeRtf_B.localEulerAngles = Vector3.Lerp(Vector3.right * 120, Vector3.zero, elapsedTime - 2);
 
+        if (elapsedTime < 3) return;
+
+        //表示するランクアップまでに必要な経験値量を算出
+        float displayAddExpF = Mathf.Lerp(0, addExp, Mathf.Pow(elapsedTime - 3, 0.35f));
+        float displayRequiredExpF = beforePlayRequiredExp - (int)displayAddExpF;
+
+        //表示プレイヤーランクの更新
+        int displayRank = beforePlayRank;
+        while (displayRequiredExpF < 0)
+        {
+            displayRank++;
+            displayRequiredExpF += (displayRank + 1) * 100;
+            playerRankText.SetText("プレイヤーランク　" + beforePlayRank + " >> " + displayRank);
+        }
+
+        //経験値に関する表示の更新
+        requiredExpText.SetText("" + (int)displayRequiredExpF);
+        playerRankScaleRtf.localScale = Vector3.one - Vector3.right * (displayRequiredExpF / ((displayRank+1) * 100));
+
         //指定時間経過でステート遷移
         if (elapsedTime >= 4)
             stateMachine.ChangeState(stateMachine.state_Result);
@@ -118,5 +167,11 @@ public class GameStateState_PlayToResult : GameStateStateBase
 
         //スコアボードの回転量をリセット
         scoreSetTf.eulerAngles = Vector3.zero;
+
+        //プレイヤーランクに関する表示を確定
+        if (beforePlayRank != GM.playerRank)
+            playerRankText.SetText("プレイヤーランク　" + beforePlayRank + " >> <b>" + GM.playerRank + "</b>");
+        requiredExpText.SetText("" + GM.requiredExp);
+        playerRankScaleRtf.localScale = Vector3.one - Vector3.right * (GM.requiredExp / (float)((GM.playerRank + 1) * 100));
     }
 }

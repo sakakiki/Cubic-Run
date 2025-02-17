@@ -38,6 +38,7 @@ public class GameManager : MonoBehaviour
     public int level;
     public int levelUpSpan {  get; private set; }
     public int playerRank { get; private set; } = 0;  //totalExpから算出
+    public int requiredExp;
     public int highestTrainingLevel { get; private set; } = 1;    // = trainingClearCounts.Count;
     public bool[] isSkinUnlocked { get; private set; } = new bool[16];    //totalExpとhighestTrainingLevelから算出
     public int previousSkinID;
@@ -90,6 +91,11 @@ public class GameManager : MonoBehaviour
     public SkinSelecter skinSelecter;
     [SerializeField] private TextMeshProUGUI skinNameText;
     [SerializeField] private GameObject skinModelCover;
+    public RectTransform playerRankScaleRtf;
+    public TextMeshProUGUI playerRankText;
+    public TextMeshProUGUI addExpText;
+    public TextMeshProUGUI requiredExpText;
+    public SpriteRenderer expSprite;
 
     //ステートマシン
     public GameStateStateMachine gameStateMachine {  get; private set; }
@@ -181,6 +187,10 @@ public class GameManager : MonoBehaviour
 
         //プレイヤーランク算出
         playerRank = CalculatePlayerRank(totalExp);
+
+        //次のランクまでに必要な経験値量を算出
+        if (playerRank == 0) requiredExp = 100;
+        else requiredExp = playerRank * (playerRank + 1) / 2 * 100 - totalExp;
 
 
         //未クリアのトレーニングモードのレベルのCountを確保
@@ -350,6 +360,9 @@ public class GameManager : MonoBehaviour
         //スコアゲージの色を変更
         scoreGageSprite.color = SDB.skinData[skinID].UIColor - Color.black * 0.4f;
 
+        //経験値バー色の変更
+        expSprite.color = Color.Lerp(SDB.skinData[skinID].UIColor, Color.gray + Color.white * 0.3f, 0.3f);
+
         //ボタンの色の更新
         button_LevelSelecters[trainingLevel - 1].PushButton();
 
@@ -479,7 +492,7 @@ public class GameManager : MonoBehaviour
 
 
     //プレイ結果のセーブ
-    public void SaveResult()
+    public async void SaveResult()
     {
         #region 走行距離の加算
         int addDistance = 0;
@@ -491,13 +504,30 @@ public class GameManager : MonoBehaviour
         //最終レベルの走行距離を加算
         addDistance += (int)((5 + Mathf.Pow(level, 0.7f) * 3) * (isTraining ? score / 100 : (score - (level - 1) * 2000) / 100));
 
+        //ローカルに反映
+        totalRunDistance += addDistance;
+
         //クラウドに保存
         FSM.SaveRunDistance(addDistance);
         #endregion
 
         #region 経験値の加算
+        //ゲームモードに応じた加算量算出
+        int addExp = isTraining ? addDistance / 10 : addDistance;
+
+        //ローカルに反映
+        totalExp += addExp;
+
+        //プレイヤーランクを更新
+        requiredExp -= addExp;
+        while (requiredExp < 0)
+        {
+            playerRank++;
+            requiredExp += (playerRank + 1) * 100;
+        }
+
         //クラウドに保存
-        FSM.SaveExperience(isTraining ? addDistance/10 : addDistance);
+        FSM.SaveExperience(addExp);
         #endregion
 
         //トレーニングモードなら処理終了
@@ -525,6 +555,9 @@ public class GameManager : MonoBehaviour
         //クラウドに保存
         //ローカルへの保存はメソッド内
         FSM.SavePlayerScore();
+
+        //変数にも反映
+        await FSM.LoadPlayerScore();
         #endregion
     }
 }

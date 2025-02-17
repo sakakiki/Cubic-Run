@@ -5,6 +5,7 @@ using UnityEngine;
 using System.Threading.Tasks;
 using System.Collections.Generic;
 using System;
+using System.Linq;
 
 public class FirestoreManager : MonoBehaviour
 {
@@ -141,7 +142,7 @@ public class FirestoreManager : MonoBehaviour
     /// <summary>
     /// プレイヤースコアの保存
     /// [オンライン専用]
-    /// Queue<int> rankingScore 内にデータがある限りクラウドにデータを反映させる
+    /// Queue<int> rankingScoreQueue 内のデータを全てクラウドにデータを反映させる
     /// </summary>
     public async Task SavePlayerScore()
     {
@@ -155,44 +156,41 @@ public class FirestoreManager : MonoBehaviour
 
         try
         {
-            // 未反映のデータがある限り繰り返し
-            while (GM.rankingScoreQueue.Count > 0)
+            // Queueのコピー（トランザクション外で安全にデータを取得）
+            List<int> tempScores = GM.rankingScoreQueue.ToList();
+
+            bool transactionSuccess = await db.RunTransactionAsync(async transaction =>
             {
-                // データを1つ参照（取り出しはしない）
-                int resultScore = GM.rankingScoreQueue.Peek();
+                // プレイヤースコアの取得
+                DocumentSnapshot snapshot = await transaction.GetSnapshotAsync(docRef);
+                int newPlayerScore = snapshot.Exists ? snapshot.GetValue<int>("playerScore") : 0;
 
-                // 排他制御
-                bool transactionSuccess = await db.RunTransactionAsync(async transaction =>
+                // 未反映のデータを反映
+                foreach (int resultScore in tempScores)
                 {
-                    DocumentSnapshot snapshot = await transaction.GetSnapshotAsync(docRef);
-                    int currentPlayerScore = snapshot.Exists ? snapshot.GetValue<int>("playerScore") : 0;
-                    int newPlayerScore = currentPlayerScore + (int)((resultScore - currentPlayerScore) / 10f);
-                    transaction.Set(docRef, new { playerScore = newPlayerScore }, SetOptions.MergeAll);
-
-                    return true;
-                });
-
-                // トランザクションが成功した場合のみ
-                if (transactionSuccess)
-                {
-                    //Dequeue() を実行
-                    GM.rankingScoreQueue.Dequeue();
-                    Debug.Log("保存：" + resultScore);
-
-                    //ローカルのQueueの内容を更新
-                    RankingScoreManager.Save(GM.rankingScoreQueue);
-                    Debug.Log("Queueの情報をローカルストレージに保存しました");
+                    newPlayerScore += (resultScore - newPlayerScore) / 10;
                 }
-            }
 
-            // 保存したプレイヤースコアをローカルにも同期
-            await LoadPlayerScore();
+                transaction.Set(docRef, new { playerScore = newPlayerScore }, SetOptions.MergeAll);
+                return true;
+            });
+
+            // トランザクションが成功した場合のみ
+            if (transactionSuccess)
+            {
+                // GM の Queue を空にする
+                GM.rankingScoreQueue.Clear();
+
+                // ローカルの Queue の内容を更新
+                RankingScoreManager.Save(GM.rankingScoreQueue);
+                Debug.Log("Queueの情報をローカルストレージに保存しました");
+            }
         }
         catch (Exception e)
         {
             Debug.LogError($"プレイヤースコアの更新に失敗: {e.Message}");
 
-            //ローカルのQueueの内容を更新
+            // ローカルの Queue の内容を更新（失敗時でも保存する）
             RankingScoreManager.Save(GM.rankingScoreQueue);
             Debug.Log("Queueの情報をローカルストレージに保存しました");
         }
@@ -520,7 +518,7 @@ public class FirestoreManager : MonoBehaviour
 
     /// <summary>
     /// プレイヤースコアをロード
-    /// [クラウドデータ]
+    /// [キャッシュデータ]
     /// </summary>
     public async Task LoadPlayerScore()
     {
@@ -533,11 +531,11 @@ public class FirestoreManager : MonoBehaviour
         try
         {
             DocumentReference docRef = db.Collection("users").Document(auth.CurrentUser.UserId);
-            DocumentSnapshot snapshot = await docRef.GetSnapshotAsync(Source.Server);
+            DocumentSnapshot snapshot = await docRef.GetSnapshotAsync(Source.Cache);
 
             if (snapshot.Exists && snapshot.ContainsField("playerScore"))
             {
-                //ローカルキャッシュに同期
+                //ローカルに同期
                 GM.playerScore = snapshot.GetValue<int>("playerScore");
                 return;
             }

@@ -2,7 +2,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using TMPro;
-using static UnityEngine.InputManagerEntry;
 
 public class SkinSelecter : MonoBehaviour, IPointerDownHandler, IDragHandler, IPointerUpHandler
 {
@@ -76,6 +75,22 @@ public class SkinSelecter : MonoBehaviour, IPointerDownHandler, IDragHandler, IP
     {
         //非アクティブ状態なら何もしない
         if (!isActive) return;
+
+        //非アクティブ状態の間にドラッグが開始されているなら開始処理の実行
+        if (!isDragged)
+        {
+            //回転状態に変化
+            isDragged = true;
+
+            //ボタンの無効化
+            IM.InputUISetActive_Skin(false);
+
+            //現在値の記憶とQueueへの格納
+            currentPointY = eventData.position.y;
+            currentTime = Time.time;
+            pointQueue.Enqueue(currentPointY);
+            timeQueue.Enqueue(currentTime);
+        }
 
         //停止状態を解除
         isStop = false;
