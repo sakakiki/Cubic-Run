@@ -92,6 +92,30 @@ public class GameStateState_PlayToResult : GameStateStateBase
         //獲得経験値量の算出・表示
         addExp = GM.totalExp - beforePlaytotalExp;
         addExpText.SetText("+" + addExp + "Exp");
+
+        //スキン開放演出の必要性をチェック
+        if (beforePlayRank < 2 && 2 <= GM.playerRank) GM.newSkinQueue.Enqueue(1);
+        if (beforePlayRank < 10 && 10 <= GM.playerRank) GM.newSkinQueue.Enqueue(2);
+        if (beforePlayRank < 20 && 20 <= GM.playerRank) GM.newSkinQueue.Enqueue(3);
+        if (beforePlayRank < 30 && 30 <= GM.playerRank) GM.newSkinQueue.Enqueue(4);
+        if (beforePlayRank < 40 && 40 <= GM.playerRank) GM.newSkinQueue.Enqueue(5);
+        if (beforePlayRank < 50 && 50 <= GM.playerRank) GM.newSkinQueue.Enqueue(6);
+        if (beforePlayRank < 100 && 100 <= GM.playerRank) GM.newSkinQueue.Enqueue(7);
+        if (GM.score == 5000 && GM.isTraining)
+        {
+            switch (GM.level)
+            {
+                case 1: GM.newSkinQueue.Enqueue(8); break;
+                case 2: GM.newSkinQueue.Enqueue(9); break;
+                case 3: GM.newSkinQueue.Enqueue(10); break;
+                case 5: GM.newSkinQueue.Enqueue(11); break;
+                case 7: GM.newSkinQueue.Enqueue(12); break;
+                case 10: GM.newSkinQueue.Enqueue(13); break;
+                case 15: GM.newSkinQueue.Enqueue(14); break;
+                case 20: GM.newSkinQueue.Enqueue(15); break;
+                default: break;
+            }
+        }
     }
 
 
@@ -143,7 +167,7 @@ public class GameStateState_PlayToResult : GameStateStateBase
         {
             displayRank++;
             displayRequiredExpF += (displayRank + 1) * 100;
-            playerRankText.SetText("プレイヤーランク　" + beforePlayRank + " >> " + displayRank);
+            playerRankText.SetText("プレイヤーランク　" + beforePlayRank + " >> <b>" + displayRank + "</b>"); 
         }
 
         //経験値に関する表示の更新
@@ -152,7 +176,10 @@ public class GameStateState_PlayToResult : GameStateStateBase
 
         //指定時間経過でステート遷移
         if (elapsedTime >= 4)
-            stateMachine.ChangeState(stateMachine.state_Result);
+        {
+            if (GM.newSkinQueue.Count > 0) stateMachine.ChangeState(stateMachine.state_UnlockSkin);
+            else stateMachine.ChangeState(stateMachine.state_Result);
+        }
     }
 
 

@@ -2,7 +2,8 @@ using TMPro;
 using UnityEngine;
 using System.Collections.Generic;
 
-
+//GameManagerは処理を優先実行
+[DefaultExecutionOrder(-1)]
 public class GameManager : MonoBehaviour
 {
     //自身のインスタンス
@@ -44,9 +45,11 @@ public class GameManager : MonoBehaviour
     public int previousSkinID;
     public Color panelSelectedColor;
     public Vector2 centerPos_PlayerArea;
+    public Queue<int> newSkinQueue = new Queue<int>();
     [Space(30)]
 
     [Header("インスペクターから設定")]
+    public AuthManager AuthManager;
     public Transform playerTf;
     public PlayerController playerCon;
     public RectTransform menuHingeRtf_L;
@@ -96,6 +99,16 @@ public class GameManager : MonoBehaviour
     public TextMeshProUGUI addExpText;
     public TextMeshProUGUI requiredExpText;
     public SpriteRenderer expSprite;
+    public GameObject unlockSkin;
+    public SpriteRenderer unlockSkinModelSprite;
+    public SpriteMask unlockSkinMask;
+    public RectTransform unlockSkinModelRtf;
+    public TextMeshProUGUI unlockSkinName;
+    public RectTransform unlockSkinNameRtf;
+    public TextMeshProUGUI unlockSkinMessage;
+    public Sprite squarSprite;
+    public Sprite cicleSprite;
+    public SpriteRenderer loginScreenCover;
 
     //ステートマシン
     public GameStateStateMachine gameStateMachine {  get; private set; }
@@ -113,9 +126,6 @@ public class GameManager : MonoBehaviour
     {
         if (Instance == null)
             Instance = this;
-
-        gameStateMachine = new GameStateStateMachine();
-        gameStateMachine.Initialize(gameStateMachine.state_Menu);
 
         #region レターボックス
         // 基準（縦方向）サイズと基準アスペクト比から基準横方向サイズを算出
@@ -137,6 +147,10 @@ public class GameManager : MonoBehaviour
         TM = TerrainManager.Instance;
         FSM = FirestoreManager.Instance;
         SDB = SkinDataBase.Instance;
+
+        //ステートマシンの作成・格納
+        gameStateMachine = new GameStateStateMachine();
+        gameStateMachine.Initialize(gameStateMachine.state_Login);
 
         //UIをHingeに接続
         for (int i = 0; i < menuUIs_L.Length; i++)
@@ -181,7 +195,7 @@ public class GameManager : MonoBehaviour
             await FSM.SavePlayerScore();
 
         //クラウドデータのロード
-        //await FSM.SaveNewPlayerData(playerName);  //新規アカウント作成
+        await FSM.SaveNewPlayerData(playerName);  //新規アカウント作成
         await FSM.LoadAll();
 
 

@@ -8,8 +8,6 @@ public class SkinSelecter : MonoBehaviour, IPointerDownHandler, IDragHandler, IP
     [SerializeField] private GameManager GM;
     [SerializeField] private InputManager IM;
     [SerializeField] private SkinDataBase skinDataBase;
-    [SerializeField] public Sprite squar;
-    [SerializeField] public Sprite cicle;
     [SerializeField] private Transform wheelTf;
     [SerializeField] private SpriteRenderer[] panels_sprite;
     [SerializeField] private Transform[] panels_tf;
@@ -310,7 +308,8 @@ public class SkinSelecter : MonoBehaviour, IPointerDownHandler, IDragHandler, IP
                 panels_skinName[ID].SetText(skinDataBase.skinData[ID].name);
 
                 //形の設定
-                panels_skinModel[ID].sprite = skinDataBase.skinData[ID].bodyType == SkinData.BodyType.Cube ? squar : cicle;
+                panels_skinModel[ID].sprite = 
+                    skinDataBase.skinData[ID].bodyType == SkinData.BodyType.Cube ? GM.squarSprite : GM.cicleSprite;
             }
             //Crystalスキンは例外処理
             else

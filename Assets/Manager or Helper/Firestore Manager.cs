@@ -27,12 +27,8 @@ public class FirestoreManager : MonoBehaviour
 
         // Firestoreのオフラインキャッシュを有効化 
         db.Settings.PersistenceEnabled = true;
-    }
 
-
-
-    void Start()
-    {
+        //GameManagerの格納
         GM = GameManager.Instance;
     }
 

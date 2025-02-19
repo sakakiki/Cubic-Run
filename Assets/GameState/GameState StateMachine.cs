@@ -4,6 +4,7 @@ public class GameStateStateMachine
 {
     public GameStateStateBase currentState {  get; private set; }
 
+    public GameStateStateBase state_Login { get; private set; }
     public GameStateStateBase state_Menu { get; private set; }
     public GameStateStateBase state_MenuToPlay { get; private set; }
     public GameStateStateBase state_MenuToSkin { get; private set; }
@@ -11,6 +12,7 @@ public class GameStateStateMachine
     public GameStateStateBase state_SkinToMenu { get; private set; }
     public GameStateStateBase state_Play { get; private set; }
     public GameStateStateBase state_PlayToResult { get; private set; }
+    public GameStateStateBase state_UnlockSkin { get; private set; }
     public GameStateStateBase state_Result { get; private set; }
     public GameStateStateBase state_ResultToMenu { get; private set; }
     public GameStateStateBase state_ResultToPlay { get; private set; }
@@ -20,6 +22,7 @@ public class GameStateStateMachine
 
     public GameStateStateMachine()
     {
+        state_Login = new GameStateState_Login(this);
         state_Menu = new GameStateState_Menu(this);
         state_MenuToPlay = new GameStateState_MenuToPlay(this);
         state_MenuToSkin = new GameStateState_MenuToSkin(this);
@@ -27,6 +30,7 @@ public class GameStateStateMachine
         state_SkinToMenu = new GameStateState_SkinToMenu(this);
         state_Play = new GameStateState_Play(this);
         state_PlayToResult = new GameStateState_PlayToResult(this);
+        state_UnlockSkin = new GameStateState_UnlockSkin(this);
         state_Result = new GameStateState_Result(this);
         state_ResultToMenu = new GameStateState_ResultToMenu(this);
         state_ResultToPlay = new GameStateState_ResultToPlay(this);

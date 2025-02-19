@@ -12,6 +12,9 @@ public class AuthManager : MonoBehaviour
 
 
 
+    /// <summary>
+    /// 起動後の初期設定
+    /// </summary>
     private void Awake()
     {
         if (Instance == null)
@@ -25,9 +28,11 @@ public class AuthManager : MonoBehaviour
 
 
 
+    /// <summary>
+    /// イベントハンドラの解除（メモリリーク防止）
+    /// </summary>
     private void OnDestroy()
     {
-        // イベントハンドラの解除（メモリリーク防止）
         if (auth != null)
         {
             auth.StateChanged -= AuthStateChanged;
@@ -36,15 +41,10 @@ public class AuthManager : MonoBehaviour
 
 
 
-    private void Start()
-    {
-        // `auth.CurrentUser` のチェックはせず、Firebase の `AuthStateChanged` を待つ
-        Debug.Log("AuthManager initialized. Waiting for authentication state...");
-    }
-
-
-
-    private async void AuthStateChanged(object sender, System.EventArgs eventArgs)
+    /// <summary>
+    /// 認証情報が取得できれば自動ログインを実行
+    /// </summary>
+    private void AuthStateChanged(object sender, System.EventArgs eventArgs)
     {
         user = auth.CurrentUser;
         if (user != null)
@@ -54,17 +54,14 @@ public class AuthManager : MonoBehaviour
         else
         {
             Debug.Log("ログインしていません");
-
-            // Unityエディタの場合のみ匿名ログイン
-            if (Application.isEditor)
-            {
-                await SignInAnonymously();
-            }
         }
     }
 
 
 
+    /// <summary>
+    /// メールアドレスによる新規データ作成
+    /// </summary>
     public async Task<bool> Register(string email, string password, string playerName)
     {
         try
@@ -117,6 +114,9 @@ public class AuthManager : MonoBehaviour
 
 
 
+    /// <summary>
+    /// メールアドレスとパスワードでのログイン
+    /// </summary>
     public async Task<bool> Login(string email, string password)
     {
         try
@@ -168,6 +168,9 @@ public class AuthManager : MonoBehaviour
 
 
 
+    /// <summary>
+    /// ログアウト
+    /// </summary>
     public void Logout()
     {
         auth.SignOut();
@@ -176,6 +179,9 @@ public class AuthManager : MonoBehaviour
 
 
 
+    /// <summary>
+    /// メールアドレス変更
+    /// </summary>
     public async Task UpdateUserEmail(string newEmail)
     {
         if (auth.CurrentUser == null)
@@ -197,7 +203,9 @@ public class AuthManager : MonoBehaviour
 
 
 
-
+    /// <summary>
+    /// パスワード変更
+    /// </summary>
     public async Task UpdatePassword(string newPassword)
     {
         if (auth.CurrentUser == null)
@@ -219,6 +227,9 @@ public class AuthManager : MonoBehaviour
 
 
 
+    /// <summary>
+    /// パスワードのリセット
+    /// </summary>
     public async Task SendPasswordResetEmail(string email)
     {
         try
@@ -234,6 +245,9 @@ public class AuthManager : MonoBehaviour
 
 
 
+    /// <summary>
+    /// 再認証
+    /// </summary>
     public async Task Reauthenticate(string email, string password)
     {
         if (auth.CurrentUser == null)
@@ -256,12 +270,89 @@ public class AuthManager : MonoBehaviour
 
 
 
+    /// <summary>
+    /// 匿名アカウントからメールアドレス認証に切り替え（適切な再認証を適用）
+    /// </summary>
+    public async Task ConvertAnonymousToEmail(string email, string password)
+    {
+        user = auth.CurrentUser; // 現在の匿名ユーザー
+        if (user == null || !user.IsAnonymous)
+        {
+            Debug.LogError("匿名ユーザーではありません");
+            return;
+        }
+
+        try
+        {
+            // メール & パスワードの認証情報を作成
+            Credential credential = EmailAuthProvider.GetCredential(email, password);
+
+            // 匿名アカウントとメールアカウントをリンク
+            await user.LinkWithCredentialAsync(credential);
+            Debug.Log("匿名アカウントをメール認証に切り替え成功: " + email);
+
+            // メール認証を送信
+            await user.SendEmailVerificationAsync();
+            Debug.Log("確認メールを送信しました");
+        }
+        catch (FirebaseException e) when (e.ErrorCode == (int)AuthError.RequiresRecentLogin)
+        {
+            Debug.LogWarning("最近のログインが必要です。匿名アカウントの認証情報で再認証を行います...");
+
+            try
+            {
+                // 匿名アカウントの認証情報を取得
+                Credential anonCredential = GoogleAuthProvider.GetCredential(null, null);
+
+                // 再認証を実行
+                await user.ReauthenticateAsync(anonCredential);
+                Debug.Log("再認証成功");
+
+                // 再認証後に再試行
+                await ConvertAnonymousToEmail(email, password);
+            }
+            catch (FirebaseException reauthError)
+            {
+                Debug.LogError("再認証に失敗しました: " + reauthError.Message);
+            }
+        }
+        catch (FirebaseException e)
+        {
+            switch (e.ErrorCode)
+            {
+                case (int)AuthError.InvalidEmail:
+                    Debug.LogError("無効なメールアドレスです");
+                    break;
+                case (int)AuthError.EmailAlreadyInUse:
+                    Debug.LogError("このメールアドレスはすでに使用されています");
+                    break;
+                case (int)AuthError.WeakPassword:
+                    Debug.LogError("パスワードが脆弱です（6文字以上推奨）");
+                    break;
+                case (int)AuthError.CredentialAlreadyInUse:
+                    Debug.LogError("この認証情報はすでに別のアカウントにリンクされています");
+                    break;
+                case (int)AuthError.NetworkRequestFailed:
+                    Debug.LogError("ネットワークエラーが発生しました。接続を確認してください");
+                    break;
+                default:
+                    Debug.LogError($"認証の切り替えに失敗: {e.Message} (エラーコード: {e.ErrorCode})");
+                    break;
+            }
+        }
+    }
+
+
+
+    /// <summary>
+    /// 匿名ログイン
+    /// </summary>
     private async Task SignInAnonymously()
     {
         try
         {
             var result = await auth.SignInAnonymouslyAsync();
-            Debug.Log("エディタ用の匿名ログイン成功");
+            Debug.Log("匿名ログイン成功");
         }
         catch (FirebaseException e)
         {
@@ -269,4 +360,13 @@ public class AuthManager : MonoBehaviour
         }
     }
 
+
+
+    /// <summary>
+    /// ログイン状態かどうかを取得
+    /// </summary>
+    public bool GetIsLogin()
+    {
+        return user != null;
+    }
 }
