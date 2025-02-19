@@ -14,7 +14,7 @@ public class GameStateState_Login : GameStateStateBase
         loginStateMachine = new LoginStateStateMachine(stateMachine);
         loginStateMachine.Initialize(loginStateMachine.state_Select);
         
-        screenCover = GM.loginScreenCover;
+        screenCover = GM.frontScreenCover;
     }
 
 

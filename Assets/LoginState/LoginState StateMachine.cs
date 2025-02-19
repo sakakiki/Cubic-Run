@@ -6,7 +6,7 @@ public class LoginStateStateMachine
 
     public LoginStateStateBase currentState {  get; private set; }
 
-    public LoginStateState_Select state_Select { get; private set; }
+    public LoginStateState_Login state_Select { get; private set; }
     public LoginStateState_Exit state_Exit { get; private set; }
 
 
@@ -15,7 +15,7 @@ public class LoginStateStateMachine
     public LoginStateStateMachine(GameStateStateMachine gameStateMachine)
     {
         this.gameStateMachine = gameStateMachine;
-        state_Select = new LoginStateState_Select(this);
+        state_Select = new LoginStateState_Login(this);
         state_Exit = new LoginStateState_Exit(this);
     }
 

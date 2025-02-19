@@ -1,6 +1,7 @@
 using TMPro;
 using UnityEngine;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 //GameManagerは処理を優先実行
 [DefaultExecutionOrder(-1)]
@@ -108,7 +109,10 @@ public class GameManager : MonoBehaviour
     public TextMeshProUGUI unlockSkinMessage;
     public Sprite squarSprite;
     public Sprite cicleSprite;
-    public SpriteRenderer loginScreenCover;
+    public SpriteRenderer frontScreenCover;
+    public GameObject optionUIBase;
+    public TextMeshProUGUI optionTitle;
+    public GameObject optionUI_Account;
 
     //ステートマシン
     public GameStateStateMachine gameStateMachine {  get; private set; }
@@ -141,7 +145,7 @@ public class GameManager : MonoBehaviour
 
 
 
-    private async void Start()
+    private void Start()
     {
         //Managerのインスタンス格納
         TM = TerrainManager.Instance;
@@ -178,17 +182,27 @@ public class GameManager : MonoBehaviour
 
         //プレイヤー移動可能エリアの中心の変更
         centerPos_PlayerArea = centerPos_World;
+    }
 
 
 
-        /* 以下LoginステートのExit等に移動 */
+    private void Update()
+    {
+        //ステートマシンのUpdateを実行
+        gameStateMachine.Update(Time.deltaTime);
+    }
 
+
+
+    //データのロードとゲームへの反映
+    public async Task LoadAndReflect()
+    {
         //ローカルデータのロード
         highScore = HighScoreManager.Load();
         rankingScoreQueue = RankingScoreManager.Load();
         isUnsavedHighScore = UnsavedHighScoreFlagManager.Load();
 
-        //未反映のデータがあれば反映
+        //クラウドに未反映のデータがあれば反映
         if (isUnsavedHighScore)
             await FSM.SaveHighScore(highScore);
         if (rankingScoreQueue.Count > 0)
@@ -233,14 +247,6 @@ public class GameManager : MonoBehaviour
 
         //初期スキンのロック解除
         UnlockSkin(0);
-    }
-
-
-
-    private void Update()
-    {
-        //ステートマシンのUpdateを実行
-        gameStateMachine.Update(Time.deltaTime);
     }
 
 

@@ -10,6 +10,15 @@ public class AuthManager : MonoBehaviour
     private FirebaseAuth auth;
     private FirebaseUser user;
 
+    //外部からの状態確認用
+    public enum LoginState
+    {
+        Unchecked,
+        Login,
+        Logout
+    }
+    public LoginState loginState {  get; private set; }
+
 
 
     /// <summary>
@@ -24,6 +33,9 @@ public class AuthManager : MonoBehaviour
 
         // 認証状態の変更を監視
         auth.StateChanged += AuthStateChanged;
+
+        //未チェック状態で初期化
+        loginState = LoginState.Unchecked;
     }
 
 
@@ -50,10 +62,12 @@ public class AuthManager : MonoBehaviour
         if (user != null)
         {
             Debug.Log($"ログイン済み: {user.Email}");
+            loginState = LoginState.Login;
         }
         else
         {
             Debug.Log("ログインしていません");
+            loginState = LoginState.Logout;
         }
     }
 
@@ -365,8 +379,8 @@ public class AuthManager : MonoBehaviour
     /// <summary>
     /// ログイン状態かどうかを取得
     /// </summary>
-    public bool GetIsLogin()
+    public LoginState GetLoginState()
     {
-        return user != null;
+        return loginState;
     }
 }

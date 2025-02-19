@@ -4,20 +4,33 @@ public class LoginStateState_Exit : LoginStateStateBase
 {
     private float elapsedTime;
     private SpriteRenderer screenCover;
+    private bool isPlayable;
 
     public LoginStateState_Exit(LoginStateStateMachine stateMachine) : base(stateMachine)
     {
-        screenCover = GM.loginScreenCover;
+        screenCover = GM.frontScreenCover;
     }
 
-    public override void Enter()
+    public override async void Enter()
     {
+        //データのロード完了まではゲームを開始しない
+        isPlayable = false;
+
         //経過時間のリセット
         elapsedTime = 0;
+
+        //ログイン後初期処理実行
+        await GM.LoadAndReflect();
+
+        //ゲームプレイ可能
+        isPlayable = true;
     }
 
     public override void Update()
     {
+        //ゲームプレイ可能でないなら何もしない
+        if (!isPlayable) return;
+
         //経過時間の加算
         elapsedTime += Time.deltaTime;
 

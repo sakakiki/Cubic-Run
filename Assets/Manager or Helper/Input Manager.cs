@@ -9,6 +9,10 @@ public class InputManager : MonoBehaviour
     [SerializeField] private Button_Push button_Menu_Play;
     [SerializeField] private Button_Push button_Menu_Skin;
     [SerializeField] private Button_Push button_Menu_Tutorial;
+    [SerializeField] private Button_Push button_Menu_Account;
+    [SerializeField] private Button_Push button_Menu_Volume;
+    [SerializeField] private Button_Push button_Menu_Button;
+    [SerializeField] private Button_Push button_Menu_Credit;
     [SerializeField] private Button_Push button_Skin_OK;
     [SerializeField] private Button_Push button_Skin_Cancel;
     public bool isSkinSelect {  get; private set; }
@@ -18,12 +22,17 @@ public class InputManager : MonoBehaviour
     [SerializeField] private Button_Push button_Pause_Retire;
     [SerializeField] private Button_Push button_Result_Title;
     [SerializeField] private Button_Push button_Result_Retry;
+    [SerializeField] private Button_Tap button_Option_Close;
 
     public bool is_Screen_Tap { get; private set; }
 
     public bool is_Menu_Play_Push { get; private set; }
     public bool is_Menu_Skin_Push { get; private set; }
     public bool is_Menu_Tutorial_Push { get; private set; }
+    public bool is_Menu_Account_Push { get; private set; }
+    public bool is_Menu_Volume_Push { get; private set; }
+    public bool is_Menu_Button_Push { get; private set; }
+    public bool is_Menu_Credit_Push { get; private set; }
 
     public bool is_Skin_OK_Push { get; private set; }
     public bool is_Skin_Cancel_Push { get; private set; }
@@ -41,8 +50,10 @@ public class InputManager : MonoBehaviour
     public bool is_Pause_Continue_Push { get; private set; }
     public bool is_Pause_Retire_Push { get; private set; }
 
-    public bool is_Result_Title_Tap { get; private set; }
-    public bool is_Result_Retry_Tap { get; private set; }
+    public bool is_Result_Title_Push { get; private set; }
+    public bool is_Result_Retry_Push { get; private set; }
+
+    public bool is_Option_Close_Tap { get; private set; }
 
 
     private void Awake()
@@ -65,6 +76,10 @@ public class InputManager : MonoBehaviour
         button_Menu_Play.enabled = isActive;
         button_Menu_Skin.enabled = isActive;
         button_Menu_Tutorial.enabled = isActive;
+        button_Menu_Account.enabled = isActive;
+        button_Menu_Volume.enabled = isActive;
+        button_Menu_Button.enabled = isActive;
+        button_Menu_Credit.enabled = isActive;
     }
 
     public void InputUISetActive_Skin(bool isActive)
@@ -95,6 +110,12 @@ public class InputManager : MonoBehaviour
         button_Result_Title.enabled = isActive;
     }
 
+    public void InputUISetActive_Option(bool isActive)
+    {
+        button_Option_Close.enabled = isActive;
+    }
+
+
 
 
     //GetInputÉÅÉ\ÉbÉh
@@ -109,6 +130,10 @@ public class InputManager : MonoBehaviour
         is_Menu_Play_Push = button_Menu_Play.GetIsPushed();
         is_Menu_Skin_Push = button_Menu_Skin.GetIsPushed();
         is_Menu_Tutorial_Push = button_Menu_Tutorial.GetIsPushed();
+        is_Menu_Account_Push = button_Menu_Account.GetIsPushed();
+        is_Menu_Volume_Push = button_Menu_Volume.GetIsPushed();
+        is_Menu_Button_Push = button_Menu_Button.GetIsPushed();
+        is_Menu_Credit_Push = button_Menu_Credit.GetIsPushed();
     }
 
     public void GetInput_Skin()
@@ -144,7 +169,12 @@ public class InputManager : MonoBehaviour
 
     public void GetInput_Result()
     {
-        is_Result_Title_Tap = button_Result_Title.GetIsPushed();
-        is_Result_Retry_Tap = button_Result_Retry.GetIsPushed();
+        is_Result_Title_Push = button_Result_Title.GetIsPushed();
+        is_Result_Retry_Push = button_Result_Retry.GetIsPushed();
+    }
+
+    public void GetInput_Option()
+    {
+        is_Option_Close_Tap = button_Option_Close.GetIsTapped();
     }
 }
