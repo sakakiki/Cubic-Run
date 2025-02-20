@@ -217,8 +217,7 @@ public class GameManager : MonoBehaviour
         playerRank = CalculatePlayerRank(totalExp);
 
         //次のランクまでに必要な経験値量を算出
-        if (playerRank == 0) requiredExp = 100;
-        else requiredExp = (playerRank + 1) * (playerRank + 2) / 2 * 100 - totalExp;
+        requiredExp = (playerRank + 1) * (playerRank + 2) / 2 * 100 - totalExp;
 
 
         //未クリアのトレーニングモードのレベルのCountを確保
