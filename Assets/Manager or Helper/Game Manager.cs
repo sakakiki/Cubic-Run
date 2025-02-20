@@ -39,7 +39,7 @@ public class GameManager : MonoBehaviour
     public int score;
     public int level;
     public int levelUpSpan {  get; private set; }
-    public int playerRank { get; private set; } = 0;  //totalExpから算出
+    public int playerRank = 0;  //totalExpから算出
     public int requiredExp;
     public int highestTrainingLevel { get; private set; } = 1;    // = trainingClearCounts.Count;
     public bool[] isSkinUnlocked { get; private set; } = new bool[16];    //totalExpとhighestTrainingLevelから算出
@@ -218,7 +218,7 @@ public class GameManager : MonoBehaviour
 
         //次のランクまでに必要な経験値量を算出
         if (playerRank == 0) requiredExp = 100;
-        else requiredExp = playerRank * (playerRank + 1) / 2 * 100 - totalExp;
+        else requiredExp = (playerRank + 1) * (playerRank + 2) / 2 * 100 - totalExp;
 
 
         //未クリアのトレーニングモードのレベルのCountを確保
@@ -469,7 +469,7 @@ public class GameManager : MonoBehaviour
         while (totalExp > 0)
         {
             playerRank++;
-            totalExp -= playerRank * 100;
+            totalExp -= (playerRank + 1) * 100;
         }
 
         return playerRank;

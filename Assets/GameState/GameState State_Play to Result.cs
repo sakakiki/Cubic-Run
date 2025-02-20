@@ -134,7 +134,7 @@ public class GameStateState_PlayToResult : GameStateStateBase
 
         //画面がタップされれば演出を飛ばす
         IM.GetInput_Screen();
-        if (IM.is_Screen_Tap) elapsedTime = 4;
+        if (IM.is_Screen_Tap) elapsedTime = 5;
 
         //事前計算
         float lerpValue = (elapsedTime - 1) / 2;
@@ -175,7 +175,7 @@ public class GameStateState_PlayToResult : GameStateStateBase
         playerRankScaleRtf.localScale = Vector3.one - Vector3.right * (displayRequiredExpF / ((displayRank+1) * 100));
 
         //指定時間経過でステート遷移
-        if (elapsedTime >= 4)
+        if (elapsedTime >= 5)
         {
             if (GM.newSkinQueue.Count > 0) stateMachine.ChangeState(stateMachine.state_UnlockSkin);
             else stateMachine.ChangeState(stateMachine.state_Result);
