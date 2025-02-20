@@ -32,8 +32,9 @@ public class OptionBoardController : MonoBehaviour, IPointerDownHandler
 
     public void Update()
     {
-        //メニュー画面でなければ閉じる
-        if (gameStateMachine.currentState != gameStateMachine.state_Menu) 
+        //メニュー画面かオプション画面でなければ閉じる
+        if (gameStateMachine.currentState != gameStateMachine.state_Menu && 
+            gameStateMachine.currentState != gameStateMachine.state_Account) 
             isOpen = false;
 
         //開閉処理の必要があるなら

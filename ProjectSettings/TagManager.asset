@@ -62,6 +62,3 @@ TagManager:
   - name: UI Front
     uniqueID: 3774809435
     locked: 0
-  - name: UI Pause
-    uniqueID: 258367837
-    locked: 0

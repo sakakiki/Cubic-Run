@@ -448,36 +448,38 @@ public class FirestoreManager : MonoBehaviour
     /// <summary>
     /// 新規データ作成
     /// </summary>
-    public async Task SaveNewPlayerData(string playerName)
+    public async Task<bool> SaveNewPlayerData()
     {
         DocumentReference docRef = db.Collection("users").Document(auth.CurrentUser.UserId);
 
         Dictionary<string, object> newData = new Dictionary<string, object>
     {
-        { "name", playerName },
-        { "experience", GM.totalExp },
-        { "highScore", GM.highScore },
-        { "playerScore", GM.playerScore },
-        { "trainingCount", GM.trainingClearCounts },
-        { "usingSkin", GM.usingSkinID },
-        { "runDistance", GM.totalRunDistance }
+        { "name", "Noname" },
+        { "experience", 0 },
+        { "highScore", 0 },
+        { "playerScore", 0 },
+        { "trainingCount", new Dictionary<string, object> { { "0", 0 } } },
+        { "usingSkin", 0 },
+        { "runDistance", 0 }
     };
 
         try
         {
             await docRef.SetAsync(newData, SetOptions.MergeAll);
 
-            // 読み込みエラーを防ぐために配列に値を格納
-            await docRef.UpdateAsync(new Dictionary<string, object>
-        {
-            { $"trainingCount.{0}", 0 }
-        });
+            #region ローカルデータも初期化
+            HighScoreManager.Save(0);
+            RankingScoreManager.Save(new Queue<int>());
+            UnsavedHighScoreFlagManager.Save(false);
+            #endregion
 
-            Debug.Log("[Firestore] 新しいプレイヤーデータを保存");
+            //正常終了
+            return true;
         }
         catch (Exception e)
         {
-            Debug.LogError($"[ERROR] プレイヤーデータの保存に失敗: {e.Message}");
+            //異常終了
+            return false;
         }
     }
 

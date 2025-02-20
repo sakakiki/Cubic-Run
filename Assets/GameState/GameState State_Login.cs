@@ -12,7 +12,7 @@ public class GameStateState_Login : GameStateStateBase
     {
         //ログインステートマシンの作成と初期化
         loginStateMachine = new LoginStateStateMachine(stateMachine);
-        loginStateMachine.Initialize(loginStateMachine.state_Select);
+        loginStateMachine.Initialize(loginStateMachine.state_Login);
         
         screenCover = GM.frontScreenCover;
     }

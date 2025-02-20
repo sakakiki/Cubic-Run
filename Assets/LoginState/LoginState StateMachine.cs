@@ -1,13 +1,12 @@
-using UnityEngine;
-
 public class LoginStateStateMachine
 {
     public GameStateStateMachine gameStateMachine;
 
     public LoginStateStateBase currentState {  get; private set; }
 
-    public LoginStateState_Login state_Select { get; private set; }
-    public LoginStateState_Exit state_Exit { get; private set; }
+    public LoginStateStateBase state_Login { get; private set; }
+    public LoginStateStateBase state_Register { get; private set; }
+    public LoginStateStateBase state_Exit { get; private set; }
 
 
 
@@ -15,7 +14,8 @@ public class LoginStateStateMachine
     public LoginStateStateMachine(GameStateStateMachine gameStateMachine)
     {
         this.gameStateMachine = gameStateMachine;
-        state_Select = new LoginStateState_Login(this);
+        state_Login = new LoginStateState_Login(this);
+        state_Register = new LoginStateState_Register(this);
         state_Exit = new LoginStateState_Exit(this);
     }
 
@@ -23,7 +23,6 @@ public class LoginStateStateMachine
     {
         currentState = firstState;
         firstState.Enter();
-        PlayStateStateBase.playTime = 0;
     }
 
     public void ChangeState(LoginStateStateBase newState)

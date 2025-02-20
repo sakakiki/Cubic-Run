@@ -2,6 +2,7 @@ using Firebase.Auth;
 using UnityEngine;
 using System.Threading.Tasks;
 using Firebase;
+using System;
 
 public class AuthManager : MonoBehaviour
 {
@@ -15,7 +16,7 @@ public class AuthManager : MonoBehaviour
     {
         Unchecked,
         Login,
-        Logout
+        NoAccount
     }
     public LoginState loginState {  get; private set; }
 
@@ -67,7 +68,7 @@ public class AuthManager : MonoBehaviour
         else
         {
             Debug.Log("ログインしていません");
-            loginState = LoginState.Logout;
+            loginState = LoginState.NoAccount;
         }
     }
 
@@ -76,7 +77,7 @@ public class AuthManager : MonoBehaviour
     /// <summary>
     /// メールアドレスによる新規データ作成
     /// </summary>
-    public async Task<bool> Register(string email, string password, string playerName)
+    public async Task<bool> Register(string email, string password)
     {
         try
         {
@@ -84,10 +85,12 @@ public class AuthManager : MonoBehaviour
             user = result.User;
 
             // Firestoreに新規データを作成
-            await FirestoreManager.Instance.SaveNewPlayerData(playerName);
-
-            Debug.Log("新規登録成功: " + user.Email);
-            return true; // 登録成功
+            if (await FirestoreManager.Instance.SaveNewPlayerData())
+                //正常終了
+                return true;
+            else
+                //異常終了
+                return false;
         }
         catch (FirebaseException e)
         {
@@ -183,12 +186,36 @@ public class AuthManager : MonoBehaviour
 
 
     /// <summary>
-    /// ログアウト
+    /// ログアウト：匿名ユーザーなら削除、それ以外は通常のログアウト
     /// </summary>
-    public void Logout()
+    public async void Logout()
     {
-        auth.SignOut();
-        Debug.Log("ログアウトしました");
+        FirebaseUser currentUser = auth.CurrentUser;
+
+        if (currentUser != null)
+        {
+            try
+            {
+                if (currentUser.IsAnonymous)
+                {
+                    await currentUser.DeleteAsync();
+                    Debug.Log("匿名アカウントを削除しました。");
+                }
+                else
+                {
+                    auth.SignOut();
+                    Debug.Log("通常アカウントでログアウトしました。");
+                }
+            }
+            catch (FirebaseException e)
+            {
+                Debug.LogError($"アカウント削除エラー: {e.Message}");
+            }
+        }
+        else
+        {
+            Debug.Log("ログイン中のユーザーがいません。");
+        }
     }
 
 
@@ -361,18 +388,40 @@ public class AuthManager : MonoBehaviour
     /// <summary>
     /// 匿名ログイン
     /// </summary>
-    private async Task SignInAnonymously()
+    public async Task<int> SignInAnonymously()
     {
         try
         {
             var result = await auth.SignInAnonymouslyAsync();
-            Debug.Log("匿名ログイン成功");
+            Debug.Log("匿名ログイン成功"); 
+            
+            //外部からの確認用
+            loginState = LoginState.Login;
+
+            // Firestoreに新規データを作成
+            if (await FirestoreManager.Instance.SaveNewPlayerData())
+                //正常終了
+                return 0;
+            else
+                //異常終了，エラーコード9を返す
+                return 9;
         }
         catch (FirebaseException e)
         {
-            Debug.LogError($"匿名ログインエラー: {e.Message}");
+            //ネットワークエラーはエラーコード1を返す
+            if (e.ErrorCode == (int)AuthError.NetworkRequestFailed)
+                return 1;
+
+            //その他エラーはエラーコード9を返す
+            else return 9;
+        }
+        catch (Exception ex)
+        {
+            //その他エラーはエラーコード9を返す
+            return 9;
         }
     }
+
 
 
 

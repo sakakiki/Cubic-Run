@@ -209,7 +209,7 @@ public class GameManager : MonoBehaviour
             await FSM.SavePlayerScore();
 
         //クラウドデータのロード
-        await FSM.SaveNewPlayerData(playerName);  //新規アカウント作成
+        //await FSM.SaveNewPlayerData();  //新規アカウント作成
         await FSM.LoadAll();
 
 
