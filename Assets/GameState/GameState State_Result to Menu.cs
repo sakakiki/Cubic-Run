@@ -40,6 +40,10 @@ public class GameStateState_ResultToMenu : GameStateStateBase
         //トレーニングモードクリア時は演出を早める
         if (GM.score == 5000 && GM.isTraining)
             elapsedTime = 1.5f;
+
+        //ランキングを更新
+        GM.highScoreRankingBoard.UpdateRanking();
+        GM.playerScoreRankingBoard.UpdateRanking();
     }
 
 

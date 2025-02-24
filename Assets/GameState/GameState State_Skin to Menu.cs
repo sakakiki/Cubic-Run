@@ -30,6 +30,10 @@ public class GameStateState_SkinToMenu : GameStateStateBase
         //フラグリセット
         isMoving = false;
         isReset = IM.isSkinSelect;
+
+        //ランキングを更新
+        GM.highScoreRankingBoard.UpdateRanking();
+        GM.playerScoreRankingBoard.UpdateRanking();
     }
 
 

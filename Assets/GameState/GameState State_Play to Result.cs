@@ -8,6 +8,7 @@ public class GameStateState_PlayToResult : GameStateStateBase
     private Transform scoreSetTf;
     private Vector3 startPos;
     private Vector3 targetPos;
+    private Vector3 targetScale;
     private SpriteRenderer screenCover;
     private Color startCoverColor;
     private Color targetCoverColor;
@@ -26,7 +27,6 @@ public class GameStateState_PlayToResult : GameStateStateBase
     public GameStateState_PlayToResult(GameStateStateMachine stateMachine) : base(stateMachine)
     {
         scoreSetTf = GM.scoreSetTf;
-        targetPos = GM.scoreMarkerTf_Result.position;
         screenCover = GM.screenCover;
         startCoverColor = GM.screenCoverColor_Play;
         targetCoverColor = GM.screenCoverColor_Menu;
@@ -47,7 +47,12 @@ public class GameStateState_PlayToResult : GameStateStateBase
         elapsedTime = 0;
 
         //ゲームモードに応じてUIの切り替え
+        GM.resultRankingUI.SetActive(!GM.isTraining);
         GM.resultTrainingUI.SetActive(GM.isTraining);
+
+        //ゲームモードに応じた移動先・スケールの変更
+        targetPos = GM.scoreMarkerTf_Result.position + (GM.isTraining ? Vector3.zero : Vector3.up * 0.8f);
+        targetScale = GM.isTraining ? Vector3.one * 1.5f : Vector3.one;
 
         //UIの内容変更
         if (GM.isTraining)
@@ -94,7 +99,6 @@ public class GameStateState_PlayToResult : GameStateStateBase
         addExpText.SetText("+" + addExp + "Exp");
 
         //スキン開放演出の必要性をチェック
-        if (beforePlayRank < 2 && 2 <= GM.playerRank) GM.newSkinQueue.Enqueue(1);
         if (beforePlayRank < 10 && 10 <= GM.playerRank) GM.newSkinQueue.Enqueue(2);
         if (beforePlayRank < 20 && 20 <= GM.playerRank) GM.newSkinQueue.Enqueue(3);
         if (beforePlayRank < 30 && 30 <= GM.playerRank) GM.newSkinQueue.Enqueue(4);
@@ -144,7 +148,7 @@ public class GameStateState_PlayToResult : GameStateStateBase
         scoreSetTf.position = 
             Vector3.Lerp(startPos, targetPos, lerpValue) + 
             Vector3.up * curveScorePosY.Evaluate(lerpValue) * 3;
-        scoreSetTf.localScale = Vector3.one * Mathf.Lerp(1, 1.5f, lerpValue);
+        scoreSetTf.localScale = Vector3.Lerp(Vector3.one, targetScale, lerpValue);
 
         //スクリーンカバーの色を変更
         screenCover.color =

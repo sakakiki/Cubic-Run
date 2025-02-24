@@ -150,6 +150,9 @@ public class FirestoreManager : MonoBehaviour
 
         DocumentReference docRef = db.Collection("users").Document(auth.CurrentUser.UserId);
 
+        //更新後のプレイヤースコア
+        int newPlayerScore = 0;
+
         try
         {
             // Queueのコピー（トランザクション外で安全にデータを取得）
@@ -159,7 +162,7 @@ public class FirestoreManager : MonoBehaviour
             {
                 // プレイヤースコアの取得
                 DocumentSnapshot snapshot = await transaction.GetSnapshotAsync(docRef);
-                int newPlayerScore = snapshot.Exists ? snapshot.GetValue<int>("playerScore") : 0;
+                newPlayerScore = snapshot.Exists ? snapshot.GetValue<int>("playerScore") : 0;
 
                 // 未反映のデータを反映
                 foreach (int resultScore in tempScores)
@@ -176,6 +179,9 @@ public class FirestoreManager : MonoBehaviour
             {
                 // GM の Queue を空にする
                 GM.rankingScoreQueue.Clear();
+
+                //ローカルデータに反映
+                GM.playerScore = newPlayerScore;
 
                 // ローカルの Queue の内容を更新
                 RankingScoreManager.Save(GM.rankingScoreQueue);
@@ -346,7 +352,6 @@ public class FirestoreManager : MonoBehaviour
 
             int serverHighScore = 0;
 
-            // 次にFirestoreの最新データを取得
             if (snapshot.Exists && snapshot.ContainsField("highScore"))
             {
                 serverHighScore = snapshot.GetValue<int>("highScore");
@@ -411,37 +416,84 @@ public class FirestoreManager : MonoBehaviour
         return;
     }
 
+
+
     /// <summary>
-    /// プレイヤースコアをロード
-    /// [キャッシュデータ]
+    /// Firestoreから指定したスコアランキングを取得
     /// </summary>
-    public async Task LoadPlayerScore()
+    /// <param name="scoreType">"highScore" または "playerScore"</param>
+    /// <returns>ランキング上位10名のリスト</returns>
+    public async Task<List<(string name, int score, int experience, int skin)>> GetTop10Ranking(string scoreType)
     {
-        if (auth.CurrentUser == null)
-        {
-            Debug.LogError("Firebase認証されていません");
-            return;
-        }
+        //ランキングのリスト
+        List<(string name, int score, int experience, int skin)> ranking
+            = new List<(string name, int score, int experience, int skin)>();
 
         try
         {
-            DocumentReference docRef = db.Collection("users").Document(auth.CurrentUser.UserId);
-            DocumentSnapshot snapshot = await docRef.GetSnapshotAsync(Source.Cache);
+            Query query = db.Collection("users")
+                .OrderByDescending(scoreType)
+                .Limit(10);
 
-            if (snapshot.Exists && snapshot.ContainsField("playerScore"))
+            QuerySnapshot snapshot = await query.GetSnapshotAsync();
+
+            foreach (DocumentSnapshot doc in snapshot.Documents)
             {
-                //ローカルに同期
-                GM.playerScore = snapshot.GetValue<int>("playerScore");
-                return;
+                string name = doc.ContainsField("name") ? doc.GetValue<string>("name") : "Unknown";
+                int score = doc.ContainsField(scoreType) ? doc.GetValue<int>(scoreType) : 0;
+                int experience = doc.ContainsField("experience") ? doc.GetValue<int>("experience") : 0;
+                int skin = doc.ContainsField("usingSkin") ? doc.GetValue<int>("usingSkin") : 0;
+
+                ranking.Add((name, score, experience, skin));
             }
         }
         catch (Exception e)
         {
-            Debug.LogError("プレイヤースコアのロードに失敗: " + e.Message);
+            Debug.LogError($"[Firestore] ランキング取得に失敗: {e.Message}");
         }
 
-        return;
+        return ranking;
     }
+    
+    
+    
+    /// <summary>
+    /// Firestoreからユーザーの順位と上位何%かを取得
+    /// </summary>
+    /// <param name="scoreType">"highScore" または "playerScore"</param>
+    /// <param name="userScore">ユーザーのスコア</param>
+    /// <returns>(順位, 上位%)</returns>
+    public async Task<(int rank, float percentile)> GetUserRanking(string scoreType, int userScore)
+    {
+        int rank = -1;  //順位が-1ならエラー
+        float percentile = 0;
+
+        try
+        {
+            // ユーザーよりスコアが高い数を取得
+            Query countQuery = db.Collection("users")
+                .WhereGreaterThan(scoreType, userScore);
+
+            QuerySnapshot countSnapshot = await countQuery.GetSnapshotAsync();
+            int higherCount = countSnapshot.Count;
+
+            // 総ユーザー数を取得
+            Query totalQuery = db.Collection("users");
+            QuerySnapshot totalSnapshot = await totalQuery.GetSnapshotAsync();
+            int totalUsers = totalSnapshot.Count;
+
+            // ユーザーの順位とパーセンタイル計算
+            rank = higherCount + 1;
+            percentile = (float)higherCount / (float)totalUsers * 100;
+        }
+        catch (Exception e)
+        {
+            Debug.LogError($"[Firestore] ユーザー順位取得に失敗: {e.Message}");
+        }
+
+        return (rank, percentile);
+    }
+
 
 
 
@@ -465,7 +517,7 @@ public class FirestoreManager : MonoBehaviour
 
         try
         {
-            await docRef.SetAsync(newData, SetOptions.MergeAll);
+            await docRef.SetAsync(newData);
 
             #region ローカルデータも初期化
             HighScoreManager.Save(0);

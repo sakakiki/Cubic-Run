@@ -85,6 +85,7 @@ public class GameManager : MonoBehaviour
     public GameObject[] countinueCircleSquares;
     public TextMeshProUGUI playButtonText;
     public TextMeshProUGUI retryButtonText;
+    public GameObject resultRankingUI;
     public GameObject resultTrainingUI;
     public TextMeshProUGUI clearRateText;
     public TextMeshProUGUI clearTimesNumText;
@@ -113,6 +114,8 @@ public class GameManager : MonoBehaviour
     public GameObject optionUIBase;
     public TextMeshProUGUI optionTitle;
     public GameObject optionUI_Account;
+    public RankingBoard highScoreRankingBoard;
+    public RankingBoard playerScoreRankingBoard;
 
     //ステートマシン
     public GameStateStateMachine gameStateMachine {  get; private set; }
@@ -246,6 +249,9 @@ public class GameManager : MonoBehaviour
 
         //初期スキンのロック解除
         UnlockSkin(0);
+
+        //ランキング更新
+        await highScoreRankingBoard.UpdateRanking();
     }
 
 
@@ -573,10 +579,7 @@ public class GameManager : MonoBehaviour
 
         //クラウドに保存
         //ローカルへの保存はメソッド内
-        FSM.SavePlayerScore();
-
-        //変数にも反映
-        await FSM.LoadPlayerScore();
+        await FSM.SavePlayerScore();
         #endregion
     }
 }

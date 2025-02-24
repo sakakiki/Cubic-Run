@@ -41,6 +41,10 @@ public class GameStateState_PauseToMenu : GameStateStateBase
         //背景の地形を停止
         TM.moveSpeed = 0;
         TM.SetSpeed(0);
+
+        //ランキングを更新
+        GM.highScoreRankingBoard.UpdateRanking();
+        GM.playerScoreRankingBoard.UpdateRanking();
     }
 
 
