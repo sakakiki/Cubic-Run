@@ -5,20 +5,16 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
+using static RankingManager;
 
 public class RankingBoard: MonoBehaviour, IPointerDownHandler
 {
     private static GameManager GM;
     private static GameStateStateMachine gameStateMachine;
-    private float rankingUpdateTime = -10;  //rankingUpdateSpan * -1 にする
-    private float rankingUpdateSpan = 10;   //ランキング更新の最短間隔
     [SerializeField] RectTransform contentFieldRtf;
-    [SerializeField] private string scoreType;
+    [SerializeField] private RankingManager.RankingType RankingType;
     [SerializeField] private RankingBoard anotherTab;
     [SerializeField] private TextMeshProUGUI tabText;
-    private List<(string name, int score, int experience, int skin)> rankingList 
-        = new List<(string name, int score, int experience, int skin)>();
-    private (int userRank, float userPercentile) userRankData = (1, 0);
     [SerializeField] private TextMeshProUGUI[] scoreTexts;
     [SerializeField] private Image[] modelImage;
     [SerializeField] private Image[] crystalImage;
@@ -64,28 +60,8 @@ public class RankingBoard: MonoBehaviour, IPointerDownHandler
         //スクリプトが有効状態なら何もしない
         if (this.enabled) return;
 
-        //前回ランキング更新から指定時間以上経過していれば情報を再取得
-        if (Time.time - rankingUpdateTime > rankingUpdateSpan)
-        {
-            //ランキング更新時刻を更新
-            rankingUpdateTime = Time.time;
-
-            //トップ10のリストを取得
-            List<(string name, int score, int experience, int skin)> newList
-                = await FirestoreManager.Instance.GetTop10Ranking(scoreType);
-            //正常に取得できてれば更新
-            if (newList.Count == playerNameTexts.Length)
-                rankingList = newList;
-
-            //ユーザーの順位と上位パーセントの取得
-            (int rank, float percentile) newUserData =
-                await FirestoreManager.Instance.GetUserRanking(
-                    scoreType, 
-                    scoreType == "highScore" ? GM.highScore : GM.GetPlayerScore());
-            //正常に取得できてれば更新
-            if (newUserData.rank != -1)
-                userRankData = newUserData;
-        }
+        //頻度制限付きランキング更新
+        await RankingManager.CheckUpdateNecessity(RankingType);
 
         //ランキング表示位置を1位の場所に戻す
         contentFieldRtf.localPosition = Vector2.zero;
@@ -94,29 +70,69 @@ public class RankingBoard: MonoBehaviour, IPointerDownHandler
         for (int i = 0; i < panelCovers.Length; i++)
             panelCovers[i].color = Color.clear;
 
-        #region ランキング情報の反映
-        //トップ10ランキングの反映
-        for (int i = 0; rankingList.Count > i; i++)
+        //ランキング表示更新
+        switch (RankingType)
         {
-            scoreTexts[i].SetText("" + rankingList[i].score);
-            playerNameTexts[i].SetText(rankingList[i].name);
-            modelImage[i].sprite = (rankingList[i].skin < 8) ? GM.squarSprite : GM.cicleSprite;
-            modelImage[i].color = SkinDataBase.Instance.skinData[rankingList[i].skin].skinColor;
-            crystalImage[i].enabled = (rankingList[i].skin == 7 || rankingList[i].skin == 15);
-            playerRankTexts[i].SetText("" + GM.CalculatePlayerRank(rankingList[i].experience));
+            case RankingType.HighScore:
+
+                //トップ10ランキングの反映
+                for (int i = 0; RankingManager.rankingList_highScore.Count > i; i++)
+                {
+                    scoreTexts[i].SetText(RankingManager.rankingList_highScore[i].score.ToString());
+                    playerNameTexts[i].SetText(RankingManager.rankingList_highScore[i].name);
+                    modelImage[i].sprite = (RankingManager.rankingList_highScore[i].skin < 8) ? GM.squarSprite : GM.cicleSprite;
+                    modelImage[i].color = SkinDataBase.Instance.skinData[RankingManager.rankingList_highScore[i].skin].skinColor;
+                    crystalImage[i].enabled 
+                        = (RankingManager.rankingList_highScore[i].skin == 7 || RankingManager.rankingList_highScore[i].skin == 15);
+                    playerRankTexts[i].SetText(GM.CalculatePlayerRank(RankingManager.rankingList_highScore[i].experience).ToString());
+                }
+
+                //ユーザーの表示を更新
+                scoreNameText.SetText("ハイスコア");
+                userScoreText.SetText((GM.highScore).ToString());
+                userRankPercentileText.SetText(
+                    RankingManager.userRankData_highScore.userRank + "位\n上位" +
+                    RankingManager.userRankData_highScore.userPercentile.ToString("F1", CultureInfo.CurrentCulture) + "%");
+
+                //ユーザーがトップ10に入っていればパネルを目立たせる
+                if (RankingManager.userRankData_highScore.userRank <= RankingManager.rankingList_highScore.Count
+                    && RankingManager.userRankData_highScore.userRank > 0)
+                    panelCovers[RankingManager.userRankData_highScore.userRank - 1].color 
+                        = GameManager.Instance.panelSelectedColor - Color.black * 0.9f;
+
+                break;
+
+
+
+            case RankingType.PlayerScore:
+
+                //トップ10ランキングの反映
+                for (int i = 0; RankingManager.rankingList_playerScore.Count > i; i++)
+                {
+                    scoreTexts[i].SetText(RankingManager.rankingList_playerScore[i].score.ToString());
+                    playerNameTexts[i].SetText(RankingManager.rankingList_playerScore[i].name);
+                    modelImage[i].sprite = (RankingManager.rankingList_playerScore[i].skin < 8) ? GM.squarSprite : GM.cicleSprite;
+                    modelImage[i].color = SkinDataBase.Instance.skinData[RankingManager.rankingList_playerScore[i].skin].skinColor;
+                    crystalImage[i].enabled
+                        = (RankingManager.rankingList_playerScore[i].skin == 7 || RankingManager.rankingList_playerScore[i].skin == 15);
+                    playerRankTexts[i].SetText(GM.CalculatePlayerRank(RankingManager.rankingList_playerScore[i].experience).ToString());
+                }
+
+                //ユーザーの表示を更新
+                scoreNameText.SetText("プレイヤースコア");
+                userScoreText.SetText(GM.GetPlayerScore().ToString());
+                userRankPercentileText.SetText(
+                    RankingManager.userRankData_playerScore.userRank + "位\n上位" +
+                    RankingManager.userRankData_playerScore.userPercentile.ToString("F1", CultureInfo.CurrentCulture) + "%");
+
+                //ユーザーがトップ10に入っていればパネルを目立たせる
+                if (RankingManager.userRankData_playerScore.userRank <= RankingManager.rankingList_playerScore.Count
+                    && RankingManager.userRankData_playerScore.userRank > 0)
+                    panelCovers[RankingManager.userRankData_playerScore.userRank - 1].color
+                        = GameManager.Instance.panelSelectedColor - Color.black * 0.9f;
+
+                break;
         }
-
-        //ユーザーの表示を更新
-        scoreNameText.SetText(scoreType == "highScore" ? "ハイスコア" : "プレイヤースコア");
-        userScoreText.SetText(((scoreType == "highScore") ? GM.highScore : GM.GetPlayerScore()).ToString());
-        userRankPercentileText.SetText(
-            userRankData.userRank + "位\n上位" + 
-            userRankData.userPercentile.ToString("F1", CultureInfo.CurrentCulture) + "%");
-
-        //ユーザーがトップ10に入っていればパネルを目立たせる
-        if (userRankData.userRank <= rankingList.Count)
-            panelCovers[userRankData.userRank-1].color = GameManager.Instance.panelSelectedColor - Color.black * 0.9f;
-        #endregion
     }
 
 

@@ -257,6 +257,8 @@ public class GameManager : MonoBehaviour
         UnlockSkin(0);
 
         //ランキング更新
+        await RankingManager.UpdateRanking(RankingManager.RankingType.HighScore);
+        await RankingManager.UpdateRanking(RankingManager.RankingType.PlayerScore);
         await highScoreRankingBoard.UpdateRanking();
     }
 

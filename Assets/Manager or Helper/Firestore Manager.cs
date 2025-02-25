@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Collections.Generic;
 using System;
 using System.Linq;
+using UnityEngine.SocialPlatforms.Impl;
 
 public class FirestoreManager : MonoBehaviour
 {
@@ -433,9 +434,9 @@ public class FirestoreManager : MonoBehaviour
         {
             Query query = db.Collection("users")
                 .OrderByDescending(scoreType)
-                .Limit(10);
+                .Limit(RankingManager.RankingCount);
 
-            QuerySnapshot snapshot = await query.GetSnapshotAsync();
+            QuerySnapshot snapshot = await query.GetSnapshotAsync(Source.Server);
 
             foreach (DocumentSnapshot doc in snapshot.Documents)
             {
@@ -451,6 +452,10 @@ public class FirestoreManager : MonoBehaviour
         {
             Debug.LogError($"[Firestore] ランキング取得に失敗: {e.Message}");
         }
+
+        //取得失敗時はListを初期値で埋める
+        while(ranking.Count < RankingManager.RankingCount)
+            ranking.Add(("Unknown", 0, 0, 0));
 
         return ranking;
     }
@@ -474,12 +479,12 @@ public class FirestoreManager : MonoBehaviour
             Query countQuery = db.Collection("users")
                 .WhereGreaterThan(scoreType, userScore);
 
-            QuerySnapshot countSnapshot = await countQuery.GetSnapshotAsync();
+            QuerySnapshot countSnapshot = await countQuery.GetSnapshotAsync(Source.Server);
             int higherCount = countSnapshot.Count;
 
             // 総ユーザー数を取得
             Query totalQuery = db.Collection("users");
-            QuerySnapshot totalSnapshot = await totalQuery.GetSnapshotAsync();
+            QuerySnapshot totalSnapshot = await totalQuery.GetSnapshotAsync(Source.Server);
             int totalUsers = totalSnapshot.Count;
 
             // ユーザーの順位とパーセンタイル計算
