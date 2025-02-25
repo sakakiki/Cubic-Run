@@ -484,7 +484,7 @@ public class FirestoreManager : MonoBehaviour
 
             // ユーザーの順位とパーセンタイル計算
             rank = higherCount + 1;
-            percentile = (float)higherCount / (float)totalUsers * 100;
+            percentile = (float)rank / (float)totalUsers * 100;
         }
         catch (Exception e)
         {
@@ -523,6 +523,8 @@ public class FirestoreManager : MonoBehaviour
             HighScoreManager.Save(0);
             RankingScoreManager.Save(new Queue<int>());
             UnsavedHighScoreFlagManager.Save(false);
+            GM.highScore = 0;
+            GM.rankingScoreQueue.Clear();
             #endregion
 
             //正常終了

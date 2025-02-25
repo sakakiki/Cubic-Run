@@ -77,7 +77,8 @@ public class GameManager : MonoBehaviour
     public RectTransform levelMarkerRtf_Play;
     public AnimationCurve scorePosY_PlaytoResult;
     public Transform scoreMarkerTf_Play;
-    public Transform scoreMarkerTf_Result;
+    public Transform scoreMarkerTf_Result_Ranking;
+    public Transform scoreMarkerTf_Result_Trainig;
     public SpriteRenderer screenCover;
     public SpriteRenderer scoreGageSprite;
     public GameObject pauseUI;
@@ -116,6 +117,11 @@ public class GameManager : MonoBehaviour
     public GameObject optionUI_Account;
     public RankingBoard highScoreRankingBoard;
     public RankingBoard playerScoreRankingBoard;
+    public ResultRankingBoard resultRankingBoard;
+    public TextMeshProUGUI scoreFluctuation_highScore;
+    public TextMeshProUGUI scoreFluctuation_playerScore;
+    public TextMeshProUGUI resultHighScoreText;
+    public TextMeshProUGUI resultPlayerScoreText;
 
     //ステートマシン
     public GameStateStateMachine gameStateMachine {  get; private set; }
@@ -471,10 +477,10 @@ public class GameManager : MonoBehaviour
     {
         int playerRank = 0;
 
-        while (totalExp > 0)
+        while (totalExp >= (playerRank + 1) * 100)
         {
             playerRank++;
-            totalExp -= (playerRank + 1) * 100;
+            totalExp -= playerRank * 100;
         }
 
         return playerRank;
@@ -517,7 +523,7 @@ public class GameManager : MonoBehaviour
 
 
     //プレイ結果のセーブ
-    public async void SaveResult()
+    public async Task SaveResult()
     {
         #region 走行距離の加算
         int addDistance = 0;
@@ -569,7 +575,7 @@ public class GameManager : MonoBehaviour
             HighScoreManager.Save(highScore);
 
             //クラウドに保存（失敗すればフラグが立つ）
-            FSM.SaveHighScore(highScore);
+            await FSM.SaveHighScore(highScore);
         }
         #endregion
 
@@ -581,5 +587,21 @@ public class GameManager : MonoBehaviour
         //ローカルへの保存はメソッド内
         await FSM.SavePlayerScore();
         #endregion
+    }
+
+
+
+    //ローカルデータを反映させたプレイヤースコアを取得
+    public int GetPlayerScore()
+    {
+        int playerScore = this.playerScore;
+
+        // 未反映のデータを反映
+        foreach (int resultScore in rankingScoreQueue)
+        {
+            playerScore += (resultScore - playerScore) / 10;
+        }
+
+        return playerScore;
     }
 }

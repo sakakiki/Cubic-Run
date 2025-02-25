@@ -4,6 +4,7 @@ public class GameStateState_ResultToPlay : GameStateStateBase
 {
     private float elapsedTime;
     private Transform scoreSetTf;
+    private Vector3 startScoreBoardScale;
     private Vector3 startPos;
     private Vector3 targetPos;
     private SpriteRenderer screenCover;
@@ -20,7 +21,6 @@ public class GameStateState_ResultToPlay : GameStateStateBase
     public GameStateState_ResultToPlay(GameStateStateMachine stateMachine) : base(stateMachine)
     {
         scoreSetTf = GM.scoreSetTf;
-        startPos = GM.scoreMarkerTf_Result.position;
         screenCover = GM.screenCover;
         startCoverColor = GM.screenCoverColor_Menu;
         targetCoverColor = GM.screenCoverColor_Play;
@@ -41,7 +41,9 @@ public class GameStateState_ResultToPlay : GameStateStateBase
         isMoveTerrein = false;
         isResetScore = false;
 
-        //スコアボードの目標位置を記憶
+        //スコアボードの開始スケール・開始位置・目標位置を記憶
+        startScoreBoardScale = GM.isTraining ? Vector3.one * 1.5f : Vector3.one * 2 / Camera.main.aspect;
+        startPos = GM.isTraining ? GM.scoreMarkerTf_Result_Trainig.position : GM.scoreMarkerTf_Result_Ranking.position;
         targetPos = GM.scoreMarkerTf_Play.position;
 
         //スコアゲージの初期スケールを記憶
@@ -91,7 +93,7 @@ public class GameStateState_ResultToPlay : GameStateStateBase
 
         //スコアボードの移動，スケール変更
         scoreSetTf.position = Vector3.Lerp(startPos, targetPos, lerpValue);
-        scoreSetTf.localScale = Vector3.one * Mathf.Lerp(1.5f, 1, lerpValue);
+        scoreSetTf.localScale = Vector3.Lerp(startScoreBoardScale, Vector3.one, lerpValue);
 
         if (elapsedTime < 2.25)
         {

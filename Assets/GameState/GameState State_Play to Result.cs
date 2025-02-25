@@ -23,6 +23,14 @@ public class GameStateState_PlayToResult : GameStateStateBase
     private int beforePlayRequiredExp;
     private int addExp;
     private int beforePlayRank;
+    private TextMeshProUGUI highScoreFluctuationText;
+    private TextMeshProUGUI playerScoreFluctuationText;
+    private bool isSetText;
+    private int beforeHighScore;
+    private int beforePlayerScore;
+    private int newPlayerScore;
+    private TextMeshProUGUI highScoreText;
+    private TextMeshProUGUI playerScoreText;
 
     public GameStateState_PlayToResult(GameStateStateMachine stateMachine) : base(stateMachine)
     {
@@ -38,21 +46,28 @@ public class GameStateState_PlayToResult : GameStateStateBase
         playerRankText = GM.playerRankText;
         addExpText = GM.addExpText;
         requiredExpText = GM.requiredExpText;
+        highScoreFluctuationText = GM.scoreFluctuation_highScore;
+        playerScoreFluctuationText = GM.scoreFluctuation_playerScore;
+        highScoreText = GM.resultHighScoreText;
+        playerScoreText = GM.resultPlayerScoreText;
     }
 
 
-    public override void Enter()
+    public override async void Enter()
     {
         //経過時間リセット
         elapsedTime = 0;
+
+        //フラグリセット
+        isSetText = false;
 
         //ゲームモードに応じてUIの切り替え
         GM.resultRankingUI.SetActive(!GM.isTraining);
         GM.resultTrainingUI.SetActive(GM.isTraining);
 
         //ゲームモードに応じた移動先・スケールの変更
-        targetPos = GM.scoreMarkerTf_Result.position + (GM.isTraining ? Vector3.zero : Vector3.up * 0.8f);
-        targetScale = GM.isTraining ? Vector3.one * 1.5f : Vector3.one;
+        targetPos = GM.isTraining ? GM.scoreMarkerTf_Result_Trainig.position : GM.scoreMarkerTf_Result_Ranking.position;
+        targetScale = GM.isTraining ? Vector3.one * 1.5f : Vector3.one * 2 / Camera.main.aspect;
 
         //UIの内容変更
         if (GM.isTraining)
@@ -91,12 +106,23 @@ public class GameStateState_PlayToResult : GameStateStateBase
         requiredExpText.SetText("" + GM.requiredExp);
         playerRankScaleRtf.localScale = Vector3.one - Vector3.right * (GM.requiredExp / (float)((GM.playerRank+1) * 100));
 
-        //プレイ結果のセーブ
-        GM.SaveResult();
+        //ランキングモードならプレイ前のスコアを記憶・記憶
+        if (!GM.isTraining)
+        {
+            beforeHighScore = GM.highScore;
+            beforePlayerScore = GM.GetPlayerScore();
+            highScoreText.SetText(beforeHighScore.ToString());
+            playerScoreText.SetText(beforePlayerScore.ToString());
+        }
 
-        //獲得経験値量の算出・表示
+        //プレイ結果のセーブ
+        await GM.SaveResult();
+
+        //獲得経験値量の算出
         addExp = GM.totalExp - beforePlaytotalExp;
-        addExpText.SetText("+" + addExp + "Exp");
+
+        //更新後のプレイヤースコアを記憶
+        newPlayerScore = GM.GetPlayerScore();
 
         //スキン開放演出の必要性をチェック
         if (beforePlayRank < 10 && 10 <= GM.playerRank) GM.newSkinQueue.Enqueue(2);
@@ -120,6 +146,13 @@ public class GameStateState_PlayToResult : GameStateStateBase
                 default: break;
             }
         }
+
+        //ランキング更新
+        GM.resultRankingBoard.UpdateRanking();
+
+        //スコア変動表示リセット
+        highScoreFluctuationText.SetText("");
+        playerScoreFluctuationText.SetText("");
     }
 
 
@@ -161,6 +194,29 @@ public class GameStateState_PlayToResult : GameStateStateBase
 
         if (elapsedTime < 3) return;
 
+        //テキスト表示
+        if (!isSetText)
+        {
+            //実行は1回のみ
+            isSetText = true;
+
+            //獲得経験値量の表示
+            addExpText.SetText("+" + addExp + "Exp");
+
+            if (!GM.isTraining)
+            {
+                //スコア変動表示
+                if (GM.highScore > beforeHighScore)
+                    highScoreFluctuationText.SetText("<color=#00951F>+" + (GM.highScore - beforeHighScore) + "</color>");
+                else highScoreFluctuationText.SetText("");
+                if (GM.GetPlayerScore() > beforePlayerScore)
+                    playerScoreFluctuationText.SetText("<color=#00951F>▲" + (GM.GetPlayerScore() - beforePlayerScore) + "</color>");
+                else if (GM.GetPlayerScore() < beforePlayerScore)
+                    playerScoreFluctuationText.SetText("<color=#BA3C46>▼" + (beforePlayerScore - GM.GetPlayerScore()) + "</color>");
+                else playerScoreFluctuationText.SetText("<color=\"black\">±0</color>");
+            }
+        }
+
         //表示するランクアップまでに必要な経験値量を算出
         float displayAddExpF = Mathf.Lerp(0, addExp, Mathf.Pow(elapsedTime - 3, 0.35f));
         float displayRequiredExpF = beforePlayRequiredExp - (int)displayAddExpF;
@@ -176,7 +232,14 @@ public class GameStateState_PlayToResult : GameStateStateBase
 
         //経験値に関する表示の更新
         requiredExpText.SetText("" + (int)displayRequiredExpF);
-        playerRankScaleRtf.localScale = Vector3.one - Vector3.right * (displayRequiredExpF / ((displayRank+1) * 100));
+        playerRankScaleRtf.localScale = Vector3.one - Vector3.right * (displayRequiredExpF / (float)((displayRank+1) * 100));
+
+        //ランキングモードならスコア表示の変動
+        if (!GM.isTraining)
+        {
+            highScoreText.SetText("" + (int)Mathf.Lerp(beforeHighScore, GM.highScore, elapsedTime - 3));
+            playerScoreText.SetText("" + (int)Mathf.Lerp(beforePlayerScore, newPlayerScore, elapsedTime - 3));
+        }
 
         //指定時間経過でステート遷移
         if (elapsedTime >= 5)

@@ -79,12 +79,12 @@ public class RankingBoard: MonoBehaviour, IPointerDownHandler
 
             //ユーザーの順位と上位パーセントの取得
             (int rank, float percentile) newUserData =
-                await FirestoreManager.Instance.GetUserRanking(scoreType, scoreType == "highScore" ? GM.highScore : GM.playerScore);
+                await FirestoreManager.Instance.GetUserRanking(
+                    scoreType, 
+                    scoreType == "highScore" ? GM.highScore : GM.GetPlayerScore());
             //正常に取得できてれば更新
             if (newUserData.rank != -1)
                 userRankData = newUserData;
-
-            Debug.Log(scoreType + "更新");
         }
 
         //ランキング表示位置を1位の場所に戻す
@@ -108,7 +108,7 @@ public class RankingBoard: MonoBehaviour, IPointerDownHandler
 
         //ユーザーの表示を更新
         scoreNameText.SetText(scoreType == "highScore" ? "ハイスコア" : "プレイヤースコア");
-        userScoreText.SetText(((scoreType == "highScore") ? GM.highScore : GM.playerScore).ToString());
+        userScoreText.SetText(((scoreType == "highScore") ? GM.highScore : GM.GetPlayerScore()).ToString());
         userRankPercentileText.SetText(
             userRankData.userRank + "位\n上位" + 
             userRankData.userPercentile.ToString("F1", CultureInfo.CurrentCulture) + "%");
