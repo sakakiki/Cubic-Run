@@ -22,7 +22,7 @@ public class GameStateState_SkinToMenu : GameStateStateBase
 
 
 
-    public override void Enter()
+    public async override void Enter()
     {
         //経過時間リセット
         elapsedTime = 0;
@@ -31,9 +31,18 @@ public class GameStateState_SkinToMenu : GameStateStateBase
         isMoving = false;
         isReset = IM.isSkinSelect;
 
-        //ランキングを更新
-        GM.highScoreRankingBoard.UpdateRanking();
-        GM.playerScoreRankingBoard.UpdateRanking();
+        //リセットの必要が無ければ
+        if (isReset)
+        {
+            //使用中のスキン情報をクラウドに保存
+            await FirestoreManager.Instance.SaveUsingSkin();
+
+            //ランキングを更新
+            await RankingManager.UpdateRanking(RankingManager.RankingType.HighScore);
+            await RankingManager.UpdateRanking(RankingManager.RankingType.PlayerScore);
+            GM.highScoreRankingBoard.UpdateRanking();
+            GM.playerScoreRankingBoard.UpdateRanking();
+        }
     }
 
 
@@ -76,6 +85,10 @@ public class GameStateState_SkinToMenu : GameStateStateBase
 
             //スキンの色を戻す
             GM.ChangePlayerSkin(GM.previousSkinID);
+
+            //ランキングを更新
+            GM.highScoreRankingBoard.UpdateRanking();
+            GM.playerScoreRankingBoard.UpdateRanking();
         }
 
         //指定時間経過でステート遷移
@@ -93,8 +106,5 @@ public class GameStateState_SkinToMenu : GameStateStateBase
 
         //スキンセレクタースクリプトの無効化
         skinSelecter.enabled = false;
-
-        //使用中のスキン情報をクラウドに保存
-        await FirestoreManager.Instance.SaveUsingSkin();
     }
 }

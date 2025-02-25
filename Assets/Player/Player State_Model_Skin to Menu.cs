@@ -27,6 +27,9 @@ public class PlayerState_Model_SkinToMenu : PlayerStateBase_Model
         //フラグリセット
         isMoving = false;
 
+        //目を開ける
+        eyeTf.localScale = Vector3.one;
+
         //物理演算の有効化
         rb.isKinematic = false;
 
