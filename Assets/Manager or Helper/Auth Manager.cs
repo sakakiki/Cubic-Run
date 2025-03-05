@@ -3,6 +3,7 @@ using UnityEngine;
 using System.Threading.Tasks;
 using Firebase;
 using System;
+using System.Text.RegularExpressions;
 
 public class AuthManager : MonoBehaviour
 {
@@ -62,7 +63,7 @@ public class AuthManager : MonoBehaviour
         user = auth.CurrentUser;
         if (user != null)
         {
-            Debug.Log($"ログイン済み: {user.Email}");
+            Debug.Log("ログイン済み: " + user.Email);
             loginState = LoginState.Login;
         }
         else
@@ -233,8 +234,29 @@ public class AuthManager : MonoBehaviour
 
         try
         {
-            await auth.CurrentUser.SendEmailVerificationAsync();
+            await auth.CurrentUser.SendEmailVerificationBeforeUpdatingEmailAsync(newEmail);
             Debug.Log("確認メールを送信しました: " + newEmail);
+        }
+        catch (FirebaseException e) when (e.ErrorCode == (int)AuthError.RequiresRecentLogin)
+        {
+            Debug.LogWarning("最近のログインが必要です。匿名アカウントの認証情報で再認証を行います...");
+
+            try
+            {
+                // 匿名アカウントの認証情報を取得
+                Credential anonCredential = GoogleAuthProvider.GetCredential(user.Email, null);
+
+                // 再認証を実行
+                await user.ReauthenticateAsync(anonCredential);
+                Debug.Log("再認証成功");
+
+                // 再認証後に再試行
+                await UpdateUserEmail(newEmail);
+            }
+            catch (FirebaseException reauthError)
+            {
+                Debug.LogError("再認証に失敗しました: " + reauthError.Message);
+            }
         }
         catch (FirebaseException e)
         {
@@ -322,6 +344,13 @@ public class AuthManager : MonoBehaviour
             Debug.LogError("匿名ユーザーではありません");
             return;
         }
+        
+
+        // 最新のユーザーデータを取得
+        //await user.ReloadAsync();
+
+        // メールアドレスが未認証なら終了
+        //if (!user.IsEmailVerified) return;
 
         try
         {
@@ -331,10 +360,6 @@ public class AuthManager : MonoBehaviour
             // 匿名アカウントとメールアカウントをリンク
             await user.LinkWithCredentialAsync(credential);
             Debug.Log("匿名アカウントをメール認証に切り替え成功: " + email);
-
-            // メール認証を送信
-            await user.SendEmailVerificationAsync();
-            Debug.Log("確認メールを送信しました");
         }
         catch (FirebaseException e) when (e.ErrorCode == (int)AuthError.RequiresRecentLogin)
         {
@@ -382,6 +407,84 @@ public class AuthManager : MonoBehaviour
             }
         }
     }
+
+
+
+    /// <summary>
+    /// メールアドレス認証（確認メールを送信）
+    /// </summary>
+    public async Task<bool> SendVerificationEmail(string email)
+    {
+        user = auth.CurrentUser;
+
+        if (user == null || !user.IsAnonymous)
+        {
+            Debug.LogError("匿名ユーザーではありません");
+            return false;
+        }
+
+        // ① メールアドレスのフォーマットチェック
+        if (!IsValidEmailFormat(email))
+        {
+            Debug.LogError("無効なメールアドレス形式です");
+            return false;
+        }
+
+        // ② メールアドレスの重複チェック
+        /*
+        if (await IsEmailAlreadyRegistered(email))
+        {
+            Debug.LogError("このメールアドレスはすでに使用されています");
+            return false;
+        }
+        */
+
+        try
+        {
+            // ③ メール認証を送信
+            //user.SendEmailVerificationBeforeUpdatingEmailAsync
+            await user.SendEmailVerificationAsync();
+            Debug.Log("確認メールを送信しました。認証を完了するとアカウントが変換されます。");
+            return true;
+        }
+        catch (FirebaseException e)
+        {
+            Debug.LogError($"確認メール送信エラー: {e.Message}");
+            return false;
+        }
+    }
+
+    /// <summary>
+    /// メールアドレスのフォーマットチェック
+    /// </summary>
+    private bool IsValidEmailFormat(string email)
+    {
+        string pattern = @"^[^@\s]+@[^@\s]+\.[^@\s]+$";
+        return Regex.IsMatch(email, pattern);
+    }
+
+    /// <summary>
+    /// メールアドレスが既に登録されているかチェック
+    /// </summary>
+    /*
+    private async Task<bool> IsEmailAlreadyRegistered(string email)
+    {
+        try
+        {
+            var signInMethods = await auth.(email);
+            return signInMethods != null && signInMethods.Count > 0;
+        }
+        catch (FirebaseException e)
+        {
+            if (e.ErrorCode == AuthErrorCode.UserNotFound)
+            {
+                return false; // 未登録のメールアドレス
+            }
+            Debug.LogError($"メールアドレスの確認エラー: {e.Message}");
+            return true; // エラー発生時は登録を避ける
+        }
+    }
+    */
 
 
 
