@@ -432,4 +432,14 @@ public class AuthManager : MonoBehaviour
     {
         return loginState;
     }
+
+
+
+    /// <summary>
+    /// “½–¼ƒƒOƒCƒ“‚©‚Ç‚¤‚©‚ğæ“¾
+    /// </summary>
+    public bool GetIsAnonymous()
+    {
+        return user.IsAnonymous;
+    }
 }

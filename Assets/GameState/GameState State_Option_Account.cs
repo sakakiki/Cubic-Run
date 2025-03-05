@@ -13,6 +13,20 @@ public class GameStateState_Option_Account : GameStateState_OptionBase
 
         //AccountのUIを有効化
         GameManager.Instance.optionUI_Account.SetActive(true);
+
+        //アカウントの状態に応じた表示内容変更
+        if (AuthManager.Instance.GetIsAnonymous())
+        {
+            GameManager.Instance.optionUI_Account_Status.SetText("メールアドレス未登録");
+            GameManager.Instance.optionUI_Account_Anonymous.SetActive(true);
+            GameManager.Instance.optionUI_Account_Email.SetActive(false);
+        }
+        else
+        {
+            GameManager.Instance.optionUI_Account_Status.SetText("メールアドレス登録済");
+            GameManager.Instance.optionUI_Account_Anonymous.SetActive(false);
+            GameManager.Instance.optionUI_Account_Email.SetActive(true);
+        }
     }
 
 
