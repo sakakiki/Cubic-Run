@@ -209,6 +209,7 @@ public class GameManager : MonoBehaviour
     //データのロードとゲームへの反映
     public async Task LoadAndReflect()
     {
+        //await AuthManager.Instance.Login("sakakiki.games@gmail.com", "Game3121Pass2222");
         //await AuthManager.Instance.Reauthenticate("sakakiki.sousaku@gmail.com", "Game3121Pass2222");
         //await AuthManager.Instance.UpdateUserEmail("sakakiki.games@gmail.com");
 

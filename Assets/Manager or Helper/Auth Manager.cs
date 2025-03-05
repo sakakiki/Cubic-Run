@@ -63,7 +63,7 @@ public class AuthManager : MonoBehaviour
         user = auth.CurrentUser;
         if (user != null)
         {
-            Debug.Log("ログイン済み: " + user.Email);
+            Debug.Log("ログイン済み: " + user.Email + ",Email:" + user.IsEmailVerified);
             loginState = LoginState.Login;
         }
         else
