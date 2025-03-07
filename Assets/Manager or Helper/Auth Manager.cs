@@ -3,7 +3,6 @@ using UnityEngine;
 using System.Threading.Tasks;
 using Firebase;
 using System;
-using System.Text.RegularExpressions;
 
 public class AuthManager : MonoBehaviour
 {
@@ -38,6 +37,10 @@ public class AuthManager : MonoBehaviour
 
         //未チェック状態で初期化
         loginState = LoginState.Unchecked;
+
+
+        //auth.SignOut();
+
     }
 
 
@@ -58,11 +61,17 @@ public class AuthManager : MonoBehaviour
     /// <summary>
     /// 認証情報が取得できれば自動ログインを実行
     /// </summary>
-    private void AuthStateChanged(object sender, System.EventArgs eventArgs)
+    private async void AuthStateChanged(object sender, System.EventArgs eventArgs)
     {
         user = auth.CurrentUser;
+
+
         if (user != null)
         {
+
+            // 最新のユーザーデータを取得
+            await UpdateUserData();
+
             Debug.Log("ログイン済み: " + user.Email + ",Email:" + user.IsEmailVerified);
             loginState = LoginState.Login;
         }
@@ -76,146 +85,66 @@ public class AuthManager : MonoBehaviour
 
 
     /// <summary>
-    /// メールアドレスによる新規データ作成
-    /// </summary>
-    public async Task<bool> Register(string email, string password)
-    {
-        try
-        {
-            var result = await auth.CreateUserWithEmailAndPasswordAsync(email, password);
-            user = result.User;
-
-            // Firestoreに新規データを作成
-            if (await FirestoreManager.Instance.SaveNewPlayerData())
-                //正常終了
-                return true;
-            else
-                //異常終了
-                return false;
-        }
-        catch (FirebaseException e)
-        {
-            Debug.LogError($"登録エラー: {e.Message}");
-
-            // エラーコードごとのメッセージ処理
-            switch (e.ErrorCode)
-            {
-                case (int)AuthError.MissingEmail:
-                    Debug.LogError("メールアドレスを入力してください。");
-                    break;
-                case (int)AuthError.MissingPassword:
-                    Debug.LogError("パスワードを入力してください。");
-                    break;
-                case (int)AuthError.WeakPassword:
-                    Debug.LogError("パスワードが短すぎます。より強力なパスワードを設定してください。");
-                    break;
-                case (int)AuthError.InvalidEmail:
-                    Debug.LogError("メールアドレスの形式が正しくありません。");
-                    break;
-                case (int)AuthError.EmailAlreadyInUse:
-                    Debug.LogError("このメールアドレスは既に登録されています。");
-                    break;
-                case (int)AuthError.NetworkRequestFailed:
-                    Debug.LogError("ネットワークエラーが発生しました。インターネット接続を確認してください。");
-                    break;
-                case (int)AuthError.TooManyRequests:
-                    Debug.LogError("試行回数が多すぎます。しばらく待ってから再試行してください。");
-                    break;
-                default:
-                    Debug.LogError("登録に失敗しました。");
-                    break;
-            }
-
-            return false; // 登録失敗
-        }
-    }
-
-
-
-    /// <summary>
     /// メールアドレスとパスワードでのログイン
     /// </summary>
-    public async Task<bool> Login(string email, string password)
+    public async Task<string> Login(string email, string password)
     {
         try
         {
+            //ログイン前のアカウントを記憶
+            FirebaseUser oldUser = auth.CurrentUser;
+
+            //メールアドレスとパスワードでログイン
             var result = await auth.SignInWithEmailAndPasswordAsync(email, password);
+
+            //アカウント情報更新
             user = result.User;
-            Debug.Log("ログイン成功: " + user.Email);
-            return true; // ログイン成功
+            Debug.Log("更新完了");
+
+            //ログイン前が匿名アカウントなら削除
+            if (oldUser.IsAnonymous)
+            {
+                //await oldUser.DeleteAsync();
+                Debug.Log("匿名アカウントを削除しました。");
+            }
+
+            return "正常終了";
         }
         catch (FirebaseException e)
         {
-            Debug.LogError($"ログインエラー: {e.Message}");
-
-            // エラーコードに応じたメッセージを出力
             switch (e.ErrorCode)
             {
                 case (int)AuthError.MissingEmail:
-                    Debug.LogError("メールアドレスを入力してください。");
-                    break;
+                    return"メールアドレスを入力してください。";
+
                 case (int)AuthError.MissingPassword:
-                    Debug.LogError("パスワードを入力してください。");
-                    break;
+                    return"パスワードを入力してください。";
+
                 case (int)AuthError.InvalidEmail:
-                    Debug.LogError("メールアドレスの形式が正しくありません。");
-                    break;
+                    return"メールアドレスの形式が正しくありません。";
+
                 case (int)AuthError.WrongPassword:
-                    Debug.LogError("パスワードが間違っています。");
-                    break;
+                    return"パスワードが間違っています。";
+
                 case (int)AuthError.UserNotFound:
-                    Debug.LogError("このメールアドレスのユーザーは登録されていません。");
-                    break;
+                    return"このメールアドレスのユーザーは登録されていません。";
+
                 case (int)AuthError.NetworkRequestFailed:
-                    Debug.LogError("ネットワークエラーが発生しました。インターネット接続を確認してください。");
-                    break;
+                    return "ネットワークエラー";
+
                 case (int)AuthError.TooManyRequests:
-                    Debug.LogError("試行回数が多すぎます。しばらく待ってから再試行してください。");
-                    break;
+                    return"試行回数が多すぎます。しばらく待ってから再試行してください。";
+
                 case (int)AuthError.UserDisabled:
-                    Debug.LogError("このアカウントは無効化されています。");
-                    break;
+                    return"このアカウントは無効化されています。";
+
                 default:
-                    Debug.LogError("ログインに失敗しました。");
-                    break;
-            }
-
-            return false; // ログイン失敗
-        }
-    }
-
-
-
-    /// <summary>
-    /// ログアウト：匿名ユーザーなら削除、それ以外は通常のログアウト
-    /// </summary>
-    public async void Logout()
-    {
-        FirebaseUser currentUser = auth.CurrentUser;
-
-        if (currentUser != null)
-        {
-            try
-            {
-                if (currentUser.IsAnonymous)
-                {
-                    await currentUser.DeleteAsync();
-                    Debug.Log("匿名アカウントを削除しました。");
-                }
-                else
-                {
-                    auth.SignOut();
-                    Debug.Log("通常アカウントでログアウトしました。");
-                }
-            }
-            catch (FirebaseException e)
-            {
-                Debug.LogError($"アカウント削除エラー: {e.Message}");
+                    return "異常終了";
             }
         }
-        else
+        catch (Exception ex)
         {
-            Debug.Log("ログイン中のユーザーがいません。");
+            return "異常終了";
         }
     }
 
@@ -334,23 +263,17 @@ public class AuthManager : MonoBehaviour
 
 
     /// <summary>
-    /// 匿名アカウントからメールアドレス認証に切り替え（適切な再認証を適用）
+    /// 匿名アカウントからメールアドレス認証に切り替え
     /// </summary>
-    public async Task ConvertAnonymousToEmail(string email, string password)
+    public async Task<string> ConvertAnonymousToEmail(string email, string password)
     {
         user = auth.CurrentUser; // 現在の匿名ユーザー
+
         if (user == null || !user.IsAnonymous)
         {
-            Debug.LogError("匿名ユーザーではありません");
-            return;
+            //匿名ユーザーでない
+            return "異常終了";
         }
-        
-
-        // 最新のユーザーデータを取得
-        //await user.ReloadAsync();
-
-        // メールアドレスが未認証なら終了
-        //if (!user.IsEmailVerified) return;
 
         try
         {
@@ -360,131 +283,43 @@ public class AuthManager : MonoBehaviour
             // 匿名アカウントとメールアカウントをリンク
             await user.LinkWithCredentialAsync(credential);
             Debug.Log("匿名アカウントをメール認証に切り替え成功: " + email);
-        }
-        catch (FirebaseException e) when (e.ErrorCode == (int)AuthError.RequiresRecentLogin)
-        {
-            Debug.LogWarning("最近のログインが必要です。匿名アカウントの認証情報で再認証を行います...");
 
-            try
-            {
-                // 匿名アカウントの認証情報を取得
-                Credential anonCredential = GoogleAuthProvider.GetCredential(null, null);
+            // 認証メール送信
+            await user.SendEmailVerificationAsync();
 
-                // 再認証を実行
-                await user.ReauthenticateAsync(anonCredential);
-                Debug.Log("再認証成功");
-
-                // 再認証後に再試行
-                await ConvertAnonymousToEmail(email, password);
-            }
-            catch (FirebaseException reauthError)
-            {
-                Debug.LogError("再認証に失敗しました: " + reauthError.Message);
-            }
+            return "正常終了";
         }
         catch (FirebaseException e)
         {
             switch (e.ErrorCode)
             {
                 case (int)AuthError.InvalidEmail:
-                    Debug.LogError("無効なメールアドレスです");
-                    break;
+                    return "無効なメールアドレスです";
+
                 case (int)AuthError.EmailAlreadyInUse:
-                    Debug.LogError("このメールアドレスはすでに使用されています");
-                    break;
+                    return "このメールアドレスはすでに使用されています";
+
                 case (int)AuthError.WeakPassword:
-                    Debug.LogError("パスワードが脆弱です（6文字以上推奨）");
-                    break;
+                    return
+                        "パスワードが脆弱です\n\n" +
+                        "パスワードは6文字以上で、英数字を含めてください。\n" +
+                        "8文字以上、英字・数字・記号を組み合わせることで安全性が向上します。";
+
                 case (int)AuthError.CredentialAlreadyInUse:
-                    Debug.LogError("この認証情報はすでに別のアカウントにリンクされています");
-                    break;
+                    return "この認証情報はすでに別のアカウントにリンクされています";
+
                 case (int)AuthError.NetworkRequestFailed:
-                    Debug.LogError("ネットワークエラーが発生しました。接続を確認してください");
-                    break;
+                    return "ネットワークエラー";
+
                 default:
-                    Debug.LogError($"認証の切り替えに失敗: {e.Message} (エラーコード: {e.ErrorCode})");
-                    break;
+                    return "異常終了";
             }
         }
-    }
-
-
-
-    /// <summary>
-    /// メールアドレス認証（確認メールを送信）
-    /// </summary>
-    public async Task<bool> SendVerificationEmail(string email)
-    {
-        user = auth.CurrentUser;
-
-        if (user == null || !user.IsAnonymous)
+        catch (Exception ex)
         {
-            Debug.LogError("匿名ユーザーではありません");
-            return false;
-        }
-
-        // ① メールアドレスのフォーマットチェック
-        if (!IsValidEmailFormat(email))
-        {
-            Debug.LogError("無効なメールアドレス形式です");
-            return false;
-        }
-
-        // ② メールアドレスの重複チェック
-        /*
-        if (await IsEmailAlreadyRegistered(email))
-        {
-            Debug.LogError("このメールアドレスはすでに使用されています");
-            return false;
-        }
-        */
-
-        try
-        {
-            // ③ メール認証を送信
-            //user.SendEmailVerificationBeforeUpdatingEmailAsync
-            await user.SendEmailVerificationAsync();
-            Debug.Log("確認メールを送信しました。認証を完了するとアカウントが変換されます。");
-            return true;
-        }
-        catch (FirebaseException e)
-        {
-            Debug.LogError($"確認メール送信エラー: {e.Message}");
-            return false;
+            return "異常終了";
         }
     }
-
-    /// <summary>
-    /// メールアドレスのフォーマットチェック
-    /// </summary>
-    private bool IsValidEmailFormat(string email)
-    {
-        string pattern = @"^[^@\s]+@[^@\s]+\.[^@\s]+$";
-        return Regex.IsMatch(email, pattern);
-    }
-
-    /// <summary>
-    /// メールアドレスが既に登録されているかチェック
-    /// </summary>
-    /*
-    private async Task<bool> IsEmailAlreadyRegistered(string email)
-    {
-        try
-        {
-            var signInMethods = await auth.(email);
-            return signInMethods != null && signInMethods.Count > 0;
-        }
-        catch (FirebaseException e)
-        {
-            if (e.ErrorCode == AuthErrorCode.UserNotFound)
-            {
-                return false; // 未登録のメールアドレス
-            }
-            Debug.LogError($"メールアドレスの確認エラー: {e.Message}");
-            return true; // エラー発生時は登録を避ける
-        }
-    }
-    */
 
 
 
@@ -505,9 +340,6 @@ public class AuthManager : MonoBehaviour
             if (await FirestoreManager.Instance.SaveNewPlayerData())
                 //正常終了
                 return 0;
-            else
-                //異常終了，エラーコード9を返す
-                return 9;
         }
         catch (FirebaseException e)
         {
@@ -520,9 +352,10 @@ public class AuthManager : MonoBehaviour
         }
         catch (Exception ex)
         {
-            //その他エラーはエラーコード9を返す
-            return 9;
+
         }
+        //その他エラーはエラーコード9を返す
+        return 9;
     }
 
 
@@ -543,6 +376,47 @@ public class AuthManager : MonoBehaviour
     /// </summary>
     public bool GetIsAnonymous()
     {
+        user = auth.CurrentUser;
         return user.IsAnonymous;
+    }
+
+
+
+    /// <summary>
+    /// メールアドレスが認証済かどうかを取得
+    /// </summary>
+    public bool GetIsEmailVerified()
+    {
+        user = auth.CurrentUser;
+        return user.IsEmailVerified;
+    }
+
+
+
+    /// <summary>
+    /// メールアドレスを取得
+    /// </summary>
+    public string GetEmail()
+    {
+        user = auth.CurrentUser;
+        return user.Email;
+    }
+
+
+
+    /// <summary>
+    /// 最新のユーザーデータを取得
+    /// </summary>
+    public async Task<bool> UpdateUserData()
+    {
+        try
+        {
+            await user.ReloadAsync();
+            return true; // 正常終了
+        }
+        catch (Exception ex)
+        {
+            return false; // 異常終了
+        }
     }
 }

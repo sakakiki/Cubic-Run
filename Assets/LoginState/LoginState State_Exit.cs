@@ -20,7 +20,7 @@ public class LoginStateState_Exit : LoginStateStateBase
         elapsedTime = 0;
 
         //ログイン後初期処理実行
-        await GM.LoadAndReflect();
+        await GM.GameInitialize();
 
         //ゲームプレイ可能
         isPlayable = true;

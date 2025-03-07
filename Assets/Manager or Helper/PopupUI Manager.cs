@@ -17,8 +17,8 @@ public class PopupUIManager : MonoBehaviour
     private float colorAlpha;
     [SerializeField] private GameObject boardPopup;
     [SerializeField] private TextMeshProUGUI boardTitle;
-    [SerializeField] private Button_Push button_OK;
-    [SerializeField] private Button_Push button_Cancel;
+    [SerializeField] private GameObject singleButton;
+    [SerializeField] private GameObject doubleButton;
     [SerializeField] private GameObject finalConfirmation;
     [SerializeField] private TextMeshProUGUI explanation_FC;
     [SerializeField] private GameObject singleInputfield;
@@ -33,8 +33,9 @@ public class PopupUIManager : MonoBehaviour
     [SerializeField] private TextMeshProUGUI inputfieldExplanation_DI_2;
     [SerializeField] private TMP_InputField inputfield_DI_2;
 
-    private UnityEvent eventOnPushOK;
-    private UnityEvent eventSaveInput;
+    [HideInInspector] public UnityEvent eventOnPushOK;
+    [HideInInspector] public UnityEvent eventSaveInput;
+    private UnityAction listenActionOnPushOK;
 
 
 
@@ -55,19 +56,25 @@ public class PopupUIManager : MonoBehaviour
 
     private void Update()
     {
+        //アクティブ状態でなければ何もしない
         if (!isActiveBand) return;
 
+        //残り表示時間を減らす
         displayTime -= Time.deltaTime;
 
+        //表示終了0.5秒以内なら消していく
         if (displayTime < 0.5)
             colorAlpha -= Time.deltaTime * 2;
+        //表示開始0.5秒かけて濃くする
         else if (colorAlpha < 1)
             colorAlpha += Time.deltaTime * 2;
         else return;
 
+        //色の更新
         bandBack.color = Color.white - Color.black * (1 - colorAlpha * 0.9f);
         bandMessage.color = Color.black * colorAlpha;
 
+        //表示時間が終了したら非アクティブ状態に
         if (displayTime < 0)
         {
             isActiveBand = false;
@@ -79,6 +86,7 @@ public class PopupUIManager : MonoBehaviour
 
 
 
+    //バンドポップアップの作成
     public void SetupMessageBand(string message, float displayTime)
     {
         isActiveBand = true;
@@ -88,20 +96,54 @@ public class PopupUIManager : MonoBehaviour
 
 
 
-    public void SetupPopup(string explanation, UnityAction onPushOK)
+    //メッセージ用ポップアップの作成（後続処理なし）
+    public void SetupPopupMessage(string title, string explanation)
     {
         boardPopup.SetActive(true);
+        singleButton.SetActive(true);
         finalConfirmation.SetActive(true);
+        boardTitle.SetText(title);
         explanation_FC.SetText(explanation);
-        eventOnPushOK.AddListener(onPushOK);
     }
 
 
 
-    public void SetupPopup(string explanation, TMP_InputField.ContentType contentType, UnityAction onPushOK)
+    //メッセージ用ポップアップの作成（後続処理あり）
+    public void SetupPopupMessage(string title, string explanation, UnityAction onPushOK)
     {
         boardPopup.SetActive(true);
+        singleButton.SetActive(true);
+        finalConfirmation.SetActive(true);
+        boardTitle.SetText(title);
+        explanation_FC.SetText(explanation);
+        eventOnPushOK.AddListener(onPushOK);
+        listenActionOnPushOK = onPushOK;
+    }
+
+
+
+    //確認用ポップアップの作成
+    public void SetupPopup(string title, string explanation, UnityAction onPushOK)
+    {
+        boardPopup.SetActive(true);
+        doubleButton.SetActive(true);
+        finalConfirmation.SetActive(true);
+        boardTitle.SetText(title);
+        explanation_FC.SetText(explanation);
+        eventOnPushOK.AddListener(onPushOK);
+        listenActionOnPushOK = onPushOK;
+    }
+
+
+
+    //単一入力ポップアップの作成
+    public void SetupPopup(
+        string title, string explanation, TMP_InputField.ContentType contentType, UnityAction onPushOK)
+    {
+        boardPopup.SetActive(true);
+        doubleButton.SetActive(true);
         singleInputfield.SetActive(true);
+        boardTitle.SetText(title);
         explanation_SI.SetText(explanation);
         inputfield_SI.contentType = contentType;
         switch (contentType)
@@ -117,18 +159,23 @@ public class PopupUIManager : MonoBehaviour
             default: break;
         }
         eventOnPushOK.AddListener(onPushOK);
+        listenActionOnPushOK = onPushOK;
         eventSaveInput.AddListener(SaveInput1);
     }
 
 
 
+    //2入力ポップアップの作成
     public void SetupPopup(
+        string title,
         string explanation1, TMP_InputField.ContentType contentType1, 
         string explanation2, TMP_InputField.ContentType contentType2, 
         UnityAction onPushOK)
     {
         boardPopup.SetActive(true);
+        doubleButton.SetActive(true);
         doubleInputfield.SetActive(true);
+        boardTitle.SetText(title);
         explanation_DI_1.SetText(explanation1);
         inputfield_DI_1.contentType = contentType1;
         explanation_DI_2.SetText(explanation2);
@@ -141,50 +188,72 @@ public class PopupUIManager : MonoBehaviour
                 break;
 
             case TMP_InputField.ContentType.Password:
-                inputfieldExplanation_DI_1.SetText("パスワードを入力");
-                inputfieldExplanation_DI_2.SetText("パスワードを入力（確認用）");
+                inputfieldExplanation_DI_1.SetText("現在のパスワードを入力");
+                inputfieldExplanation_DI_2.SetText("新しいパスワードを入力");
                 break;
 
             default: break;
         }
         eventOnPushOK.AddListener(onPushOK);
+        listenActionOnPushOK = onPushOK;
         eventSaveInput.AddListener(SaveInput2);
     }
 
 
 
+    //OKボタンが押された場合の処理
     public void OnPushOK()
     {
         eventSaveInput?.Invoke();
         finalConfirmation.SetActive(false);
         singleInputfield.SetActive(false);
         doubleInputfield.SetActive(false);
+        singleButton.SetActive(false);
+        doubleButton.SetActive(false);
         boardPopup.SetActive(false);
+        inputfield_SI.text = "";
+        inputfield_DI_1.text = "";
+        inputfield_DI_2.text = "";
+        UnityAction tempAction = listenActionOnPushOK;
         eventOnPushOK?.Invoke();
+        eventOnPushOK.RemoveListener(tempAction);
     }
 
 
+
+    //キャンセルボタンが押された場合の処理
 
     public void OnPushCancel()
     {
         finalConfirmation.SetActive(false);
         singleInputfield.SetActive(false);
         doubleInputfield.SetActive(false);
+        singleButton.SetActive(false);
+        doubleButton.SetActive(false);
         boardPopup.SetActive(false);
+        inputfield_SI.text = "";
+        inputfield_DI_1.text = "";
+        inputfield_DI_2.text = "";
+        eventOnPushOK.RemoveListener(listenActionOnPushOK);
     }
 
 
 
-    private void SaveInput1()
+    //単一入力の入力内容を記憶
+    public void SaveInput1()
     {
         inputText1 = inputfield_SI.text;
+        inputfield_SI.text = "";
     }
 
 
 
-    private void SaveInput2()
+    //2入力の入力内容を記憶
+    public void SaveInput2()
     {
         inputText1 = inputfield_DI_1.text;
+        inputfieldExplanation_DI_1.text = "";
         inputText2 = inputfield_DI_2.text;
+        inputfieldExplanation_DI_2.text = "";
     }
 }

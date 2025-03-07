@@ -4,7 +4,7 @@ public class GameStateState_Option_Account : GameStateState_OptionBase
 
 
 
-    public override void Enter()
+    public async override void Enter()
     {
         base.Enter();
 
@@ -14,18 +14,36 @@ public class GameStateState_Option_Account : GameStateState_OptionBase
         //AccountのUIを有効化
         GameManager.Instance.optionUI_Account.SetActive(true);
 
-        //アカウントの状態に応じた表示内容変更
-        if (AuthManager.Instance.GetIsAnonymous())
+        //アカウントの最新状態を取得
+        if (await AuthManager.Instance.UpdateUserData())
         {
-            GameManager.Instance.optionUI_Account_Status.SetText("メールアドレス未登録");
-            GameManager.Instance.optionUI_Account_Anonymous.SetActive(true);
-            GameManager.Instance.optionUI_Account_Email.SetActive(false);
+            //アカウントの状態に応じた表示内容変更
+            if (AuthManager.Instance.GetIsAnonymous())
+            {
+                GameManager.Instance.optionUI_Account_Status.SetText("メールアドレス未登録");
+                GameManager.Instance.optionUI_Account_Anonymous.SetActive(true);
+                GameManager.Instance.optionUI_Account_Email.SetActive(false);
+            }
+            else
+            {
+                if (AuthManager.Instance.GetIsEmailVerified())
+                    GameManager.Instance.optionUI_Account_Status.SetText("メールアドレス登録済・認証済");
+                else
+                {
+                    GameManager.Instance.optionUI_Account_Status.SetText("メールアドレス登録済・未認証");
+                    GameManager.Instance.optionUI_SendEmail.SetActive(true);
+                }
+
+                GameManager.Instance.optionUI_Account_Anonymous.SetActive(false);
+                GameManager.Instance.optionUI_Account_Email.SetActive(true);
+            }
+
+            //共通のボタンを表示
+            GameManager.Instance.optionUI_DeleteData.SetActive(true);
         }
         else
         {
-            GameManager.Instance.optionUI_Account_Status.SetText("メールアドレス登録済");
-            GameManager.Instance.optionUI_Account_Anonymous.SetActive(false);
-            GameManager.Instance.optionUI_Account_Email.SetActive(true);
+            GameManager.Instance.optionUI_Account_Status.SetText("アカウントの状態を取得できませんでした。");
         }
     }
 
@@ -42,7 +60,12 @@ public class GameStateState_Option_Account : GameStateState_OptionBase
     {
         base.Exit();
 
-        //AccountのUIを無効化
+        //AccountのUIを非表示・無効化
+        GameManager.Instance.optionUI_Account_Status.SetText("");
+        GameManager.Instance.optionUI_Account_Anonymous.SetActive(false);
+        GameManager.Instance.optionUI_Account_Email.SetActive(false);
+        GameManager.Instance.optionUI_SendEmail.SetActive(false);
+        GameManager.Instance.optionUI_DeleteData.SetActive(false);
         GameManager.Instance.optionUI_Account.SetActive(false);
     }
 }

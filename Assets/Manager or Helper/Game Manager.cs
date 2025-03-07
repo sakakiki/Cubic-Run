@@ -118,6 +118,8 @@ public class GameManager : MonoBehaviour
     public TextMeshProUGUI optionUI_Account_Status;
     public GameObject optionUI_Account_Anonymous;
     public GameObject optionUI_Account_Email;
+    public GameObject optionUI_SendEmail;
+    public GameObject optionUI_DeleteData;
     public RankingBoard highScoreRankingBoard;
     public RankingBoard playerScoreRankingBoard;
     public ResultRankingBoard resultRankingBoard;
@@ -125,6 +127,7 @@ public class GameManager : MonoBehaviour
     public TextMeshProUGUI scoreFluctuation_playerScore;
     public TextMeshProUGUI resultHighScoreText;
     public TextMeshProUGUI resultPlayerScoreText;
+    private Queue<GameObject> trainingPanels = new Queue<GameObject>();
 
     //ステートマシン
     public GameStateStateMachine gameStateMachine {  get; private set; }
@@ -186,9 +189,6 @@ public class GameManager : MonoBehaviour
         for (int i = 0; i < resultUIs_B.Length; i++)
             resultUIs_B[i].SetParent(resultHingeRtf_B);
 
-        //ランキングモードで開始
-        SetTrainingMode(false);
-
         //スキンパネルの生成
         skinSelecter.CreateSkinPanel();
 
@@ -207,11 +207,18 @@ public class GameManager : MonoBehaviour
 
 
     //データのロードとゲームへの反映
-    public async Task LoadAndReflect()
+    public async Task GameInitialize()
     {
         //await AuthManager.Instance.Login("sakakiki.games@gmail.com", "Game3121Pass2222");
         //await AuthManager.Instance.Reauthenticate("sakakiki.sousaku@gmail.com", "Game3121Pass2222");
         //await AuthManager.Instance.UpdateUserEmail("sakakiki.games@gmail.com");
+
+        //変数・オブジェクト・設定の初期化
+        SetTrainingMode(false);
+        trainingClearCounts.Clear();
+        button_LevelSelecters.Clear();
+        while (trainingPanels.Count > 0)
+            Destroy(trainingPanels.Dequeue());
 
         //ローカルデータのロード
         highScore = HighScoreManager.Load();
@@ -287,6 +294,9 @@ public class GameManager : MonoBehaviour
         Button_LevelSelecter button_LevelSelecter = newPanelRtf.GetComponent<Button_LevelSelecter>();
         button_LevelSelecter.SetLevel(level);
         button_LevelSelecters.Add(button_LevelSelecter);
+
+        //パネルオブジェクトを管理可能に
+        trainingPanels.Enqueue(newPanelRtf.gameObject);
     }
 
 

@@ -10,9 +10,8 @@ public class GameStateState_Login : GameStateStateBase
 
     public GameStateState_Login(GameStateStateMachine stateMachine) : base(stateMachine)
     {
-        //ログインステートマシンの作成と初期化
+        //ログインステートマシンの作成
         loginStateMachine = new LoginStateStateMachine(stateMachine);
-        loginStateMachine.Initialize(loginStateMachine.state_Login);
         
         screenCover = GM.frontScreenCover;
     }
@@ -21,6 +20,9 @@ public class GameStateState_Login : GameStateStateBase
 
     public override void Enter()
     {
+        //ログインステートマシンの初期化
+        loginStateMachine.Initialize(loginStateMachine.state_Login);
+
         //障害物の生成を有効化
         TM.isCreateObstacle = true;
 

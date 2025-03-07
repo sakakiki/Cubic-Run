@@ -11,11 +11,23 @@ public class LoginStateState_Register : LoginStateStateBase
             case 0: stateMachine.ChangeState(stateMachine.state_Exit); break;
 
             //ネットワークエラーならメッセージ表示
-            case 1: break;
+            case 1:
+                PopupUIManager.Instance.SetupPopupMessage(
+                    "ネットワークエラー",
+                    "ネットワーク上のエラーが発生しました。\n" +
+                    "通信環境を確認の上再試行してください。",
+                    Enter); 
+                break;
 
             //予期せぬエラーならその旨を表示
             case 9:
-            default: break;
+            default:
+                PopupUIManager.Instance.SetupPopupMessage(
+                    "通信エラー",
+                    "エラーが発生しました。\n" +
+                    "時間を空けて再試行してください。",
+                    Enter); 
+                break;
         }
     }
 
