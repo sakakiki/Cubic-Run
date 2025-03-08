@@ -115,11 +115,13 @@ public class GameManager : MonoBehaviour
     public GameObject optionUIBase;
     public TextMeshProUGUI optionTitle;
     public GameObject optionUI_Account;
+    public TextMeshProUGUI optionUI_CurrentAccount;
     public TextMeshProUGUI optionUI_Account_Status;
     public GameObject optionUI_Account_Anonymous;
     public GameObject optionUI_Account_Email;
     public GameObject optionUI_SendEmail;
     public GameObject optionUI_DeleteData;
+    public GameObject optionUI_Relogin;
     public RankingBoard highScoreRankingBoard;
     public RankingBoard playerScoreRankingBoard;
     public ResultRankingBoard resultRankingBoard;

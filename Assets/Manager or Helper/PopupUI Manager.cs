@@ -156,6 +156,10 @@ public class PopupUIManager : MonoBehaviour
                 inputfieldExplanation_SI.SetText("メールアドレスを入力");
                 break;
 
+            case TMP_InputField.ContentType.Password:
+                inputfieldExplanation_SI.SetText("パスワードを入力");
+                break;
+
             default: break;
         }
         eventOnPushOK.AddListener(onPushOK);
@@ -185,11 +189,6 @@ public class PopupUIManager : MonoBehaviour
             case TMP_InputField.ContentType.EmailAddress:
                 inputfieldExplanation_DI_1.SetText("メールアドレスを入力");
                 inputfieldExplanation_DI_2.SetText("パスワードを入力");
-                break;
-
-            case TMP_InputField.ContentType.Password:
-                inputfieldExplanation_DI_1.SetText("現在のパスワードを入力");
-                inputfieldExplanation_DI_2.SetText("新しいパスワードを入力");
                 break;
 
             default: break;
@@ -242,8 +241,11 @@ public class PopupUIManager : MonoBehaviour
     //単一入力の入力内容を記憶
     public void SaveInput1()
     {
-        inputText1 = inputfield_SI.text;
-        inputfield_SI.text = "";
+        if (inputfield_SI.text != "")
+        {
+            inputText1 = inputfield_SI.text;
+            inputfield_SI.text = "";
+        }
     }
 
 
@@ -251,9 +253,15 @@ public class PopupUIManager : MonoBehaviour
     //2入力の入力内容を記憶
     public void SaveInput2()
     {
-        inputText1 = inputfield_DI_1.text;
-        inputfieldExplanation_DI_1.text = "";
-        inputText2 = inputfield_DI_2.text;
-        inputfieldExplanation_DI_2.text = "";
+        if (inputfield_DI_1.text != "")
+        {
+            inputText1 = inputfield_DI_1.text;
+            inputfieldExplanation_DI_1.text = "";
+        }
+        if (inputfield_DI_2.text != "")
+        {
+            inputText2 = inputfield_DI_2.text;
+            inputfieldExplanation_DI_2.text = "";
+        }
     }
 }

@@ -58,7 +58,6 @@ public class AccountInputManager : MonoBehaviour
             "アカウントに設定したパスワードを入力してください。",
             TMP_InputField.ContentType.Password,
             this.Login_Result);
-
     }
     public async void Login_Result()
     {
@@ -72,9 +71,54 @@ public class AccountInputManager : MonoBehaviour
             case "正常終了":
                 PopupUIManager.Instance.SetupPopupMessage(
                     "ログイン成功",
-                "アカウントのログインに成功しました。\n\n" +
-                "再ログインします。",
-                ReLogin);
+                    "アカウントのログインに成功しました。\n\n" +
+                    "再ログインします。",
+                    ReLogin);
+                break;
+
+            case "異常終了":
+                PopupUIManager.Instance.SetupPopupMessage("ログイン失敗", "ログインに失敗しました。", this.Login);
+                break;
+
+            case "ネットワークエラー":
+                PopupUIManager.Instance.SetupMessageBand(
+                    "ネットワークエラーが発生しました。接続を確認してください。", 2);
+                break;
+
+            default:
+                PopupUIManager.Instance.SetupPopupMessage("ログイン失敗", resultMessage, this.Login);
+                break;
+        }
+    }
+    #endregion
+
+    #region メールアドレス変更
+    public void CangeEmail_Reauthenticate()
+    {
+        PopupUIManager.Instance.SetupPopup(
+            "再ログイン",
+            "現在のメールアドレスを入力してください。",
+            TMP_InputField.ContentType.EmailAddress,
+            "アカウントに設定したパスワードを入力してください。",
+            TMP_InputField.ContentType.Password,
+            this.CangeEmail);
+
+    }
+    public async void CangeEmail()
+    {
+        string resultMessage =
+            await AuthManager.Instance.Reauthenticate(
+            PopupUIManager.Instance.inputText1,
+            PopupUIManager.Instance.inputText2);
+
+        switch (resultMessage)
+        {
+            case "正常終了":
+                PopupUIManager.Instance.SetupPopup(
+                    "メールアドレス変更",
+                    "新しいメールアドレスを入力してください。",
+                    TMP_InputField.ContentType.EmailAddress,
+                    this.CangeEmail_Result);
                 break;
 
             case "異常終了":
@@ -87,28 +131,47 @@ public class AccountInputManager : MonoBehaviour
                 break;
 
             default:
-                PopupUIManager.Instance.SetupPopupMessage("ログイン失敗", resultMessage, Login);
+                PopupUIManager.Instance.SetupPopupMessage("再ログイン失敗", resultMessage, this.CangeEmail_Reauthenticate);
                 break;
         }
-    }
-    #endregion
-
-    #region メールアドレス変更
-    public void CangeEmail()
-    {
-        PopupUIManager.Instance.SetupPopup(
-            "メールアドレス変更",
-            "アカウントに登録されているメールアドレスを入力してください。",
-            TMP_InputField.ContentType.EmailAddress,
-            "アカウントに設定したパスワードを入力してください。",
-            TMP_InputField.ContentType.Password,
-            this.CangeEmail_Result);
-
     }
     public async void CangeEmail_Result()
     {
         string resultMessage =
-            await AuthManager.Instance.Login(
+            await AuthManager.Instance.UpdateUserEmail(
+            PopupUIManager.Instance.inputText1);
+
+        switch (resultMessage)
+        {
+            case "正常終了":
+                PopupUIManager.Instance.SetupPopupMessage(
+                    "メールアドレス変更",
+                    PopupUIManager.Instance.inputText1 + "\n\n" +
+                    "上記メールアドレスに認証メールを送信しています。\n" +
+                    "リンクを開いてアドレスの認証を行い、下の OK のボタンをを押してください。",
+                    this.CangeEmail_Check);
+                break;
+
+            case "異常終了":
+                PopupUIManager.Instance.SetupMessageBand("エラーが発生しました。", 2);
+                break;
+
+            case "ネットワークエラー":
+                PopupUIManager.Instance.SetupMessageBand(
+                    "ネットワークエラーが発生しました。接続を確認してください。", 2);
+                break;
+
+            default:
+                PopupUIManager.Instance.SetupPopupMessage("メールアドレス変更失敗", resultMessage, this.CangeEmail);
+                break;
+        }
+    }
+    public async void CangeEmail_Check()
+    {
+        Debug.Log("チェック");
+
+        string resultMessage =
+            await AuthManager.Instance.Reauthenticate(
             PopupUIManager.Instance.inputText1,
             PopupUIManager.Instance.inputText2);
 
@@ -116,10 +179,62 @@ public class AccountInputManager : MonoBehaviour
         {
             case "正常終了":
                 PopupUIManager.Instance.SetupPopupMessage(
-                    "ログイン成功",
-                "アカウントのログインに成功しました。\n\n" +
-                "再ログインします。",
-                ReLogin);
+                    "メールアドレス変更完了",
+                    "メールアドレスの変更が完了しました。");
+                break;
+
+            case "異常終了":
+                PopupUIManager.Instance.SetupPopup(
+                    "メールアドレス未認証",
+                    PopupUIManager.Instance.inputText1 + "\n\n" +
+                    "上記メールアドレスに認証メールを送信しています。\n" +
+                    "リンクを開いてアドレスの認証を行い、下の OK のボタンをを押してください。",
+                    this.CangeEmail_Check);
+                break;
+
+            case "ネットワークエラー":
+                PopupUIManager.Instance.SetupMessageBand(
+                    "ネットワークエラーが発生しました。接続を確認してください。", 2);
+                break;
+
+            default:
+                PopupUIManager.Instance.SetupPopup(
+                    "メールアドレス未認証",
+                    PopupUIManager.Instance.inputText1 + "\n\n" +
+                    "上記メールアドレスに認証メールを送信しています。\n" +
+                    "リンクを開いてアドレスの認証を行い、下の OK のボタンをを押してください。",
+                    this.CangeEmail_Check);
+                break;
+        }
+    }
+    #endregion
+
+    #region パスワード変更
+    public void CangePassword_Reauthenticate()
+    {
+        PopupUIManager.Instance.SetupPopup(
+            "再ログイン",
+            "アカウントに登録したメールアドレスを入力してください。",
+            TMP_InputField.ContentType.EmailAddress,
+            "現在のパスワードを入力してください。",
+            TMP_InputField.ContentType.Password,
+            this.CangePassword);
+    }
+    public async void CangePassword()
+    {
+        string resultMessage =
+            await AuthManager.Instance.Reauthenticate(
+            PopupUIManager.Instance.inputText1,
+            PopupUIManager.Instance.inputText2);
+
+        switch (resultMessage)
+        {
+            case "正常終了":
+                PopupUIManager.Instance.SetupPopup(
+                    "パスワード変更",
+                    "新しいパスワードを入力してください。",
+                    TMP_InputField.ContentType.Password,
+                    this.CangePassword_Result);
                 break;
 
             case "異常終了":
@@ -132,7 +247,128 @@ public class AccountInputManager : MonoBehaviour
                 break;
 
             default:
-                PopupUIManager.Instance.SetupPopupMessage("ログイン失敗", resultMessage, Login);
+                PopupUIManager.Instance.SetupPopupMessage("再ログイン失敗", resultMessage, this.CangePassword_Reauthenticate);
+                break;
+        }
+    }
+    public async void CangePassword_Result()
+    {
+        string resultMessage =
+            await AuthManager.Instance.UpdatePassword(
+            PopupUIManager.Instance.inputText1);
+
+        switch (resultMessage)
+        {
+            case "正常終了":
+                PopupUIManager.Instance.SetupPopupMessage(
+                    "パスワード変更",
+                    "パスワードの変更が完了しました。");
+                break;
+
+            case "異常終了":
+                PopupUIManager.Instance.SetupMessageBand("エラーが発生しました。", 2);
+                break;
+
+            case "ネットワークエラー":
+                PopupUIManager.Instance.SetupMessageBand(
+                    "ネットワークエラーが発生しました。接続を確認してください。", 2);
+                break;
+
+            default:
+                PopupUIManager.Instance.SetupPopupMessage("パスワード変更失敗", resultMessage, this.CangePassword);
+                break;
+        }
+    }
+    #endregion
+
+    #region パスワードリセット
+    public void ResetPassword()
+    {
+        PopupUIManager.Instance.SetupPopup(
+            "パスワードリセット",
+            AuthManager.Instance.GetEmail() + "\n\n" +
+            "上記メールアドレスにパスワード再設定用のメールを送信します。",
+            this.ResetPassword_Result);
+
+    }
+    public async void ResetPassword_Result()
+    {
+        string resultMessage =
+            await AuthManager.Instance.SendPasswordResetEmail(
+            AuthManager.Instance.GetEmail());
+
+        switch (resultMessage)
+        {
+            case "正常終了":
+                PopupUIManager.Instance.SetupPopupMessage(
+                    "メール送信完了",
+                    "パスワード再設定用のメールを送信しました。\n" +
+                    "リンクを開き、パスワードをリセットしてください。\n\n" +
+                    "<color=#E20000><B>パスワード変更後は再ログインが必要です。</color></B>",
+                ResetPassword_ReLogin);
+                break;
+
+            case "異常終了":
+                PopupUIManager.Instance.SetupMessageBand("エラーが発生しました。", 2);
+                break;
+
+            case "ネットワークエラー":
+                PopupUIManager.Instance.SetupMessageBand(
+                    "ネットワークエラーが発生しました。接続を確認してください。", 2);
+                break;
+
+            default:
+                PopupUIManager.Instance.SetupPopupMessage("メール送信失敗", resultMessage);
+                break;
+        }
+    }
+    public void ResetPassword_ReLogin()
+    {
+        PopupUIManager.Instance.SetupPopup(
+            "ログイン",
+            "アカウントに登録されているメールアドレスを入力してください。",
+            TMP_InputField.ContentType.EmailAddress,
+            "アカウントに設定したパスワードを入力してください。",
+            TMP_InputField.ContentType.Password,
+            this.Login_Result);
+    }
+    #endregion
+
+    #region 認証メール再送
+    public void SendEmail()
+    {
+        PopupUIManager.Instance.SetupPopup(
+            "認証メール再送",
+            AuthManager.Instance.GetEmail() + "\n\n" +
+            "上記メールアドレスに認証メールを送信します。",
+            this.SendEmail_Result);
+
+    }
+    public async void SendEmail_Result()
+    {
+        string resultMessage =
+            await AuthManager.Instance.SendEmailVerification();
+
+        switch (resultMessage)
+        {
+            case "正常終了":
+                PopupUIManager.Instance.SetupPopupMessage(
+                    "メール送信完了",
+                    "認証メールを送信しました。\n\n" +
+                    "リンクを開き、アドレスの認証を行ってください。");
+                break;
+
+            case "異常終了":
+                PopupUIManager.Instance.SetupMessageBand("エラーが発生しました。", 2);
+                break;
+
+            case "ネットワークエラー":
+                PopupUIManager.Instance.SetupMessageBand(
+                    "ネットワークエラーが発生しました。接続を確認してください。", 2);
+                break;
+
+            default:
+                PopupUIManager.Instance.SetupPopupMessage("ログイン失敗", resultMessage, this.Login);
                 break;
         }
     }

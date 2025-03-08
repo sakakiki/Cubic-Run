@@ -68,7 +68,6 @@ public class AuthManager : MonoBehaviour
 
         if (user != null)
         {
-
             // 最新のユーザーデータを取得
             await UpdateUserData();
 
@@ -85,179 +84,38 @@ public class AuthManager : MonoBehaviour
 
 
     /// <summary>
-    /// メールアドレスとパスワードでのログイン
+    /// 匿名ログイン
     /// </summary>
-    public async Task<string> Login(string email, string password)
+    public async Task<int> SignInAnonymously()
     {
         try
         {
-            //ログイン前のアカウントを記憶
-            FirebaseUser oldUser = auth.CurrentUser;
+            var result = await auth.SignInAnonymouslyAsync();
+            Debug.Log("匿名ログイン成功");
 
-            //メールアドレスとパスワードでログイン
-            var result = await auth.SignInWithEmailAndPasswordAsync(email, password);
+            //外部からの確認用
+            loginState = LoginState.Login;
 
-            //アカウント情報更新
-            user = result.User;
-            Debug.Log("更新完了");
-
-            //ログイン前が匿名アカウントなら削除
-            if (oldUser.IsAnonymous)
-            {
-                //await oldUser.DeleteAsync();
-                Debug.Log("匿名アカウントを削除しました。");
-            }
-
-            return "正常終了";
+            // Firestoreに新規データを作成
+            if (await FirestoreManager.Instance.SaveNewPlayerData())
+                //正常終了
+                return 0;
         }
         catch (FirebaseException e)
         {
-            switch (e.ErrorCode)
-            {
-                case (int)AuthError.MissingEmail:
-                    return"メールアドレスを入力してください。";
+            //ネットワークエラーはエラーコード1を返す
+            if (e.ErrorCode == (int)AuthError.NetworkRequestFailed)
+                return 1;
 
-                case (int)AuthError.MissingPassword:
-                    return"パスワードを入力してください。";
-
-                case (int)AuthError.InvalidEmail:
-                    return"メールアドレスの形式が正しくありません。";
-
-                case (int)AuthError.WrongPassword:
-                    return"パスワードが間違っています。";
-
-                case (int)AuthError.UserNotFound:
-                    return"このメールアドレスのユーザーは登録されていません。";
-
-                case (int)AuthError.NetworkRequestFailed:
-                    return "ネットワークエラー";
-
-                case (int)AuthError.TooManyRequests:
-                    return"試行回数が多すぎます。しばらく待ってから再試行してください。";
-
-                case (int)AuthError.UserDisabled:
-                    return"このアカウントは無効化されています。";
-
-                default:
-                    return "異常終了";
-            }
+            //その他エラーはエラーコード9を返す
+            else return 9;
         }
         catch (Exception ex)
         {
-            return "異常終了";
+
         }
-    }
-
-
-
-    /// <summary>
-    /// メールアドレス変更
-    /// </summary>
-    public async Task UpdateUserEmail(string newEmail)
-    {
-        if (auth.CurrentUser == null)
-        {
-            Debug.LogError("ユーザーが認証されていません");
-            return;
-        }
-
-        try
-        {
-            await auth.CurrentUser.SendEmailVerificationBeforeUpdatingEmailAsync(newEmail);
-            Debug.Log("確認メールを送信しました: " + newEmail);
-        }
-        catch (FirebaseException e) when (e.ErrorCode == (int)AuthError.RequiresRecentLogin)
-        {
-            Debug.LogWarning("最近のログインが必要です。匿名アカウントの認証情報で再認証を行います...");
-
-            try
-            {
-                // 匿名アカウントの認証情報を取得
-                Credential anonCredential = GoogleAuthProvider.GetCredential(user.Email, null);
-
-                // 再認証を実行
-                await user.ReauthenticateAsync(anonCredential);
-                Debug.Log("再認証成功");
-
-                // 再認証後に再試行
-                await UpdateUserEmail(newEmail);
-            }
-            catch (FirebaseException reauthError)
-            {
-                Debug.LogError("再認証に失敗しました: " + reauthError.Message);
-            }
-        }
-        catch (FirebaseException e)
-        {
-            Debug.LogError("メールアドレスの更新に失敗しました: " + e.Message);
-        }
-    }
-
-
-
-    /// <summary>
-    /// パスワード変更
-    /// </summary>
-    public async Task UpdatePassword(string newPassword)
-    {
-        if (auth.CurrentUser == null)
-        {
-            Debug.LogError("ユーザーが認証されていません");
-            return;
-        }
-
-        try
-        {
-            await auth.CurrentUser.UpdatePasswordAsync(newPassword);
-            Debug.Log("パスワード変更成功");
-        }
-        catch (FirebaseException e)
-        {
-            Debug.LogError("パスワード変更失敗: " + e.Message);
-        }
-    }
-
-
-
-    /// <summary>
-    /// パスワードのリセット
-    /// </summary>
-    public async Task SendPasswordResetEmail(string email)
-    {
-        try
-        {
-            await auth.SendPasswordResetEmailAsync(email);
-            Debug.Log("パスワードリセットメール送信成功: " + email);
-        }
-        catch (FirebaseException e)
-        {
-            Debug.LogError("パスワードリセットメール送信失敗: " + e.Message);
-        }
-    }
-
-
-
-    /// <summary>
-    /// 再認証
-    /// </summary>
-    public async Task Reauthenticate(string email, string password)
-    {
-        if (auth.CurrentUser == null)
-        {
-            Debug.LogError("ユーザーが認証されていません");
-            return;
-        }
-
-        try
-        {
-            var credential = Firebase.Auth.EmailAuthProvider.GetCredential(email, password);
-            await auth.CurrentUser.ReauthenticateAsync(credential);
-            Debug.Log("再認証成功");
-        }
-        catch (FirebaseException e)
-        {
-            Debug.LogError("再認証失敗: " + e.Message);
-        }
+        //その他エラーはエラーコード9を返す
+        return 9;
     }
 
 
@@ -324,39 +182,262 @@ public class AuthManager : MonoBehaviour
 
 
     /// <summary>
-    /// 匿名ログイン
+    /// メールアドレスとパスワードでのログイン
+    /// ログイン前が匿名アカウントだった場合はアカウント削除
     /// </summary>
-    public async Task<int> SignInAnonymously()
+    public async Task<string> Login(string email, string password)
     {
         try
         {
-            var result = await auth.SignInAnonymouslyAsync();
-            Debug.Log("匿名ログイン成功"); 
-            
-            //外部からの確認用
-            loginState = LoginState.Login;
+            //ログイン前が匿名アカウントなら削除
+            if (user.IsAnonymous)
+            {
+                await FirestoreManager.Instance.DeleteDocument(user.UserId);
+                await user.DeleteAsync();
+                Debug.Log("匿名アカウントを削除しました。");
+                await UpdateUserData();
+            }
 
-            // Firestoreに新規データを作成
-            if (await FirestoreManager.Instance.SaveNewPlayerData())
-                //正常終了
-                return 0;
+            //メールアドレスとパスワードでログイン
+            var result = await auth.SignInWithEmailAndPasswordAsync(email, password);
+
+            //アカウント情報更新
+            user = result.User;
+
+            return "正常終了";
         }
         catch (FirebaseException e)
         {
-            //ネットワークエラーはエラーコード1を返す
-            if (e.ErrorCode == (int)AuthError.NetworkRequestFailed)
-                return 1;
+            switch (e.ErrorCode)
+            {
+                case (int)AuthError.MissingEmail:
+                    return"メールアドレスを入力してください。";
 
-            //その他エラーはエラーコード9を返す
-            else return 9;
+                case (int)AuthError.MissingPassword:
+                    return"パスワードを入力してください。";
+
+                case (int)AuthError.InvalidEmail:
+                    return"メールアドレスの形式が正しくありません。";
+
+                case (int)AuthError.WrongPassword:
+                    return"パスワードが間違っています。";
+
+                case (int)AuthError.UserNotFound:
+                    return"このメールアドレスのユーザーは登録されていません。";
+
+                case (int)AuthError.NetworkRequestFailed:
+                    return "ネットワークエラー";
+
+                case (int)AuthError.TooManyRequests:
+                    return"試行回数が多すぎます。しばらく待ってから再試行してください。";
+
+                case (int)AuthError.UserDisabled:
+                    return"このアカウントは無効化されています。";
+
+                default:
+                    return "異常終了";
+            }
         }
         catch (Exception ex)
         {
-
+            return "異常終了";
         }
-        //その他エラーはエラーコード9を返す
-        return 9;
     }
+
+
+
+    /// <summary>
+    /// 再認証
+    /// </summary>
+    public async Task<string> Reauthenticate(string email, string password)
+    {
+        if (auth.CurrentUser == null)
+        {
+            return "ユーザーが認証されていません。";
+        }
+
+        try
+        {
+            var credential = EmailAuthProvider.GetCredential(email, password);
+            await auth.CurrentUser.ReauthenticateAsync(credential);
+            return "正常終了";
+        }
+        catch (FirebaseException e)
+        {
+            switch (e.ErrorCode)
+            {
+                case (int)AuthError.InvalidEmail:
+                    return "無効なメールアドレスです。";
+
+                case (int)AuthError.WrongPassword:
+                    return "パスワードが間違っています。";
+
+                case (int)AuthError.UserNotFound:
+                    return "このメールアドレスのアカウントは存在しません。";
+
+                case (int)AuthError.UserDisabled:
+                    return "このアカウントは無効化されています。";
+
+                case (int)AuthError.NetworkRequestFailed:
+                    return "ネットワークエラー";
+
+                default:
+                    return "異常終了";
+            }
+        }
+        catch (Exception e)
+        {
+            return "異常終了";
+        }
+    }
+
+
+
+    /// <summary>
+    /// メールアドレス変更
+    /// </summary>
+    public async Task<string> UpdateUserEmail(string newEmail)
+    {
+        if (auth.CurrentUser == null)
+        {
+            return "ユーザーが認証されていません。";
+        }
+
+        try
+        {
+            await auth.CurrentUser.SendEmailVerificationBeforeUpdatingEmailAsync(newEmail);
+            return "正常終了";
+        }
+        catch (FirebaseException e)
+        {
+            switch (e.ErrorCode)
+            {
+                case (int)AuthError.InvalidEmail:
+                    return "無効なメールアドレスです。";
+
+                case (int)AuthError.EmailAlreadyInUse:
+                    return "このメールアドレスはすでに使用されています。";
+
+                case (int)AuthError.NetworkRequestFailed:
+                    return "ネットワークエラー";
+
+                default:
+                    return "異常終了";
+            }
+        }
+        catch (Exception e)
+        {
+            return "異常終了";
+        }
+    }
+
+
+
+    /// <summary>
+    /// パスワード変更
+    /// </summary>
+    public async Task<string> UpdatePassword(string newPassword)
+    {
+        if (auth.CurrentUser == null)
+        {
+            return "ユーザーが認証されていません。";
+        }
+
+        try
+        {
+            await auth.CurrentUser.UpdatePasswordAsync(newPassword);
+            return "正常終了";
+        }
+
+        catch (FirebaseException e)
+        {
+            switch (e.ErrorCode)
+            {
+                case (int)AuthError.WeakPassword:
+                    return
+                        "パスワードが脆弱です\n\n" +
+                        "パスワードは6文字以上で、英数字を含めてください。\n" +
+                        "8文字以上、英字・数字・記号を組み合わせることで安全性が向上します。";
+
+                case (int)AuthError.NetworkRequestFailed:
+                    return "ネットワークエラー";
+
+                default:
+                    return "異常終了";
+            }
+        }
+        catch (Exception ex)
+        {
+            return "異常終了";
+        }
+    }
+
+
+
+    /// <summary>
+    /// パスワードのリセット
+    /// </summary>
+    public async Task<string> SendPasswordResetEmail(string email)
+    {
+        if (string.IsNullOrEmpty(email))
+        {
+            return "メールアドレス情報が見つかりませんでした。";
+        }
+
+        try
+        {
+            await auth.SendPasswordResetEmailAsync(email);
+            return "正常終了";
+        }
+        catch (FirebaseException e)
+        {
+            switch (e.ErrorCode)
+            {
+                case (int)AuthError.TooManyRequests:
+                    return "短時間にリクエストが多すぎます。しばらく待ってから再試行してください。";
+
+                case (int)AuthError.NetworkRequestFailed:
+                    return "ネットワークエラー";
+
+                default:
+                    return "異常終了";
+            }
+        }
+        catch (Exception e)
+        {
+            return "異常終了";
+        }
+    }
+
+
+
+    /// <summary>
+    /// 認証メールの再送
+    /// </summary>
+    public async Task<string> SendEmailVerification()
+    {
+        try
+        {
+            await user.SendEmailVerificationAsync();
+            return "正常終了";
+        }
+        catch (FirebaseException e)
+        {
+            switch (e.ErrorCode)
+            {
+                case (int)AuthError.NetworkRequestFailed:
+                    return "ネットワークエラー";
+
+                default:
+                    return "異常終了";
+            }
+        }
+        catch (Exception e)
+        {
+            return "異常終了";
+        }
+    }
+
 
 
 
@@ -398,8 +479,16 @@ public class AuthManager : MonoBehaviour
     /// </summary>
     public string GetEmail()
     {
-        user = auth.CurrentUser;
-        return user.Email;
+        try
+        {
+            user = auth.CurrentUser;
+            string result = user.Email;
+            return result; // 正常終了
+        }
+        catch (Exception ex)
+        {
+            return "未設定"; // 異常終了
+        }
     }
 
 

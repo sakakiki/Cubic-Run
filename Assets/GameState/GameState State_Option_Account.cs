@@ -20,12 +20,14 @@ public class GameStateState_Option_Account : GameStateState_OptionBase
             //アカウントの状態に応じた表示内容変更
             if (AuthManager.Instance.GetIsAnonymous())
             {
+                GameManager.Instance.optionUI_CurrentAccount.SetText("未設定");
                 GameManager.Instance.optionUI_Account_Status.SetText("メールアドレス未登録");
                 GameManager.Instance.optionUI_Account_Anonymous.SetActive(true);
                 GameManager.Instance.optionUI_Account_Email.SetActive(false);
             }
             else
             {
+                GameManager.Instance.optionUI_CurrentAccount.SetText(AuthManager.Instance.GetEmail());
                 if (AuthManager.Instance.GetIsEmailVerified())
                     GameManager.Instance.optionUI_Account_Status.SetText("メールアドレス登録済・認証済");
                 else
@@ -44,6 +46,7 @@ public class GameStateState_Option_Account : GameStateState_OptionBase
         else
         {
             GameManager.Instance.optionUI_Account_Status.SetText("アカウントの状態を取得できませんでした。");
+            GameManager.Instance.optionUI_Relogin.SetActive(true);
         }
     }
 
@@ -66,6 +69,7 @@ public class GameStateState_Option_Account : GameStateState_OptionBase
         GameManager.Instance.optionUI_Account_Email.SetActive(false);
         GameManager.Instance.optionUI_SendEmail.SetActive(false);
         GameManager.Instance.optionUI_DeleteData.SetActive(false);
+        GameManager.Instance.optionUI_Relogin.SetActive(false);
         GameManager.Instance.optionUI_Account.SetActive(false);
     }
 }

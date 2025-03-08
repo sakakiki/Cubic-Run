@@ -476,9 +476,7 @@ public class FirestoreManager : MonoBehaviour
         try
         {
             // ユーザーよりスコアが高い数を取得
-            Query countQuery = db.Collection("users")
-                .WhereGreaterThan(scoreType, userScore);
-
+            Query countQuery = db.Collection("users").WhereGreaterThan(scoreType, userScore);
             QuerySnapshot countSnapshot = await countQuery.GetSnapshotAsync(Source.Server);
             int higherCount = countSnapshot.Count;
 
@@ -542,4 +540,23 @@ public class FirestoreManager : MonoBehaviour
         }
     }
 
+
+
+    /// <summary>
+    /// データ削除
+    /// </summary>
+    public async Task DeleteDocument(string documentId)
+    {
+        try
+        {
+            DocumentReference docRef = db.Collection("users").Document(documentId);
+            await docRef.DeleteAsync();
+            Debug.Log($"ドキュメント {documentId} を削除しました");
+        }
+        catch (System.Exception e)
+        {
+            Debug.LogError($"ドキュメント削除エラー: {e.Message}");
+            Debug.Log(documentId);
+        }
+    }
 }
