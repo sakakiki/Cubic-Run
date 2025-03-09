@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
@@ -26,6 +25,7 @@ public class RankingManager : MonoBehaviour
 
 
 
+    //ランキング更新の必要性を確認
     public static async Task CheckUpdateNecessity(RankingType rankingType)
     {
         //前回ランキング更新から指定時間以上経過していなければ何もしない
@@ -46,6 +46,7 @@ public class RankingManager : MonoBehaviour
 
 
 
+    //ランキングを取得し更新
     public static async Task UpdateRanking(RankingType rankingType)
     {
         switch (rankingType)

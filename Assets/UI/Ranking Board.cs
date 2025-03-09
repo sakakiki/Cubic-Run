@@ -12,7 +12,7 @@ public class RankingBoard: MonoBehaviour, IPointerDownHandler
     private static GameManager GM;
     private static GameStateStateMachine gameStateMachine;
     [SerializeField] RectTransform contentFieldRtf;
-    [SerializeField] private RankingManager.RankingType RankingType;
+    [SerializeField] private RankingType RankingType;
     [SerializeField] private RankingBoard anotherTab;
     [SerializeField] private TextMeshProUGUI tabText;
     [SerializeField] private TextMeshProUGUI[] scoreTexts;

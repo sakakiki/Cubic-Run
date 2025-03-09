@@ -71,7 +71,7 @@ public class AuthManager : MonoBehaviour
             // 最新のユーザーデータを取得
             await UpdateUserData();
 
-            Debug.Log("ログイン済み: " + user.Email + ",Email:" + user.IsEmailVerified);
+            Debug.Log("ログイン済み　　アドレス登録： " + !string.IsNullOrEmpty(user.Email) + "　認証：" + user.IsEmailVerified);
             loginState = LoginState.Login;
         }
         else
