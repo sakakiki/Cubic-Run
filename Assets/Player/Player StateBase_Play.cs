@@ -1,6 +1,9 @@
+using UnityEngine;
+
 public abstract class PlayerStateBase_Play : PlayerStateBase
 {
     protected InputManager IM;
+    protected AudioManager AM;
     protected bool isGrounded;
     private TouchCheck trigerFoot;
     private TouchCheck trigerFront;
@@ -8,6 +11,7 @@ public abstract class PlayerStateBase_Play : PlayerStateBase
     public PlayerStateBase_Play(PlayerStateMachine stateMachine) : base(stateMachine)
     {
         IM = InputManager.Instance;
+        AM = AudioManager.Instance;
         trigerFoot = stateMachine.playerController.trigerFoot;
         trigerFront = stateMachine.playerController.trigerFront;
     }

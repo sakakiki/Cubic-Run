@@ -24,6 +24,10 @@ public class PlayerState_Play_Jump : PlayerStateBase_Play
         if (IM.is_Player_Squat_Push)
         {
             if (rb.velocity.y > -25) rb.velocity = Vector2.down * 25;
+
+            //SEçƒê∂
+            AM.PlaySE(AM.SE_Player);
+
             stateMachine.ChangeState(stateMachine.state_Play_SmallJump);
         }
 

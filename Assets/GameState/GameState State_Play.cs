@@ -40,6 +40,11 @@ public class GameStateState_Play : GameStateStateBase
 
         //ポーズ状態を解除
         InitializePauseState();
+
+        //プレイ用BGMの再生
+        audioSource_BGM.volume = 1;
+        audioSource_BGM.clip = AudioManager.Instance.BGM_Play;
+        audioSource_BGM.Play();
     }
 
 

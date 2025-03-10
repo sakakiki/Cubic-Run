@@ -31,6 +31,7 @@ public class GameStateState_PlayToResult : GameStateStateBase
     private int newPlayerScore;
     private TextMeshProUGUI highScoreText;
     private TextMeshProUGUI playerScoreText;
+    private bool isAudioPlay;
 
     public GameStateState_PlayToResult(GameStateStateMachine stateMachine) : base(stateMachine)
     {
@@ -60,6 +61,7 @@ public class GameStateState_PlayToResult : GameStateStateBase
 
         //フラグリセット
         isSetText = false;
+        isAudioPlay = false;
 
         //ゲームモードに応じてUIの切り替え
         GM.resultRankingUI.SetActive(!GM.isTraining);
@@ -166,8 +168,27 @@ public class GameStateState_PlayToResult : GameStateStateBase
         if (GM.score == 5000 && GM.isTraining)
             TM.ManageMovingTerrain();
 
-        //1秒間待機
-        if (elapsedTime < 1) return;
+        //開始後1秒間
+        if (elapsedTime < 1)
+        {
+            //BGMのボリューム変更
+            audioSource_BGM.volume = 1 - elapsedTime;
+
+            //残りの処理を飛ばす
+            return;
+        }
+
+        //リザルト用BGMの再生
+        else if (!isAudioPlay)
+        {
+            //実行は1回のみ
+            isAudioPlay = true;
+
+            //BGM再生
+            audioSource_BGM.volume = 1;
+            audioSource_BGM.clip = AudioManager.Instance.BGM_Result;
+            audioSource_BGM.Play();
+        }
 
         //画面がタップされれば演出を飛ばす
         IM.GetInput_Screen();

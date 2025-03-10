@@ -22,6 +22,9 @@ public class Button_Push : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 
         //カバーを着色
         cover.color = GameManager.Instance.panelSelectedColor - Color.black * 0.95f;
+
+        //SEを再生
+        AudioManager.Instance.PlaySE(AudioManager.Instance.SE_Button);
     }
 
     //タップ：タップ後に指が画面から離れたとき、指の場所に関わらず実行

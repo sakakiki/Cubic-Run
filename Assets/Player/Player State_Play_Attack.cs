@@ -12,6 +12,9 @@ public class PlayerState_Play_Attack : PlayerStateBase_Play
         //スキンの切り替え
         playerCon.SkinDefault.SetActive(false);
         playerCon.SkinAttack.SetActive(true);
+
+        //SE再生
+        AM.PlaySE(AM.SE_Player);
     }
 
     public override void Update()
@@ -22,8 +25,13 @@ public class PlayerState_Play_Attack : PlayerStateBase_Play
         if (IM.is_Player_Attack_Release)
         {
             //しゃがみ入力でSquatステート
-            if (IM.is_Player_Squat_Hold) 
+            if (IM.is_Player_Squat_Hold)
+            {
                 stateMachine.ChangeState(stateMachine.state_Play_Squat);
+
+                //SE再生
+                AM.PlaySE(AM.SE_Player);
+            }
 
             //入力なしでRunステート
             else stateMachine.ChangeState(stateMachine.state_Play_Run);
@@ -31,11 +39,21 @@ public class PlayerState_Play_Attack : PlayerStateBase_Play
 
         //ジャンプ処理
         else if (IM.is_Player_Jump_Push)
+        {
             rb.velocity = Vector2.up * 30;
+
+            //SE再生
+            AM.PlaySE(AM.SE_Player);
+        }
 
         //しゃがみ入力でSquatステートに遷移
         else if (IM.is_Player_Squat_Push)
+        {
             stateMachine.ChangeState(stateMachine.state_Play_Squat);
+
+            //SE再生
+            AM.PlaySE(AM.SE_Player);
+        }
 
         //空中に出たらJumpステートへ遷移
         else if (!isGrounded)

@@ -7,6 +7,7 @@ public class SkinSelecter : MonoBehaviour, IPointerDownHandler, IDragHandler, IP
 {
     [SerializeField] private GameManager GM;
     [SerializeField] private InputManager IM;
+    [SerializeField] private AudioManager AM;
     [SerializeField] private SkinDataBase skinDataBase;
     [SerializeField] private Transform wheelTf;
     [SerializeField] private SpriteRenderer[] panels_sprite;
@@ -199,6 +200,7 @@ public class SkinSelecter : MonoBehaviour, IPointerDownHandler, IDragHandler, IP
             frontSkinID += (int)Mathf.Sign(wheelEulerAnglesX - 22.5f * frontSkinID);
 
             //音を鳴らす処理
+            AM.PlaySE(AM.SE_SkinSelecter);
 
             /* ここでパネルの更新処理をすればスキンを増やせる（他の処理の変更も必要） */
         }

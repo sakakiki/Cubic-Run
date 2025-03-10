@@ -11,6 +11,14 @@ public class GameStateState_Menu : GameStateStateBase
 
         //障害物の生成を有効化
         TM.isCreateObstacle = true;
+
+        //BGMがメニュー画面のものでなければ変更して再生
+        if (audioSource_BGM.clip != AudioManager.Instance.BGM_Menu)
+        {
+            audioSource_BGM.volume = 1;
+            audioSource_BGM.clip = AudioManager.Instance.BGM_Menu;
+            audioSource_BGM.Play();
+        }
     }
 
 

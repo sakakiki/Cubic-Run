@@ -22,6 +22,10 @@ public class LoginStateState_Exit : LoginStateStateBase
         //ログイン後初期処理実行
         await GM.GameInitialize();
 
+        //BGMを流し始める
+        AudioManager.Instance.audioSource_BGM.clip = AudioManager.Instance.BGM_Menu;
+        AudioManager.Instance.audioSource_BGM.Play();
+
         //ゲームプレイ可能
         isPlayable = true;
     }

@@ -90,6 +90,7 @@ public class PlayerState_Model_MenuToPlay : PlayerStateBase_Model
         //移動関連演算
         velocityY -= gravity * Time.deltaTime;
         posCorrectionY += velocityY * Time.deltaTime;
+        if (posCorrectionY < 0) posCorrectionY = 0;
         tf.position = Vector2.Lerp(startPos, targetPos, lerpValue) + Vector2.up * posCorrectionY;
 
         //ゲームステートがPlayならステート遷移

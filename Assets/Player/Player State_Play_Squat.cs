@@ -37,7 +37,12 @@ public class PlayerState_Play_Squat : PlayerStateBase_Play
 
         //ジャンプ処理
         else if (IM.is_Player_Jump_Push)
+        {
             rb.velocity = Vector2.up * 20;
+
+            //SE再生
+            AM.PlaySE(AM.SE_Player);
+        }
 
         //攻撃入力でAttackステートに遷移
         else if (IM.is_Player_Attack_Push)
