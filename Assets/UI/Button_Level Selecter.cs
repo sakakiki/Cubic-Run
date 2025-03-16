@@ -25,6 +25,9 @@ public class Button_LevelSelecter: MonoBehaviour, IPointerClickHandler
         //“ü—Í‚Ìó‚¯“n‚µ
         GameManager.Instance.SetTrainingLevel(level);
 
+        //SE‚ÌÄ¶
+        AudioManager.Instance.audioSource_SE.PlayOneShot(AudioManager.Instance.SE_Panel);
+
         PushButton();
     }
 

@@ -32,6 +32,7 @@ public class GameStateState_PlayToResult : GameStateStateBase
     private TextMeshProUGUI highScoreText;
     private TextMeshProUGUI playerScoreText;
     private bool isAudioPlay;
+    private int levelUpCount_state;
 
     public GameStateState_PlayToResult(GameStateStateMachine stateMachine) : base(stateMachine)
     {
@@ -62,6 +63,9 @@ public class GameStateState_PlayToResult : GameStateStateBase
         //フラグリセット
         isSetText = false;
         isAudioPlay = false;
+
+        //変数リセット
+        levelUpCount_state = 0;
 
         //ゲームモードに応じてUIの切り替え
         GM.resultRankingUI.SetActive(!GM.isTraining);
@@ -224,6 +228,9 @@ public class GameStateState_PlayToResult : GameStateStateBase
             //獲得経験値量の表示
             addExpText.SetText("+" + addExp + "Exp");
 
+            //SEの再生
+            AudioManager.Instance.audioSource_SE.PlayOneShot(AudioManager.Instance.SE_GetExp);
+
             if (!GM.isTraining)
             {
                 //スコア変動表示
@@ -244,11 +251,19 @@ public class GameStateState_PlayToResult : GameStateStateBase
 
         //表示プレイヤーランクの更新
         int displayRank = beforePlayRank;
+        int levelUpCount_local = 0;
         while (displayRequiredExpF < 0)
         {
             displayRank++;
             displayRequiredExpF += (displayRank + 1) * 100;
-            playerRankText.SetText("プレイヤーランク　" + beforePlayRank + " >> <b>" + displayRank + "</b>"); 
+            playerRankText.SetText("プレイヤーランク　" + beforePlayRank + " >> <b>" + displayRank + "</b>");
+            levelUpCount_local++;
+            if (levelUpCount_local > levelUpCount_state)
+            {
+                //SEの再生
+                AudioManager.Instance.audioSource_SE.PlayOneShot(AudioManager.Instance.SE_LevelUp);
+                levelUpCount_state++;
+            }
         }
 
         //経験値に関する表示の更新
@@ -288,5 +303,8 @@ public class GameStateState_PlayToResult : GameStateStateBase
             playerRankText.SetText("プレイヤーランク　" + beforePlayRank + " >> <b>" + GM.playerRank + "</b>");
         requiredExpText.SetText("" + GM.requiredExp);
         playerRankScaleRtf.localScale = Vector3.one - Vector3.right * (GM.requiredExp / (float)((GM.playerRank + 1) * 100));
+
+        //SEの停止
+        AudioManager.Instance.audioSource_SE.Stop();
     }
 }

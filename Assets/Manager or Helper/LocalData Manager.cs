@@ -73,3 +73,39 @@ public static class UnsavedHighScoreFlagManager
         return PlayerPrefs.GetInt(key, 0) == 1;
     }
 }
+
+
+
+public static class VolumeBGMManager
+{
+    private const string key = "volumeBGM";
+
+    public static void Save(float volumeBGM)
+    {
+        PlayerPrefs.SetFloat(key, volumeBGM);
+        PlayerPrefs.Save();
+    }
+
+    public static float Load()
+    {
+        return PlayerPrefs.GetFloat(key, 1);
+    }
+}
+
+
+
+public static class VolumeSEManager
+{
+    private const string key = "volumeSE";
+
+    public static void Save(float volumeSE)
+    {
+        PlayerPrefs.SetFloat(key, volumeSE);
+        PlayerPrefs.Save();
+    }
+
+    public static float Load()
+    {
+        return PlayerPrefs.GetFloat(key, 1);
+    }
+}

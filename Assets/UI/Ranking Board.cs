@@ -40,6 +40,9 @@ public class RankingBoard: MonoBehaviour, IPointerDownHandler
         //メニュー画面でなければ何もしない
         if (gameStateMachine.currentState != gameStateMachine.state_Menu) return;
 
+        //SEの再生
+        AudioManager.Instance.audioSource_SE.PlayOneShot(AudioManager.Instance.SE_Panel);
+
         //このスクリプトを無効化
         this.enabled = false;
 

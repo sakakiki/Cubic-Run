@@ -38,6 +38,8 @@ public class GameStateState_Menu : GameStateStateBase
             stateMachine.ChangeState(stateMachine.state_MenuToSkin);
         else if (IM.is_Menu_Account_Push)
             stateMachine.ChangeState(stateMachine.state_Account);
+        else if (IM.is_Menu_Volume_Push)
+            stateMachine.ChangeState(stateMachine.state_Volume);
     }
 
 

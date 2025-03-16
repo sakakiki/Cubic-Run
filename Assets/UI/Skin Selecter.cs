@@ -148,39 +148,45 @@ public class SkinSelecter : MonoBehaviour, IPointerDownHandler, IDragHandler, IP
         if (!isStop || !isActive)
         {
             //パネルの透明度・スケール変更
-            for (int ID = 0; ID < panels_sprite.Length; ID++)
+            for (int ID = frontSkinID - 2; ID <= frontSkinID + 2; ID++)
             {
+                int panelID = ID;
+
+                //スキンIDを補正
+                if (panelID < 0) panelID += 16;
+                else if (panelID > 15) panelID -= 16;
+
                 //事前計算
                 //パネルの角度をベースにホイールのワールド座標で補正をかける
-                float temp = (1 - panels_tf[ID].forward.z + (wheelTf.position.z - 90) / 25) * 5;
+                float temp = (1 - panels_tf[panelID].forward.z + (wheelTf.position.z - 90) / 25) * 5;
 
                 //透明度変更
                 Color tempColor_white = Color.white - Color.black * temp;
                 Color tempColor_black = Color.black - Color.black * temp;
-                panels_sprite[ID].color = tempColor_white;
-                panels_skinName[ID].color = tempColor_black;
-                if (GM.isSkinUnlocked[ID] || ID % 8 != 7)
+                panels_sprite[panelID].color = tempColor_white;
+                panels_skinName[panelID].color = tempColor_black;
+                if (GM.isSkinUnlocked[panelID] || panelID % 8 != 7)
                 {
-                    panels_skinModel[ID].color = skinDataBase.skinData[ID].skinColor - Color.black * temp;
-                    panels_skinEyes_L[ID].color = tempColor_white;
-                    panels_skinEyes_R[ID].color = tempColor_white;
+                    panels_skinModel[panelID].color = skinDataBase.skinData[panelID].skinColor - Color.black * temp;
+                    panels_skinEyes_L[panelID].color = tempColor_white;
+                    panels_skinEyes_R[panelID].color = tempColor_white;
                 }
                 //ロック中のCrystalスキンのみ例外処理
                 else
                 {
-                    panels_skinModel[ID].color = tempColor_black;
-                    panels_skinModelText[ID/8].color = tempColor_white * 0.5f;
+                    panels_skinModel[panelID].color = tempColor_black;
+                    panels_skinModelText[panelID/8].color = tempColor_white * 0.5f;
                 }
                 //ロック中のパネルの処理
-                if (!GM.isSkinUnlocked[ID])
+                if (!GM.isSkinUnlocked[panelID])
                 {
-                    panels_lockPanel[ID].color = tempColor_black * 0.8f;
-                    panels_lockText[ID].color = tempColor_white;
-                    panels_lockText[ID].outlineColor = tempColor_black;
+                    panels_lockPanel[panelID].color = tempColor_black * 0.8f;
+                    panels_lockText[panelID].color = tempColor_white;
+                    panels_lockText[panelID].outlineColor = tempColor_black;
                 }
 
                 //スケール変更
-                panels_tf[ID].localScale = Vector3.one * (1 - temp / 5);
+                panels_tf[panelID].localScale = Vector3.one * (1 - temp / 5);
             }
         }
 
@@ -196,17 +202,23 @@ public class SkinSelecter : MonoBehaviour, IPointerDownHandler, IDragHandler, IP
         //ホイールが現在のスキンパネルの位置の外まで回転したら
         while (Mathf.Abs(wheelEulerAnglesX - 22.5f * frontSkinID) > 11.25)
         {
+            //回転の端は例外として処理
+            if (wheelEulerAnglesX > 348.75 && frontSkinID == 0)
+                break;
+
             //フロントのスキンIDを更新
-            frontSkinID += (int)Mathf.Sign(wheelEulerAnglesX - 22.5f * frontSkinID);
+            float misalignment = wheelEulerAnglesX - 22.5f * frontSkinID;
+            frontSkinID += (int)(Mathf.Sign(misalignment) * Mathf.Sign(180 - Mathf.Abs(misalignment)));
+
+            //スキンIDを補正
+            if (frontSkinID < 0) frontSkinID += 16;
+            else if (frontSkinID > 15) frontSkinID -= 16;
 
             //音を鳴らす処理
             AM.PlaySE(AM.SE_SkinSelecter);
 
             /* ここでパネルの更新処理をすればスキンを増やせる（他の処理の変更も必要） */
         }
-        //スキンIDを補正
-        if (frontSkinID < 0) frontSkinID += 16;
-        else if (frontSkinID > 15) frontSkinID -= 16;
 
         //ドラッグ中は残りの処理を飛ばす
         if (isDragged) return;

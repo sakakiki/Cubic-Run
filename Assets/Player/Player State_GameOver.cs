@@ -35,6 +35,9 @@ public class PlayerState_GameOver : PlayerStateBase
             playerCon.boxCol.enabled = false;
             playerCon.capsuleCol.enabled = true;
         }
+
+        //SEçƒê∂
+        AudioManager.Instance.audioSource_SE.PlayOneShot(AudioManager.Instance.SE_GameOver);
     }
 
     public override void Update()

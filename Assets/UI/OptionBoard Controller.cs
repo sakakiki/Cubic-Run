@@ -24,8 +24,14 @@ public class OptionBoardController : MonoBehaviour, IPointerDownHandler
         //メニュー画面でなければ何もしない
         if (gameStateMachine.currentState != gameStateMachine.state_Menu) return;
 
-        //フラグをオープン状態に
+        //フラグを切り替え
         isOpen = !isOpen;
+
+        //SEの再生
+        if (isOpen)
+            AudioManager.Instance.audioSource_SE.PlayOneShot(AudioManager.Instance.SE_Panel);
+        if (!isOpen)
+            AudioManager.Instance.audioSource_SE.PlayOneShot(AudioManager.Instance.SE_Close);
     }
 
 
@@ -33,8 +39,9 @@ public class OptionBoardController : MonoBehaviour, IPointerDownHandler
     public void Update()
     {
         //メニュー画面かオプション画面でなければ閉じる
-        if (gameStateMachine.currentState != gameStateMachine.state_Menu && 
-            gameStateMachine.currentState != gameStateMachine.state_Account) 
+        if (gameStateMachine.currentState != gameStateMachine.state_Menu &&
+            gameStateMachine.currentState != gameStateMachine.state_Account &&
+            gameStateMachine.currentState != gameStateMachine.state_Volume) 
             isOpen = false;
 
         //開閉処理の必要があるなら

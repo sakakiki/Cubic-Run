@@ -45,5 +45,8 @@ public abstract class GameStateState_OptionBase : GameStateStateBase
 
         //ƒJƒo[‚ğ“§–¾‚É
         GameManager.Instance.frontScreenCover.color = Color.clear;
+
+        //SE‚ÌÄ¶
+        AudioManager.Instance.audioSource_SE.PlayOneShot(AudioManager.Instance.SE_Close);
     }
 }

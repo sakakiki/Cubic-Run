@@ -45,6 +45,9 @@ public class GameStateState_UnlockSkin : GameStateStateBase
         unlockSkinModelRtf.localScale = Vector3.zero;
         unlockSkinNameRtf.localScale = Vector3.zero;
         unlockSkinMessage.color = Color.clear;
+
+        //SEÇÃçƒê∂
+        AudioManager.Instance.audioSource_SE.PlayOneShot(AudioManager.Instance.SE_SkinUnlock);
     }
 
 

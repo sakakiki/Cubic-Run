@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.UI;
 
 public class AudioManager : MonoBehaviour
 {
@@ -6,6 +7,9 @@ public class AudioManager : MonoBehaviour
 
     public AudioSource audioSource_BGM;
     public AudioSource audioSource_SE;
+
+    public Slider slider_BGM;
+    public Slider slider_SE;
 
     public float volume_BGM = 1;
     public float volume_SE = 1;
@@ -16,9 +20,14 @@ public class AudioManager : MonoBehaviour
 
     public AudioClip SE_Button;
     public AudioClip SE_Player;
+    public AudioClip SE_GameOver;
     public AudioClip SE_Enemy;
     public AudioClip SE_Close;
     public AudioClip SE_SkinSelecter;
+    public AudioClip SE_SkinUnlock;
+    public AudioClip SE_Panel;
+    public AudioClip SE_GetExp;
+    public AudioClip SE_LevelUp;
 
     public void Awake()
     {
@@ -29,5 +38,33 @@ public class AudioManager : MonoBehaviour
     public void PlaySE(AudioClip clip)
     {
         audioSource_SE.PlayOneShot(clip, volume_SE);
+    }
+
+    public void SetVolumeBGM()
+    {
+        volume_BGM = slider_BGM.value;
+        audioSource_BGM.volume = volume_BGM;
+        VolumeBGMManager.Save(volume_BGM);
+    }
+
+    public void SetVolumeBGM(float volume)
+    {
+        volume_BGM = volume;
+        slider_BGM.value = volume;
+        audioSource_BGM.volume = volume;
+    }
+
+    public void SetVolumeSE()
+    {
+        volume_SE = slider_SE.value;
+        audioSource_SE.volume = volume_SE;
+        VolumeSEManager.Save(volume_SE);
+    }
+
+    public void SetVolumeSE(float volume)
+    {
+        volume_SE = volume;
+        slider_SE.value = volume;
+        audioSource_SE.volume = volume;
     }
 }

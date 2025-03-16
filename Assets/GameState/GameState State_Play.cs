@@ -75,6 +75,9 @@ public class GameStateState_Play : GameStateStateBase
                     //オブジェクトを停止
                     Time.timeScale = 0;
 
+                    //SEの再生
+                    AudioManager.Instance.audioSource_SE.PlayOneShot(AudioManager.Instance.SE_Panel);
+
                     //ポーズ状態へ
                     currentPauseState = PauseState.Pause;
                 }

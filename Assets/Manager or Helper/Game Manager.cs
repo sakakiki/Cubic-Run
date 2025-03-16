@@ -2,6 +2,7 @@ using TMPro;
 using UnityEngine;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using UnityEngine.UI;
 
 //GameManagerは処理を優先実行
 [DefaultExecutionOrder(-1)]
@@ -115,13 +116,14 @@ public class GameManager : MonoBehaviour
     public GameObject optionUIBase;
     public TextMeshProUGUI optionTitle;
     public GameObject optionUI_Account;
-    public TextMeshProUGUI optionUI_CurrentAccount;
+    public TextMeshProUGUI optionUI_Account_CurrentAccount;
     public TextMeshProUGUI optionUI_Account_Status;
     public GameObject optionUI_Account_Anonymous;
     public GameObject optionUI_Account_Email;
-    public GameObject optionUI_SendEmail;
-    public GameObject optionUI_DeleteData;
-    public GameObject optionUI_Relogin;
+    public GameObject optionUI_Account_SendEmail;
+    public GameObject optionUI_Account_DeleteData;
+    public GameObject optionUI_Account_Relogin;
+    public GameObject optionUI_Volume;
     public RankingBoard highScoreRankingBoard;
     public RankingBoard playerScoreRankingBoard;
     public ResultRankingBoard resultRankingBoard;
@@ -130,6 +132,8 @@ public class GameManager : MonoBehaviour
     public TextMeshProUGUI resultHighScoreText;
     public TextMeshProUGUI resultPlayerScoreText;
     private Queue<GameObject> trainingPanels = new Queue<GameObject>();
+    [SerializeField] private Image volumeFillArea_BGM;
+    [SerializeField] private Image volumeFillArea_SE;
 
     //ステートマシン
     public GameStateStateMachine gameStateMachine {  get; private set; }
@@ -226,6 +230,8 @@ public class GameManager : MonoBehaviour
         highScore = HighScoreManager.Load();
         rankingScoreQueue = RankingScoreManager.Load();
         isUnsavedHighScore = UnsavedHighScoreFlagManager.Load();
+        AudioManager.Instance.SetVolumeBGM(VolumeBGMManager.Load());
+        AudioManager.Instance.SetVolumeSE(VolumeSEManager.Load());
 
         //クラウドに未反映のデータがあれば反映
         if (isUnsavedHighScore)
@@ -234,7 +240,6 @@ public class GameManager : MonoBehaviour
             await FSM.SavePlayerScore();
 
         //クラウドデータのロード
-        //await FSM.SaveNewPlayerData();  //新規アカウント作成
         await FSM.LoadAll();
 
 
@@ -261,16 +266,17 @@ public class GameManager : MonoBehaviour
         UpdatePanelCount();
 
 
-        //表示スキンとスキンセレクター回転量の変更
-        ChangePlayerSkin(usingSkinID);
-        skinSelecter.SetWheelAngle(usingSkinID);
-
         //スキンを全てロック
         for (int i = 0; i < isSkinUnlocked.Length; i++)
             isSkinUnlocked[i] = false;
 
-        //初期スキンのロック解除
-        UnlockSkin(0);
+        //スキンのロック解除
+        CheckSkinUnlock();
+
+        //表示スキンとスキンセレクター回転量の変更
+        ChangePlayerSkin(usingSkinID);
+        skinSelecter.SetWheelAngle(usingSkinID);
+
 
         //ランキング更新
         await RankingManager.UpdateRanking(RankingManager.RankingType.HighScore);
@@ -418,6 +424,10 @@ public class GameManager : MonoBehaviour
         //ボタンの色の更新
         button_LevelSelecters[trainingLevel - 1].PushButton();
 
+        //音量バーの色の変更
+        volumeFillArea_BGM.color = Color.Lerp(SDB.skinData[skinID].UIColor, Color.gray + Color.white * 0.5f, 0.3f);
+        volumeFillArea_SE.color = Color.Lerp(SDB.skinData[skinID].UIColor, Color.gray + Color.white * 0.5f, 0.3f);
+
         //表示スキン名の変更
         skinNameText.SetText(SDB.skinData[skinID].name);
 
@@ -513,6 +523,7 @@ public class GameManager : MonoBehaviour
     public void CheckSkinUnlock()
     {
         //Cubeスキンのチェック
+        if (playerRank >= 0) UnlockSkin(0);
         if (playerRank >= 1) UnlockSkin(1);
         if (playerRank >= 10) UnlockSkin(2);
         if (playerRank >= 20) UnlockSkin(3);
