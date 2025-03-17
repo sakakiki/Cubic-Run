@@ -148,10 +148,6 @@ public class PopupUIManager : MonoBehaviour
         inputfield_SI.contentType = contentType;
         switch (contentType)
         {
-            case TMP_InputField.ContentType.Standard:
-                inputfieldExplanation_SI.SetText("プレイヤー名を入力");
-                break;
-
             case TMP_InputField.ContentType.EmailAddress:
                 inputfieldExplanation_SI.SetText("メールアドレスを入力");
                 break;
@@ -162,6 +158,25 @@ public class PopupUIManager : MonoBehaviour
 
             default: break;
         }
+        eventOnPushOK.AddListener(onPushOK);
+        listenActionOnPushOK = onPushOK;
+        eventSaveInput.AddListener(SaveInput1);
+    }
+
+
+
+    //プレイヤー名用単一入力ポップアップの作成
+    public void SetupPopup(
+        string title, string explanation, string currentPlayerName, UnityAction onPushOK)
+    {
+        boardPopup.SetActive(true);
+        doubleButton.SetActive(true);
+        singleInputfield.SetActive(true);
+        boardTitle.SetText(title);
+        explanation_SI.SetText(explanation);
+        inputfield_SI.contentType = TMP_InputField.ContentType.Standard;
+        inputfieldExplanation_SI.SetText("プレイヤー名を入力");
+        inputfield_SI.text = currentPlayerName;
         eventOnPushOK.AddListener(onPushOK);
         listenActionOnPushOK = onPushOK;
         eventSaveInput.AddListener(SaveInput1);

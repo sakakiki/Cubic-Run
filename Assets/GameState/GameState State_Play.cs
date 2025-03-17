@@ -64,22 +64,11 @@ public class GameStateState_Play : GameStateStateBase
                 //ポーズ
                 if (IM.is_Play_Pause_Tap)
                 {
-                    //プレイ画面UIを無効化
-                    IM.InputUISetActive_Play(false);
-                    IM.InputUISetActive_Player(false);
-
-                    //ポーズ画面UIを表示・有効化
-                    GM.pauseUI.SetActive(true);
-                    IM.InputUISetActive_Pause(true);
-
-                    //オブジェクトを停止
-                    Time.timeScale = 0;
-
                     //SEの再生
                     AudioManager.Instance.audioSource_SE.PlayOneShot(AudioManager.Instance.SE_Panel);
 
                     //ポーズ状態へ
-                    currentPauseState = PauseState.Pause;
+                    EnterPause();
                 }
                 break;
 
@@ -187,9 +176,37 @@ public class GameStateState_Play : GameStateStateBase
         IM.InputUISetActive_Player(false);
     }
 
+
+
     private static void InitializePauseState()
     {
         //ポーズ状態を解除
         currentPauseState = PauseState.Play;
+    }
+
+
+
+    public static void EnterPause()
+    {
+        //プレイ画面UIを無効化
+        InputManager.Instance.InputUISetActive_Play(false);
+        InputManager.Instance.InputUISetActive_Player(false);
+
+        //ポーズ画面UIを表示・有効化
+        GameManager.Instance.pauseUI.SetActive(true);
+        InputManager.Instance.InputUISetActive_Pause(true);
+
+        //オブジェクトを停止
+        Time.timeScale = 0;
+
+        //再開のカウントダウンを非表示
+        GameManager.Instance.countinueCountText.SetText("");
+
+        //カウントサークルを非表示
+        for (int i = 0; i < GameManager.Instance.countinueCircleSquares.Length; i++)
+            GameManager.Instance.countinueCircleSquares[i].SetActive(false);
+
+        //ポーズ状態へ
+        currentPauseState = PauseState.Pause;
     }
 }

@@ -40,6 +40,8 @@ public class GameStateState_Menu : GameStateStateBase
             stateMachine.ChangeState(stateMachine.state_Account);
         else if (IM.is_Menu_Volume_Push)
             stateMachine.ChangeState(stateMachine.state_Volume);
+        else if (IM.is_Menu_Credit_Push)
+            stateMachine.ChangeState(stateMachine.state_Credit);
     }
 
 

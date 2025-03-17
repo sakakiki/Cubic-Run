@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using System.Collections.Generic;
 using System;
 using System.Linq;
-using UnityEngine.SocialPlatforms.Impl;
+using System.Text.RegularExpressions;
 
 public class FirestoreManager : MonoBehaviour
 {
@@ -15,6 +15,9 @@ public class FirestoreManager : MonoBehaviour
     private GameManager GM;
     private FirebaseFirestore db;
     private FirebaseAuth auth;
+
+    private const int playerNameMaxLength = 12; // 全角2文字、半角1文字としてカウントする最大文字数
+
 
 
 
@@ -39,13 +42,18 @@ public class FirestoreManager : MonoBehaviour
     /// プレイヤー名を保存
     /// [オンライン専用]
     /// </summary>
-    public async Task SavePlayerName(string playerName)
+    public async Task<string> SavePlayerName(string playerName)
     {
         if (auth.CurrentUser == null)
         {
             Debug.LogError("Firebase認証されていません");
-            return;
+
+            return "異常終了";
         }
+
+        //新しいプレイヤー名が長すぎれば拒否
+        if (CalculateTextLength(playerName) > playerNameMaxLength)
+            return "プレイヤー名が長すぎます。短いプレイヤー名で再度お試しください。";
 
         try
         {
@@ -55,15 +63,41 @@ public class FirestoreManager : MonoBehaviour
             DocumentReference docRef = db.Collection("users").Document(auth.CurrentUser.UserId);
 
             await docRef.SetAsync(new { name = playerName }, SetOptions.MergeAll);
+
+            //ローカルにも反映
+            GM.playerName = playerName;
+
+            return "正常終了";
         }
         catch (FirebaseException e)
         {
-            Debug.LogWarning("ネットワークが無効またはオフラインのため、プレイヤー名の保存をスキップしました。" + e.Message);
+            return "ネットワークが無効またはオフラインのため、プレイヤー名を保存できませんでした。";
         }
         catch (Exception e)
         {
-            Debug.LogError("プレイヤー名の保存に失敗: " + e.Message);
+            return "異常終了";
         }
+    }
+
+    /// <summary>
+    /// 全角を2、半角を1として文字数を計算する
+    /// </summary>
+    int CalculateTextLength(string text)
+    {
+        int count = 0;
+        foreach (char c in text)
+        {
+            count += IsFullWidth(c) ? 2 : 1;
+        }
+        return count;
+    }
+
+    /// <summary>
+    /// 全角文字かどうかを判定
+    /// </summary>
+    bool IsFullWidth(char c)
+    {
+        return Regex.IsMatch(c.ToString(), @"[^\x00-\x7F]"); // ASCII外の文字を全角と判定
     }
 
     /// <summary>

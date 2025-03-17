@@ -124,6 +124,7 @@ public class GameManager : MonoBehaviour
     public GameObject optionUI_Account_DeleteData;
     public GameObject optionUI_Account_Relogin;
     public GameObject optionUI_Volume;
+    public GameObject optionUI_Credit;
     public RankingBoard highScoreRankingBoard;
     public RankingBoard playerScoreRankingBoard;
     public ResultRankingBoard resultRankingBoard;
@@ -134,6 +135,13 @@ public class GameManager : MonoBehaviour
     private Queue<GameObject> trainingPanels = new Queue<GameObject>();
     [SerializeField] private Image volumeFillArea_BGM;
     [SerializeField] private Image volumeFillArea_SE;
+    [SerializeField] private TextMeshProUGUI playerInfo_PlayerName;
+    [SerializeField] private TextMeshProUGUI playerInfo_PlayerRank;
+    [SerializeField] private RectTransform playerInfo_ExpScaleRtf;
+    [SerializeField] private SpriteRenderer playerInfo_ExpScaleSprite;
+    [SerializeField] private TextMeshProUGUI playerInfo_TotalExp;
+    [SerializeField] private TextMeshProUGUI playerInfo_RequiredExp;
+    [SerializeField] private TextMeshProUGUI playerInfo_TotalRunDistance;
 
     //ステートマシン
     public GameStateStateMachine gameStateMachine {  get; private set; }
@@ -278,6 +286,9 @@ public class GameManager : MonoBehaviour
         skinSelecter.SetWheelAngle(usingSkinID);
 
 
+        //プレイヤー情報の更新
+        UpdatePlayerInfo();
+
         //ランキング更新
         await RankingManager.UpdateRanking(RankingManager.RankingType.HighScore);
         await RankingManager.UpdateRanking(RankingManager.RankingType.PlayerScore);
@@ -420,6 +431,8 @@ public class GameManager : MonoBehaviour
 
         //経験値バー色の変更
         expSprite.color = Color.Lerp(SDB.skinData[skinID].UIColor, Color.gray + Color.white * 0.3f, 0.3f);
+        playerInfo_ExpScaleSprite.color = 
+            Color.Lerp(SDB.skinData[skinID].UIColor, Color.gray + Color.white * 0.3f, 0.3f);
 
         //ボタンの色の更新
         button_LevelSelecters[trainingLevel - 1].PushButton();
@@ -593,6 +606,9 @@ public class GameManager : MonoBehaviour
         FSM.SaveExperience(addExp);
         #endregion
 
+        //プレイヤー情報の更新
+        UpdatePlayerInfo();
+
         //トレーニングモードなら処理終了
         if (isTraining) return;
 
@@ -635,5 +651,30 @@ public class GameManager : MonoBehaviour
         }
 
         return playerScore;
+    }
+
+
+
+    //プレイヤー情報の更新
+    public void UpdatePlayerInfo()
+    {
+        playerInfo_PlayerName.SetText(playerName);
+        playerInfo_PlayerRank.SetText("プレイヤーランク　" + playerRank);
+        playerInfo_ExpScaleRtf.localScale = Vector3.one - Vector3.right * (requiredExp / (float)((playerRank + 1) * 100));
+        playerInfo_TotalExp.SetText(totalExp + "Exp");
+        playerInfo_RequiredExp.SetText(requiredExp.ToString());
+        playerInfo_TotalRunDistance.SetText("走った距離：" + totalRunDistance.ToString("N0") + "m");
+    }
+
+
+
+    //アプリ中断時の処理
+    public void OnApplicationFocus(bool hasFocus)
+    {
+        if (!hasFocus)
+        {
+            if (gameStateMachine.currentState == gameStateMachine.state_Play)
+                GameStateState_Play.EnterPause();
+        }
     }
 }

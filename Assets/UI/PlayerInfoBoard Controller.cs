@@ -1,14 +1,12 @@
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class OptionBoardController : MonoBehaviour, IPointerDownHandler
+public class PlayerInfoBoardController : MonoBehaviour, IPointerDownHandler
 {
     private GameStateStateMachine gameStateMachine;
-    [SerializeField] private SpriteRenderer optionIcon;
-    [SerializeField] private RectTransform optionRtf;
-    [SerializeField] private SpriteRenderer[] closeIcon;
-    [SerializeField] private RectTransform closeRtf;
-    [SerializeField] private RectTransform boardRtf;
+    [SerializeField] private RectTransform buttonIconRtf;
+    [SerializeField] private RectTransform boardUpRtf;
+    [SerializeField] private GameObject addInfo;
     private bool isOpen;
     private float openRate;
 
@@ -51,17 +49,14 @@ public class OptionBoardController : MonoBehaviour, IPointerDownHandler
             //開閉具合を更新
             openRate += Time.deltaTime * (isOpen ? 5 : -5);
 
-            //アイコンのカラー変更
-            optionIcon.color = Color.white - Color.black * openRate;
-            closeIcon[0].color = Color.black * openRate;
-            closeIcon[1].color = Color.black * openRate;
-
             //アイコンの回転
-            optionRtf.localEulerAngles = Vector3.forward * Mathf.Lerp(0, 90, openRate);
-            closeRtf.localEulerAngles = Vector3.forward * Mathf.Lerp(-90, 0, openRate);
+            buttonIconRtf.localEulerAngles = Vector3.forward * Mathf.Lerp(0, 180, openRate);
 
             //ボードの開閉
-            boardRtf.localScale = Vector3.one * Mathf.Lerp(0, 1, openRate);
+            boardUpRtf.anchoredPosition = Vector3.up * Mathf.Lerp(0, 200, openRate);
+
+            //拡張情報の表示・非表示
+            addInfo.SetActive(openRate > 1);
         }
     }
 }
