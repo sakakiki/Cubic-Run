@@ -19,6 +19,10 @@ public class PlayerState_Play_SmallJump : PlayerStateBase_Play
     {
         base.Update();
 
+        //ポーズ状態なら何もしない
+        if (GameStateState_Play.currentPauseState != GameStateState_Play.PauseState.Play)
+            return;
+
         //しゃがみ入力解除でJumpステートに遷移
         if (IM.is_Player_Squat_Release)
             stateMachine.ChangeState(stateMachine.state_Play_Jump);

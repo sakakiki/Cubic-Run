@@ -21,6 +21,10 @@ public class PlayerState_Play_Attack : PlayerStateBase_Play
     {
         base.Update();
 
+        //ƒ|[ƒYó‘Ô‚È‚ç‰½‚à‚µ‚È‚¢
+        if (GameStateState_Play.currentPauseState != GameStateState_Play.PauseState.Play)
+            return;
+
         //UŒ‚“ü—Í‰ğœ
         if (IM.is_Player_Attack_Release)
         {

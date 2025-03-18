@@ -57,7 +57,7 @@ public class GameStateState_ResultToMenu : GameStateStateBase
         if (elapsedTime < 1.5) return;
 
         //BGMのボリューム変更
-        audioSource_BGM.volume = 2.5f - elapsedTime;
+        audioSource_BGM.volume = (2.5f - elapsedTime) * AM.volume_BGM;
 
         //UI動作開始処理
         if (!isMoveStart)

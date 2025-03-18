@@ -14,6 +14,10 @@ public class PlayerState_Play_Run : PlayerStateBase_Play
     {
         base.Update();
 
+        //ポーズ状態なら何もしない
+        if (GameStateState_Play.currentPauseState != GameStateState_Play.PauseState.Play)
+            return;
+
         //ジャンプ処理
         if (IM.is_Player_Jump_Push)
         {

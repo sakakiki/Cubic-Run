@@ -20,6 +20,10 @@ public class PlayerState_Play_Jump : PlayerStateBase_Play
     {
         base.Update();
 
+        //ポーズ状態なら何もしない
+        if (GameStateState_Play.currentPauseState != GameStateState_Play.PauseState.Play)
+            return;
+
         //しゃがみボタンが押されたら急降下
         if (IM.is_Player_Squat_Push)
         {

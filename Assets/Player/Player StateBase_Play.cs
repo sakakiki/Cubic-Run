@@ -18,6 +18,10 @@ public abstract class PlayerStateBase_Play : PlayerStateBase
 
     public override void Update()
     {
+        //ƒ|[ƒYó‘Ô‚È‚ç‰½‚à‚µ‚È‚¢
+        if (GameStateState_Play.currentPauseState != GameStateState_Play.PauseState.Play)
+            return;
+
         //“ü—Íæ“¾
         IM.GetInput_Player();
 

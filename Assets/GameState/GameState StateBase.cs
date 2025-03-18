@@ -6,6 +6,7 @@ public abstract class GameStateStateBase
     protected GameManager GM;
     protected InputManager IM;
     protected TerrainManager TM;
+    protected AudioManager AM;
     protected PlayerController playerCon;
     protected PlayerStateMachine playerStateMachine;
     protected AudioSource audioSource_BGM;
@@ -16,6 +17,7 @@ public abstract class GameStateStateBase
         GM = GameManager.Instance;
         IM = InputManager.Instance;
         TM = TerrainManager.Instance;
+        AM = AudioManager.Instance;
         playerCon = GM.playerCon;
         playerStateMachine = playerCon.stateMachine;
         audioSource_BGM = AudioManager.Instance.audioSource_BGM;

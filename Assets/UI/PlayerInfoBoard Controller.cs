@@ -40,6 +40,7 @@ public class PlayerInfoBoardController : MonoBehaviour, IPointerDownHandler
         if (gameStateMachine.currentState != gameStateMachine.state_Menu &&
             gameStateMachine.currentState != gameStateMachine.state_Account &&
             gameStateMachine.currentState != gameStateMachine.state_Volume &&
+            gameStateMachine.currentState != gameStateMachine.state_Button_Pattern &&
             gameStateMachine.currentState != gameStateMachine.state_Credit) 
             isOpen = false;
 

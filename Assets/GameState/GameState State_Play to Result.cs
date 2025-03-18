@@ -176,7 +176,7 @@ public class GameStateState_PlayToResult : GameStateStateBase
         if (elapsedTime < 1)
         {
             //BGMのボリューム変更
-            audioSource_BGM.volume = 1 - elapsedTime;
+            audioSource_BGM.volume = (1 - elapsedTime) * AM.volume_BGM;
 
             //残りの処理を飛ばす
             return;
@@ -189,8 +189,8 @@ public class GameStateState_PlayToResult : GameStateStateBase
             isAudioPlay = true;
 
             //BGM再生
-            audioSource_BGM.volume = 1;
-            audioSource_BGM.clip = AudioManager.Instance.BGM_Result;
+            audioSource_BGM.volume = AM.volume_BGM;
+            audioSource_BGM.clip = AM.BGM_Result;
             audioSource_BGM.Play();
         }
 
@@ -229,7 +229,7 @@ public class GameStateState_PlayToResult : GameStateStateBase
             addExpText.SetText("+" + addExp + "Exp");
 
             //SEの再生
-            AudioManager.Instance.audioSource_SE.PlayOneShot(AudioManager.Instance.SE_GetExp);
+            AM.audioSource_SE.PlayOneShot(AM.SE_GetExp);
 
             if (!GM.isTraining)
             {
@@ -261,7 +261,7 @@ public class GameStateState_PlayToResult : GameStateStateBase
             if (levelUpCount_local > levelUpCount_state)
             {
                 //SEの再生
-                AudioManager.Instance.audioSource_SE.PlayOneShot(AudioManager.Instance.SE_LevelUp);
+                AM.audioSource_SE.PlayOneShot(AM.SE_LevelUp);
                 levelUpCount_state++;
             }
         }
@@ -305,6 +305,6 @@ public class GameStateState_PlayToResult : GameStateStateBase
         playerRankScaleRtf.localScale = Vector3.one - Vector3.right * (GM.requiredExp / (float)((GM.playerRank + 1) * 100));
 
         //SEの停止
-        AudioManager.Instance.audioSource_SE.Stop();
+        AM.audioSource_SE.Stop();
     }
 }

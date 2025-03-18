@@ -124,6 +124,7 @@ public class GameManager : MonoBehaviour
     public GameObject optionUI_Account_DeleteData;
     public GameObject optionUI_Account_Relogin;
     public GameObject optionUI_Volume;
+    public GameObject optionUI_Button_Pattern;
     public GameObject optionUI_Credit;
     public RankingBoard highScoreRankingBoard;
     public RankingBoard playerScoreRankingBoard;

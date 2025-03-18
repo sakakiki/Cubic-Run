@@ -13,10 +13,10 @@ public class GameStateState_Menu : GameStateStateBase
         TM.isCreateObstacle = true;
 
         //BGM‚ªƒƒjƒ…[‰æ–Ê‚Ì‚à‚Ì‚Å‚È‚¯‚ê‚Î•ÏX‚µ‚ÄÄ¶
-        if (audioSource_BGM.clip != AudioManager.Instance.BGM_Menu)
+        if (audioSource_BGM.clip != AM.BGM_Menu)
         {
-            audioSource_BGM.volume = 1;
-            audioSource_BGM.clip = AudioManager.Instance.BGM_Menu;
+            audioSource_BGM.volume = AM.volume_BGM;
+            audioSource_BGM.clip = AM.BGM_Menu;
             audioSource_BGM.Play();
         }
     }
@@ -40,6 +40,8 @@ public class GameStateState_Menu : GameStateStateBase
             stateMachine.ChangeState(stateMachine.state_Account);
         else if (IM.is_Menu_Volume_Push)
             stateMachine.ChangeState(stateMachine.state_Volume);
+        else if (IM.is_Menu_Button_Push)
+            stateMachine.ChangeState(stateMachine.state_Button_Pattern);
         else if (IM.is_Menu_Credit_Push)
             stateMachine.ChangeState(stateMachine.state_Credit);
     }

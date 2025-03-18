@@ -20,6 +20,10 @@ public class PlayerState_Play_Squat : PlayerStateBase_Play
     {
         base.Update();
 
+        //ƒ|[ƒYó‘Ô‚È‚ç‰½‚à‚µ‚È‚¢
+        if (GameStateState_Play.currentPauseState != GameStateState_Play.PauseState.Play)
+            return;
+
         //‚µ‚á‚ª‚İ“ü—Í‰ğœ
         if (IM.is_Player_Squat_Release)
         {

@@ -7,11 +7,15 @@ public class Button_Push_BindEvent : MonoBehaviour, IPointerDownHandler, IPointe
     [SerializeField] private UnityEvent eventOnPush;
     private Vector3 defaultScale;
     [SerializeField] private SpriteRenderer cover;
+    [SerializeField] private AudioClip clipSE = null;
 
     private void Start()
     {
         //基本のスケールを記憶
         defaultScale = transform.localScale;
+
+        //効果音が未設定ならデフォルトの効果音を登録
+        if (clipSE == null) clipSE = AudioManager.Instance.SE_Button;
     }
 
     //タップ：タップ時に実行
@@ -25,7 +29,7 @@ public class Button_Push_BindEvent : MonoBehaviour, IPointerDownHandler, IPointe
         cover.color = GameManager.Instance.panelSelectedColor - Color.black * 0.95f;
 
         //SEを再生
-        AudioManager.Instance.PlaySE(AudioManager.Instance.SE_Button);
+        AudioManager.Instance.PlaySE(clipSE);
     }
 
     //タップ：タップ後に指が画面から離れたとき、指の場所に関わらず実行

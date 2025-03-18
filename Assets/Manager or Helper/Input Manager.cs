@@ -17,7 +17,8 @@ public class InputManager : MonoBehaviour
     [SerializeField] private Button_Push button_Skin_Cancel;
     public bool isSkinSelect {  get; private set; }
     [SerializeField] private Button_Tap button_Play_Pause;
-    private bool isInputPlayerActive = true;
+    public bool isPauseGame;
+    [SerializeField] private GameObject playButton;
     [SerializeField] private Button_Push button_Pause_Continue;
     [SerializeField] private Button_Push button_Pause_Retire;
     [SerializeField] private Button_Push button_Result_Title;
@@ -56,6 +57,7 @@ public class InputManager : MonoBehaviour
     public bool is_Option_Close_Tap { get; private set; }
 
 
+
     private void Awake()
     {
         if (Instance == null)
@@ -64,7 +66,14 @@ public class InputManager : MonoBehaviour
 
 
 
-    //SetActiveメソッド
+    public void LateUpdate()
+    {
+        ResetInput_Player();
+    }
+
+
+
+    #region SetActiveメソッド
     //有効・無効の切り替えに使用
     public void InputUISetActive_Screen(bool isActive)
     {
@@ -95,7 +104,7 @@ public class InputManager : MonoBehaviour
 
     public void InputUISetActive_Player(bool isActive)
     {
-        isInputPlayerActive = isActive;
+        playButton.SetActive(isActive);
     }
 
     public void InputUISetActive_Pause(bool isActive)
@@ -114,11 +123,12 @@ public class InputManager : MonoBehaviour
     {
         button_Option_Close.enabled = isActive;
     }
+    #endregion
 
 
 
 
-    //GetInputメソッド
+    #region GetInputメソッド
     //入力情報を最新に更新
     public void GetInput_Screen()
     {
@@ -149,16 +159,28 @@ public class InputManager : MonoBehaviour
         is_Play_Pause_Tap = button_Play_Pause.GetIsTapped();
     }
 
+    /* 開発用メソッド */
     public void GetInput_Player()
     {
-        if (!isInputPlayerActive) return;
-        is_Player_Jump_Push = Input.GetKeyDown(KeyCode.UpArrow);
-        is_Player_Squat_Push = Input.GetKeyDown(KeyCode.DownArrow);
-        is_Player_Squat_Hold = Input.GetKey(KeyCode.DownArrow);
-        is_Player_Squat_Release = Input.GetKeyUp(KeyCode.DownArrow);
-        is_Player_Attack_Push = Input.GetKeyDown(KeyCode.RightArrow);
-        is_Player_Attack_Hold = Input.GetKey(KeyCode.RightArrow);
-        is_Player_Attack_Release = Input.GetKeyUp(KeyCode.RightArrow);
+        is_Player_Jump_Push |= Input.GetKeyDown(KeyCode.UpArrow);
+        is_Player_Squat_Push |= Input.GetKeyDown(KeyCode.DownArrow);
+        is_Player_Squat_Hold |= Input.GetKey(KeyCode.DownArrow);
+        is_Player_Squat_Release |= Input.GetKeyUp(KeyCode.DownArrow);
+        is_Player_Attack_Push |= Input.GetKeyDown(KeyCode.RightArrow);
+        is_Player_Attack_Hold |= Input.GetKey(KeyCode.RightArrow);
+        is_Player_Attack_Release |= Input.GetKeyUp(KeyCode.RightArrow);
+    }
+    //Push・Releaseを1フレームのみに制限
+    public void ResetInput_Player()
+    {
+        //ポーズ状態ならリセットしない
+        if (isPauseGame) return;
+
+        is_Player_Jump_Push = false;
+        is_Player_Squat_Push = false;
+        is_Player_Squat_Release = false;
+        is_Player_Attack_Push = false;
+        is_Player_Attack_Release = false;
     }
 
     public void GetInput_Pause()
@@ -177,4 +199,51 @@ public class InputManager : MonoBehaviour
     {
         is_Option_Close_Tap = button_Option_Close.GetIsTapped();
     }
+    #endregion
+
+
+
+
+    #region プレイ入力用イベント
+    public void InputEvent_Jump_Push()
+    {
+        is_Player_Jump_Push = true;
+    }
+
+    public void InputEvent_Squat_Push()
+    {
+        is_Player_Squat_Push = true;
+        is_Player_Squat_Hold = true;
+
+        if (isPauseGame)
+        {
+            is_Player_Squat_Release = false;
+            is_Player_Attack_Push = false;
+        }
+    }
+
+    public void InputEvent_Squat_Release()
+    {
+        is_Player_Squat_Hold = false;
+        is_Player_Squat_Release = true;
+    }
+
+    public void InputEvent_Attack_Push()
+    {
+        is_Player_Attack_Push = true;
+        is_Player_Attack_Hold = true;
+
+        if (isPauseGame)
+        {
+            is_Player_Attack_Release = false;
+            is_Player_Squat_Push = false;
+        }
+    }
+
+    public void InputEvent_Attack_Release()
+    {
+        is_Player_Attack_Hold = false;
+        is_Player_Attack_Release = true;
+    }
+    #endregion
 }

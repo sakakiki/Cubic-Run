@@ -8,19 +8,22 @@ public class GameStateState_Play : GameStateStateBase
     //ポーズ処理関係変数
     private int countinueCount;
     private int countinueCircleCount;
-    private enum PauseState
+    public enum PauseState
     {
         Play,
         Pause,
         PauseToPlay
     }
-    private static PauseState currentPauseState;
+    public static PauseState currentPauseState { get; private set; }
 
 
 
     public GameStateState_Play(GameStateStateMachine stateMachine) : base(stateMachine)
     {
         playStateMachine = new PlayStateStateMachine(stateMachine);
+
+        //ポーズ状態を解除
+        InitializePauseState();
     }
 
 
@@ -38,12 +41,9 @@ public class GameStateState_Play : GameStateStateBase
         TM.moveSpeed = 5 + Mathf.Pow(GM.level, 0.7f) * 3;
         TM.SetSpeed(5 + Mathf.Pow(GM.level, 0.7f) * 3);
 
-        //ポーズ状態を解除
-        InitializePauseState();
-
         //プレイ用BGMの再生
-        audioSource_BGM.volume = 1;
-        audioSource_BGM.clip = AudioManager.Instance.BGM_Play;
+        audioSource_BGM.volume = AM.volume_BGM;
+        audioSource_BGM.clip = AM.BGM_Play;
         audioSource_BGM.Play();
     }
 
@@ -151,7 +151,7 @@ public class GameStateState_Play : GameStateStateBase
 
                         //プレイ画面UIを有効化
                         IM.InputUISetActive_Play(true);
-                        IM.InputUISetActive_Player(true);
+                        InputManager.Instance.isPauseGame = false;
 
                         //オブジェクトを動かす
                         Time.timeScale = 1;
@@ -174,6 +174,9 @@ public class GameStateState_Play : GameStateStateBase
         //プレイ画面入力UIの無効化
         IM.InputUISetActive_Play(false);
         IM.InputUISetActive_Player(false);
+
+        //ポーズ状態を解除
+        InitializePauseState();
     }
 
 
@@ -190,7 +193,7 @@ public class GameStateState_Play : GameStateStateBase
     {
         //プレイ画面UIを無効化
         InputManager.Instance.InputUISetActive_Play(false);
-        InputManager.Instance.InputUISetActive_Player(false);
+        InputManager.Instance.isPauseGame = true;
 
         //ポーズ画面UIを表示・有効化
         GameManager.Instance.pauseUI.SetActive(true);
