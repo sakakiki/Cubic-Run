@@ -33,6 +33,7 @@ public class GameStateState_Play : GameStateStateBase
         //プレイ画面入力UIの有効化
         IM.InputUISetActive_Play(true);
         IM.InputUISetActive_Player(true);
+        IM.isPauseGame = false;
 
         //プレイ用ステートマシンの初期化
         playStateMachine.Initialize(playStateMachine.state_LevelStart);
@@ -151,7 +152,7 @@ public class GameStateState_Play : GameStateStateBase
 
                         //プレイ画面UIを有効化
                         IM.InputUISetActive_Play(true);
-                        InputManager.Instance.isPauseGame = false;
+                        IM.isPauseGame = false;
 
                         //オブジェクトを動かす
                         Time.timeScale = 1;

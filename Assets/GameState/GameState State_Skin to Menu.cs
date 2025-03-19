@@ -9,7 +9,7 @@ public class GameStateState_SkinToMenu : GameStateStateBase
     public RectTransform skinHingeRtf_B;
     private SkinSelecter skinSelecter;
     private bool isMoving;
-    private bool isReset;
+    private bool isNeedReset;
 
     public GameStateState_SkinToMenu(GameStateStateMachine stateMachine) : base(stateMachine)
     {
@@ -29,10 +29,10 @@ public class GameStateState_SkinToMenu : GameStateStateBase
 
         //フラグリセット
         isMoving = false;
-        isReset = IM.isSkinSelect;
+        isNeedReset = !IM.isSkinSelect;
 
         //リセットの必要が無ければ
-        if (isReset)
+        if (!isNeedReset)
         {
             //使用中のスキン情報をクラウドに保存
             await FirestoreManager.Instance.SaveUsingSkin();
@@ -43,6 +43,8 @@ public class GameStateState_SkinToMenu : GameStateStateBase
             GM.highScoreRankingBoard.UpdateRanking();
             GM.playerScoreRankingBoard.UpdateRanking();
         }
+        //リセットが必要ならUIの色だけ先に戻す
+        else GM.ChangeUIColor(GM.previousSkinID);
     }
 
 
@@ -78,10 +80,10 @@ public class GameStateState_SkinToMenu : GameStateStateBase
         if (elapsedTime < 1.5) return;
 
         //リセットの必要があるなら
-        if (!isReset)
+        if (isNeedReset)
         {
-            //リセット済みフラグを立てる
-            isReset = true;
+            //リセット要求フラグを下ろす
+            isNeedReset = false;
 
             //スキンの色を戻す
             GM.ChangePlayerSkin(GM.previousSkinID);

@@ -166,13 +166,11 @@ public class InputManager : MonoBehaviour
     /* 開発用メソッド */
     public void GetInput_Player()
     {
-        is_Player_Jump_Push |= Input.GetKeyDown(KeyCode.UpArrow);
-        is_Player_Squat_Push |= Input.GetKeyDown(KeyCode.DownArrow);
-        is_Player_Squat_Hold |= Input.GetKey(KeyCode.DownArrow);
-        is_Player_Squat_Release |= Input.GetKeyUp(KeyCode.DownArrow);
-        is_Player_Attack_Push |= Input.GetKeyDown(KeyCode.RightArrow);
-        is_Player_Attack_Hold |= Input.GetKey(KeyCode.RightArrow);
-        is_Player_Attack_Release |= Input.GetKeyUp(KeyCode.RightArrow);
+        if (Input.GetKeyDown(KeyCode.UpArrow)) InputEvent_Jump_Push();
+        if (Input.GetKeyDown(KeyCode.DownArrow)) InputEvent_Squat_Push();
+        if (Input.GetKeyUp(KeyCode.DownArrow)) InputEvent_Squat_Release();
+        if (Input.GetKeyDown(KeyCode.RightArrow)) InputEvent_Attack_Push();
+        if (Input.GetKeyUp(KeyCode.RightArrow)) InputEvent_Attack_Release();
     }
     //Push・Releaseを1フレームのみに制限
     public void ResetInput_Player()

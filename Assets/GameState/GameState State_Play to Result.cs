@@ -137,7 +137,7 @@ public class GameStateState_PlayToResult : GameStateStateBase
         if (beforePlayRank < 40 && 40 <= GM.playerRank) GM.newSkinQueue.Enqueue(5);
         if (beforePlayRank < 50 && 50 <= GM.playerRank) GM.newSkinQueue.Enqueue(6);
         if (beforePlayRank < 100 && 100 <= GM.playerRank) GM.newSkinQueue.Enqueue(7);
-        if (GM.score == 5000 && GM.isTraining)
+        if (GM.score == 5000 && GM.isTraining && GM.trainingClearCounts[GM.level-1] == 1)
         {
             switch (GM.level)
             {
@@ -156,7 +156,8 @@ public class GameStateState_PlayToResult : GameStateStateBase
         //ランキング更新
         GM.resultRankingBoard.UpdateRanking();
 
-        //スコア変動表示リセット
+        //経験値・スコア変動表示リセット
+        addExpText.SetText("");
         highScoreFluctuationText.SetText("");
         playerScoreFluctuationText.SetText("");
     }
@@ -226,7 +227,11 @@ public class GameStateState_PlayToResult : GameStateStateBase
             isSetText = true;
 
             //獲得経験値量の表示
-            addExpText.SetText("+" + addExp + "Exp");
+            //トレーニングモード完走時のみ例外処理
+            if (GM.score == 5000 && GM.isTraining)
+                addExpText.SetText("+" + addExp + "Exp（完走ボーナス+" + GM.level * 50 + "Exp）");
+            else
+                addExpText.SetText("+" + addExp + "Exp");
 
             //SEの再生
             AM.audioSource_SE.PlayOneShot(AM.SE_GetExp);

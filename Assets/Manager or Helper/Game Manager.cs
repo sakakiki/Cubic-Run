@@ -3,6 +3,7 @@ using UnityEngine;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine.UI;
+using static UnityEngine.InputManagerEntry;
 
 //GameManagerは処理を優先実行
 [DefaultExecutionOrder(-1)]
@@ -430,29 +431,11 @@ public class GameManager : MonoBehaviour
         //スキンの変更
         playerCon.ChangeSkin(skinID);
 
-        //パネル選択時の色を変更
-        panelSelectedColor = SDB.skinData[skinID].UIColor;
-
-        //スコアゲージの色を変更
-        scoreGageSprite.color = SDB.skinData[skinID].UIColor - Color.black * 0.4f;
-
-        //経験値バー色の変更
-        expSprite.color = Color.Lerp(SDB.skinData[skinID].UIColor, Color.gray + Color.white * 0.3f, 0.3f);
-        playerInfo_ExpScaleSprite.color = 
-            Color.Lerp(SDB.skinData[skinID].UIColor, Color.gray + Color.white * 0.3f, 0.3f);
-
-        //ボタンの色の更新
-        button_LevelSelecters[trainingLevel - 1].PushButton();
-
-        //音量バーの色の変更
-        volumeFillArea_BGM.color = Color.Lerp(SDB.skinData[skinID].UIColor, Color.gray + Color.white * 0.5f, 0.3f);
-        volumeFillArea_SE.color = Color.Lerp(SDB.skinData[skinID].UIColor, Color.gray + Color.white * 0.5f, 0.3f);
-
-        //ボタン配置UIの色変更
-        buttonPatternSelectSquare.color = SDB.skinData[skinID].UIColor;
-
         //表示スキン名の変更
         skinNameText.SetText(SDB.skinData[skinID].name);
+
+        //UIの色を変更
+        ChangeUIColor(skinID);
 
         //Crystalスキンロック時の例外処理
         if (!isSkinUnlocked[skinID])
@@ -464,6 +447,33 @@ public class GameManager : MonoBehaviour
                 //名前を表示しない
                 skinNameText.SetText("？？？");
             }
+    }
+
+
+
+    //UIの色のみを変更
+    public void ChangeUIColor(int skinID)
+    {
+        //パネル選択時の色を変更
+        panelSelectedColor = SDB.skinData[skinID].UIColor;
+
+        //スコアゲージの色を変更
+        scoreGageSprite.color = SDB.skinData[skinID].UIColor - Color.black * 0.4f;
+
+        //経験値バー色の変更
+        expSprite.color = Color.Lerp(SDB.skinData[skinID].UIColor, Color.gray + Color.white * 0.3f, 0.3f);
+        playerInfo_ExpScaleSprite.color =
+            Color.Lerp(SDB.skinData[skinID].UIColor, Color.gray + Color.white * 0.3f, 0.3f);
+
+        //ボタンの色の更新
+        button_LevelSelecters[trainingLevel - 1].PushButton();
+
+        //音量バーの色の変更
+        volumeFillArea_BGM.color = Color.Lerp(SDB.skinData[skinID].UIColor, Color.gray + Color.white * 0.5f, 0.3f);
+        volumeFillArea_SE.color = Color.Lerp(SDB.skinData[skinID].UIColor, Color.gray + Color.white * 0.5f, 0.3f);
+
+        //ボタン配置UIの色変更
+        buttonPatternSelectSquare.color = SDB.skinData[skinID].UIColor;
     }
 
 
@@ -600,6 +610,10 @@ public class GameManager : MonoBehaviour
         #region 経験値の加算
         //ゲームモードに応じた加算量算出
         int addExp = isTraining ? addDistance / 10 : addDistance;
+
+        //トレーニングモード完走で完走ボーナス加算
+        if (score == 5000 && isTraining)
+            addExp += level * 50;
 
         //ローカルに反映
         totalExp += addExp;
