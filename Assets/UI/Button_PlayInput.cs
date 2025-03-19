@@ -4,8 +4,8 @@ using UnityEngine.EventSystems;
 
 public class Button_PlayInput : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 {
-    public UnityEvent eventOnPush;
-    public UnityEvent eventOnRelease;
+    public UnityAction eventOnPush;
+    public UnityAction eventOnRelease;
 
     public void OnPointerDown(PointerEventData eventData)
     {

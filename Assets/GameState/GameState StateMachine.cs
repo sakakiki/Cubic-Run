@@ -19,7 +19,7 @@ public class GameStateStateMachine
     public GameStateStateBase state_PauseToMenu { get; private set; }
     public GameStateStateBase state_Account { get; private set; }
     public GameStateStateBase state_Volume { get; private set; }
-    public GameStateStateBase state_Button_Pattern { get; private set; }
+    public GameStateStateBase state_Button { get; private set; }
     public GameStateStateBase state_Credit { get; private set; }
 
 
@@ -41,7 +41,7 @@ public class GameStateStateMachine
         state_PauseToMenu = new GameStateState_PauseToMenu(this);
         state_Account = new GameStateState_Option_Account(this);
         state_Volume = new GameStateState_Option_Volume(this);
-        state_Button_Pattern = new GameStateState_Option_Button_Pattern(this);
+        state_Button = new GameStateState_Option_Button(this);
         state_Credit = new GameStateState_Option_Credit(this);
     }
 

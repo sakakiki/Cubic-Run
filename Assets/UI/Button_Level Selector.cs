@@ -3,7 +3,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class Button_LevelSelecter: MonoBehaviour, IPointerClickHandler
+public class Button_LevelSelector: MonoBehaviour, IPointerClickHandler
 {
     public bool isEnable;
     [SerializeField] private Transform tf;

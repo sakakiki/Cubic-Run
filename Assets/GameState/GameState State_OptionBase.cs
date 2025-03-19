@@ -30,7 +30,12 @@ public abstract class GameStateState_OptionBase : GameStateStateBase
 
         //入力に応じたステート遷移
         if (IM.is_Option_Close_Tap)
+        {
+            //SEの再生
+            AudioManager.Instance.audioSource_SE.PlayOneShot(AudioManager.Instance.SE_Close);
+
             stateMachine.ChangeState(stateMachine.state_Menu);
+        }
     }
 
 
@@ -45,8 +50,5 @@ public abstract class GameStateState_OptionBase : GameStateStateBase
 
         //カバーを透明に
         GameManager.Instance.frontScreenCover.color = Color.clear;
-
-        //SEの再生
-        AudioManager.Instance.audioSource_SE.PlayOneShot(AudioManager.Instance.SE_Close);
     }
 }

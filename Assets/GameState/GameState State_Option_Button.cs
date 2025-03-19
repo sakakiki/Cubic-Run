@@ -1,6 +1,6 @@
-public class GameStateState_Option_Button_Pattern : GameStateState_OptionBase
+public class GameStateState_Option_Button : GameStateState_OptionBase
 {
-    public GameStateState_Option_Button_Pattern(GameStateStateMachine stateMachine) : base(stateMachine) { }
+    public GameStateState_Option_Button(GameStateStateMachine stateMachine) : base(stateMachine) { }
 
 
 
@@ -12,7 +12,7 @@ public class GameStateState_Option_Button_Pattern : GameStateState_OptionBase
         GameManager.Instance.optionTitle.SetText("ボタン配置変更");
 
         //UIを有効化
-        GameManager.Instance.optionUI_Button_Pattern.SetActive(true);
+        GameManager.Instance.optionUI_Button.SetActive(true);
     }
 
 
@@ -29,6 +29,6 @@ public class GameStateState_Option_Button_Pattern : GameStateState_OptionBase
         base.Exit();
 
         //VolumeのUIを非表示・無効化
-        GameManager.Instance.optionUI_Button_Pattern.SetActive(false);
+        GameManager.Instance.optionUI_Button.SetActive(false);
     }
 }

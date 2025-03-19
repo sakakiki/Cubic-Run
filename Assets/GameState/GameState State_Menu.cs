@@ -41,7 +41,7 @@ public class GameStateState_Menu : GameStateStateBase
         else if (IM.is_Menu_Volume_Push)
             stateMachine.ChangeState(stateMachine.state_Volume);
         else if (IM.is_Menu_Button_Push)
-            stateMachine.ChangeState(stateMachine.state_Button_Pattern);
+            stateMachine.ChangeState(stateMachine.state_Button);
         else if (IM.is_Menu_Credit_Push)
             stateMachine.ChangeState(stateMachine.state_Credit);
     }

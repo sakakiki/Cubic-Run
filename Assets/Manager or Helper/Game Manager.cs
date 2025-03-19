@@ -94,7 +94,7 @@ public class GameManager : MonoBehaviour
     public BoxCollider2D resultWallCol;
     [SerializeField] private Transform content_LevelSelecter;
     [SerializeField] private GameObject levelPanelPrefab;
-    [HideInInspector] public List<Button_LevelSelecter> button_LevelSelecters = new List<Button_LevelSelecter>();
+    [HideInInspector] public List<Button_LevelSelector> button_LevelSelecters = new List<Button_LevelSelector>();
     public SkinSelecter skinSelecter;
     [SerializeField] private TextMeshProUGUI skinNameText;
     [SerializeField] private GameObject skinModelCover;
@@ -124,7 +124,7 @@ public class GameManager : MonoBehaviour
     public GameObject optionUI_Account_DeleteData;
     public GameObject optionUI_Account_Relogin;
     public GameObject optionUI_Volume;
-    public GameObject optionUI_Button_Pattern;
+    public GameObject optionUI_Button;
     public GameObject optionUI_Credit;
     public RankingBoard highScoreRankingBoard;
     public RankingBoard playerScoreRankingBoard;
@@ -143,6 +143,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] private TextMeshProUGUI playerInfo_TotalExp;
     [SerializeField] private TextMeshProUGUI playerInfo_RequiredExp;
     [SerializeField] private TextMeshProUGUI playerInfo_TotalRunDistance;
+    [SerializeField] private SpriteRenderer buttonPatternSelectSquare;
 
     //ステートマシン
     public GameStateStateMachine gameStateMachine {  get; private set; }
@@ -241,6 +242,10 @@ public class GameManager : MonoBehaviour
         isUnsavedHighScore = UnsavedHighScoreFlagManager.Load();
         AudioManager.Instance.SetVolumeBGM(VolumeBGMManager.Load());
         AudioManager.Instance.SetVolumeSE(VolumeSEManager.Load());
+        InputManager.Instance.playButtonPatternNum = PlayerPrefs.GetInt("ButtonPattern", 0);
+        for (int i = 0; i < InputManager.Instance.actionAllocation.Length; i++)
+            InputManager.Instance.actionAllocation[i] = PlayerPrefs.GetInt("ActionAllocation_" + i, (4-i)%3);
+        InputManager.Instance.BindEvent();
 
         //クラウドに未反映のデータがあれば反映
         if (isUnsavedHighScore)
@@ -290,6 +295,7 @@ public class GameManager : MonoBehaviour
         //プレイヤー情報の更新
         UpdatePlayerInfo();
 
+
         //ランキング更新
         await RankingManager.UpdateRanking(RankingManager.RankingType.HighScore);
         await RankingManager.UpdateRanking(RankingManager.RankingType.PlayerScore);
@@ -311,7 +317,7 @@ public class GameManager : MonoBehaviour
         newPanelRtf.localEulerAngles = Vector3.zero;
 
         //入力スクリプトを管理可能に
-        Button_LevelSelecter button_LevelSelecter = newPanelRtf.GetComponent<Button_LevelSelecter>();
+        Button_LevelSelector button_LevelSelecter = newPanelRtf.GetComponent<Button_LevelSelector>();
         button_LevelSelecter.SetLevel(level);
         button_LevelSelecters.Add(button_LevelSelecter);
 
@@ -441,6 +447,9 @@ public class GameManager : MonoBehaviour
         //音量バーの色の変更
         volumeFillArea_BGM.color = Color.Lerp(SDB.skinData[skinID].UIColor, Color.gray + Color.white * 0.5f, 0.3f);
         volumeFillArea_SE.color = Color.Lerp(SDB.skinData[skinID].UIColor, Color.gray + Color.white * 0.5f, 0.3f);
+
+        //ボタン配置UIの色変更
+        buttonPatternSelectSquare.color = SDB.skinData[skinID].UIColor;
 
         //表示スキン名の変更
         skinNameText.SetText(SDB.skinData[skinID].name);

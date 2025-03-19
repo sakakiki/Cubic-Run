@@ -1,3 +1,4 @@
+using TMPro;
 using UnityEngine;
 
 public class InputManager : MonoBehaviour
@@ -18,7 +19,10 @@ public class InputManager : MonoBehaviour
     public bool isSkinSelect {  get; private set; }
     [SerializeField] private Button_Tap button_Play_Pause;
     public bool isPauseGame;
-    [SerializeField] private GameObject playButton;
+    public int playButtonPatternNum = 0;
+    public int[] actionAllocation = new int[3];
+    [SerializeField] private PlayButtonSet[] playButtonSet;
+    [SerializeField] private GameObject[] playButtonObject;
     [SerializeField] private Button_Push button_Pause_Continue;
     [SerializeField] private Button_Push button_Pause_Retire;
     [SerializeField] private Button_Push button_Result_Title;
@@ -104,7 +108,7 @@ public class InputManager : MonoBehaviour
 
     public void InputUISetActive_Player(bool isActive)
     {
-        playButton.SetActive(isActive);
+        playButtonObject[playButtonPatternNum].SetActive(isActive);
     }
 
     public void InputUISetActive_Pause(bool isActive)
@@ -205,6 +209,32 @@ public class InputManager : MonoBehaviour
 
 
     #region ƒvƒŒƒC“ü—Í—pƒCƒxƒ“ƒg
+    public void BindEvent()
+    {
+        Button_PlayInput[] playButton = playButtonSet[playButtonPatternNum].playButton;
+
+        for (int i = 0; i < playButton.Length; i++)
+        {
+            switch (actionAllocation[i])
+            {
+                case 0: //ƒWƒƒƒ“ƒv‚Ì“o˜^
+                    playButton[i].eventOnPush = InputEvent_Jump_Push;
+                    playButton[i].eventOnRelease = null;
+                    break;
+
+                case 1: //‚µ‚á‚ª‚ÝE‹}~‰º‚Ì“o˜^
+                    playButton[i].eventOnPush = InputEvent_Squat_Push;
+                    playButton[i].eventOnRelease = InputEvent_Squat_Release;
+                    break;
+
+                case 2: //UŒ‚‚Ì“o˜^
+                    playButton[i].eventOnPush = InputEvent_Attack_Push;
+                    playButton[i].eventOnRelease = InputEvent_Attack_Release;
+                    break;
+            }
+        }
+    }
+
     public void InputEvent_Jump_Push()
     {
         is_Player_Jump_Push = true;
@@ -246,4 +276,12 @@ public class InputManager : MonoBehaviour
         is_Player_Attack_Release = true;
     }
     #endregion
+}
+
+
+
+[System.Serializable]
+public class PlayButtonSet
+{
+    public Button_PlayInput[] playButton;
 }
