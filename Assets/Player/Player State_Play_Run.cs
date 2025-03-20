@@ -19,7 +19,7 @@ public class PlayerState_Play_Run : PlayerStateBase_Play
             return;
 
         //ジャンプ処理
-        if (IM.is_Player_Jump_Push)
+        if (IM.is_Player_Jump_Push && isActive_Jump)
         {
             rb.velocity = Vector2.up * 30;
 
@@ -28,7 +28,7 @@ public class PlayerState_Play_Run : PlayerStateBase_Play
         }
 
         //しゃがみ入力でSquatステートに遷移
-        else if (IM.is_Player_Squat_Push)
+        else if (IM.is_Player_Squat_Push && isActive_Squat)
         {
             stateMachine.ChangeState(stateMachine.state_Play_Squat);
 
@@ -37,7 +37,7 @@ public class PlayerState_Play_Run : PlayerStateBase_Play
         }
 
         //攻撃入力でAttackステートに遷移
-        else if (IM.is_Player_Attack_Push)
+        else if (IM.is_Player_Attack_Push && isActive_Attack)
             stateMachine.ChangeState(stateMachine.state_Play_Attack);
 
         //空中に出たらJumpステートへ遷移

@@ -21,7 +21,7 @@ public class InputManager : MonoBehaviour
     public bool isPauseGame;
     public int playButtonPatternNum = 0;
     public int[] actionAllocation = new int[3];
-    [SerializeField] private PlayButtonSet[] playButtonSet;
+    public PlayButtonSet[] playButtonSet;
     [SerializeField] private GameObject[] playButtonObject;
     [SerializeField] private Button_Push button_Pause_Continue;
     [SerializeField] private Button_Push button_Pause_Retire;
@@ -175,10 +175,11 @@ public class InputManager : MonoBehaviour
     //Push・Releaseを1フレームのみに制限
     public void ResetInput_Player()
     {
-        //ポーズ状態ならリセットしない
+        is_Player_Jump_Push = false;
+
+        //ポーズ状態なら以下はリセットしない
         if (isPauseGame) return;
 
-        is_Player_Jump_Push = false;
         is_Player_Squat_Push = false;
         is_Player_Squat_Release = false;
         is_Player_Attack_Push = false;
@@ -254,6 +255,11 @@ public class InputManager : MonoBehaviour
     {
         is_Player_Squat_Hold = false;
         is_Player_Squat_Release = true;
+
+        if (isPauseGame)
+        {
+            is_Player_Squat_Push = false;
+        }
     }
 
     public void InputEvent_Attack_Push()
@@ -272,6 +278,11 @@ public class InputManager : MonoBehaviour
     {
         is_Player_Attack_Hold = false;
         is_Player_Attack_Release = true;
+
+        if (isPauseGame)
+        {
+            is_Player_Attack_Push = false;
+        }
     }
     #endregion
 }
@@ -282,4 +293,5 @@ public class InputManager : MonoBehaviour
 public class PlayButtonSet
 {
     public Button_PlayInput[] playButton;
+    public SpriteRenderer[] playButtonSprite;
 }

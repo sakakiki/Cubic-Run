@@ -123,7 +123,8 @@ public class PlayerState_Model_ResultToPlay : PlayerStateBase_Model
         tf.position = Vector2.Lerp(startPos, targetPos, lerpValue) + Vector2.up * posCorrectionY;
 
         //ゲームステートがPlayならステート遷移
-        if (gameStateMachine.currentState == gameStateMachine.state_Play)
+        if (gameStateMachine.currentState == gameStateMachine.state_Play ||
+            gameStateMachine.currentState == gameStateMachine.state_Tutorial)
             stateMachine.ChangeState(stateMachine.state_Play_Run);
     }
 

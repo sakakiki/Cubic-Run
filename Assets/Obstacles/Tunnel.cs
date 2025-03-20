@@ -21,7 +21,8 @@ public class Tunnel : MonoBehaviour
     void Update()
     {
         //プレイ中でなければ何もしない
-        if (gameStateMachine.currentState != gameStateMachine.state_Play) return;
+        if (gameStateMachine.currentState != gameStateMachine.state_Play &&
+            gameStateMachine.currentState != gameStateMachine.state_Tutorial) return;
 
         //プレイヤーがGameOverステートなら壁のColliderを無効化
         if (playerStateMachine.currentState == playerStateMachine.state_GameOver)

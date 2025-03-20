@@ -28,7 +28,8 @@ public class Enemy : MonoBehaviour
     void Update()
     {
         //ƒvƒŒƒC’†‚Å‚È‚¯‚ê‚Î‰½‚à‚µ‚È‚¢
-        if (gameStateMachine.currentState != gameStateMachine.state_Play) return;
+        if (gameStateMachine.currentState != gameStateMachine.state_Play &&
+            gameStateMachine.currentState != gameStateMachine.state_Tutorial) return;
 
         //ÀsÏ‚İ‚È‚ç‰½‚à‚µ‚È‚¢
         if (!isActive) return;

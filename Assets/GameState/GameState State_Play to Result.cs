@@ -33,6 +33,7 @@ public class GameStateState_PlayToResult : GameStateStateBase
     private TextMeshProUGUI playerScoreText;
     private bool isAudioPlay;
     private int levelUpCount_state;
+    private bool isOnEnter;
 
     public GameStateState_PlayToResult(GameStateStateMachine stateMachine) : base(stateMachine)
     {
@@ -57,6 +58,13 @@ public class GameStateState_PlayToResult : GameStateStateBase
 
     public override async void Enter()
     {
+        Debug.Log("try");
+
+        //同時複数実行の制限
+        if (isOnEnter) return;
+        isOnEnter = true;
+        Debug.Log("do");
+
         //経過時間リセット
         elapsedTime = 0;
 
@@ -160,6 +168,9 @@ public class GameStateState_PlayToResult : GameStateStateBase
         addExpText.SetText("");
         highScoreFluctuationText.SetText("");
         playerScoreFluctuationText.SetText("");
+
+        //同時複数実行の制限
+        isOnEnter = false;
     }
 
 

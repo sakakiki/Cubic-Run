@@ -2,14 +2,24 @@ using UnityEngine;
 
 public class PlayerState_GameOver : PlayerStateBase
 {
+    private float elapsedTime;
     private Vector2 tunnelScale = new Vector2(1.3f, 0.6f);
 
     public PlayerState_GameOver(PlayerStateMachine stateMachine) : base(stateMachine) { }
 
     public override void Enter()
     {
+        //経過時間の初期化
+        elapsedTime = 0;
+
         //ゲームステートの遷移
+        //通常プレイならリザルトへ
+        if (TutorialStateStateBase.continueState == 
+            ((GameStateState_Tutorial)gameStateMachine.state_Tutorial).tutorialStateMachine.state_Start)
         gameStateMachine.ChangeState(gameStateMachine.state_PlayToResult);
+        //チュートリアルならリトライ
+        else
+            gameStateMachine.ChangeState(gameStateMachine.state_TutorialRetry);
 
         //トンネル内なら専用のスケールに
         if (TerrainManager.Instance.currentTerrainNum == 3)
@@ -42,10 +52,14 @@ public class PlayerState_GameOver : PlayerStateBase
 
     public override void Update()
     {
+        //経過時間の加算
+        elapsedTime += Time.deltaTime;
+
         //ゲームステートの遷移に合わせてステート遷移
         if (gameStateMachine.currentState == gameStateMachine.state_ResultToMenu)
             stateMachine.ChangeState(stateMachine.state_Model_ResultToMenu);
-        else if (gameStateMachine.currentState == gameStateMachine.state_ResultToPlay)
+        else if (gameStateMachine.currentState == gameStateMachine.state_ResultToPlay ||
+                 gameStateMachine.currentState == gameStateMachine.state_TutorialRetry && elapsedTime > 1)
             stateMachine.ChangeState(stateMachine.state_Model_ResultToPlay);
     }
 

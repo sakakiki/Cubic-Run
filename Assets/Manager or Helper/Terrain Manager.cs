@@ -16,7 +16,7 @@ public class TerrainManager : MonoBehaviour
     [HideInInspector] public float moveSpeed;
     [HideInInspector] public bool isCreateObstacle;
     private Transform previousTerrainTf;
-    private float stageRightEdge;
+    public float stageRightEdge { get; private set; } //チュートリアルで読み取り
 
     //オブジェクトプール関連変数
     private ObjectPool<GameObject>[] pool;
@@ -33,7 +33,7 @@ public class TerrainManager : MonoBehaviour
     private Queue<int> approachingTerrainNumQueue = new Queue<int>();
     private Transform currentTerrainTf;
     public int currentTerrainNum { get; private set; } //ゲームオーバー処理で読み取り
-    private int nextTerrainNum;
+    public int nextTerrainNum { get; private set; } //チュートリアルで読み取り
 
 
 

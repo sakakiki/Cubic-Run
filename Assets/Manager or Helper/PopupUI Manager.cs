@@ -11,6 +11,7 @@ public class PopupUIManager : MonoBehaviour
     public string inputText2 { private set; get; }
 
     [SerializeField] private SpriteRenderer bandBack;
+    [SerializeField] private TextMeshProUGUI textMessage;
     [SerializeField] private TextMeshProUGUI bandMessage;
     private bool isActiveBand;
     private float displayTime;
@@ -47,13 +48,6 @@ public class PopupUIManager : MonoBehaviour
 
 
 
-    private void Start()
-    {
-        
-    }
-
-
-
     private void Update()
     {
         //アクティブ状態でなければ何もしない
@@ -82,6 +76,19 @@ public class PopupUIManager : MonoBehaviour
             bandBack.color = Color.clear;
             bandMessage.color = Color.clear;
         }
+    }
+
+
+
+    //テキストポップアップの作成
+    public void SetupMessageText(string message)
+    {
+        textMessage.SetText(message);
+    }
+    //テキストポップアップの削除
+    public void DeleteMessageText()
+    {
+        textMessage.SetText("");
     }
 
 

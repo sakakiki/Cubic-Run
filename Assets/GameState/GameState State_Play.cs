@@ -38,6 +38,9 @@ public class GameStateState_Play : GameStateStateBase
         //プレイ用ステートマシンの初期化
         playStateMachine.Initialize(playStateMachine.state_LevelStart);
 
+        //プレイヤーの全アクションの有効化
+        PlayerStateBase_Play.EnableAllAction();
+
         //地形を減速
         TM.moveSpeed = 5 + Mathf.Pow(GM.level, 0.7f) * 3;
         TM.SetSpeed(5 + Mathf.Pow(GM.level, 0.7f) * 3);

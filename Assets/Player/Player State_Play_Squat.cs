@@ -42,19 +42,19 @@ public class PlayerState_Play_Squat : PlayerStateBase_Play
         //ジャンプ処理
         else if (IM.is_Player_Jump_Push)
         {
-            rb.velocity = Vector2.up * 20;
+            rb.velocity = Vector2.up * (isActive_SmallJump ? 20 : 30);
 
             //SE再生
             AM.PlaySE(AM.SE_Player);
         }
 
         //攻撃入力でAttackステートに遷移
-        else if (IM.is_Player_Attack_Push)
+        else if (IM.is_Player_Attack_Push && isActive_Attack)
             stateMachine.ChangeState(stateMachine.state_Play_Attack);
 
         //空中に出たらJumpステートへ遷移
         else if (!isGrounded)
-            stateMachine.ChangeState(stateMachine.state_Play_SmallJump);
+            stateMachine.ChangeState(isActive_SmallJump ? stateMachine.state_Play_SmallJump : stateMachine.state_Play_Jump);
     }
 
     public override void Exit() { }

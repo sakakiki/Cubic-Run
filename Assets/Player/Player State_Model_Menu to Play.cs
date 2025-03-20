@@ -93,8 +93,9 @@ public class PlayerState_Model_MenuToPlay : PlayerStateBase_Model
         if (posCorrectionY < 0) posCorrectionY = 0;
         tf.position = Vector2.Lerp(startPos, targetPos, lerpValue) + Vector2.up * posCorrectionY;
 
-        //ゲームステートがPlayならステート遷移
-        if (gameStateMachine.currentState == gameStateMachine.state_Play)
+        //ゲームステートがPlayかTutorialならステート遷移
+        if (gameStateMachine.currentState == gameStateMachine.state_Play ||
+            gameStateMachine.currentState == gameStateMachine.state_Tutorial)
             stateMachine.ChangeState(stateMachine.state_Play_Run);
     }
 
