@@ -1,5 +1,6 @@
 using TMPro;
 using UnityEngine;
+using UnityEngine.Rendering;
 
 public class PlayButtonSettingController : MonoBehaviour
 {
@@ -55,12 +56,19 @@ public class PlayButtonSettingController : MonoBehaviour
                     buttonAllocator[i].SetActive(false);
                 buttonAllocator[patternNum].SetActive(true);
 
+                //SEを一時的に停止
+                float tempVolume = AudioManager.Instance.volume_SE;
+                AudioManager.Instance.volume_SE = 0;
+
                 //ボタン割り当てUIのリセット
                 for (int i = 0; i < actionAllocation.Length; i++)
                 {
                     actionAllocation[i] = InputManager.Instance.actionAllocation[i];
                     actionSelectorSet[patternNum].actionSelector[i].value = actionAllocation[i];
                 }
+
+                //SEを戻す
+                AudioManager.Instance.volume_SE = tempVolume;
 
                 break;
 
@@ -124,7 +132,7 @@ public class PlayButtonSettingController : MonoBehaviour
         selectSquareRtf.anchoredPosition = previewRtf[patternNum].anchoredPosition;
 
         //SEの再生
-        AudioManager.Instance.audioSource_SE.PlayOneShot(AudioManager.Instance.SE_Panel);
+        AudioManager.Instance.PlaySE(AudioManager.Instance.SE_Panel);
     }
 
     public void AllocateAction(int buttonNum)
@@ -133,7 +141,7 @@ public class PlayButtonSettingController : MonoBehaviour
         actionAllocation[buttonNum] = actionSelectorSet[patternNum].actionSelector[buttonNum].value;
 
         //SEの再生
-        AudioManager.Instance.audioSource_SE.PlayOneShot(AudioManager.Instance.SE_Close);
+        AudioManager.Instance.PlaySE(AudioManager.Instance.SE_Close);
 
         //更新していないボタンの割り当てチェック
         for (int i = 1; i < actionAllocation.Length; i++)

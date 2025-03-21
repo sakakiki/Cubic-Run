@@ -105,6 +105,7 @@ public class TerrainManager : MonoBehaviour
                 break;
 
             case 3:
+            case 6:
                 if (currentTerrainTf.position.x < 0)
                     UpdateCurrentTerrain();
                 break;

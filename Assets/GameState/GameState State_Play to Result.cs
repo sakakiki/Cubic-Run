@@ -34,6 +34,7 @@ public class GameStateState_PlayToResult : GameStateStateBase
     private bool isAudioPlay;
     private int levelUpCount_state;
     private bool isOnEnter;
+    private bool isTutorial;
 
     public GameStateState_PlayToResult(GameStateStateMachine stateMachine) : base(stateMachine)
     {
@@ -71,13 +72,23 @@ public class GameStateState_PlayToResult : GameStateStateBase
         //フラグリセット
         isSetText = false;
         isAudioPlay = false;
+        //一部の処理はチュートリアルからのクリアでは実行しない
+        isTutorial =
+            TutorialStateStateBase.continueState !=
+            ((GameStateState_Tutorial)stateMachine.state_Tutorial).tutorialStateMachine.state_Start;
 
         //変数リセット
         levelUpCount_state = 0;
 
         //ゲームモードに応じてUIの切り替え
-        GM.resultRankingUI.SetActive(!GM.isTraining);
-        GM.resultTrainingUI.SetActive(GM.isTraining);
+        GM.resultRankingUI.SetActive(!GM.isTraining && !isTutorial);
+        GM.resultTrainingUI.SetActive(GM.isTraining && !isTutorial);
+        GM.resultTutorialUI.SetActive(isTutorial);
+
+        //ボタンの変更
+        GM.resultButton_Retry.SetActive(!isTutorial);
+        GM.resultButtonRtf_Title.anchoredPosition = 
+            isTutorial ? GM.resultButtonAPos_Title_Single : GM.resultButtonAPos_Title_Double;
 
         //ゲームモードに応じた移動先・スケールの変更
         targetPos = GM.isTraining ? GM.scoreMarkerTf_Result_Trainig.position : GM.scoreMarkerTf_Result_Ranking.position;
@@ -121,7 +132,7 @@ public class GameStateState_PlayToResult : GameStateStateBase
         playerRankScaleRtf.localScale = Vector3.one - Vector3.right * (GM.requiredExp / (float)((GM.playerRank+1) * 100));
 
         //ランキングモードならプレイ前のスコアを記憶・記憶
-        if (!GM.isTraining)
+        if (!GM.isTraining && !isTutorial)
         {
             beforeHighScore = GM.highScore;
             beforePlayerScore = GM.GetPlayerScore();
@@ -130,7 +141,10 @@ public class GameStateState_PlayToResult : GameStateStateBase
         }
 
         //プレイ結果のセーブ
-        await GM.SaveResult();
+        if (!isTutorial)
+            await GM.SaveResult();
+        else if (GM.totalExp == 0)
+            GM.SaveResult(100);
 
         //獲得経験値量の算出
         addExp = GM.totalExp - beforePlaytotalExp;
@@ -139,6 +153,7 @@ public class GameStateState_PlayToResult : GameStateStateBase
         newPlayerScore = GM.GetPlayerScore();
 
         //スキン開放演出の必要性をチェック
+        if (isTutorial && beforePlaytotalExp == 0) GM.newSkinQueue.Enqueue(1);
         if (beforePlayRank < 10 && 10 <= GM.playerRank) GM.newSkinQueue.Enqueue(2);
         if (beforePlayRank < 20 && 20 <= GM.playerRank) GM.newSkinQueue.Enqueue(3);
         if (beforePlayRank < 30 && 30 <= GM.playerRank) GM.newSkinQueue.Enqueue(4);
@@ -181,7 +196,7 @@ public class GameStateState_PlayToResult : GameStateStateBase
         elapsedTime += deltaTime;
 
         //トレーニングモードクリア時は地形の管理
-        if (GM.score == 5000 && GM.isTraining)
+        if (GM.score == 5000 && GM.isTraining || isTutorial)
             TM.ManageMovingTerrain();
 
         //開始後1秒間
@@ -214,11 +229,14 @@ public class GameStateState_PlayToResult : GameStateStateBase
         float lerpValue = (elapsedTime - 1) / 2;
 
         //スコアボードの移動，回転，スケール変更
-        scoreSetTf.eulerAngles = Vector3.up * Mathf.Lerp(0, 3600, Mathf.Pow((elapsedTime - 1)/3, 0.3f));
-        scoreSetTf.position = 
-            Vector3.Lerp(startPos, targetPos, lerpValue) + 
-            Vector3.up * curveScorePosY.Evaluate(lerpValue) * 3;
-        scoreSetTf.localScale = Vector3.Lerp(Vector3.one, targetScale, lerpValue);
+        if (!isTutorial)
+        {
+            scoreSetTf.eulerAngles = Vector3.up * Mathf.Lerp(0, 3600, Mathf.Pow((elapsedTime - 1) / 3, 0.3f));
+            scoreSetTf.position =
+                Vector3.Lerp(startPos, targetPos, lerpValue) +
+                Vector3.up * curveScorePosY.Evaluate(lerpValue) * 3;
+            scoreSetTf.localScale = Vector3.Lerp(Vector3.one, targetScale, lerpValue);
+        }
 
         //スクリーンカバーの色を変更
         screenCover.color =
@@ -238,16 +256,20 @@ public class GameStateState_PlayToResult : GameStateStateBase
             isSetText = true;
 
             //獲得経験値量の表示
-            //トレーニングモード完走時のみ例外処理
+            //トレーニングモード完走時の例外処理
             if (GM.score == 5000 && GM.isTraining)
                 addExpText.SetText("+" + addExp + "Exp（完走ボーナス+" + GM.level * 50 + "Exp）");
+            //チュートリアル初回クリア時の例外処理
+            else if (isTutorial && addExp == 100)
+                addExpText.SetText("+100Exp（初回クリアボーナス）");
             else
                 addExpText.SetText("+" + addExp + "Exp");
 
             //SEの再生
-            AM.audioSource_SE.PlayOneShot(AM.SE_GetExp);
+            if (!isTutorial || addExp == 100)
+                AM.PlaySE(AM.SE_GetExp);
 
-            if (!GM.isTraining)
+            if (!GM.isTraining && !isTutorial)
             {
                 //スコア変動表示
                 if (GM.highScore > beforeHighScore)
@@ -268,7 +290,7 @@ public class GameStateState_PlayToResult : GameStateStateBase
         //表示プレイヤーランクの更新
         int displayRank = beforePlayRank;
         int levelUpCount_local = 0;
-        while (displayRequiredExpF < 0)
+        while (displayRequiredExpF <= 0)
         {
             displayRank++;
             displayRequiredExpF += (displayRank + 1) * 100;
@@ -277,7 +299,7 @@ public class GameStateState_PlayToResult : GameStateStateBase
             if (levelUpCount_local > levelUpCount_state)
             {
                 //SEの再生
-                AM.audioSource_SE.PlayOneShot(AM.SE_LevelUp);
+                AM.PlaySE(AM.SE_LevelUp);
                 levelUpCount_state++;
             }
         }
@@ -296,7 +318,8 @@ public class GameStateState_PlayToResult : GameStateStateBase
         //指定時間経過でステート遷移
         if (elapsedTime >= 5)
         {
-            if (GM.newSkinQueue.Count > 0) stateMachine.ChangeState(stateMachine.state_UnlockSkin);
+            if (isTutorial && beforePlayRank == 0) stateMachine.ChangeState(stateMachine.state_UnlockPlay);
+            else if (GM.newSkinQueue.Count > 0) stateMachine.ChangeState(stateMachine.state_UnlockSkin);
             else stateMachine.ChangeState(stateMachine.state_Result);
         }
     }
@@ -312,7 +335,8 @@ public class GameStateState_PlayToResult : GameStateStateBase
         IM.InputUISetActive_Screen(false);
 
         //スコアボードの回転量をリセット
-        scoreSetTf.eulerAngles = Vector3.zero;
+        if (!isTutorial)
+            scoreSetTf.eulerAngles = Vector3.zero;
 
         //プレイヤーランクに関する表示を確定
         if (beforePlayRank != GM.playerRank)
@@ -321,6 +345,6 @@ public class GameStateState_PlayToResult : GameStateStateBase
         playerRankScaleRtf.localScale = Vector3.one - Vector3.right * (GM.requiredExp / (float)((GM.playerRank + 1) * 100));
 
         //SEの停止
-        AM.audioSource_SE.Stop();
+        AM.StopSE();
     }
 }

@@ -1,13 +1,13 @@
 using UnityEngine;
 
-public class TutorialStateState_Squat_2 : TutorialStateStateBase
+public class TutorialStateState_Fall_4 : TutorialStateStateBase
 {
     private const int actionNum_Squat = 1;
     private SpriteRenderer buttonSprite_Squat;
 
 
 
-    public TutorialStateState_Squat_2(TutorialStateStateMachine stateMachine) : base(stateMachine) { }
+    public TutorialStateState_Fall_4(TutorialStateStateMachine stateMachine) : base(stateMachine) { }
 
 
 
@@ -18,8 +18,8 @@ public class TutorialStateState_Squat_2 : TutorialStateStateBase
         //ゲームの一時停止
         Time.timeScale = 0;
 
-        //しゃがみアクションの有効化
-        PlayerStateBase_Play.isActive_Squat = true;
+        //全アクションの有効化
+        PlayerStateBase_Play.EnableAllAction();
 
         //しゃがみボタンを光らせ、それ以外を暗く
         for (int i = 0; i < IM.actionAllocation.Length; i++)
@@ -30,9 +30,6 @@ public class TutorialStateState_Squat_2 : TutorialStateStateBase
             }
             else
                 IM.playButtonSet[IM.playButtonPatternNum].playButtonSprite[i].color = Color.black * 0.8f;
-
-        //操作方法表示
-        PopupUIManager.Instance.SetupMessageText("光っている部分をタップしてしゃがむ");
     }
 
 
@@ -49,7 +46,7 @@ public class TutorialStateState_Squat_2 : TutorialStateStateBase
 
         //指定の入力を満たせばステート遷移
         if (IM.is_Player_Squat_Push)
-            stateMachine.ChangeState(stateMachine.state_Squat_3);
+            stateMachine.ChangeState(stateMachine.state_Fall_5);
     }
 
 
@@ -65,8 +62,5 @@ public class TutorialStateState_Squat_2 : TutorialStateStateBase
 
         //ゲームの再開
         Time.timeScale = 1;
-
-        //ジャンプアクションの有効化
-        PlayerStateBase_Play.isActive_Jump = true;
     }
 }

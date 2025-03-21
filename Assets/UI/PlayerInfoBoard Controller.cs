@@ -27,9 +27,9 @@ public class PlayerInfoBoardController : MonoBehaviour, IPointerDownHandler
 
         //SEÇÃçƒê∂
         if (isOpen)
-            AudioManager.Instance.audioSource_SE.PlayOneShot(AudioManager.Instance.SE_Panel);
+            AudioManager.Instance.PlaySE(AudioManager.Instance.SE_Panel);
         if (!isOpen)
-            AudioManager.Instance.audioSource_SE.PlayOneShot(AudioManager.Instance.SE_Close);
+            AudioManager.Instance.PlaySE(AudioManager.Instance.SE_Close);
     }
 
 

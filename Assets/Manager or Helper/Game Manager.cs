@@ -3,7 +3,6 @@ using UnityEngine;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine.UI;
-using static UnityEngine.InputManagerEntry;
 
 //GameManagerは処理を優先実行
 [DefaultExecutionOrder(-1)]
@@ -90,6 +89,9 @@ public class GameManager : MonoBehaviour
     public TextMeshProUGUI retryButtonText;
     public GameObject resultRankingUI;
     public GameObject resultTrainingUI;
+    public GameObject resultTutorialUI;
+    public RectTransform resultButtonRtf_Title;
+    public GameObject resultButton_Retry;
     public TextMeshProUGUI clearRateText;
     public TextMeshProUGUI clearTimesNumText;
     public BoxCollider2D resultWallCol;
@@ -111,6 +113,9 @@ public class GameManager : MonoBehaviour
     public TextMeshProUGUI unlockSkinName;
     public RectTransform unlockSkinNameRtf;
     public TextMeshProUGUI unlockSkinMessage;
+    public GameObject unlockPlay;
+    public RectTransform[] unlockPlayModeRtf;
+    public TextMeshProUGUI unlockPlayMessage;
     public Sprite squarSprite;
     public Sprite cicleSprite;
     public SpriteRenderer frontScreenCover;
@@ -155,6 +160,8 @@ public class GameManager : MonoBehaviour
     public Vector2 centerPos_PlayerArea_Result { get; private set; } = new Vector2(-1, 3);
     public Color screenCoverColor_Menu { get; private set; } = Color.white - Color.black * 0.2f;
     public Color screenCoverColor_Play { get; private set; } = Color.clear;
+    public Vector2 resultButtonAPos_Title_Single { get; private set; } = new Vector2(0, 200);
+    public Vector2 resultButtonAPos_Title_Double { get; private set; } = new Vector2(-400, 200);
 
 
 
@@ -205,9 +212,6 @@ public class GameManager : MonoBehaviour
             resultUIs_L[i].SetParent(resultHingeRtf_L);
         for (int i = 0; i < resultUIs_B.Length; i++)
             resultUIs_B[i].SetParent(resultHingeRtf_B);
-
-        //スキンパネルの生成
-        skinSelecter.CreateSkinPanel();
 
         //プレイヤー移動可能エリアの中心の変更
         centerPos_PlayerArea = centerPos_World;
@@ -285,6 +289,9 @@ public class GameManager : MonoBehaviour
         for (int i = 0; i < isSkinUnlocked.Length; i++)
             isSkinUnlocked[i] = false;
 
+        //スキンパネルの生成
+        skinSelecter.CreateSkinPanel();
+
         //スキンのロック解除
         CheckSkinUnlock();
 
@@ -295,6 +302,11 @@ public class GameManager : MonoBehaviour
 
         //プレイヤー情報の更新
         UpdatePlayerInfo();
+
+
+        //チュートリアル未クリアならプレイボタンをロック
+        if (playerRank == 0)
+            InputManager.Instance.SetPlayButtonLock(true);
 
 
         //ランキング更新
@@ -620,7 +632,7 @@ public class GameManager : MonoBehaviour
 
         //プレイヤーランクを更新
         requiredExp -= addExp;
-        while (requiredExp < 0)
+        while (requiredExp <= 0)
         {
             playerRank++;
             requiredExp += (playerRank + 1) * 100;
@@ -659,6 +671,27 @@ public class GameManager : MonoBehaviour
         //ローカルへの保存はメソッド内
         await FSM.SavePlayerScore();
         #endregion
+    }
+    public void SaveResult(int getExp)
+    {
+        #region 経験値の加算
+        //ローカルに反映
+        totalExp += getExp;
+
+        //プレイヤーランクを更新
+        requiredExp -= getExp;
+        while (requiredExp <= 0)
+        {
+            playerRank++;
+            requiredExp += (playerRank + 1) * 100;
+        }
+
+        //クラウドに保存
+        FSM.SaveExperience(getExp);
+        #endregion
+
+        //プレイヤー情報の更新
+        UpdatePlayerInfo();
     }
 
 

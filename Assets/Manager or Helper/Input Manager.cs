@@ -8,6 +8,7 @@ public class InputManager : MonoBehaviour
     [SerializeField] GameObject screenButtonObj;
     [SerializeField] private Button_Tap button_Screen;
     [SerializeField] private Button_Push button_Menu_Play;
+    [SerializeField] private GameObject buttonLock_Menu_Play;
     [SerializeField] private Button_Push button_Menu_Skin;
     [SerializeField] private Button_Push button_Menu_Tutorial;
     [SerializeField] private Button_Push button_Menu_Account;
@@ -93,6 +94,11 @@ public class InputManager : MonoBehaviour
         button_Menu_Volume.enabled = isActive;
         button_Menu_Button.enabled = isActive;
         button_Menu_Credit.enabled = isActive;
+    }
+
+    public void SetPlayButtonLock(bool isLock)
+    {
+        buttonLock_Menu_Play.SetActive(isLock);
     }
 
     public void InputUISetActive_Skin(bool isActive)

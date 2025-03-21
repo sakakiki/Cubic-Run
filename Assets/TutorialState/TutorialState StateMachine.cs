@@ -16,6 +16,15 @@ public class TutorialStateStateMachine
     public TutorialStateStateBase state_Attack_1 { get; private set; }
     public TutorialStateStateBase state_Attack_2 { get; private set; }
     public TutorialStateStateBase state_Attack_3 { get; private set; }
+    public TutorialStateStateBase state_SmallJump_1 { get; private set; }
+    public TutorialStateStateBase state_SmallJump_2 { get; private set; }
+    public TutorialStateStateBase state_SmallJump_3 { get; private set; }
+    public TutorialStateStateBase state_SmallJump_4 { get; private set; }
+    public TutorialStateStateBase state_Fall_1 { get; private set; }
+    public TutorialStateStateBase state_Fall_2 { get; private set; }
+    public TutorialStateStateBase state_Fall_3 { get; private set; }
+    public TutorialStateStateBase state_Fall_4 { get; private set; }
+    public TutorialStateStateBase state_Fall_5 { get; private set; }
 
 
 
@@ -32,6 +41,15 @@ public class TutorialStateStateMachine
         state_Attack_1 = new TutorialStateState_Attack_1(this);
         state_Attack_2 = new TutorialStateState_Attack_2(this);
         state_Attack_3 = new TutorialStateState_Attack_3(this);
+        state_SmallJump_1 = new TutorialStateState_SmallJump_1(this);
+        state_SmallJump_2 = new TutorialStateState_SmallJump_2(this);
+        state_SmallJump_3 = new TutorialStateState_SmallJump_3(this);
+        state_SmallJump_4 = new TutorialStateState_SmallJump_4(this);
+        state_Fall_1 = new TutorialStateState_Fall_1(this);
+        state_Fall_2 = new TutorialStateState_Fall_2(this);
+        state_Fall_3 = new TutorialStateState_Fall_3(this);
+        state_Fall_4 = new TutorialStateState_Fall_4(this);
+        state_Fall_5 = new TutorialStateState_Fall_5(this);
         TutorialStateStateBase.continueState = state_Start;
     }
 

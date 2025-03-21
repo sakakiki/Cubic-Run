@@ -9,6 +9,7 @@ public class GameStateState_ResultToMenu : GameStateStateBase
     public RectTransform playHingeRtf_L;
     private RectTransform resultHingeRtf_L;
     private RectTransform resultHingeRtf_B;
+    private bool isTutorial;
 
     public GameStateState_ResultToMenu(GameStateStateMachine stateMachine) : base(stateMachine)
     {
@@ -28,6 +29,15 @@ public class GameStateState_ResultToMenu : GameStateStateBase
 
         //動作フラグリセット
         isMoveStart = false;
+        //一部の処理はチュートリアルからのクリアでは実行しない
+        isTutorial =
+            TutorialStateStateBase.continueState !=
+            ((GameStateState_Tutorial)stateMachine.state_Tutorial).tutorialStateMachine.state_Start;
+
+        //チュートリアルクリア時はチュートリアル進度をリセット
+        if (isTutorial)
+            TutorialStateStateBase.continueState =
+                ((GameStateState_Tutorial)stateMachine.state_Tutorial).tutorialStateMachine.state_Start;
 
         //プレイヤーがトンネル内なら演出を早める
         if (TM.currentTerrainNum == 3)
@@ -37,8 +47,8 @@ public class GameStateState_ResultToMenu : GameStateStateBase
         if (playerCon.tf.position.y < -5 || playerCon.tf.position.x < -6)
             elapsedTime = 1.5f;
 
-        //トレーニングモードクリア時は演出を早める
-        if (GM.score == 5000 && GM.isTraining)
+        //クリア時は演出を早める
+        if (GM.score == 5000 && GM.isTraining || isTutorial)
             elapsedTime = 1.5f;
 
         //ランキングを更新
@@ -89,7 +99,8 @@ public class GameStateState_ResultToMenu : GameStateStateBase
         //UIを回転
         menuHingeRtf_L.localEulerAngles = Vector3.Lerp(Vector3.up * -180, Vector3.zero, lerpValue);
         menuHingeRtf_R.localEulerAngles = Vector3.Lerp(Vector3.up * 180, Vector3.zero, lerpValue);
-        playHingeRtf_L.localEulerAngles = Vector3.Lerp(Vector3.zero, Vector3.up * 180, lerpValue);
+        if (!isTutorial)
+            playHingeRtf_L.localEulerAngles = Vector3.Lerp(Vector3.zero, Vector3.up * 180, lerpValue);
         resultHingeRtf_L.localEulerAngles = Vector3.Lerp(Vector3.zero, Vector3.up * 180, lerpValue);
         resultHingeRtf_B.localEulerAngles = Vector3.Lerp(Vector3.zero, Vector3.right * 180, lerpValue);
 

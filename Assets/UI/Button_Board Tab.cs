@@ -35,7 +35,7 @@ public class Button_BoardTab : MonoBehaviour, IPointerDownHandler
             item.SetActive(true);
 
         //SEの再生
-        AudioManager.Instance.audioSource_SE.PlayOneShot(AudioManager.Instance.SE_Panel);
+        AudioManager.Instance.PlaySE(AudioManager.Instance.SE_Panel);
 
         //このスクリプトを無効化
         this.enabled = false;

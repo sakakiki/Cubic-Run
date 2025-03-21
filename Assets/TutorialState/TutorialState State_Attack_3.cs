@@ -15,8 +15,8 @@ public class TutorialStateState_Attack_3 : TutorialStateStateBase
     {
         base.Update(deltaTime);
 
-        //if (elapsedTime > 3)
-        //    stateMachine.ChangeState(stateMachine.state_Jump_2);
+        if (elapsedTime > 3)
+            stateMachine.ChangeState(stateMachine.state_SmallJump_1);
     }
 
 

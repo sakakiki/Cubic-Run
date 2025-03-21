@@ -6,7 +6,7 @@ public class AudioManager : MonoBehaviour
     public static AudioManager Instance;
 
     public AudioSource audioSource_BGM;
-    public AudioSource audioSource_SE;
+    [SerializeField] private AudioSource audioSource_SE;
 
     public Slider slider_BGM;
     public Slider slider_SE;
@@ -40,6 +40,11 @@ public class AudioManager : MonoBehaviour
         audioSource_SE.PlayOneShot(clip, volume_SE);
     }
 
+    public void StopSE()
+    {
+        audioSource_SE.Stop();
+    }
+
     public void SetVolumeBGM()
     {
         volume_BGM = slider_BGM.value;
@@ -57,7 +62,6 @@ public class AudioManager : MonoBehaviour
     public void SetVolumeSE()
     {
         volume_SE = slider_SE.value;
-        audioSource_SE.volume = volume_SE;
         VolumeSEManager.Save(volume_SE);
     }
 
@@ -65,6 +69,5 @@ public class AudioManager : MonoBehaviour
     {
         volume_SE = volume;
         slider_SE.value = volume;
-        audioSource_SE.volume = volume;
     }
 }

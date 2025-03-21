@@ -1,13 +1,13 @@
 using UnityEngine;
 
-public class TutorialStateState_Squat_2 : TutorialStateStateBase
+public class TutorialStateState_SmallJump_2 : TutorialStateStateBase
 {
     private const int actionNum_Squat = 1;
     private SpriteRenderer buttonSprite_Squat;
 
 
 
-    public TutorialStateState_Squat_2(TutorialStateStateMachine stateMachine) : base(stateMachine) { }
+    public TutorialStateState_SmallJump_2(TutorialStateStateMachine stateMachine) : base(stateMachine) { }
 
 
 
@@ -18,8 +18,12 @@ public class TutorialStateState_Squat_2 : TutorialStateStateBase
         //ゲームの一時停止
         Time.timeScale = 0;
 
+        //ジャンプアクションの無効化
+        PlayerStateBase_Play.isActive_Jump = false;
         //しゃがみアクションの有効化
         PlayerStateBase_Play.isActive_Squat = true;
+        //攻撃アクションの無効化
+        PlayerStateBase_Play.isActive_Attack = false;
 
         //しゃがみボタンを光らせ、それ以外を暗く
         for (int i = 0; i < IM.actionAllocation.Length; i++)
@@ -32,7 +36,7 @@ public class TutorialStateState_Squat_2 : TutorialStateStateBase
                 IM.playButtonSet[IM.playButtonPatternNum].playButtonSprite[i].color = Color.black * 0.8f;
 
         //操作方法表示
-        PopupUIManager.Instance.SetupMessageText("光っている部分をタップしてしゃがむ");
+        PopupUIManager.Instance.SetupMessageText("しゃがみ中にジャンプすると小ジャンプ");
     }
 
 
@@ -49,24 +53,10 @@ public class TutorialStateState_Squat_2 : TutorialStateStateBase
 
         //指定の入力を満たせばステート遷移
         if (IM.is_Player_Squat_Push)
-            stateMachine.ChangeState(stateMachine.state_Squat_3);
+            stateMachine.ChangeState(stateMachine.state_SmallJump_3);
     }
 
 
 
-    public override void Exit()
-    {
-        //ボタンを戻す
-        for (int i = 0; i < IM.actionAllocation.Length; i++)
-            IM.playButtonSet[IM.playButtonPatternNum].playButtonSprite[i].color = Color.clear;
-
-        //操作方法非表示
-        PopupUIManager.Instance.DeleteMessageText();
-
-        //ゲームの再開
-        Time.timeScale = 1;
-
-        //ジャンプアクションの有効化
-        PlayerStateBase_Play.isActive_Jump = true;
-    }
+    public override void Exit() { }
 }

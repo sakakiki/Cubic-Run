@@ -3,7 +3,14 @@ using TMPro;
 
 public class TutorialStateState_Start : TutorialStateStateBase
 {
-    public TutorialStateState_Start(TutorialStateStateMachine stateMachine) : base(stateMachine) { }
+    private PopupUIManager PUIM;
+
+
+
+    public TutorialStateState_Start(TutorialStateStateMachine stateMachine) : base(stateMachine)
+    {
+        PUIM = PopupUIManager.Instance;
+    }
 
 
 
@@ -12,7 +19,8 @@ public class TutorialStateState_Start : TutorialStateStateBase
         base.Enter();
 
         //ポップアップメッセージ
-        PopupUIManager.Instance.SetupMessageBand("チュートリアル", 1);
+        PUIM.SetMessageTextColor(Color.clear);
+        PUIM.SetupMessageText("チュートリアル");
     }
 
 
@@ -21,6 +29,9 @@ public class TutorialStateState_Start : TutorialStateStateBase
     {
         base.Update(deltaTime);
 
+        //ポップアップメッセージ
+        PUIM.SetMessageTextColor(Color.black * (1 - Mathf.Abs(elapsedTime - 1)) * 2);
+
         //時間経過でステート遷移
         if (elapsedTime > 2)
             stateMachine.ChangeState(stateMachine.state_Jump_1);
@@ -28,5 +39,9 @@ public class TutorialStateState_Start : TutorialStateStateBase
 
 
 
-    public override void Exit() { }
+    public override void Exit()
+    {
+        PUIM.DeleteMessageText();
+        PUIM.SetMessageTextColor(Color.black);
+    }
 }

@@ -90,6 +90,11 @@ public class PopupUIManager : MonoBehaviour
     {
         textMessage.SetText("");
     }
+    //テキストポップアップの色変更
+    public void SetMessageTextColor(Color textColor)
+    {
+        textMessage.color = textColor;
+    }
 
 
 

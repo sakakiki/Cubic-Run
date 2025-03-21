@@ -47,7 +47,7 @@ public class PlayerState_GameOver : PlayerStateBase
         }
 
         //SEçƒê∂
-        AudioManager.Instance.audioSource_SE.PlayOneShot(AudioManager.Instance.SE_GameOver);
+        AudioManager.Instance.PlaySE(AudioManager.Instance.SE_GameOver);
     }
 
     public override void Update()

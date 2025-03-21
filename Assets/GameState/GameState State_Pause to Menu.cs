@@ -12,13 +12,14 @@ public class GameStateState_PauseToMenu : GameStateStateBase
     private SpriteRenderer screenCover;
     private Color startCoverColor;
     private Color targetCoverColor;
+    private bool isTutorial;
 
     public GameStateState_PauseToMenu(GameStateStateMachine stateMachine) : base(stateMachine)
     {
         menuHingeRtf_L = GM.menuHingeRtf_L;
         menuHingeRtf_R = GM.menuHingeRtf_R;
-        playHingeRtf_L = GM.playHingeRtf_R;
-        playHingeRtf_R = GM.playHingeRtf_L;
+        playHingeRtf_L = GM.playHingeRtf_L;
+        playHingeRtf_R = GM.playHingeRtf_R;
         screenCover = GM.screenCover;
         startCoverColor = GM.screenCoverColor_Play;
         targetCoverColor = GM.screenCoverColor_Menu;
@@ -33,6 +34,15 @@ public class GameStateState_PauseToMenu : GameStateStateBase
 
         //動作フラグリセット
         isMoveStart = false;
+        //一部の処理はチュートリアルからのリタイアでは実行しない
+        isTutorial =
+            TutorialStateStateBase.continueState !=
+            ((GameStateState_Tutorial)stateMachine.state_Tutorial).tutorialStateMachine.state_Start;
+
+        //チュートリアル中ならチュートリアル進度をリセット
+        if (isTutorial)
+            TutorialStateStateBase.continueState = 
+                ((GameStateState_Tutorial)stateMachine.state_Tutorial).tutorialStateMachine.state_Start;
 
         //プレイヤーがトンネル内なら演出を早める
         if (TM.currentTerrainNum == 3)
@@ -79,9 +89,12 @@ public class GameStateState_PauseToMenu : GameStateStateBase
             }
 
             //レベルのテキストのZ座標を修正
-            Vector3 levelPos = GM.levelTf.position;
-            levelPos.z = GM.scoreSetTf.position.z;
-            GM.levelTf.position = levelPos;
+            if (!isTutorial)
+            {
+                Vector3 levelPos = GM.levelTf.position;
+                levelPos.z = GM.scoreSetTf.position.z;
+                GM.levelTf.position = levelPos;
+            }
         }
 
         //地形を管理
@@ -95,8 +108,9 @@ public class GameStateState_PauseToMenu : GameStateStateBase
         //UIを回転
         menuHingeRtf_L.localEulerAngles = Vector3.Lerp(Vector3.up * -180, Vector3.zero, lerpValue);
         menuHingeRtf_R.localEulerAngles = Vector3.Lerp(Vector3.up * 180, Vector3.zero, lerpValue);
-        playHingeRtf_L.localEulerAngles = Vector3.Lerp(Vector3.zero, Vector3.up * 180, lerpValue);
-        playHingeRtf_R.localEulerAngles = Vector3.Lerp(Vector3.zero, Vector3.up * -180, lerpValue);
+        if (!isTutorial)
+            playHingeRtf_L.localEulerAngles = Vector3.Lerp(Vector3.zero, Vector3.up * -180, lerpValue);
+        playHingeRtf_R.localEulerAngles = Vector3.Lerp(Vector3.zero, Vector3.up * 180, lerpValue);
 
         //スクリーンカバーの色を変更
         screenCover.color =

@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class GameStateState_Tutorial : GameStateStateBase
 {
-    //プレイ用ステートマシン
+    //チュートリアル用ステートマシン
     public TutorialStateStateMachine tutorialStateMachine { private set; get; }
 
     private static float playTimeScale;
@@ -47,7 +47,7 @@ public class GameStateState_Tutorial : GameStateStateBase
         TM.SetSpeed(8);
 
         //プレイ用BGMが再生されていなければの再生
-        if (audioSource_BGM.clip == AM.BGM_Play)
+        if (audioSource_BGM.clip != AM.BGM_Play)
         {
             audioSource_BGM.volume = AM.volume_BGM;
             audioSource_BGM.clip = AM.BGM_Play;
@@ -73,7 +73,7 @@ public class GameStateState_Tutorial : GameStateStateBase
                 if (IM.is_Play_Pause_Tap)
                 {
                     //SEの再生
-                    AudioManager.Instance.audioSource_SE.PlayOneShot(AudioManager.Instance.SE_Panel);
+                    AudioManager.Instance.PlaySE(AudioManager.Instance.SE_Panel);
 
                     //ポーズ状態へ
                     EnterPause();

@@ -362,7 +362,7 @@ public class SkinSelecter : MonoBehaviour, IPointerDownHandler, IDragHandler, IP
             panels_skinModel[skinID].maskInteraction = SpriteMaskInteraction.VisibleInsideMask;
 
             //テクスチャ上の"?"を非表示に
-            panels_skinModelText[skinID/8].SetText("");
+            panels_skinModelText[skinID / 8].SetText("");
         }
     }
 }

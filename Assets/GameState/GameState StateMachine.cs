@@ -16,6 +16,7 @@ public class GameStateStateMachine
     public GameStateStateBase state_Play { get; private set; }
     public GameStateStateBase state_PlayToResult { get; private set; }
     public GameStateStateBase state_UnlockSkin { get; private set; }
+    public GameStateStateBase state_UnlockPlay { get; private set; }
     public GameStateStateBase state_Result { get; private set; }
     public GameStateStateBase state_ResultToMenu { get; private set; }
     public GameStateStateBase state_ResultToPlay { get; private set; }
@@ -33,6 +34,7 @@ public class GameStateStateMachine
         state_Menu = new GameStateState_Menu(this);
         state_MenuToPlay = new GameStateState_MenuToPlay(this);
         state_MenuToSkin = new GameStateState_MenuToSkin(this);
+        state_UnlockPlay = new GameStateState_UnlockPlay(this);
         state_MenuToTutorial = new GameStateState_MenuToTutorial(this);
         state_Skin = new GameStateState_Skin(this);
         state_SkinToMenu = new GameStateState_SkinToMenu(this);

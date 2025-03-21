@@ -69,7 +69,7 @@ public class GameStateState_Play : GameStateStateBase
                 if (IM.is_Play_Pause_Tap)
                 {
                     //SEÇÃçƒê∂
-                    AudioManager.Instance.audioSource_SE.PlayOneShot(AudioManager.Instance.SE_Panel);
+                    AudioManager.Instance.PlaySE(AudioManager.Instance.SE_Panel);
 
                     //É|Å[ÉYèÛë‘Ç÷
                     EnterPause();

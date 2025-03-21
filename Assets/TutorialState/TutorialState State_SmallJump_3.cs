@@ -1,13 +1,13 @@
 using UnityEngine;
 
-public class TutorialStateState_Attack_2 : TutorialStateStateBase
+public class TutorialStateState_SmallJump_3 : TutorialStateStateBase
 {
-    private const int actionNum_Attack = 2;
-    private SpriteRenderer buttonSprite_Attack;
+    private const int actionNum_Jump = 0;
+    private SpriteRenderer buttonSprite_Jump;
 
 
 
-    public TutorialStateState_Attack_2(TutorialStateStateMachine stateMachine) : base(stateMachine) { }
+    public TutorialStateState_SmallJump_3(TutorialStateStateMachine stateMachine) : base(stateMachine) { }
 
 
 
@@ -18,23 +18,18 @@ public class TutorialStateState_Attack_2 : TutorialStateStateBase
         //ゲームの一時停止
         Time.timeScale = 0;
 
-        //しゃがみアクションの無効化
-        PlayerStateBase_Play.isActive_Squat = false;
-        //攻撃アクションの有効化
-        PlayerStateBase_Play.isActive_Attack = true;
+        //小ジャンプアクションの有効化
+        PlayerStateBase_Play.isActive_SmallJump = true;
 
-        //攻撃ボタンを光らせ、それ以外を暗く
+        //ジャンプボタンを光らせ、それ以外を暗く
         for (int i = 0; i < IM.actionAllocation.Length; i++)
-            if (IM.actionAllocation[i] == actionNum_Attack)
+            if (IM.actionAllocation[i] == actionNum_Jump)
             {
-                buttonSprite_Attack = IM.playButtonSet[IM.playButtonPatternNum].playButtonSprite[i];
-                buttonSprite_Attack.color = Color.white - Color.black * 0.9f;
+                buttonSprite_Jump = IM.playButtonSet[IM.playButtonPatternNum].playButtonSprite[i];
+                buttonSprite_Jump.color = Color.white - Color.black * 0.9f;
             }
             else
                 IM.playButtonSet[IM.playButtonPatternNum].playButtonSprite[i].color = Color.black * 0.8f;
-
-        //操作方法表示
-        PopupUIManager.Instance.SetupMessageText("光っている部分をタップして攻撃状態に");
     }
 
 
@@ -47,11 +42,13 @@ public class TutorialStateState_Attack_2 : TutorialStateStateBase
         elapsedTime += 1f / GM.defaultFrameRate;
 
         //タップするボタンを光らせる
-        buttonSprite_Attack.color = Color.white - Color.black * (1 - Mathf.Abs(elapsedTime % 2 - 1) * 0.1f);
+        buttonSprite_Jump.color = Color.white - Color.black * (1 - Mathf.Abs(elapsedTime % 2 - 1) * 0.1f);
 
         //指定の入力を満たせばステート遷移
-        if (IM.is_Player_Attack_Push)
-            stateMachine.ChangeState(stateMachine.state_Attack_3);
+        if (IM.is_Player_Jump_Push)
+            stateMachine.ChangeState(stateMachine.state_SmallJump_4);
+        else if (IM.is_Player_Squat_Release)
+            stateMachine.ChangeState(stateMachine.state_SmallJump_2);
     }
 
 
