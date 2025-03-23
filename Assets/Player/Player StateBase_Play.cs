@@ -12,6 +12,7 @@ public abstract class PlayerStateBase_Play : PlayerStateBase
     public static bool isActive_Attack;
     public static bool isActive_SmallJump;
     public static bool isActive_Fall;
+    public static bool isActiveUpdate;
 
     public PlayerStateBase_Play(PlayerStateMachine stateMachine) : base(stateMachine)
     {
@@ -33,15 +34,15 @@ public abstract class PlayerStateBase_Play : PlayerStateBase
         //接地判定
         isGrounded = trigerFoot.isTouch;
 
-        //ゲームオーバーへの遷移
-        if (trigerFront.isTouch || tf.position.y < -5)
-            stateMachine.ChangeState(stateMachine.state_GameOver);
         //トレーニングモードクリア状態へ遷移
-        else if (gameStateMachine.currentState == gameStateMachine.state_PlayToResult)
+        if (gameStateMachine.currentState == gameStateMachine.state_PlayToResult)
             stateMachine.ChangeState(stateMachine.state_Model_TrainingClear);
         //リタイア状態へ遷移
         else if (gameStateMachine.currentState == gameStateMachine.state_PauseToMenu)
             stateMachine.ChangeState(stateMachine.state_Model_PauseToMenu);
+        //ゲームオーバーへの遷移
+        else if (trigerFront.isTouch || tf.position.y < -5)
+            stateMachine.ChangeState(stateMachine.state_GameOver);
     }
 
     public static void InitializeTutorial()

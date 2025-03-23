@@ -218,6 +218,7 @@ public class GameStateState_PlayToResult : GameStateStateBase
             //BGMçƒê∂
             audioSource_BGM.volume = AM.volume_BGM;
             audioSource_BGM.clip = AM.BGM_Result;
+            AM.SetBGMSpeed(1);
             audioSource_BGM.Play();
         }
 

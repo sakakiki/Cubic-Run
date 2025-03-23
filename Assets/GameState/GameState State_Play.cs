@@ -47,8 +47,6 @@ public class GameStateState_Play : GameStateStateBase
 
         //ƒvƒŒƒC—pBGM‚ÌÄ¶
         audioSource_BGM.volume = AM.volume_BGM;
-        audioSource_BGM.clip = AM.BGM_Play;
-        audioSource_BGM.Play();
     }
 
 

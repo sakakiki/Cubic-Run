@@ -1,9 +1,12 @@
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class AudioManager : MonoBehaviour
 {
     public static AudioManager Instance;
+
+    private const string PitchShifterParam = "PitchShifterParam_Pitch"; // Audio Mixer ÇÃ Pitch ÉpÉâÉÅÅ[É^
 
     public AudioSource audioSource_BGM;
     [SerializeField] private AudioSource audioSource_SE;
@@ -15,7 +18,11 @@ public class AudioManager : MonoBehaviour
     public float volume_SE = 1;
 
     public AudioClip BGM_Menu;
-    public AudioClip BGM_Play;
+    public AudioClip BGM_Play_1;
+    public AudioClip BGM_Play_2;
+    public AudioClip BGM_Play_3;
+    public AudioClip BGM_Play_4;
+    public AudioClip BGM_Play_5;
     public AudioClip BGM_Result;
 
     public AudioClip SE_Button;
@@ -33,6 +40,12 @@ public class AudioManager : MonoBehaviour
     {
         if (Instance == null)
             Instance = this;
+    }
+
+    public void SetBGMSpeed(float speed)
+    {
+        audioSource_BGM.pitch = speed;
+        audioSource_BGM.outputAudioMixerGroup.audioMixer.SetFloat(PitchShifterParam, 1/speed);
     }
 
     public void PlaySE(AudioClip clip)

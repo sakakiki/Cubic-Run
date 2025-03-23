@@ -20,6 +20,10 @@ public class PlayerState_Play_Jump : PlayerStateBase_Play
     {
         base.Update();
 
+        //Update‚ª–³Œø‰»’†‚È‚ç‰½‚à‚µ‚È‚¢
+        if (!isActiveUpdate)
+            return;
+
         //ƒ|[ƒYó‘Ô‚È‚ç‰½‚à‚µ‚È‚¢
         if (GameStateState_Play.currentPauseState != GameStateState_Play.PauseState.Play)
             return;

@@ -1,3 +1,5 @@
+using UnityEngine;
+
 public class PlayerStateMachine
 {
     public PlayerStateBase currentState {  get; private set; }
@@ -59,6 +61,9 @@ public class PlayerStateMachine
     {
         currentState = firstState;
         firstState.Enter();
+
+        //Updateを有効化
+        PlayerStateBase_Play.isActiveUpdate = true;
     }
 
     public void ChangeState(PlayerStateBase newState)
@@ -66,6 +71,9 @@ public class PlayerStateMachine
         currentState.Exit();
         currentState = newState;
         newState.Enter();
+
+        //残りのUpdateを無効化
+        PlayerStateBase_Play.isActiveUpdate = false;
     }
 
     public void ChangeStateDelay(PlayerStateBase newState, float delayTime)
@@ -80,5 +88,8 @@ public class PlayerStateMachine
     public void Update()
     {
         if (currentState != null) currentState.Update();
+
+        //次フレームのUpdateを有効化
+        PlayerStateBase_Play.isActiveUpdate = true;
     }
 }

@@ -8868,7 +8868,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 1}
   m_AnchorMax: {x: 0.5, y: 1}
-  m_AnchoredPosition: {x: 300, y: -600}
+  m_AnchoredPosition: {x: 300, y: -500}
   m_SizeDelta: {x: 2000, y: 160}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &248885584
@@ -15902,7 +15902,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 1}
   m_AnchorMax: {x: 0.5, y: 1}
-  m_AnchoredPosition: {x: 300, y: -850}
+  m_AnchoredPosition: {x: 300, y: -800}
   m_SizeDelta: {x: 2000, y: 160}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &498824182
@@ -15925,7 +15925,10 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "\rBlue Sun (hotaru sounds \u69D8)\r\nAmygdala Mutation (Anonyment \u69D8)\r\n\u6E56\u6C34\u3092\u898B\u3064\u3081\u3066\uFF08\u304F\u308C\u3063\u3077
+  m_text: "\rDaydream (shimtone \u69D8)\r\nAmygdala Mutation (Anonyment \u69D8)\r\nNight
+    City Safari (\u306E\u308B \u69D8)\r\nSpace Odyssey (ISSEI AIR \u69D8)\r\nReflect
+    (\u307E\u3093\u307C\u3046\u4E8C\u7B49\u5175 \u69D8)\r\n\u98A8\u96F2\u93E1\uFF08\u304B\u305A\u3061
+    \u69D8\uFF09\n\u6E56\u6C34\u3092\u898B\u3064\u3081\u3066\uFF08\u304F\u308C\u3063\u3077
     \u69D8\uFF09"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 792ced2636e83fc4885d0163d39274b6, type: 2}
@@ -21853,7 +21856,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 1}
   m_AnchorMax: {x: 0.5, y: 1}
-  m_AnchoredPosition: {x: -1050, y: -850}
+  m_AnchoredPosition: {x: -1050, y: -800}
   m_SizeDelta: {x: 300, y: 160}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &652793051
@@ -28840,7 +28843,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 1}
   m_AnchorMax: {x: 0.5, y: 1}
-  m_AnchoredPosition: {x: -1050, y: -600}
+  m_AnchoredPosition: {x: -1050, y: -500}
   m_SizeDelta: {x: 300, y: 160}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &871764544
@@ -29145,7 +29148,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 1}
   m_AnchorMax: {x: 0.5, y: 1}
-  m_AnchoredPosition: {x: 300, y: -1300}
+  m_AnchoredPosition: {x: 300, y: -1700}
   m_SizeDelta: {x: 2000, y: 160}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &878555721
@@ -35760,7 +35763,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 1}
   m_AnchorMax: {x: 0.5, y: 1}
-  m_AnchoredPosition: {x: -1050, y: -1300}
+  m_AnchoredPosition: {x: -1050, y: -1700}
   m_SizeDelta: {x: 300, y: 160}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1055059605
@@ -47508,8 +47511,12 @@ MonoBehaviour:
   slider_SE: {fileID: 1680718122}
   volume_BGM: 1
   volume_SE: 1
-  BGM_Menu: {fileID: 8300000, guid: 54fc645b4883a884792f2ce69c09478c, type: 3}
-  BGM_Play: {fileID: 8300000, guid: 2ab7274e8c69aa34ea60b1240bbf3cc8, type: 3}
+  BGM_Menu: {fileID: 8300000, guid: c12125feba79a154da5dac95a30a3b10, type: 3}
+  BGM_Play_1: {fileID: 8300000, guid: 2ab7274e8c69aa34ea60b1240bbf3cc8, type: 3}
+  BGM_Play_2: {fileID: 8300000, guid: c5799dbd5c3bfe04bb181fa6093bf597, type: 3}
+  BGM_Play_3: {fileID: 8300000, guid: 0553d206501d11a448e4dcb3b4b0f605, type: 3}
+  BGM_Play_4: {fileID: 8300000, guid: c24078d5e1c70c349af68676e23c155d, type: 3}
+  BGM_Play_5: {fileID: 8300000, guid: 745680418b267454c830be27271386a6, type: 3}
   BGM_Result: {fileID: 8300000, guid: af4f37c9255eb3a48b4e696a53e3449b, type: 3}
   SE_Button: {fileID: 8300000, guid: 4a674c26af0764c439abd7d5fe3c647d, type: 3}
   SE_Player: {fileID: 8300000, guid: 33783b0948ee6eb4791321f370ceb3cd, type: 3}
@@ -68589,7 +68596,7 @@ AudioSource:
   m_GameObject: {fileID: 2027254944}
   m_Enabled: 1
   serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 0}
+  OutputAudioMixerGroup: {fileID: 24300002, guid: 3f907b7e4aa4d4844b09188ffe29e3d6, type: 2}
   m_audioClip: {fileID: 0}
   m_PlayOnAwake: 1
   m_Volume: 1

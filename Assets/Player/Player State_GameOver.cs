@@ -16,7 +16,7 @@ public class PlayerState_GameOver : PlayerStateBase
         //通常プレイならリザルトへ
         if (TutorialStateStateBase.continueState == 
             ((GameStateState_Tutorial)gameStateMachine.state_Tutorial).tutorialStateMachine.state_Start)
-        gameStateMachine.ChangeState(gameStateMachine.state_PlayToResult);
+            gameStateMachine.ChangeState(gameStateMachine.state_PlayToResult);
         //チュートリアルならリトライ
         else
             gameStateMachine.ChangeState(gameStateMachine.state_TutorialRetry);

@@ -47,11 +47,12 @@ public class GameStateState_Tutorial : GameStateStateBase
         TM.SetSpeed(8);
 
         //ÉvÉåÉCópBGMÇ™çƒê∂Ç≥ÇÍÇƒÇ¢Ç»ÇØÇÍÇŒÇÃçƒê∂
-        if (audioSource_BGM.clip != AM.BGM_Play)
+        if (audioSource_BGM.clip != AM.BGM_Play_1)
         {
             audioSource_BGM.volume = AM.volume_BGM;
-            audioSource_BGM.clip = AM.BGM_Play;
+            audioSource_BGM.clip = AM.BGM_Play_1;
             audioSource_BGM.Play();
+            AM.SetBGMSpeed(0.9f);
         }
     }
 

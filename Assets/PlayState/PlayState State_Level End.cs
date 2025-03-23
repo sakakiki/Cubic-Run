@@ -3,6 +3,8 @@ using UnityEngine;
 
 public class PlayStateState_LevelEnd : PlayStateStateBase
 {
+    private AudioManager AM;
+    private AudioSource audioSource_BGM;
     private int levelUpScore;
     private TextMeshProUGUI levelText;
     private Transform levelTf;
@@ -13,6 +15,8 @@ public class PlayStateState_LevelEnd : PlayStateStateBase
 
     public PlayStateState_LevelEnd(PlayStateStateMachine stateMachine) : base(stateMachine)
     {
+        AM = AudioManager.Instance;
+        audioSource_BGM = AM.audioSource_BGM;
         levelText = GM.levelText;
         levelTf = GM.levelTf;
         centerPos = GM.centerPos_World;
@@ -42,6 +46,10 @@ public class PlayStateState_LevelEnd : PlayStateStateBase
         levelText.fontSize = Mathf.Lerp(300, 72, (shortageScore - 150) / 75f);
         levelText.color = Color.Lerp(Color.clear, Color.black, (shortageScore - 50) / 50f);
 
+        //必要があればBGM音量調整
+        if (GM.level % 5 == 0)
+            audioSource_BGM.volume = Mathf.Lerp(0, AM.volume_BGM, (levelUpScore - GM.score) / 100f);
+
         //スコアがレベル上昇基準を満たせばステート遷移
         if (GM.score > levelUpScore)
             stateMachine.ChangeState(stateMachine.state_LevelStart);
@@ -51,6 +59,8 @@ public class PlayStateState_LevelEnd : PlayStateStateBase
 
     public override void Exit()
     {
-
+        //必要があればBGM音量調整
+        if (GM.level % 5 == 0)
+            audioSource_BGM.volume = AM.volume_BGM;
     }
 }
