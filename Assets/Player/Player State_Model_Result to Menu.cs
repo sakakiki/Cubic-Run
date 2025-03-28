@@ -47,6 +47,9 @@ public class PlayerState_Model_ResultToMenu : PlayerStateBase_Model
         {
             isResetRotation = true;
 
+            //GameState側に地形判定完了の通知
+            GameStateState_ResultToMenu.isPlayerCheck = true;
+
             //プレイヤーがトンネル内なら演出を早める
             if (TerrainManager.Instance.currentTerrainNum == 3)
                 elapsedTime = 1;

@@ -99,6 +99,9 @@ public class PlayerState_Model_ResultToPlay : PlayerStateBase_Model
             //処理実行済みのフラグを立てる
             isMoving = true;
 
+            //GameState側に地形判定完了の通知
+            GameStateState_ResultToPlay.isPlayerCheck = true;
+
             //物理演算を無効化
             rb.isKinematic = true;
 

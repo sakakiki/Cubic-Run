@@ -29,7 +29,7 @@ public class PlayerState_Play_Squat : PlayerStateBase_Play
             return;
 
         //しゃがみ入力解除時
-        if (IM.is_Player_Squat_Release)
+        if (IM.is_Player_Squat_Release && isActive_Squat)
         {
             //トンネル内ならゲームオーバー
             if (TM.currentTerrainNum == 3)
@@ -44,7 +44,7 @@ public class PlayerState_Play_Squat : PlayerStateBase_Play
         }
 
         //ジャンプ処理
-        else if (IM.is_Player_Jump_Push)
+        else if (IM.is_Player_Jump_Push && isActive_Jump)
         {
             rb.velocity = Vector2.up * (isActive_SmallJump ? 20 : 30);
 

@@ -134,6 +134,13 @@ public class GameStateState_Tutorial : GameStateStateBase
         //ポーズ状態を解除
         InitializePauseState();
 
+        //操作方法非表示
+        PopupUIManager.Instance.DeleteMessageText();
+
+        //ボタン表示を戻す
+        for (int i = 0; i < IM.actionAllocation.Length; i++)
+            IM.playButtonSet[IM.playButtonPatternNum].playButtonSprite[i].color = Color.clear;
+
         //チュートリアル用ステートマシンのExitを実行
         tutorialStateMachine.currentState.Exit();
     }
