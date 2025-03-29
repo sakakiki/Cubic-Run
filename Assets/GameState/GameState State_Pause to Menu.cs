@@ -13,6 +13,7 @@ public class GameStateState_PauseToMenu : GameStateStateBase
     private Color startCoverColor;
     private Color targetCoverColor;
     private bool isTutorial;
+    public static bool isPlayerCheck;
 
     public GameStateState_PauseToMenu(GameStateStateMachine stateMachine) : base(stateMachine)
     {
@@ -98,8 +99,8 @@ public class GameStateState_PauseToMenu : GameStateStateBase
         }
 
         //地形を管理
-        //地形動作開始後0.1秒間はPlayer側の判定のために実行しない
-        if (elapsedTime > 1.6)
+        //Player側の判定完了までは実行しない
+        if (isPlayerCheck)
             TM.ManageMovingTerrain();
 
         //事前計算

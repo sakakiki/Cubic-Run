@@ -17,6 +17,7 @@ public class GameStateState_Menu : GameStateStateBase
         {
             audioSource_BGM.volume = AM.volume_BGM;
             audioSource_BGM.clip = AM.BGM_Menu;
+            AM.SetBGMSpeed(1);
             audioSource_BGM.Play();
         }
     }

@@ -32,6 +32,9 @@ public class PlayerState_Model_PauseToMenu : PlayerStateBase_Model
         //プレイヤーがトンネル内なら演出を早める
         if (TerrainManager.Instance.currentTerrainNum == 3)
             elapsedTime = 0;
+
+        //GameState側に地形判定完了の通知
+        GameStateState_PauseToMenu.isPlayerCheck = true;
     }
 
     public override void Update()
