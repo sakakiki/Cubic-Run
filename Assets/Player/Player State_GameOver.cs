@@ -22,7 +22,7 @@ public class PlayerState_GameOver : PlayerStateBase
             gameStateMachine.ChangeState(gameStateMachine.state_TutorialRetry);
 
         //トンネル内なら専用のスケールに
-        if (TerrainManager.Instance.currentTerrainNum == 3)
+        if (TerrainManager.Instance.currentTerrainNum == 3 && tf.position.y < 0.5)
             tf.localScale = tunnelScale;
 
         //トンネル外かつ画面内なら跳ね返り処理
