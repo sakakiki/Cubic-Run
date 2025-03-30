@@ -69,5 +69,7 @@ public class TutorialStateState_SmallJump_3 : TutorialStateStateBase
         PlayerStateBase_Play.isActive_Jump = true;
         //しゃがみアクションの有効化
         PlayerStateBase_Play.isActive_Squat = true;
+        //攻撃アクションの有効化
+        PlayerStateBase_Play.isActive_Attack = true;
     }
 }
