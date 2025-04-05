@@ -6,6 +6,7 @@ public class AdmobManager : MonoBehaviour
     public static AdmobManager Instance;
     public bool isReady { private set; get; } = false;
     private NativeOverlayAd _nativeOverlayAd; //広告本体
+    private GameObject dummyAdUI; // エディタ用のダミー広告表示
 
     // これらの広告ユニットは、常にテスト広告を配信するように設定されています。
 #if UNITY_ANDROID
@@ -35,8 +36,6 @@ public class AdmobManager : MonoBehaviour
             isReady = true;
             Debug.Log(initializeStatus);
         });
-
-        LoadAd();
     }
 
 
@@ -52,7 +51,7 @@ public class AdmobManager : MonoBehaviour
             DestroyAd();
         }
 
-        Debug.Log("Loading native overlay ad.");
+        Debug.Log("広告ロード開始");
 
         // 広告を読み込むためのリクエストを作成
         var adRequest = new AdRequest();
@@ -64,8 +63,6 @@ public class AdmobManager : MonoBehaviour
             MediaAspectRatio = MediaAspectRatio.Landscape, //横長の広告
         };
         Debug.Log("オプションを定義");
-
-        _adUnitId = "ca-app-pub-3940256099942544/2247696110";
 
         // 広告を読み込むリクエストを送信
         NativeOverlayAd.Load(_adUnitId, adRequest, options,
@@ -96,7 +93,6 @@ public class AdmobManager : MonoBehaviour
 
                 // 広告イベントに登録して機能を拡張
                 //RegisterEventHandlers(ad);
-                RenderAd(0, 0, 1000, 500);
             });
     }
     
@@ -105,7 +101,7 @@ public class AdmobManager : MonoBehaviour
     /// <summary>
     /// 広告のレンダリング
     /// </summary>
-    public void RenderAd(int posX, int posY, int width, int height)
+    public void RenderAd(RectTransform targetRect)
     {
         if (_nativeOverlayAd != null)
         {
@@ -125,10 +121,24 @@ public class AdmobManager : MonoBehaviour
                 }
             };
 
-            AdSize adSize = new AdSize(width, height);
+            // 広告描画対象の四角形の四隅の座標を取得
+            Vector3[] corners = new Vector3[4];
+            targetRect.GetWorldCorners(corners);
 
-            // ネイティブオーバーレイ広告を指定場所に指定サイズでレンダリング
-            _nativeOverlayAd.RenderTemplate(style, adSize, posX, posY);
+            // 左下・右上のスクリーン座標を取得
+            Vector3 bottomLeft = RectTransformUtility.WorldToScreenPoint(null, corners[0]);
+            Vector3 topRight = RectTransformUtility.WorldToScreenPoint(null, corners[2]);
+
+            // 幅と高さを計算（ピクセル）
+            int adWidth = Mathf.RoundToInt(topRight.x - bottomLeft.x);
+            int adHeight = Mathf.RoundToInt(topRight.y - bottomLeft.y);
+
+            // 左上座標を計算（RenderTemplateの原点は左上）
+            int adPosX = Mathf.RoundToInt(bottomLeft.x);
+            int adPosY = Mathf.RoundToInt(Screen.height - topRight.y); // Y軸反転に注意
+
+            // ネイティブオーバーレイ広告を指定場所にレンダリング
+            _nativeOverlayAd.RenderTemplate(style, new AdSize(adWidth, adHeight), adPosX, adPosY);
         }
     }
 
@@ -144,6 +154,13 @@ public class AdmobManager : MonoBehaviour
             Debug.Log("非表示広告の再表示");
             _nativeOverlayAd.Show();
         }
+
+#if UNITY_EDITOR
+        if (dummyAdUI != null)
+        {
+            dummyAdUI.SetActive(true);
+        }
+#endif
     }
 
 
@@ -157,6 +174,13 @@ public class AdmobManager : MonoBehaviour
             Debug.Log("広告を非表示");
             _nativeOverlayAd.Hide();
         }
+
+#if UNITY_EDITOR
+        if (dummyAdUI != null)
+        {
+            dummyAdUI.SetActive(false);
+        }
+#endif
     }
 
 
@@ -172,5 +196,12 @@ public class AdmobManager : MonoBehaviour
             _nativeOverlayAd.Destroy();
             _nativeOverlayAd = null;
         }
+
+#if UNITY_EDITOR
+        if (dummyAdUI != null)
+        {
+            Destroy(dummyAdUI);
+        }
+#endif
     }
 }
