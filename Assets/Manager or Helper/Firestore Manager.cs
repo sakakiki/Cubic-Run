@@ -57,7 +57,14 @@ public class FirestoreManager : MonoBehaviour
 
         try
         {
-            // Firebaseのネットワークを有効化（オフラインならエラーが出る）
+            // ネットワーク接続をチェック（オフラインなら即エラーを返す）
+            if (Application.internetReachability == NetworkReachability.NotReachable)
+            {
+                return "ネットワークが無効またはオフラインのため、プレイヤー名を保存できませんでした。";
+            }
+
+            // Firebaseのネットワークを明示的に有効化（オフラインならエラーが出る）
+            await db.DisableNetworkAsync();
             await db.EnableNetworkAsync();
 
             DocumentReference docRef = db.Collection("users").Document(auth.CurrentUser.UserId);

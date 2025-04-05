@@ -46,7 +46,7 @@ public class GameStateState_Option_Account : GameStateState_OptionBase
         else
         {
             GameManager.Instance.optionUI_Account_Status.SetText("アカウントの状態を取得できませんでした。");
-            GameManager.Instance.optionUI_Account_Relogin.SetActive(true);
+            GameManager.Instance.optionUI_Account_Relogin.SetActive(false);
         }
     }
 
