@@ -14,6 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   name: Yellow Cube
   bodyType: 0
-  skinColor: {r: 0.78113204, g: 0.7565084, b: 0.039793454, a: 1}
+  skinColor: {r: 0.8867924, g: 0.86705583, b: 0.0050195074, a: 1}
   isEnabledMask: 0
-  UIColor: {r: 0.8490566, g: 0.81730175, b: 0, a: 1}
+  UIColor: {r: 1, g: 0.9585254, b: 0, a: 1}

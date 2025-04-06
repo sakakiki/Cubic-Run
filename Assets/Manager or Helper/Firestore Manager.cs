@@ -17,6 +17,8 @@ public class FirestoreManager : MonoBehaviour
     private FirebaseAuth auth;
 
     private const int playerNameMaxLength = 12; // 全角2文字、半角1文字としてカウントする最大文字数
+    private const int maxStamina = 3; // 自動回復によるスタミナ最大値（広告視聴で超過回復可能）
+    private const int resetStaminaHour = 4; // スタミナ回復時刻
 
 
 
@@ -337,12 +339,12 @@ public class FirestoreManager : MonoBehaviour
     /// [クラウドデータ優先]
     /// ローカルデータとの比較も含む
     /// </summary>
-    public async Task LoadAll()
+    public async Task<bool> LoadAll()
     {
         if (auth.CurrentUser == null)
         {
             Debug.LogError("Firebase認証されていません");
-            return;
+            return false;
         }
 
         try
@@ -370,7 +372,7 @@ public class FirestoreManager : MonoBehaviour
             if (!snapshot.Exists)
             {
                 Debug.LogWarning("[Firestore] プレイヤーデータが存在しません");
-                return;
+                return false;
             }
             #endregion
 
@@ -453,9 +455,10 @@ public class FirestoreManager : MonoBehaviour
         catch (Exception e)
         {
             Debug.LogError("データのロードに失敗: " + e.Message);
+            return false;
         }
 
-        return;
+        return true;
     }
 
 
@@ -501,8 +504,6 @@ public class FirestoreManager : MonoBehaviour
         return ranking;
     }
     
-    
-    
     /// <summary>
     /// Firestoreからユーザーの順位と上位何%かを取得
     /// </summary>
@@ -540,6 +541,109 @@ public class FirestoreManager : MonoBehaviour
 
 
 
+    /// <summary>
+    /// スタミナの最新状態を取得
+    /// </summary>
+    public async Task<int> UpdateAndGetStamina()
+    {
+        if (auth.CurrentUser == null)
+        {
+            Debug.LogError("Firebase認証されていません");
+            return -1; //異常終了
+        }
+
+        try
+        {
+            DocumentReference docRef = db.Collection("users").Document(auth.CurrentUser.UserId);
+
+            //オンライン専用化
+            DocumentSnapshot snapshot = await docRef.GetSnapshotAsync(Source.Server);
+
+            if (!snapshot.ContainsField("stamina") || !snapshot.ContainsField("lastUpdated"))
+            {
+                //スタミナのデータが存在しなければ最大値で初期化
+                await docRef.SetAsync(new { stamina = maxStamina, lastUpdated = Timestamp.GetCurrentTimestamp() }, SetOptions.MergeAll);
+            }
+
+            //現在のスタミナを取得
+            int currentStamina = snapshot.GetValue<int>("stamina");
+
+            //前回のスタミナ情報更新日時
+            Timestamp lastUpdatedTimestamp = snapshot.GetValue<Timestamp>("lastUpdated");
+            DateTime lastUpdated = lastUpdatedTimestamp.ToDateTime();
+
+            //直近のスタミナ回復日時
+            DateTime now = DateTime.UtcNow;
+            DateTime lastReset = new DateTime(now.Year, now.Month, now.Day, resetStaminaHour, 0, 0, DateTimeKind.Utc);
+            if (now.Hour < resetStaminaHour)
+            {
+                lastReset = lastReset.AddDays(-1);
+            }
+
+            //前回のスタミナ情報更新が直近のスタミナ回復日時より前ならスタミナ回復
+            if (lastUpdated < lastReset)
+            {
+                int newStamina = Mathf.Max(currentStamina, maxStamina);
+                await docRef.SetAsync(new { stamina = newStamina, lastUpdated = Timestamp.GetCurrentTimestamp() }, SetOptions.MergeAll);
+                return newStamina;
+            }
+
+
+            return currentStamina;
+        }
+        catch (Exception e)
+        {
+            Debug.LogError("スタミナの取得に失敗: " + e.Message);
+            return -1; //異常終了
+        }
+    }
+
+    /// <summary>
+    /// スタミナを消費
+    /// </summary>
+    public async Task<int> UseStamina()
+    {
+        if (auth.CurrentUser == null)
+        {
+            Debug.LogError("Firebase認証されていません");
+            return - 2; //異常終了
+        }
+
+        try
+        {
+            DocumentReference docRef = db.Collection("users").Document(auth.CurrentUser.UserId);
+
+            int returnValue = - 2; // 変更が無ければ異常終了として扱う
+
+            await db.RunTransactionAsync(async transaction =>
+            {
+                DocumentSnapshot snapshot = await transaction.GetSnapshotAsync(docRef);
+                if (!snapshot.Exists) return false;
+
+                int currentStamina = snapshot.GetValue<int>("stamina");
+                if (currentStamina <= 0)
+                {
+                    returnValue = - 1;
+                    return true;
+                }
+
+                transaction.Set(docRef, new { stamina = currentStamina - 1 }, SetOptions.MergeAll);
+                returnValue = currentStamina - 1;
+                return true;
+            });
+
+            return returnValue;
+        }
+        catch (Exception e)
+        {
+            Debug.LogError("スタミナの消費に失敗: " + e.Message);
+            return - 2; //異常終了
+        }
+    }
+
+
+
+
 
     /// <summary>
     /// 新規データ作成
@@ -556,7 +660,10 @@ public class FirestoreManager : MonoBehaviour
         { "playerScore", 0 },
         { "trainingCount", new Dictionary<string, object> { { "0", 0 } } },
         { "usingSkin", 0 },
-        { "runDistance", 0 }
+        { "runDistance", 0 },
+        { "stamina", 3 },
+        { "adWatchCount", 0 },
+        { "lastUpdated", Timestamp.GetCurrentTimestamp() }
     };
 
         try

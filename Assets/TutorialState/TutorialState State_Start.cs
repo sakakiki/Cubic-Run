@@ -21,6 +21,9 @@ public class TutorialStateState_Start : TutorialStateStateBase
         //ポップアップメッセージ
         PUIM.SetMessageTextColor(Color.clear);
         PUIM.SetupMessageText("チュートリアル");
+
+        //再挑戦ステートの更新
+        continueState = stateMachine.state_Jump_1;
     }
 
 

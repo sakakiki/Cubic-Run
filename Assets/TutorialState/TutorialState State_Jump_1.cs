@@ -10,9 +10,6 @@ public class TutorialStateState_Jump_1 : TutorialStateStateBase
 
         //障害物の生成
         TM.CreateTerrain(2, TM.stageRightEdge, 6, 2, TM.moveSpeed);
-
-        //再挑戦ステートの更新
-        continueState = this;
     }
 
 

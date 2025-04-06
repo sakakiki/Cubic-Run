@@ -34,7 +34,10 @@ public class GameStateState_Menu : GameStateStateBase
 
         //入力に応じたステート遷移
         if (IM.is_Menu_Play_Push)
-            stateMachine.ChangeState(stateMachine.state_MenuToPlay);
+        {
+            GameStateState_MenuToPlay.remainingStamina = -1;
+            stateMachine.ChangeState(GM.isTraining ? stateMachine.state_MenuToPlay : stateMachine.state_CheckStamina);
+        }
         else if (IM.is_Menu_Skin_Push)
             stateMachine.ChangeState(stateMachine.state_MenuToSkin);
         else if (IM.is_Menu_Tutorial_Push)

@@ -5,6 +5,7 @@ public class GameStateStateMachine
     public GameStateStateBase currentState {  get; private set; }
 
     public GameStateStateBase state_Login { get; private set; }
+    public GameStateStateBase state_CheckStamina { get; private set; }
     public GameStateStateBase state_Menu { get; private set; }
     public GameStateStateBase state_MenuToPlay { get; private set; }
     public GameStateStateBase state_MenuToSkin { get; private set; }
@@ -31,6 +32,7 @@ public class GameStateStateMachine
     public GameStateStateMachine()
     {
         state_Login = new GameStateState_Login(this);
+        state_CheckStamina = new GameStateState_CheckStamina(this);
         state_Menu = new GameStateState_Menu(this);
         state_MenuToPlay = new GameStateState_MenuToPlay(this);
         state_MenuToSkin = new GameStateState_MenuToSkin(this);

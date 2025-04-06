@@ -242,7 +242,8 @@ public class PopupUIManager : MonoBehaviour
         inputfield_DI_2.text = "";
         UnityAction tempAction = listenActionOnPushOK;
         eventOnPushOK?.Invoke();
-        eventOnPushOK.RemoveListener(tempAction);
+        if (tempAction != null)
+            eventOnPushOK.RemoveListener(tempAction);
     }
 
 

@@ -47,7 +47,7 @@ public class RankingManager : MonoBehaviour
 
 
     //ランキングを取得し更新
-    public static async Task UpdateRanking(RankingType rankingType)
+    public static async Task<bool> UpdateRanking(RankingType rankingType)
     {
         switch (rankingType)
         {
@@ -68,11 +68,13 @@ public class RankingManager : MonoBehaviour
                 //正常に取得できていれば更新
                 if (newUserData_highScore.rank != -1)
                     userRankData_highScore = newUserData_highScore;
+                //そうでなければエラーを返す
+                else return false;
 
                 //ランキング更新時間を記憶
                 rankingUpdateTime_highScore = Time.time;
 
-                break;
+                return true;
 
 
 
@@ -93,11 +95,15 @@ public class RankingManager : MonoBehaviour
                 //正常に取得できていれば更新
                 if (newUserData_playerScore.rank != -1)
                     userRankData_playerScore = newUserData_playerScore;
+                //そうでなければエラーを返す
+                else return false;
 
                 //ランキング更新時間を記憶
                 rankingUpdateTime_playerScore = Time.time;
 
-                break;
+                return true;
+
+            default: return false;
         }
     }
 }

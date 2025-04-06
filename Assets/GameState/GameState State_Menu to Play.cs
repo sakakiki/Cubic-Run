@@ -10,6 +10,9 @@ public class GameStateState_MenuToPlay : GameStateStateBase
     private SpriteRenderer screenCover;
     private Color startCoverColor;
     private Color targetCoverColor;
+    public static int remainingStamina;
+    private SpriteRenderer[] staminaSprite = new SpriteRenderer[3];
+    private RectTransform[] staminaRtf;
 
     public GameStateState_MenuToPlay(GameStateStateMachine stateMachine) : base(stateMachine)
     {
@@ -20,6 +23,9 @@ public class GameStateState_MenuToPlay : GameStateStateBase
         screenCover = GM.screenCover;
         startCoverColor = GM.screenCoverColor_Menu;
         targetCoverColor = GM.screenCoverColor_Play;
+        for (int i = 0; i < staminaSprite.Length; i++)
+            staminaSprite[i] = GM.staminaSprite[i + 1];
+        staminaRtf = GM.staminaRtf;
     }
 
 
@@ -77,6 +83,13 @@ public class GameStateState_MenuToPlay : GameStateStateBase
         //BGMのボリューム変更
         audioSource_BGM.volume = (2 - elapsedTime) * AM.volume_BGM;
 
+        //スタミナの消費演出
+        if (0 <= remainingStamina && remainingStamina < 3)
+        {
+            staminaSprite[remainingStamina].color = GM.staminaColor - Color.black * elapsedTime * 3;
+            staminaRtf[remainingStamina].localScale = Vector3.one * 130 * (1 + elapsedTime);
+        }
+
         //指定時間経過でステート遷移
         if (elapsedTime > 2)
             stateMachine.ChangeState(stateMachine.state_Play);
@@ -90,5 +103,9 @@ public class GameStateState_MenuToPlay : GameStateStateBase
         GM.levelTf.position = GM.centerPos_World;
         GM.levelText.fontSize = 300;
         GM.levelText.color = Color.clear;
+
+        //スタミナアイコンの大きさを戻す
+        if (0 <= remainingStamina && remainingStamina < 3)
+            staminaRtf[remainingStamina].localScale = Vector3.one * 130;
     }
 }

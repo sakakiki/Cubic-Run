@@ -3,6 +3,7 @@ using UnityEngine;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine.UI;
+using System.Net.Http.Headers;
 
 //GameManagerは処理を優先実行
 [DefaultExecutionOrder(-1)]
@@ -48,6 +49,7 @@ public class GameManager : MonoBehaviour
     public Color panelSelectedColor;
     public Vector2 centerPos_PlayerArea;
     public Queue<int> newSkinQueue = new Queue<int>();
+    public Color staminaColor { private set; get; }
     [Space(30)]
 
     [Header("インスペクターから設定")]
@@ -150,6 +152,10 @@ public class GameManager : MonoBehaviour
     [SerializeField] private TextMeshProUGUI playerInfo_RequiredExp;
     [SerializeField] private TextMeshProUGUI playerInfo_TotalRunDistance;
     [SerializeField] private SpriteRenderer buttonPatternSelectSquare;
+    [SerializeField] private GameObject playCost;
+    public SpriteRenderer[] staminaSprite;
+    [SerializeField] private TextMeshProUGUI overStamina;
+    public RectTransform[] staminaRtf;
 
     //ステートマシン
     public GameStateStateMachine gameStateMachine {  get; private set; }
@@ -241,6 +247,7 @@ public class GameManager : MonoBehaviour
         while (trainingPanels.Count > 0)
             Destroy(trainingPanels.Dequeue());
 
+
         //ローカルデータのロード
         highScore = HighScoreManager.Load();
         rankingScoreQueue = RankingScoreManager.Load();
@@ -258,8 +265,11 @@ public class GameManager : MonoBehaviour
         if (rankingScoreQueue.Count > 0)
             await FSM.SavePlayerScore();
 
+
+        bool onlineSuccess = true;
+
         //クラウドデータのロード
-        await FSM.LoadAll();
+        onlineSuccess &= await FSM.LoadAll();
 
 
         //プレイヤーランク算出
@@ -310,9 +320,18 @@ public class GameManager : MonoBehaviour
 
 
         //ランキング更新
-        await RankingManager.UpdateRanking(RankingManager.RankingType.HighScore);
-        await RankingManager.UpdateRanking(RankingManager.RankingType.PlayerScore);
+        onlineSuccess &= await RankingManager.UpdateRanking(RankingManager.RankingType.HighScore);
+        onlineSuccess &= await RankingManager.UpdateRanking(RankingManager.RankingType.PlayerScore);
         await highScoreRankingBoard.UpdateRanking();
+
+
+        //スタミナの反映
+        onlineSuccess &= UpdateStamina(await FSM.UpdateAndGetStamina());
+
+
+        //オンラインデータ取得が失敗すれば通知
+        if (!onlineSuccess)
+            PopupUIManager.Instance.SetupMessageBand("クラウドデータを取得できませんでした。", 2);
     }
 
 
@@ -361,6 +380,9 @@ public class GameManager : MonoBehaviour
             //背景の速度を変更
             TM.SetSpeed(5 + Mathf.Pow(trainingLevel, 0.7f) * 3);
             TM.moveSpeed = 5 + Mathf.Pow(trainingLevel, 0.7f) * 3;
+
+            //スタミナ消費表示を非表示
+            playCost.SetActive(false);
         }
 
         //ランキングモードへ遷移時
@@ -375,6 +397,9 @@ public class GameManager : MonoBehaviour
             //背景の速度を変更
             TM.SetSpeed(8);
             TM.moveSpeed = 8;
+
+            //スタミナ消費表示を表示
+            playCost.SetActive(true);
         }
     }
 
@@ -486,6 +511,12 @@ public class GameManager : MonoBehaviour
 
         //ボタン配置UIの色変更
         buttonPatternSelectSquare.color = SDB.skinData[skinID].UIColor;
+
+        //スタミナの色を変更
+        staminaColor = Color.Lerp(SDB.skinData[skinID].UIColor, Color.gray, 0.2f);
+        for (int i = 0; i < staminaSprite.Length; i++)
+            if(staminaSprite[i].color != Color.clear)
+                staminaSprite[i].color = staminaColor;
     }
 
 
@@ -733,5 +764,34 @@ public class GameManager : MonoBehaviour
             if (gameStateMachine.currentState == gameStateMachine.state_Play)
                 GameStateState_Play.EnterPause();
         }
+    }
+
+
+
+    //スタミナ表示の更新
+    public bool UpdateStamina(int stamina)
+    {
+        for (int i = 1; i < staminaSprite.Length; i++)
+        {
+            if (i <= stamina)
+                staminaSprite[i].color = staminaColor;
+            else
+                staminaSprite[i].color = Color.clear;
+        }
+
+        UpdateOverStamina(stamina);
+
+        return stamina >= 0;
+    }
+
+
+
+    //最大値超過スタミナ表示の更新
+    public void UpdateOverStamina(int stamina)
+    {
+        if (stamina > 3)
+            overStamina.SetText("＋" + (stamina - 3));
+        else
+            overStamina.SetText("");
     }
 }

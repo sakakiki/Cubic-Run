@@ -35,6 +35,7 @@ public class AudioManager : MonoBehaviour
     public AudioClip SE_Panel;
     public AudioClip SE_GetExp;
     public AudioClip SE_LevelUp;
+    public AudioClip SE_UseStama;
 
     public void Awake()
     {
