@@ -68,8 +68,8 @@ public class GameManager : MonoBehaviour
     public RectTransform[] playUIs_L;
     public RectTransform playHingeRtf_R;
     public RectTransform[] playUIs_R;
-    public RectTransform resultHingeRtf_L;
-    public RectTransform[] resultUIs_L;
+    public RectTransform resultHingeRtf_R;
+    public RectTransform[] resultUIs_R;
     public RectTransform resultHingeRtf_B;
     public RectTransform[] resultUIs_B;
     public TextMeshProUGUI scoreText;
@@ -156,6 +156,8 @@ public class GameManager : MonoBehaviour
     public SpriteRenderer[] staminaSprite;
     [SerializeField] private TextMeshProUGUI overStamina;
     public RectTransform[] staminaRtf;
+    public RectTransform adRtf_Menu;
+    public RectTransform adRtf_Result;
 
     //ステートマシン
     public GameStateStateMachine gameStateMachine {  get; private set; }
@@ -214,8 +216,8 @@ public class GameManager : MonoBehaviour
             playUIs_L[i].SetParent(playHingeRtf_L);
         for (int i = 0; i < playUIs_R.Length; i++)
             playUIs_R[i].SetParent(playHingeRtf_R);
-        for (int i = 0; i < resultUIs_L.Length; i++)
-            resultUIs_L[i].SetParent(resultHingeRtf_L);
+        for (int i = 0; i < resultUIs_R.Length; i++)
+            resultUIs_R[i].SetParent(resultHingeRtf_R);
         for (int i = 0; i < resultUIs_B.Length; i++)
             resultUIs_B[i].SetParent(resultHingeRtf_B);
 
@@ -326,7 +328,7 @@ public class GameManager : MonoBehaviour
 
 
         //スタミナの反映
-        onlineSuccess &= UpdateStamina(await FSM.UpdateAndGetStamina());
+        onlineSuccess &= UpdateStamina(await FSM.CheckResetAndGetStamina());
 
 
         //オンラインデータ取得が失敗すれば通知

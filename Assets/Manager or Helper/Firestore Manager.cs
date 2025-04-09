@@ -543,8 +543,9 @@ public class FirestoreManager : MonoBehaviour
 
     /// <summary>
     /// スタミナの最新状態を取得
+    /// スタミナ回復・広告視聴回数リセットもここで実行
     /// </summary>
-    public async Task<int> UpdateAndGetStamina()
+    public async Task<int> CheckResetAndGetStamina()
     {
         if (auth.CurrentUser == null)
         {
@@ -584,7 +585,14 @@ public class FirestoreManager : MonoBehaviour
             if (lastUpdated < lastReset)
             {
                 int newStamina = Mathf.Max(currentStamina, maxStamina);
-                await docRef.SetAsync(new { stamina = newStamina, lastUpdated = Timestamp.GetCurrentTimestamp() }, SetOptions.MergeAll);
+
+                //同時に広告視聴回数もリセット
+                await docRef.SetAsync(new { 
+                    stamina = newStamina, 
+                    lastUpdated = Timestamp.GetCurrentTimestamp(),
+                    adWatchCount = 0 }, 
+                    SetOptions.MergeAll);
+
                 return newStamina;
             }
 
@@ -606,14 +614,14 @@ public class FirestoreManager : MonoBehaviour
         if (auth.CurrentUser == null)
         {
             Debug.LogError("Firebase認証されていません");
-            return - 2; //異常終了
+            return -2; //異常終了
         }
 
         try
         {
             DocumentReference docRef = db.Collection("users").Document(auth.CurrentUser.UserId);
 
-            int returnValue = - 2; // 変更が無ければ異常終了として扱う
+            int returnValue = -2; // 変更が無ければ異常終了として扱う
 
             await db.RunTransactionAsync(async transaction =>
             {
@@ -623,7 +631,7 @@ public class FirestoreManager : MonoBehaviour
                 int currentStamina = snapshot.GetValue<int>("stamina");
                 if (currentStamina <= 0)
                 {
-                    returnValue = - 1;
+                    returnValue = -1;
                     return true;
                 }
 
@@ -637,7 +645,96 @@ public class FirestoreManager : MonoBehaviour
         catch (Exception e)
         {
             Debug.LogError("スタミナの消費に失敗: " + e.Message);
-            return - 2; //異常終了
+            return -2; //異常終了
+        }
+    }
+
+    /// <summary>
+    /// スタミナを回復
+    /// </summary>
+    public async Task<int> AddStamina(int addNum)
+    {
+        if (auth.CurrentUser == null)
+        {
+            Debug.LogError("Firebase認証されていません");
+            return -2; //異常終了
+        }
+
+        try
+        {
+            DocumentReference docRef = db.Collection("users").Document(auth.CurrentUser.UserId);
+
+            int returnValue = -2; // 変更が無ければ異常終了として扱う
+
+            await db.RunTransactionAsync(async transaction =>
+            {
+                DocumentSnapshot snapshot = await transaction.GetSnapshotAsync(docRef);
+                if (!snapshot.Exists) return false;
+
+                int currentStamina = snapshot.GetValue<int>("stamina");
+                int currentAdWatchCount = snapshot.GetValue<int>("adWatchCount");
+
+                //既に3回以上広告を視聴していれば回復しない
+                if (currentAdWatchCount >= 3)
+                {
+                    return false;
+                }
+
+                //広告視聴回数を加算しつつスタミナ回復
+                transaction.Set(docRef, new { 
+                    stamina = currentStamina + 2, 
+                    adWatchCount = currentAdWatchCount + 1 
+                }, SetOptions.MergeAll);
+
+                returnValue = currentStamina + 2;
+
+                return true;
+            });
+
+            return returnValue;
+        }
+        catch (Exception e)
+        {
+            Debug.LogError("スタミナの回復に失敗: " + e.Message);
+            return -2; //異常終了
+        }
+    }
+
+
+
+    /// <summary>
+    /// 広告視聴回数を取得
+    /// </summary>
+    public async Task<int> GetAdWatchCount()
+    {
+        if (auth.CurrentUser == null)
+        {
+            Debug.LogError("Firebase認証されていません");
+            return 4; //異常終了
+        }
+
+        try
+        {
+            DocumentReference docRef = db.Collection("users").Document(auth.CurrentUser.UserId);
+
+            //オンライン専用化
+            DocumentSnapshot snapshot = await docRef.GetSnapshotAsync(Source.Server);
+
+
+            if (snapshot.ContainsField("adWatchCount"))
+            {
+                return snapshot.GetValue<int>("adWatchCount");
+            }
+            else
+            {
+                //広告視聴回数のデータが存在しなければ初期値を返す
+                return 0;
+            }
+        }
+        catch (Exception e)
+        {
+            Debug.LogError("広告視聴回数の取得に失敗: " + e.Message);
+            return 4; //異常終了
         }
     }
 

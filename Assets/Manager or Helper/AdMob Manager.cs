@@ -8,8 +8,6 @@ public class AdmobManager : MonoBehaviour
     private NativeOverlayAd _nativeOverlayAd; //ネイティブ広告本体
     private RewardedAd _rewardedAd; //リワード広告本体
 
-    private GameObject dummyAdUI; // エディタ用のダミーネイティブ広告
-
     // 広告ユニット
 #if UNITY_ANDROID
     private string _adUnitId_nativeOverlay = "ca-app-pub-3940256099942544/2247696110"; //テスト用
@@ -48,14 +46,14 @@ public class AdmobManager : MonoBehaviour
 
 
     /// <summary>
-    /// ネイティブ広告のロード
+    /// ネイティブ広告のロードと表示
     /// </summary>
-    public void LoadAd()
+    public void LoadAndRenderNativeAd(RectTransform targetRect)
     {
         // 新しい広告をロードする前に古い広告をクリーンアップ
         if (_nativeOverlayAd != null)
         {
-            DestroyAd();
+            DestroyNativeAd();
         }
 
         Debug.Log("広告ロード開始");
@@ -65,10 +63,15 @@ public class AdmobManager : MonoBehaviour
         Debug.Log("リクエストを作成");
 
         // オプション：ネイティブ広告のオプションを定義
-        var options = new NativeAdOptions
+        // アスペクト比に応じて広告の形を変更
+        var options = new NativeAdOptions { };
+        float targetAspect = targetRect.localScale.x / targetRect.localScale.y;
+        switch (targetAspect)
         {
-            MediaAspectRatio = MediaAspectRatio.Landscape, //横長の広告
-        };
+            case < 0.8f: options.MediaAspectRatio = MediaAspectRatio.Portrait; break; //縦長の広告
+            case > 1.2f: options.MediaAspectRatio = MediaAspectRatio.Landscape; break; //横長の広告
+            default: options.MediaAspectRatio = MediaAspectRatio.Square; break;
+        }
         Debug.Log("オプションを定義");
 
         // 広告を読み込むリクエストを送信
@@ -98,17 +101,15 @@ public class AdmobManager : MonoBehaviour
                        ad.GetResponseInfo());
                 _nativeOverlayAd = ad;
 
-                // 広告イベントに登録して機能を拡張
-                //RegisterEventHandlers(ad);
+                // 広告を表示
+                RenderNativeAd(targetRect);
             });
     }
-
-
 
     /// <summary>
     /// ネイティブ広告のレンダリング
     /// </summary>
-    public void RenderAd(RectTransform targetRect)
+    private void RenderNativeAd(RectTransform targetRect)
     {
         if (_nativeOverlayAd != null)
         {
@@ -149,75 +150,26 @@ public class AdmobManager : MonoBehaviour
         }
     }
 
-
-
-    /// <summary>
-    /// 非表示中のネイティブ広告の再表示
-    /// </summary>
-    public void ShowAd()
-    {
-        if (_nativeOverlayAd != null)
-        {
-            Debug.Log("非表示広告の再表示");
-            _nativeOverlayAd.Show();
-        }
-
-#if UNITY_EDITOR
-        if (dummyAdUI != null)
-        {
-            dummyAdUI.SetActive(true);
-        }
-#endif
-    }
-
-
-    /// <summary>
-    /// ネイティブ広告を非表示
-    /// </summary>
-    public void HideAd()
-    {
-        if (_nativeOverlayAd != null)
-        {
-            Debug.Log("広告を非表示");
-            _nativeOverlayAd.Hide();
-        }
-
-#if UNITY_EDITOR
-        if (dummyAdUI != null)
-        {
-            dummyAdUI.SetActive(false);
-        }
-#endif
-    }
-
-
-
     /// <summary>
     /// ネイティブ広告を破棄
     /// </summary>
-    public void DestroyAd()
+    public void DestroyNativeAd()
     {
+        Debug.Log("広告を破棄");
         if (_nativeOverlayAd != null)
         {
             Debug.Log("広告を破棄");
             _nativeOverlayAd.Destroy();
             _nativeOverlayAd = null;
         }
-
-#if UNITY_EDITOR
-        if (dummyAdUI != null)
-        {
-            Destroy(dummyAdUI);
-        }
-#endif
     }
 
 
 
     /// <summary>
-    /// リワード広告のロード
+    /// リワード広告のロードと再生
     /// </summary>
-    public void LoadRewardedAd()
+    public void LoadAndShowRewardedAd()
     {
         // 新しい広告をロードする前に古い広告をクリーンアップ
         if (_rewardedAd != null)
@@ -230,6 +182,7 @@ public class AdmobManager : MonoBehaviour
 
         // 広告を読み込むためのリクエストを作成
         var adRequest = new AdRequest();
+        Debug.Log("リクエストを作成");
 
         // 広告をロードするリクエストを送信
         RewardedAd.Load(_adUnitId_reward, adRequest,
@@ -242,6 +195,9 @@ public class AdmobManager : MonoBehaviour
                 {
                     Debug.LogError("Rewarded ad failed to load an ad " +
                                    "with error : " + error);
+
+                    //メニュー画面に戻して終了
+                    GameManager.Instance.gameStateMachine.ChangeState(GameManager.Instance.gameStateMachine.state_Menu);
                     return;
                 }
 
@@ -249,10 +205,13 @@ public class AdmobManager : MonoBehaviour
                           + ad.GetResponseInfo());
 
                 _rewardedAd = ad;
+
+                //広告の再生
+                ShowRewardedAd();
             });
 
-        // 広告のプリロードイベントを登録
-        RegisterReloadHandler(_rewardedAd);
+        //メニュー画面に戻して終了
+        GameManager.Instance.gameStateMachine.ChangeState(GameManager.Instance.gameStateMachine.state_Menu);
     }
 
 
@@ -260,47 +219,44 @@ public class AdmobManager : MonoBehaviour
     /// <summary>
     /// リワード広告の再生
     /// </summary>
-    public void ShowRewardedAd()
+    private void ShowRewardedAd()
     {
         // 広告が再生可能か確認
         if (_rewardedAd != null && _rewardedAd.CanShowAd())
         {
-            _rewardedAd.Show((Reward reward) =>
+            _rewardedAd.Show(async (Reward reward) =>
             {
                 // 報酬の付与
                 Debug.Log("Reward：" + reward.Type + " × " + reward.Amount);
+
+                //回復後のスタミナ残量を取得
+                int remainingStamina = await FirestoreManager.Instance.AddStamina(2);
+
+                //通信エラー通知
+                if (remainingStamina == -2)
+                {
+                    PopupUIManager.Instance.SetupMessageBand("通信エラーが発生しました。", 2);
+                }
+
+                else
+                {
+                    //スタミナ表示の更新
+                    GameManager.Instance.UpdateStamina(remainingStamina);
+
+                    //超過スタミナ消費の場合の処理
+                    if (remainingStamina >= 3)
+                        GameManager.Instance.UpdateOverStamina(remainingStamina);
+                }
+
+                // スタミナ回復の通知
+                PopupUIManager.Instance.SetupMessageBand("スタミナを2回復しました。", 2);
             });
         }
         // 広告が再生できない場合
         else
         {
             // 広告が準備できていないことの通知
+            PopupUIManager.Instance.SetupMessageBand("広告の取得に失敗しました。", 2);
         }
-    }
-
-
-
-    /// <summary>
-    /// リワード広告へのイベントの登録
-    /// </summary>
-    private void RegisterReloadHandler(RewardedAd ad)
-    {
-        // フルスクリーンコンテンツを閉じた場合に発生
-        ad.OnAdFullScreenContentClosed += () =>
-        {
-            Debug.Log("Rewarded Ad full screen content closed.");
-
-            // 広告のリロード
-            LoadRewardedAd();
-        };
-        // フルスクリーンコンテンツを開くのに失敗した場合に発生
-        ad.OnAdFullScreenContentFailed += (AdError error) =>
-        {
-            Debug.LogError("Rewarded ad failed to open full screen content " +
-                           "with error : " + error);
-
-            // 広告のリロード
-            LoadRewardedAd();
-        };
     }
 }

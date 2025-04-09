@@ -7,7 +7,7 @@ public class GameStateState_ResultToMenu : GameStateStateBase
     public RectTransform menuHingeRtf_L;
     public RectTransform menuHingeRtf_R;
     public RectTransform playHingeRtf_L;
-    private RectTransform resultHingeRtf_L;
+    private RectTransform resultHingeRtf_R;
     private RectTransform resultHingeRtf_B;
     private bool isTutorial;
     public static bool isPlayerCheck;
@@ -17,7 +17,7 @@ public class GameStateState_ResultToMenu : GameStateStateBase
         menuHingeRtf_L = GM.menuHingeRtf_L;
         menuHingeRtf_R = GM.menuHingeRtf_R;
         playHingeRtf_L = GM.playHingeRtf_L;
-        resultHingeRtf_L = GM.resultHingeRtf_L;
+        resultHingeRtf_R = GM.resultHingeRtf_R;
         resultHingeRtf_B = GM.resultHingeRtf_B;
     }
 
@@ -103,7 +103,7 @@ public class GameStateState_ResultToMenu : GameStateStateBase
         menuHingeRtf_R.localEulerAngles = Vector3.Lerp(Vector3.up * 180, Vector3.zero, lerpValue);
         if (!isTutorial)
             playHingeRtf_L.localEulerAngles = Vector3.Lerp(Vector3.zero, Vector3.up * 180, lerpValue);
-        resultHingeRtf_L.localEulerAngles = Vector3.Lerp(Vector3.zero, Vector3.up * 180, lerpValue);
+        resultHingeRtf_R.localEulerAngles = Vector3.Lerp(Vector3.zero, Vector3.up * -180, lerpValue);
         resultHingeRtf_B.localEulerAngles = Vector3.Lerp(Vector3.zero, Vector3.right * 180, lerpValue);
 
         //指定時間経過でステート遷移

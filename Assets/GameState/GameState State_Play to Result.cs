@@ -13,7 +13,7 @@ public class GameStateState_PlayToResult : GameStateStateBase
     private Color startCoverColor;
     private Color targetCoverColor;
     public RectTransform playHingeRtf_R;
-    private RectTransform resultHingeRtf_L;
+    private RectTransform resultHingeRtf_R;
     private RectTransform resultHingeRtf_B;
     private AnimationCurve curveScorePosY;
     private RectTransform playerRankScaleRtf;
@@ -43,7 +43,7 @@ public class GameStateState_PlayToResult : GameStateStateBase
         startCoverColor = GM.screenCoverColor_Play;
         targetCoverColor = GM.screenCoverColor_Menu;
         playHingeRtf_R = GM.playHingeRtf_R;
-        resultHingeRtf_L = GM.resultHingeRtf_L;
+        resultHingeRtf_R = GM.resultHingeRtf_R;
         resultHingeRtf_B = GM.resultHingeRtf_B;
         curveScorePosY = GM.scorePosY_PlaytoResult;
         playerRankScaleRtf = GM.playerRankScaleRtf;
@@ -242,7 +242,7 @@ public class GameStateState_PlayToResult : GameStateStateBase
 
         //UI‚ð‰ñ“]
         playHingeRtf_R.localEulerAngles = Vector3.Lerp(Vector3.zero, Vector3.up * -180, elapsedTime - 1);
-        resultHingeRtf_L.localEulerAngles = Vector3.Lerp(Vector3.up * 120, Vector3.zero, elapsedTime - 2);
+        resultHingeRtf_R.localEulerAngles = Vector3.Lerp(Vector3.up * -120, Vector3.zero, elapsedTime - 2);
         resultHingeRtf_B.localEulerAngles = Vector3.Lerp(Vector3.right * 120, Vector3.zero, elapsedTime - 2);
 
         if (elapsedTime < 3) return;

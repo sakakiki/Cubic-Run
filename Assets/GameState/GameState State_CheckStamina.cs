@@ -16,10 +16,28 @@ public class GameStateState_CheckStamina : GameStateStateBase
         //スタミナ不足通知
         if (remainingStamina == -1)
         {
-            PopupUIManager.Instance.SetupPopupMessage(
-                "スタミナ不足",
-                "スタミナがありません。\nスタミナは毎日4:00に全回復します。");
-            stateMachine.ChangeState(stateMachine.state_Menu);
+            //広告視聴回数の取得
+            int adWatchCount = await FirestoreManager.Instance.GetAdWatchCount();
+
+            //視聴回数が3回未満なら広告視聴を提案
+            if (adWatchCount < 3)
+            {
+                PopupUIManager.Instance.SetupPopup(
+                    "スタミナ不足",
+                    "スタミナがありません。\n\n広告を見てスタミナを2回復しますか？\n本日の回復可能回数：" + (3 - adWatchCount),
+                    AdmobManager.Instance.LoadAndShowRewardedAd,
+                    BackToMenu);
+            }
+
+            //広告視聴回数が上限なら回復を待つように通知
+            else
+            {
+                PopupUIManager.Instance.SetupPopupMessage(
+                    "スタミナ不足",
+                    "スタミナがありません。\n\nスタミナは毎日4:00に全回復します。");
+                stateMachine.ChangeState(stateMachine.state_Menu);
+            }
+
             return;
         }
 
@@ -52,5 +70,12 @@ public class GameStateState_CheckStamina : GameStateStateBase
     {
         //他ステートに変数の受け渡し
         GameStateState_MenuToPlay.remainingStamina = remainingStamina;
+    }
+
+
+
+    public void BackToMenu()
+    {
+        stateMachine.ChangeState(stateMachine.state_Menu);
     }
 }

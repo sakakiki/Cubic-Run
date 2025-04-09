@@ -20,6 +20,9 @@ public class GameStateState_Menu : GameStateStateBase
             AM.SetBGMSpeed(1);
             audioSource_BGM.Play();
         }
+
+        //L‚ğ•\¦
+        AdmobManager.Instance.LoadAndRenderNativeAd(GM.adRtf_Menu);
     }
 
 
@@ -58,5 +61,8 @@ public class GameStateState_Menu : GameStateStateBase
     {
         //ƒƒjƒ…[‰æ–Ê‚ÌUI‚ğ–³Œø‰»
         IM.InputUISetActive_Menu(false);
+
+        //L‚ğ”jŠü
+        AdmobManager.Instance.DestroyNativeAd();
     }
 }

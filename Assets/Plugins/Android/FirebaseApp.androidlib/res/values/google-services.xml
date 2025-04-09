@@ -1,0 +1,10 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources xmlns:tools="http://schemas.android.com/tools" tools:keep="@string/gcm_defaultSenderId,@string/google_storage_bucket,@string/project_id,@string/google_api_key,@string/google_crash_reporting_api_key,@string/google_app_id,@string/default_web_client_id">
+  <string name="gcm_defaultSenderId" translatable="false">651397958438</string>
+  <string name="google_storage_bucket" translatable="false">cubic-run-sakakiki.firebasestorage.app</string>
+  <string name="project_id" translatable="false">cubic-run-sakakiki</string>
+  <string name="google_api_key" translatable="false">AIzaSyA6InJ97WwRpmTv63p2zMEuRny0oc3kKC8</string>
+  <string name="google_crash_reporting_api_key" translatable="false">AIzaSyA6InJ97WwRpmTv63p2zMEuRny0oc3kKC8</string>
+  <string name="google_app_id" translatable="false">1:651397958438:android:f985418a622d8234da4fe7</string>
+  <string name="default_web_client_id" translatable="false">651397958438-v7i8i23e7op0fs8un40spfrpht20ipgc.apps.googleusercontent.com</string>
+</resources>

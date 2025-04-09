@@ -14,6 +14,9 @@ public class GameStateState_Result : GameStateStateBase
 
         //プレイヤー移動可能エリアの中心の変更
         GM.centerPos_PlayerArea = GM.centerPos_PlayerArea_Result;
+
+        //広告を表示
+        AdmobManager.Instance.LoadAndRenderNativeAd(GM.adRtf_Result);
     }
 
 
@@ -42,5 +45,8 @@ public class GameStateState_Result : GameStateStateBase
 
         //プレイヤー移動可能エリアの中心の変更
         GM.centerPos_PlayerArea = GM.centerPos_World;
+
+        //広告を破棄
+        AdmobManager.Instance.DestroyNativeAd();
     }
 }

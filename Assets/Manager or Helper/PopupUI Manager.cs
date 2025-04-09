@@ -35,8 +35,10 @@ public class PopupUIManager : MonoBehaviour
     [SerializeField] private TMP_InputField inputfield_DI_2;
 
     [HideInInspector] public UnityEvent eventOnPushOK;
+    [HideInInspector] public UnityEvent eventOnCancel;
     [HideInInspector] public UnityEvent eventSaveInput;
     private UnityAction listenActionOnPushOK;
+    private UnityAction listenActionOnCancel;
 
 
 
@@ -148,6 +150,22 @@ public class PopupUIManager : MonoBehaviour
 
 
 
+    //確認用ポップアップの作成（キャンセル処理あり）
+    public void SetupPopup(string title, string explanation, UnityAction onPushOK, UnityAction onCancel)
+    {
+        boardPopup.SetActive(true);
+        doubleButton.SetActive(true);
+        finalConfirmation.SetActive(true);
+        boardTitle.SetText(title);
+        explanation_FC.SetText(explanation);
+        eventOnPushOK.AddListener(onPushOK);
+        eventOnCancel.AddListener(onCancel);
+        listenActionOnPushOK = onPushOK;
+        listenActionOnCancel = onCancel;
+    }
+
+
+
     //単一入力ポップアップの作成
     public void SetupPopup(
         string title, string explanation, TMP_InputField.ContentType contentType, UnityAction onPushOK)
@@ -244,6 +262,8 @@ public class PopupUIManager : MonoBehaviour
         eventOnPushOK?.Invoke();
         if (tempAction != null)
             eventOnPushOK.RemoveListener(tempAction);
+        if (listenActionOnCancel != null)
+            eventOnCancel.RemoveListener(listenActionOnCancel);
     }
 
 
@@ -261,7 +281,12 @@ public class PopupUIManager : MonoBehaviour
         inputfield_SI.text = "";
         inputfield_DI_1.text = "";
         inputfield_DI_2.text = "";
-        eventOnPushOK.RemoveListener(listenActionOnPushOK);
+        if (listenActionOnPushOK != null)
+            eventOnPushOK.RemoveListener(listenActionOnPushOK);
+        UnityAction tempAction = listenActionOnCancel;
+        eventOnCancel?.Invoke();
+        if (tempAction != null)
+            eventOnCancel.RemoveListener(tempAction);
     }
 
 
