@@ -24,7 +24,7 @@ public class GameStateState_CheckStamina : GameStateStateBase
             {
                 PopupUIManager.Instance.SetupPopup(
                     "スタミナ不足",
-                    "スタミナがありません。\n\n広告を見てスタミナを2回復しますか？\n本日の回復可能回数：" + (3 - adWatchCount),
+                    @"スタミナがありません。\n\n広告を見てスタミナを2回復しますか？\n本日の回復可能回数：" + (3 - adWatchCount),
                     AdmobManager.Instance.LoadAndShowRewardedAd,
                     BackToMenu);
             }
@@ -34,7 +34,7 @@ public class GameStateState_CheckStamina : GameStateStateBase
             {
                 PopupUIManager.Instance.SetupPopupMessage(
                     "スタミナ不足",
-                    "スタミナがありません。\n\nスタミナは毎日4:00に全回復します。");
+                    @"スタミナがありません。\n\nスタミナは毎日4:00に全回復します。");
                 stateMachine.ChangeState(stateMachine.state_Menu);
             }
 

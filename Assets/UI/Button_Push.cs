@@ -35,7 +35,7 @@ public class Button_Push : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
         transform.localScale = defaultScale;
 
         //カバーを透明に
-        cover.color =　Color.clear;
+        cover.color = Color.clear;
     }
 
     //タップ：タップ後に指が画面から離れたとき、指がオブジェクト上なら実行
