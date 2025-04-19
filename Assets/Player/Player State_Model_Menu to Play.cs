@@ -1,6 +1,4 @@
-using UnityEditor.Tilemaps;
 using UnityEngine;
-using static UnityEngine.InputManagerEntry;
 
 public class PlayerState_Model_MenuToPlay : PlayerStateBase_Model
 {
