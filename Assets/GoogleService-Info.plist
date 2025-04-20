@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>651397958438-mpe1rjmponn0p1jf8nqf294j1rs9tnj8.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.651397958438-mpe1rjmponn0p1jf8nqf294j1rs9tnj8</string>
+	<key>API_KEY</key>
+	<string>AIzaSyBcS4tVXEsYY6FmKzt_Mn4ypkpNfoGeE2A</string>
+	<key>GCM_SENDER_ID</key>
+	<string>651397958438</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.DefaultCompany.com.unity.template.mobile2D</string>
+	<key>PROJECT_ID</key>
+	<string>cubic-run-sakakiki</string>
+	<key>STORAGE_BUCKET</key>
+	<string>cubic-run-sakakiki.firebasestorage.app</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:651397958438:ios:95a15a608ddd3ca6da4fe7</string>
+</dict>
+</plist>
