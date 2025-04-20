@@ -59,76 +59,76 @@ public class GameStateState_PlayToResult : GameStateStateBase
 
     public override async void Enter()
     {
-        //“¯•¡”Às‚Ì§ŒÀ
+        //åŒæ™‚è¤‡æ•°å®Ÿè¡Œã®åˆ¶é™
         if (isOnEnter) return;
         isOnEnter = true;
 
-        //Œo‰ßŠÔƒŠƒZƒbƒg
+        //çµŒéæ™‚é–“ãƒªã‚»ãƒƒãƒˆ
         elapsedTime = 0;
 
-        //ƒtƒ‰ƒOƒŠƒZƒbƒg
+        //ãƒ•ãƒ©ã‚°ãƒªã‚»ãƒƒãƒˆ
         isSetText = false;
         isAudioPlay = false;
-        //ˆê•”‚Ìˆ—‚Íƒ`ƒ…[ƒgƒŠƒAƒ‹‚©‚ç‚ÌƒNƒŠƒA‚Å‚ÍÀs‚µ‚È‚¢
+        //ä¸€éƒ¨ã®å‡¦ç†ã¯ãƒãƒ¥ãƒ¼ãƒˆãƒªã‚¢ãƒ«ã‹ã‚‰ã®ã‚¯ãƒªã‚¢ã§ã¯å®Ÿè¡Œã—ãªã„
         isTutorial =
             TutorialStateStateBase.continueState !=
             ((GameStateState_Tutorial)stateMachine.state_Tutorial).tutorialStateMachine.state_Start;
 
-        //•Ï”ƒŠƒZƒbƒg
+        //å¤‰æ•°ãƒªã‚»ãƒƒãƒˆ
         levelUpCount_state = 0;
 
-        //ƒQ[ƒ€ƒ‚[ƒh‚É‰‚¶‚ÄUI‚ÌØ‚è‘Ö‚¦
+        //ã‚²ãƒ¼ãƒ ãƒ¢ãƒ¼ãƒ‰ã«å¿œã˜ã¦UIã®åˆ‡ã‚Šæ›¿ãˆ
         GM.resultRankingUI.SetActive(!GM.isTraining && !isTutorial);
         GM.resultTrainingUI.SetActive(GM.isTraining && !isTutorial);
         GM.resultTutorialUI.SetActive(isTutorial);
 
-        //ƒ{ƒ^ƒ“‚Ì•ÏX
-        GM.resultButton_Retry.SetActive(!isTutorial);
+        //ãƒœã‚¿ãƒ³ã®å¤‰æ›´
+        GM.resultButton_Retry.SetActive(GM.isTraining && !isTutorial);
         GM.resultButtonRtf_Title.anchoredPosition = 
-            isTutorial ? GM.resultButtonAPos_Title_Single : GM.resultButtonAPos_Title_Double;
+            (GM.isTraining && !isTutorial) ? GM.resultButtonAPos_Title_Double : GM.resultButtonAPos_Title_Single;
 
-        //ƒQ[ƒ€ƒ‚[ƒh‚É‰‚¶‚½ˆÚ“®æEƒXƒP[ƒ‹‚Ì•ÏX
+        //ã‚²ãƒ¼ãƒ ãƒ¢ãƒ¼ãƒ‰ã«å¿œã˜ãŸç§»å‹•å…ˆãƒ»ã‚¹ã‚±ãƒ¼ãƒ«ã®å¤‰æ›´
         targetPos = GM.isTraining ? GM.scoreMarkerTf_Result_Trainig.position : GM.scoreMarkerTf_Result_Ranking.position;
         targetScale = GM.isTraining ? Vector3.one * 1.5f : Vector3.one * 2 / Camera.main.aspect;
 
-        //UI‚Ì“à—e•ÏX
+        //UIã®å†…å®¹å¤‰æ›´
         if (GM.isTraining)
         {
             GM.clearRateText.SetText((GM.score / 5000f * 100).ToString("F1", CultureInfo.CurrentCulture) + "%");
-            GM.clearTimesNumText.SetText("‘–”j‰ñ”F" + GM.trainingClearCounts[GM.level - 1] + "‰ñ");
+            GM.clearTimesNumText.SetText("èµ°ç ´å›æ•°ï¼š" + GM.trainingClearCounts[GM.level - 1] + "å›");
         }
 
-        //ƒgƒŒ[ƒjƒ“ƒOƒ‚[ƒhƒNƒŠƒA‚ğœ‚«
+        //ãƒˆãƒ¬ãƒ¼ãƒ‹ãƒ³ã‚°ãƒ¢ãƒ¼ãƒ‰ã‚¯ãƒªã‚¢æ™‚ã‚’é™¤ã
         if (GM.score != 5000 || !GM.isTraining)
         {
-            //’nŒ`‚Ì’â~
+            //åœ°å½¢ã®åœæ­¢
             TerrainManager.Instance.SetSpeed(0);
 
-            //ƒŠƒgƒ‰ƒCƒ{ƒ^ƒ“‚ÌƒeƒLƒXƒg‚ğ•ÏX
-            GM.retryButtonText.SetText("ƒŠƒgƒ‰ƒC");
+            //ãƒªãƒˆãƒ©ã‚¤ãƒœã‚¿ãƒ³ã®ãƒ†ã‚­ã‚¹ãƒˆã‚’å¤‰æ›´
+            GM.retryButtonText.SetText("ãƒªãƒˆãƒ©ã‚¤");
         }
 
-        //‰æ–Êƒ^ƒbƒvŒŸoƒ{ƒ^ƒ“‚Ì—LŒø‰»
+        //ç”»é¢ã‚¿ãƒƒãƒ—æ¤œå‡ºãƒœã‚¿ãƒ³ã®æœ‰åŠ¹åŒ–
         IM.InputUISetActive_Screen(true);
 
-        //ƒXƒRƒAƒ{[ƒh‚ÌˆÚ“®ŠJnˆÊ’u‚ğ‹L‰¯
+        //ã‚¹ã‚³ã‚¢ãƒœãƒ¼ãƒ‰ã®ç§»å‹•é–‹å§‹ä½ç½®ã‚’è¨˜æ†¶
         startPos = GM.scoreMarkerTf_Play.position;
 
-        //ƒvƒŒƒC‘O‚Ìƒ‰ƒ“ƒNƒAƒbƒv‚Ü‚Å‚É•K—v‚ÈŒoŒ±’l—Ê‚ğ‹L‰¯
+        //ãƒ—ãƒ¬ã‚¤å‰ã®ãƒ©ãƒ³ã‚¯ã‚¢ãƒƒãƒ—ã¾ã§ã«å¿…è¦ãªçµŒé¨“å€¤é‡ã‚’è¨˜æ†¶
         beforePlayRequiredExp = GM.requiredExp;
 
-        //ƒvƒŒƒC‘O‚ÌŒoŒ±’l—Ê‚ğ‹L‰¯
+        //ãƒ—ãƒ¬ã‚¤å‰ã®çµŒé¨“å€¤é‡ã‚’è¨˜æ†¶
         int beforePlaytotalExp = GM.totalExp;
 
-        //ƒvƒŒƒC‘O‚ÌƒvƒŒƒCƒ„[ƒ‰ƒ“ƒN‚ğ‹L‰¯E•\¦
+        //ãƒ—ãƒ¬ã‚¤å‰ã®ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ãƒ©ãƒ³ã‚¯ã‚’è¨˜æ†¶ãƒ»è¡¨ç¤º
         beforePlayRank = GM.playerRank; 
-        playerRankText.SetText("ƒvƒŒƒCƒ„[ƒ‰ƒ“ƒN@" + beforePlayRank);
+        playerRankText.SetText("ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ãƒ©ãƒ³ã‚¯ã€€" + beforePlayRank);
 
-        //ŒoŒ±’l‚ÉŠÖ‚·‚é•\¦‚ÌXV
+        //çµŒé¨“å€¤ã«é–¢ã™ã‚‹è¡¨ç¤ºã®æ›´æ–°
         requiredExpText.SetText("" + GM.requiredExp);
         playerRankScaleRtf.localScale = Vector3.one - Vector3.right * (GM.requiredExp / (float)((GM.playerRank+1) * 100));
 
-        //ƒ‰ƒ“ƒLƒ“ƒOƒ‚[ƒh‚È‚çƒvƒŒƒC‘O‚ÌƒXƒRƒA‚ğ‹L‰¯E‹L‰¯
+        //ãƒ©ãƒ³ã‚­ãƒ³ã‚°ãƒ¢ãƒ¼ãƒ‰ãªã‚‰ãƒ—ãƒ¬ã‚¤å‰ã®ã‚¹ã‚³ã‚¢ã‚’è¨˜æ†¶ãƒ»è¨˜æ†¶
         if (!GM.isTraining && !isTutorial)
         {
             beforeHighScore = GM.highScore;
@@ -137,19 +137,19 @@ public class GameStateState_PlayToResult : GameStateStateBase
             playerScoreText.SetText(beforePlayerScore.ToString());
         }
 
-        //ƒvƒŒƒCŒ‹‰Ê‚ÌƒZ[ƒu
+        //ãƒ—ãƒ¬ã‚¤çµæœã®ã‚»ãƒ¼ãƒ–
         if (!isTutorial)
             await GM.SaveResult();
         else if (GM.totalExp == 0)
             GM.SaveResult(100);
 
-        //Šl“¾ŒoŒ±’l—Ê‚ÌZo
+        //ç²å¾—çµŒé¨“å€¤é‡ã®ç®—å‡º
         addExp = GM.totalExp - beforePlaytotalExp;
 
-        //XVŒã‚ÌƒvƒŒƒCƒ„[ƒXƒRƒA‚ğ‹L‰¯
+        //æ›´æ–°å¾Œã®ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã‚¹ã‚³ã‚¢ã‚’è¨˜æ†¶
         newPlayerScore = GM.GetPlayerScore();
 
-        //ƒXƒLƒ“ŠJ•ú‰‰o‚Ì•K—v«‚ğƒ`ƒFƒbƒN
+        //ã‚¹ã‚­ãƒ³é–‹æ”¾æ¼”å‡ºã®å¿…è¦æ€§ã‚’ãƒã‚§ãƒƒã‚¯
         if (isTutorial && beforePlaytotalExp == 0) GM.newSkinQueue.Enqueue(1);
         if (beforePlayRank < 10 && 10 <= GM.playerRank) GM.newSkinQueue.Enqueue(2);
         if (beforePlayRank < 20 && 20 <= GM.playerRank) GM.newSkinQueue.Enqueue(3);
@@ -173,15 +173,15 @@ public class GameStateState_PlayToResult : GameStateStateBase
             }
         }
 
-        //ƒ‰ƒ“ƒLƒ“ƒOXV
+        //ãƒ©ãƒ³ã‚­ãƒ³ã‚°æ›´æ–°
         GM.resultRankingBoard.UpdateRanking();
 
-        //ŒoŒ±’lEƒXƒRƒA•Ï“®•\¦ƒŠƒZƒbƒg
+        //çµŒé¨“å€¤ãƒ»ã‚¹ã‚³ã‚¢å¤‰å‹•è¡¨ç¤ºãƒªã‚»ãƒƒãƒˆ
         addExpText.SetText("");
         highScoreFluctuationText.SetText("");
         playerScoreFluctuationText.SetText("");
 
-        //“¯•¡”Às‚Ì§ŒÀ
+        //åŒæ™‚è¤‡æ•°å®Ÿè¡Œã®åˆ¶é™
         isOnEnter = false;
     }
 
@@ -189,44 +189,44 @@ public class GameStateState_PlayToResult : GameStateStateBase
 
     public override void Update(float deltaTime)
     {
-        //Œo‰ßŠÔ‚Ì‰ÁZ
+        //çµŒéæ™‚é–“ã®åŠ ç®—
         elapsedTime += deltaTime;
 
-        //ƒgƒŒ[ƒjƒ“ƒOƒ‚[ƒhƒNƒŠƒA‚Í’nŒ`‚ÌŠÇ—
+        //ãƒˆãƒ¬ãƒ¼ãƒ‹ãƒ³ã‚°ãƒ¢ãƒ¼ãƒ‰ã‚¯ãƒªã‚¢æ™‚ã¯åœ°å½¢ã®ç®¡ç†
         if (GM.score == 5000 && GM.isTraining || isTutorial)
             TM.ManageMovingTerrain();
 
-        //ŠJnŒã1•bŠÔ
+        //é–‹å§‹å¾Œ1ç§’é–“
         if (elapsedTime < 1)
         {
-            //BGM‚Ìƒ{ƒŠƒ…[ƒ€•ÏX
+            //BGMã®ãƒœãƒªãƒ¥ãƒ¼ãƒ å¤‰æ›´
             audioSource_BGM.volume = (1 - elapsedTime) * AM.volume_BGM;
 
-            //c‚è‚Ìˆ—‚ğ”ò‚Î‚·
+            //æ®‹ã‚Šã®å‡¦ç†ã‚’é£›ã°ã™
             return;
         }
 
-        //ƒŠƒUƒ‹ƒg—pBGM‚ÌÄ¶
+        //ãƒªã‚¶ãƒ«ãƒˆç”¨BGMã®å†ç”Ÿ
         else if (!isAudioPlay)
         {
-            //Às‚Í1‰ñ‚Ì‚İ
+            //å®Ÿè¡Œã¯1å›ã®ã¿
             isAudioPlay = true;
 
-            //BGMÄ¶
+            //BGMå†ç”Ÿ
             audioSource_BGM.volume = AM.volume_BGM;
             audioSource_BGM.clip = AM.BGM_Result;
             AM.SetBGMSpeed(1);
             audioSource_BGM.Play();
         }
 
-        //‰æ–Ê‚ªƒ^ƒbƒv‚³‚ê‚ê‚Î‰‰o‚ğ”ò‚Î‚·
+        //ç”»é¢ãŒã‚¿ãƒƒãƒ—ã•ã‚Œã‚Œã°æ¼”å‡ºã‚’é£›ã°ã™
         IM.GetInput_Screen();
         if (IM.is_Screen_Tap) elapsedTime = 5;
 
-        //–‘OŒvZ
+        //äº‹å‰è¨ˆç®—
         float lerpValue = (elapsedTime - 1) / 2;
 
-        //ƒXƒRƒAƒ{[ƒh‚ÌˆÚ“®C‰ñ“]CƒXƒP[ƒ‹•ÏX
+        //ã‚¹ã‚³ã‚¢ãƒœãƒ¼ãƒ‰ã®ç§»å‹•ï¼Œå›è»¢ï¼Œã‚¹ã‚±ãƒ¼ãƒ«å¤‰æ›´
         if (!isTutorial)
         {
             scoreSetTf.eulerAngles = Vector3.up * Mathf.Lerp(0, 3600, Mathf.Pow((elapsedTime - 1) / 3, 0.3f));
@@ -236,84 +236,84 @@ public class GameStateState_PlayToResult : GameStateStateBase
             scoreSetTf.localScale = Vector3.Lerp(Vector3.one, targetScale, lerpValue);
         }
 
-        //ƒXƒNƒŠ[ƒ“ƒJƒo[‚ÌF‚ğ•ÏX
+        //ã‚¹ã‚¯ãƒªãƒ¼ãƒ³ã‚«ãƒãƒ¼ã®è‰²ã‚’å¤‰æ›´
         screenCover.color =
             targetCoverColor - Color.black * Mathf.Lerp(targetCoverColor.a, startCoverColor.a, lerpValue);
 
-        //UI‚ğ‰ñ“]
+        //UIã‚’å›è»¢
         playHingeRtf_R.localEulerAngles = Vector3.Lerp(Vector3.zero, Vector3.up * -180, elapsedTime - 1);
         resultHingeRtf_R.localEulerAngles = Vector3.Lerp(Vector3.up * -120, Vector3.zero, elapsedTime - 2);
         resultHingeRtf_B.localEulerAngles = Vector3.Lerp(Vector3.right * 120, Vector3.zero, elapsedTime - 2);
 
         if (elapsedTime < 3) return;
 
-        //ƒeƒLƒXƒg•\¦
+        //ãƒ†ã‚­ã‚¹ãƒˆè¡¨ç¤º
         if (!isSetText)
         {
-            //Às‚Í1‰ñ‚Ì‚İ
+            //å®Ÿè¡Œã¯1å›ã®ã¿
             isSetText = true;
 
-            //Šl“¾ŒoŒ±’l—Ê‚Ì•\¦
-            //ƒgƒŒ[ƒjƒ“ƒOƒ‚[ƒhŠ®‘–‚Ì—áŠOˆ—
+            //ç²å¾—çµŒé¨“å€¤é‡ã®è¡¨ç¤º
+            //ãƒˆãƒ¬ãƒ¼ãƒ‹ãƒ³ã‚°ãƒ¢ãƒ¼ãƒ‰å®Œèµ°æ™‚ã®ä¾‹å¤–å‡¦ç†
             if (GM.score == 5000 && GM.isTraining)
-                addExpText.SetText("+" + addExp + "ExpiŠ®‘–ƒ{[ƒiƒX+" + GM.level * 50 + "Expj");
-            //ƒ`ƒ…[ƒgƒŠƒAƒ‹‰‰ñƒNƒŠƒA‚Ì—áŠOˆ—
+                addExpText.SetText("+" + addExp + "Expï¼ˆå®Œèµ°ãƒœãƒ¼ãƒŠã‚¹+" + GM.level * 50 + "Expï¼‰");
+            //ãƒãƒ¥ãƒ¼ãƒˆãƒªã‚¢ãƒ«åˆå›ã‚¯ãƒªã‚¢æ™‚ã®ä¾‹å¤–å‡¦ç†
             else if (isTutorial && addExp == 100)
-                addExpText.SetText("+100Expi‰‰ñƒNƒŠƒAƒ{[ƒiƒXj");
+                addExpText.SetText("+100Expï¼ˆåˆå›ã‚¯ãƒªã‚¢ãƒœãƒ¼ãƒŠã‚¹ï¼‰");
             else
                 addExpText.SetText("+" + addExp + "Exp");
 
-            //SE‚ÌÄ¶
+            //SEã®å†ç”Ÿ
             if (!isTutorial || addExp == 100)
                 AM.PlaySE(AM.SE_GetExp);
 
             if (!GM.isTraining && !isTutorial)
             {
-                //ƒXƒRƒA•Ï“®•\¦
+                //ã‚¹ã‚³ã‚¢å¤‰å‹•è¡¨ç¤º
                 if (GM.highScore > beforeHighScore)
                     highScoreFluctuationText.SetText("<color=#00951F>+" + (GM.highScore - beforeHighScore) + "</color>");
                 else highScoreFluctuationText.SetText("");
                 if (GM.GetPlayerScore() > beforePlayerScore)
-                    playerScoreFluctuationText.SetText("<color=#00951F>£" + (GM.GetPlayerScore() - beforePlayerScore) + "</color>");
+                    playerScoreFluctuationText.SetText("<color=#00951F>â–²" + (GM.GetPlayerScore() - beforePlayerScore) + "</color>");
                 else if (GM.GetPlayerScore() < beforePlayerScore)
-                    playerScoreFluctuationText.SetText("<color=#BA3C46>¥" + (beforePlayerScore - GM.GetPlayerScore()) + "</color>");
-                else playerScoreFluctuationText.SetText("<color=\"black\">}0</color>");
+                    playerScoreFluctuationText.SetText("<color=#BA3C46>â–¼" + (beforePlayerScore - GM.GetPlayerScore()) + "</color>");
+                else playerScoreFluctuationText.SetText("<color=\"black\">Â±0</color>");
             }
         }
 
-        //•\¦‚·‚éƒ‰ƒ“ƒNƒAƒbƒv‚Ü‚Å‚É•K—v‚ÈŒoŒ±’l—Ê‚ğZo
+        //è¡¨ç¤ºã™ã‚‹ãƒ©ãƒ³ã‚¯ã‚¢ãƒƒãƒ—ã¾ã§ã«å¿…è¦ãªçµŒé¨“å€¤é‡ã‚’ç®—å‡º
         float displayAddExpF = Mathf.Lerp(0, addExp, Mathf.Pow(elapsedTime - 3, 0.35f));
         float displayRequiredExpF = beforePlayRequiredExp - (int)displayAddExpF;
 
-        //•\¦ƒvƒŒƒCƒ„[ƒ‰ƒ“ƒN‚ÌXV
+        //è¡¨ç¤ºãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ãƒ©ãƒ³ã‚¯ã®æ›´æ–°
         int displayRank = beforePlayRank;
         int levelUpCount_local = 0;
         while (displayRequiredExpF <= 0)
         {
             displayRank++;
             displayRequiredExpF += (displayRank + 1) * 100;
-            playerRankText.SetText("ƒvƒŒƒCƒ„[ƒ‰ƒ“ƒN@" + beforePlayRank + " >> <b>" + displayRank + "</b>");
+            playerRankText.SetText("ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ãƒ©ãƒ³ã‚¯ã€€" + beforePlayRank + " >> <b>" + displayRank + "</b>");
             levelUpCount_local++;
             if (levelUpCount_local > levelUpCount_state)
             {
-                //SE‚ÌÄ¶
+                //SEã®å†ç”Ÿ
                 AM.PlaySE(AM.SE_LevelUp);
                 levelUpCount_state++;
             }
         }
 
-        //ŒoŒ±’l‚ÉŠÖ‚·‚é•\¦‚ÌXV
+        //çµŒé¨“å€¤ã«é–¢ã™ã‚‹è¡¨ç¤ºã®æ›´æ–°
         requiredExpText.SetText("" + (int)displayRequiredExpF);
         playerRankScaleRtf.localScale = Vector3.one - Vector3.right * (displayRequiredExpF / (float)((displayRank+1) * 100));
 
-        //ƒ‰ƒ“ƒLƒ“ƒOƒ‚[ƒh‚È‚çƒXƒRƒA•\¦‚Ì•Ï“®
+        //ãƒ©ãƒ³ã‚­ãƒ³ã‚°ãƒ¢ãƒ¼ãƒ‰ãªã‚‰ã‚¹ã‚³ã‚¢è¡¨ç¤ºã®å¤‰å‹•
         if (!GM.isTraining)
         {
             highScoreText.SetText("" + (int)Mathf.Lerp(beforeHighScore, GM.highScore, elapsedTime - 3));
             playerScoreText.SetText("" + (int)Mathf.Lerp(beforePlayerScore, newPlayerScore, elapsedTime - 3));
         }
 
-        //w’èŠÔŒo‰ß‚ÅƒXƒe[ƒg‘JˆÚ
+        //æŒ‡å®šæ™‚é–“çµŒéã§ã‚¹ãƒ†ãƒ¼ãƒˆé·ç§»
         if (elapsedTime >= 5)
         {
             if (isTutorial && beforePlayRank == 0) stateMachine.ChangeState(stateMachine.state_UnlockPlay);
@@ -326,23 +326,23 @@ public class GameStateState_PlayToResult : GameStateStateBase
 
     public override void Exit()
     {
-        //’nŒ`‚Ì’â~
+        //åœ°å½¢ã®åœæ­¢
         TerrainManager.Instance.SetSpeed(0);
 
-        //‰æ–Êƒ^ƒbƒvŒŸoƒ{ƒ^ƒ“‚Ì–³Œø‰»
+        //ç”»é¢ã‚¿ãƒƒãƒ—æ¤œå‡ºãƒœã‚¿ãƒ³ã®ç„¡åŠ¹åŒ–
         IM.InputUISetActive_Screen(false);
 
-        //ƒXƒRƒAƒ{[ƒh‚Ì‰ñ“]—Ê‚ğƒŠƒZƒbƒg
+        //ã‚¹ã‚³ã‚¢ãƒœãƒ¼ãƒ‰ã®å›è»¢é‡ã‚’ãƒªã‚»ãƒƒãƒˆ
         if (!isTutorial)
             scoreSetTf.eulerAngles = Vector3.zero;
 
-        //ƒvƒŒƒCƒ„[ƒ‰ƒ“ƒN‚ÉŠÖ‚·‚é•\¦‚ğŠm’è
+        //ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ãƒ©ãƒ³ã‚¯ã«é–¢ã™ã‚‹è¡¨ç¤ºã‚’ç¢ºå®š
         if (beforePlayRank != GM.playerRank)
-            playerRankText.SetText("ƒvƒŒƒCƒ„[ƒ‰ƒ“ƒN@" + beforePlayRank + " >> <b>" + GM.playerRank + "</b>");
+            playerRankText.SetText("ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ãƒ©ãƒ³ã‚¯ã€€" + beforePlayRank + " >> <b>" + GM.playerRank + "</b>");
         requiredExpText.SetText("" + GM.requiredExp);
         playerRankScaleRtf.localScale = Vector3.one - Vector3.right * (GM.requiredExp / (float)((GM.playerRank + 1) * 100));
 
-        //SE‚Ì’â~
+        //SEã®åœæ­¢
         AM.StopSE();
     }
 }

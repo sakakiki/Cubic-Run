@@ -6,10 +6,10 @@ public class AudioManager : MonoBehaviour
 {
     public static AudioManager Instance;
 
-    private const string PitchShifterParam = "PitchShifterParam_Pitch"; // Audio Mixer ÇÃ Pitch ÉpÉâÉÅÅ[É^
+    private const string PitchShifterParam = "PitchShifterParam_Pitch"; // Audio Mixer „ÅÆ Pitch „Éë„É©„É°„Éº„Çø
 
     public AudioSource audioSource_BGM;
-    [SerializeField] private AudioSource audioSource_SE;
+    public AudioSource audioSource_SE;
 
     public Slider slider_BGM;
     public Slider slider_SE;

@@ -4,9 +4,9 @@ using UnityEngine;
 
 public class RankingManager : MonoBehaviour
 {
-    public static int RankingCount = 10;   //ƒ‰ƒ“ƒLƒ“ƒO‚Ì•\¦”
+    public static int RankingCount = 10;   //ãƒ©ãƒ³ã‚­ãƒ³ã‚°ã®è¡¨ç¤ºæ•°
 
-    private static float rankingUpdateSpan = 60;   //ƒnƒCƒXƒRƒAƒ‰ƒ“ƒLƒ“ƒOXV‚ÌÅ’ZŠÔŠu
+    private static float rankingUpdateSpan = 60;   //ãƒã‚¤ã‚¹ã‚³ã‚¢ãƒ©ãƒ³ã‚­ãƒ³ã‚°æ›´æ–°ã®æœ€çŸ­é–“éš”
     private static float rankingUpdateTime_highScore = 0;
     private static float rankingUpdateTime_playerScore = 0;
 
@@ -25,10 +25,10 @@ public class RankingManager : MonoBehaviour
 
 
 
-    //ƒ‰ƒ“ƒLƒ“ƒOXV‚Ì•K—v«‚ğŠm”F
+    //ãƒ©ãƒ³ã‚­ãƒ³ã‚°æ›´æ–°ã®å¿…è¦æ€§ã‚’ç¢ºèª
     public static async Task CheckUpdateNecessity(RankingType rankingType)
     {
-        //‘O‰ñƒ‰ƒ“ƒLƒ“ƒOXV‚©‚çw’èŠÔˆÈãŒo‰ß‚µ‚Ä‚¢‚È‚¯‚ê‚Î‰½‚à‚µ‚È‚¢
+        //å‰å›ãƒ©ãƒ³ã‚­ãƒ³ã‚°æ›´æ–°ã‹ã‚‰æŒ‡å®šæ™‚é–“ä»¥ä¸ŠçµŒéã—ã¦ã„ãªã‘ã‚Œã°ä½•ã‚‚ã—ãªã„
         switch (rankingType)
         {
             case RankingType.HighScore:
@@ -40,38 +40,38 @@ public class RankingManager : MonoBehaviour
                 break;
         }
 
-        //ƒ‰ƒ“ƒLƒ“ƒO‚ÌXV
+        //ãƒ©ãƒ³ã‚­ãƒ³ã‚°ã®æ›´æ–°
         await UpdateRanking(rankingType);
     }
 
 
 
-    //ƒ‰ƒ“ƒLƒ“ƒO‚ğæ“¾‚µXV
+    //ãƒ©ãƒ³ã‚­ãƒ³ã‚°ã‚’å–å¾—ã—æ›´æ–°
     public static async Task<bool> UpdateRanking(RankingType rankingType)
     {
         switch (rankingType)
         {
             case RankingType.HighScore:
 
-                //ƒgƒbƒv10‚ÌƒŠƒXƒg‚ğæ“¾
+                //ãƒˆãƒƒãƒ—10ã®ãƒªã‚¹ãƒˆã‚’å–å¾—
                 List<(string name, int score, int experience, int skin)> newList_highScore
                     = await FirestoreManager.Instance.GetTop10Ranking("highScore");
 
-                //³í‚Éæ“¾‚Å‚«‚Ä‚¢‚ê‚ÎXV
+                //æ­£å¸¸ã«å–å¾—ã§ãã¦ã„ã‚Œã°æ›´æ–°
                 if (newList_highScore.Count == RankingCount)
                     RankingManager.rankingList_highScore = newList_highScore;
 
-                //ƒ†[ƒU[‚Ì‡ˆÊ‚ÆãˆÊƒp[ƒZƒ“ƒg‚Ìæ“¾
+                //ãƒ¦ãƒ¼ã‚¶ãƒ¼ã®é †ä½ã¨ä¸Šä½ãƒ‘ãƒ¼ã‚»ãƒ³ãƒˆã®å–å¾—
                 (int rank, float percentile) newUserData_highScore =
                     await FirestoreManager.Instance.GetUserRanking("highScore", GameManager.Instance.highScore);
 
-                //³í‚Éæ“¾‚Å‚«‚Ä‚¢‚ê‚ÎXV
+                //æ­£å¸¸ã«å–å¾—ã§ãã¦ã„ã‚Œã°æ›´æ–°
                 if (newUserData_highScore.rank != -1)
                     userRankData_highScore = newUserData_highScore;
-                //‚»‚¤‚Å‚È‚¯‚ê‚ÎƒGƒ‰[‚ğ•Ô‚·
+                //ãã†ã§ãªã‘ã‚Œã°ã‚¨ãƒ©ãƒ¼ã‚’è¿”ã™
                 else return false;
 
-                //ƒ‰ƒ“ƒLƒ“ƒOXVŠÔ‚ğ‹L‰¯
+                //ãƒ©ãƒ³ã‚­ãƒ³ã‚°æ›´æ–°æ™‚é–“ã‚’è¨˜æ†¶
                 rankingUpdateTime_highScore = Time.time;
 
                 return true;
@@ -80,25 +80,25 @@ public class RankingManager : MonoBehaviour
 
             case RankingType.PlayerScore:
 
-                //ƒgƒbƒv10‚ÌƒŠƒXƒg‚ğæ“¾
+                //ãƒˆãƒƒãƒ—10ã®ãƒªã‚¹ãƒˆã‚’å–å¾—
                 List<(string name, int score, int experience, int skin)> newList_playerScore
                     = await FirestoreManager.Instance.GetTop10Ranking("playerScore");
 
-                //³í‚Éæ“¾‚Å‚«‚Ä‚¢‚ê‚ÎXV
+                //æ­£å¸¸ã«å–å¾—ã§ãã¦ã„ã‚Œã°æ›´æ–°
                 if (newList_playerScore.Count == RankingCount)
                     rankingList_playerScore = newList_playerScore;
 
-                //ƒ†[ƒU[‚Ì‡ˆÊ‚ÆãˆÊƒp[ƒZƒ“ƒg‚Ìæ“¾
+                //ãƒ¦ãƒ¼ã‚¶ãƒ¼ã®é †ä½ã¨ä¸Šä½ãƒ‘ãƒ¼ã‚»ãƒ³ãƒˆã®å–å¾—
                 (int rank, float percentile) newUserData_playerScore =
                     await FirestoreManager.Instance.GetUserRanking("playerScore", GameManager.Instance.GetPlayerScore());
 
-                //³í‚Éæ“¾‚Å‚«‚Ä‚¢‚ê‚ÎXV
+                //æ­£å¸¸ã«å–å¾—ã§ãã¦ã„ã‚Œã°æ›´æ–°
                 if (newUserData_playerScore.rank != -1)
                     userRankData_playerScore = newUserData_playerScore;
-                //‚»‚¤‚Å‚È‚¯‚ê‚ÎƒGƒ‰[‚ğ•Ô‚·
+                //ãã†ã§ãªã‘ã‚Œã°ã‚¨ãƒ©ãƒ¼ã‚’è¿”ã™
                 else return false;
 
-                //ƒ‰ƒ“ƒLƒ“ƒOXVŠÔ‚ğ‹L‰¯
+                //ãƒ©ãƒ³ã‚­ãƒ³ã‚°æ›´æ–°æ™‚é–“ã‚’è¨˜æ†¶
                 rankingUpdateTime_playerScore = Time.time;
 
                 return true;

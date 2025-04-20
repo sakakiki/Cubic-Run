@@ -8,17 +8,17 @@ public class TutorialStateState_Fall_1 : TutorialStateStateBase
     {
         base.Enter();
 
-        //áŠQ•¨‚Ì¶¬
+        //éšœå®³ç‰©ã®ç”Ÿæˆ
         TM.CreateTerrain(6, TM.stageRightEdge, 5, 1, TM.moveSpeed);
         TM.CreateTerrain(0, TM.stageRightEdge + 5, 1.5f, 1, TM.moveSpeed);
         TM.CreateTerrain(1, TM.stageRightEdge + 6.5f, 2, 1, TM.moveSpeed);
         TM.CreateTerrain(0, TM.stageRightEdge + 8.5f, 2.5f, 1, TM.moveSpeed);
         TM.CreateTerrain(6, TM.stageRightEdge + 11, 5, 1, TM.moveSpeed);
 
-        //Ä’§íƒXƒe[ƒg‚ÌXV
+        //å†æŒ‘æˆ¦ã‚¹ãƒ†ãƒ¼ãƒˆã®æ›´æ–°
         continueState = this;
 
-        //ƒWƒƒƒ“ƒvƒAƒNƒVƒ‡ƒ“‚Ì–³Œø‰»
+        //ã‚¸ãƒ£ãƒ³ãƒ—ã‚¢ã‚¯ã‚·ãƒ§ãƒ³ã®ç„¡åŠ¹åŒ–
         PlayerStateBase_Play.isActive_Jump = false;
     }
 

@@ -6,14 +6,14 @@ public class Button_Rename : MonoBehaviour, IPointerDownHandler
 {
     public void OnPointerDown(PointerEventData eventData)
     {
-        //SEÄ¶
+        //SEå†ç”Ÿ
         AudioManager.Instance.PlaySE(AudioManager.Instance.SE_Panel);
 
         PopupUIManager.Instance.SetupPopup(
-            "ƒvƒŒƒCƒ„[–¼•ÏX",
-            "”¼Šp12•¶ši‘SŠp6•¶šjˆÈ“à‚Å\n“ü—Í‚µ‚Ä‚­‚¾‚³‚¢B\n\n" +
+            "ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼åå¤‰æ›´",
+            "åŠè§’12æ–‡å­—ï¼ˆå…¨è§’6æ–‡å­—ï¼‰ä»¥å†…ã§\nå…¥åŠ›ã—ã¦ãã ã•ã„ã€‚\n\n" +
             "<color=#E20000><B>" +
-            "•s“KØ‚ÈƒvƒŒƒCƒ„[–¼‚ªŠm”F‚³‚ê‚½\nê‡AƒAƒJƒEƒ“ƒg‚ª§ŒÀ‚Ü‚½‚Ííœ\n‚³‚ê‚é‚±‚Æ‚ª‚ ‚è‚Ü‚·B" +
+            "ä¸é©åˆ‡ãªãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼åãŒç¢ºèªã•ã‚ŒãŸ\nå ´åˆã€ã‚¢ã‚«ã‚¦ãƒ³ãƒˆãŒåˆ¶é™ã¾ãŸã¯å‰Šé™¤\nã•ã‚Œã‚‹ã“ã¨ãŒã‚ã‚Šã¾ã™ã€‚" +
             "</color></B>",
             GameManager.Instance.playerName,
             this.Rename_Result);
@@ -27,17 +27,17 @@ public class Button_Rename : MonoBehaviour, IPointerDownHandler
 
         switch (resultMessage)
         {
-            case "³íI—¹":
+            case "æ­£å¸¸çµ‚äº†":
                 GameManager.Instance.UpdatePlayerInfo();
-                PopupUIManager.Instance.SetupMessageBand("ƒvƒŒƒCƒ„[–¼‚Ì•ÏX‚ªŠ®—¹‚µ‚Ü‚µ‚½B", 2);
+                PopupUIManager.Instance.SetupMessageBand("ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼åã®å¤‰æ›´ãŒå®Œäº†ã—ã¾ã—ãŸã€‚", 2);
                 await RankingManager.UpdateRanking(RankingManager.RankingType.HighScore);
                 await RankingManager.UpdateRanking(RankingManager.RankingType.PlayerScore);
                 GameManager.Instance.highScoreRankingBoard.UpdateRanking();
                 GameManager.Instance.playerScoreRankingBoard.UpdateRanking();
                 break;
 
-            case "ˆÙíI—¹":
-                PopupUIManager.Instance.SetupMessageBand("ƒvƒŒƒCƒ„[–¼‚Ì•ÏX‚É¸”s‚µ‚Ü‚µ‚½B", 2);
+            case "ç•°å¸¸çµ‚äº†":
+                PopupUIManager.Instance.SetupMessageBand("ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼åã®å¤‰æ›´ã«å¤±æ•—ã—ã¾ã—ãŸã€‚", 2);
                 break;
 
             default:

@@ -26,6 +26,9 @@ public class LoginStateState_Exit : LoginStateStateBase
         AudioManager.Instance.audioSource_BGM.clip = AudioManager.Instance.BGM_Menu;
         AudioManager.Instance.audioSource_BGM.Play();
 
+        //ローディングキューブを非表示
+        GM.loadingCube.SetActive(false);
+
         //ゲームプレイ可能
         isPlayable = true;
     }

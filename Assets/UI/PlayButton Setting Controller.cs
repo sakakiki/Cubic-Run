@@ -26,14 +26,14 @@ public class PlayButtonSettingController : MonoBehaviour
 
     public void OnEnable()
     {
-        //ƒXƒe[ƒg‚Ì‰Šú‰»
+        //ã‚¹ãƒ†ãƒ¼ãƒˆã®åˆæœŸåŒ–
         currentSettingState = ButtonSettingState.PatternSelect;
 
-        //UI‚ğƒZƒbƒg
+        //UIã‚’ã‚»ãƒƒãƒˆ
         selectPattern.SetActive(true);
         setButton.SetActive(false);
 
-        //Œ»İ‚Ì‘I‘ğ‚ğ”½‰f
+        //ç¾åœ¨ã®é¸æŠã‚’åæ˜ 
         patternNum = InputManager.Instance.playButtonPatternNum;
         selectSquareRtf.anchoredPosition = previewRtf[patternNum].anchoredPosition;
     }
@@ -44,30 +44,30 @@ public class PlayButtonSettingController : MonoBehaviour
         {
             case ButtonSettingState.PatternSelect:
 
-                //ƒXƒe[ƒgØ‚è‘Ö‚¦
+                //ã‚¹ãƒ†ãƒ¼ãƒˆåˆ‡ã‚Šæ›¿ãˆ
                 currentSettingState = ButtonSettingState.ButtonSet;
 
-                //UI‚ÌØ‚è‘Ö‚¦
+                //UIã®åˆ‡ã‚Šæ›¿ãˆ
                 selectPattern.SetActive(false);
                 setButton.SetActive(true);
 
-                //Š„‚è“–‚ÄUI‚ÌØ‚è‘Ö‚¦
+                //å‰²ã‚Šå½“ã¦UIã®åˆ‡ã‚Šæ›¿ãˆ
                 for (int i = 0; i < buttonAllocator.Length; i++)
                     buttonAllocator[i].SetActive(false);
                 buttonAllocator[patternNum].SetActive(true);
 
-                //SE‚ğˆê“I‚É’â~
+                //SEã‚’ä¸€æ™‚çš„ã«åœæ­¢
                 float tempVolume = AudioManager.Instance.volume_SE;
                 AudioManager.Instance.volume_SE = 0;
 
-                //ƒ{ƒ^ƒ“Š„‚è“–‚ÄUI‚ÌƒŠƒZƒbƒg
+                //ãƒœã‚¿ãƒ³å‰²ã‚Šå½“ã¦UIã®ãƒªã‚»ãƒƒãƒˆ
                 for (int i = 0; i < actionAllocation.Length; i++)
                 {
                     actionAllocation[i] = InputManager.Instance.actionAllocation[i];
                     actionSelectorSet[patternNum].actionSelector[i].value = actionAllocation[i];
                 }
 
-                //SE‚ğ–ß‚·
+                //SEã‚’æˆ»ã™
                 AudioManager.Instance.volume_SE = tempVolume;
 
                 break;
@@ -76,21 +76,21 @@ public class PlayButtonSettingController : MonoBehaviour
 
             case ButtonSettingState.ButtonSet:
 
-                //İ’è‚Ì“K—p
+                //è¨­å®šã®é©ç”¨
                 InputManager.Instance.playButtonPatternNum = patternNum;
                 for (int i = 0; i < actionAllocation.Length; i++)
                     InputManager.Instance.actionAllocation[i] = actionAllocation[i];
                 InputManager.Instance.BindEvent();
 
-                //İ’è‚ğ•Û‘¶
+                //è¨­å®šã‚’ä¿å­˜
                 PlayerPrefs.SetInt("ButtonPattern", patternNum);
                 for (int i = 0; i < actionAllocation.Length; i++)
                     PlayerPrefs.SetInt("ActionAllocation_" + i, actionAllocation[i]);
 
-                //ƒ{ƒ^ƒ“”z’uŠ®—¹•ñ
-                PopupUIManager.Instance.SetupMessageBand("ƒ{ƒ^ƒ“‚Ìİ’è‚ğ•Û‘¶‚µ‚Ü‚µ‚½", 1.5f);
+                //ãƒœã‚¿ãƒ³é…ç½®å®Œäº†å ±å‘Š
+                PopupUIManager.Instance.SetupMessageBand("ãƒœã‚¿ãƒ³ã®è¨­å®šã‚’ä¿å­˜ã—ã¾ã—ãŸ", 1.5f);
 
-                //ƒ{ƒ^ƒ“”z’u‰æ–Ê‚ğ•Â‚¶‚é
+                //ãƒœã‚¿ãƒ³é…ç½®ç”»é¢ã‚’é–‰ã˜ã‚‹
                 GameManager.Instance.gameStateMachine.ChangeState(GameManager.Instance.gameStateMachine.state_Menu);
 
                 break;
@@ -103,7 +103,7 @@ public class PlayButtonSettingController : MonoBehaviour
         {
             case ButtonSettingState.PatternSelect:
 
-                //ƒ{ƒ^ƒ“”z’u‰æ–Ê‚ğ•Â‚¶‚é
+                //ãƒœã‚¿ãƒ³é…ç½®ç”»é¢ã‚’é–‰ã˜ã‚‹
                 GameManager.Instance.gameStateMachine.ChangeState(GameManager.Instance.gameStateMachine.state_Menu);
 
                 break;
@@ -112,10 +112,10 @@ public class PlayButtonSettingController : MonoBehaviour
 
             case ButtonSettingState.ButtonSet:
 
-                //ƒXƒe[ƒgØ‚è‘Ö‚¦
+                //ã‚¹ãƒ†ãƒ¼ãƒˆåˆ‡ã‚Šæ›¿ãˆ
                 currentSettingState = ButtonSettingState.PatternSelect;
 
-                //UI‚ÌØ‚è‘Ö‚¦
+                //UIã®åˆ‡ã‚Šæ›¿ãˆ
                 selectPattern.SetActive(true);
                 setButton.SetActive(false);
 
@@ -125,46 +125,46 @@ public class PlayButtonSettingController : MonoBehaviour
 
     public void SelectPattern(int patternNum)
     {
-        //•ªŠ„ƒpƒ^[ƒ“‚ğˆê•Û‘¶
+        //åˆ†å‰²ãƒ‘ã‚¿ãƒ¼ãƒ³ã‚’ä¸€æ™‚ä¿å­˜
         this.patternNum = patternNum;
 
-        //‘I‘ğ˜g‚ÌˆÚ“®
+        //é¸æŠæ ã®ç§»å‹•
         selectSquareRtf.anchoredPosition = previewRtf[patternNum].anchoredPosition;
 
-        //SE‚ÌÄ¶
+        //SEã®å†ç”Ÿ
         AudioManager.Instance.PlaySE(AudioManager.Instance.SE_Panel);
     }
 
     public void AllocateAction(int buttonNum)
     {
-        //ƒ{ƒ^ƒ“‚ÌŠ„‚è“–‚Ä
+        //ãƒœã‚¿ãƒ³ã®å‰²ã‚Šå½“ã¦
         actionAllocation[buttonNum] = actionSelectorSet[patternNum].actionSelector[buttonNum].value;
 
-        //SE‚ÌÄ¶
+        //SEã®å†ç”Ÿ
         AudioManager.Instance.PlaySE(AudioManager.Instance.SE_Close);
 
-        //XV‚µ‚Ä‚¢‚È‚¢ƒ{ƒ^ƒ“‚ÌŠ„‚è“–‚Äƒ`ƒFƒbƒN
+        //æ›´æ–°ã—ã¦ã„ãªã„ãƒœã‚¿ãƒ³ã®å‰²ã‚Šå½“ã¦ãƒã‚§ãƒƒã‚¯
         for (int i = 1; i < actionAllocation.Length; i++)
         {
             int checkButtonNum = (buttonNum + i)%actionAllocation.Length;
 
-            //‘¼‚Ìƒ{ƒ^ƒ“‘S‚Ä‚ğƒ`ƒFƒbƒN
+            //ä»–ã®ãƒœã‚¿ãƒ³å…¨ã¦ã‚’ãƒã‚§ãƒƒã‚¯
             for (int j = 1; j < actionAllocation.Length; j++)
             {
                 int otherButtonNum = (checkButtonNum + j)%actionAllocation.Length;
 
-                //ƒ{ƒ^ƒ“‚ÌŠ„‚è“–‚Ä‚ª”í‚Á‚Ä‚¢‚ê‚ÎÄŠ„‚è“–‚Ä
+                //ãƒœã‚¿ãƒ³ã®å‰²ã‚Šå½“ã¦ãŒè¢«ã£ã¦ã„ã‚Œã°å†å‰²ã‚Šå½“ã¦
                 if (actionAllocation[checkButtonNum] == actionAllocation[otherButtonNum])
                 {
                     actionAllocation[checkButtonNum] = (actionAllocation[checkButtonNum] + 1) % actionAllocation.Length;
 
-                    //Äƒ`ƒFƒbƒN
+                    //å†ãƒã‚§ãƒƒã‚¯
                     j = 0;
                     continue;
                 }
             }
 
-            //ƒ`ƒFƒbƒN‚ª–â‘è‚È‚¯‚ê‚ÎÄŠ„‚è“–‚Ä
+            //ãƒã‚§ãƒƒã‚¯ãŒå•é¡Œãªã‘ã‚Œã°å†å‰²ã‚Šå½“ã¦
             actionSelectorSet[patternNum].actionSelector[checkButtonNum].value = actionAllocation[checkButtonNum];
         }
     }

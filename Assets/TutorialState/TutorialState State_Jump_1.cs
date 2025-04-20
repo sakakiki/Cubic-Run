@@ -8,7 +8,7 @@ public class TutorialStateState_Jump_1 : TutorialStateStateBase
     {
         base.Enter();
 
-        //áŠQ•¨‚Ì¶¬
+        //éšœå®³ç‰©ã®ç”Ÿæˆ
         TM.CreateTerrain(2, TM.stageRightEdge, 6, 2, TM.moveSpeed);
     }
 

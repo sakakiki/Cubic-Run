@@ -18,11 +18,11 @@ public class TutorialStateState_Start : TutorialStateStateBase
     {
         base.Enter();
 
-        //�|�b�v�A�b�v���b�Z�[�W
+        //ポップアップメッセージ
         PUIM.SetMessageTextColor(Color.clear);
-        PUIM.SetupMessageText("�`���[�g���A��");
+        PUIM.SetupMessageText("チュートリアル");
 
-        //�Ē���X�e�[�g�̍X�V
+        //再挑戦ステートの更新
         continueState = stateMachine.state_Jump_1;
     }
 
@@ -32,10 +32,10 @@ public class TutorialStateState_Start : TutorialStateStateBase
     {
         base.Update(deltaTime);
 
-        //�|�b�v�A�b�v���b�Z�[�W
+        //ポップアップメッセージ
         PUIM.SetMessageTextColor(Color.black * (1 - Mathf.Abs(elapsedTime - 1)) * 2);
 
-        //���Ԍo�߂ŃX�e�[�g�J��
+        //時間経過でステート遷移
         if (elapsedTime > 2)
             stateMachine.ChangeState(stateMachine.state_Jump_1);
     }

@@ -23,27 +23,27 @@ public class PlayStateState_LevelStart : PlayStateStateBase
 
     public override void Enter()
     {
-        //áŠQ•¨¶¬‚ğŠJn‚·‚éƒXƒRƒA‚ğZo
+        //éšœå®³ç‰©ç”Ÿæˆã‚’é–‹å§‹ã™ã‚‹ã‚¹ã‚³ã‚¢ã‚’ç®—å‡º
         levelStartScore = GM.level * GM.levelUpSpan + 300;
 
-        //ƒŒƒxƒ‹ã¸EXV
+        //ãƒ¬ãƒ™ãƒ«ä¸Šæ˜‡ãƒ»æ›´æ–°
         GM.level++;
         levelText.SetText("Lv." + GM.level);
 
-        //‘¬“xXV
+        //é€Ÿåº¦æ›´æ–°
         TM.moveSpeed = 5 + Mathf.Pow(GM.level, 0.7f) * 3;
 
-        //áŠQ•¨¶¬‚ğI—¹‚·‚éƒXƒRƒA‚ğZo
+        //éšœå®³ç‰©ç”Ÿæˆã‚’çµ‚äº†ã™ã‚‹ã‚¹ã‚³ã‚¢ã‚’ç®—å‡º
         ((PlayStateState_Play)stateMachine.state_Play).levelEndScore = 
             GM.level * GM.levelUpSpan - (int)(300 + 3200 / TM.moveSpeed);
         /*
-            ’l‚ÌÚ×
-            GM.level * GM.levelUpSpan@ccƒŒƒxƒ‹ã¸‚Ìƒ^ƒCƒ~ƒ“ƒOiƒXƒRƒAŠ·Zj
-            300@ccI—¹‰‰o‚Ég—p‚·‚éŠÔiƒXƒRƒAŠ·Zj
-            3200 / TM.moveSpeed@ccáŠQ•¨‚ª‰æ–ÊŠO‚ÉˆÚ“®‚·‚é‚Ì‚É‚©‚©‚éŠÔiƒXƒRƒAŠ·Zj
+            å€¤ã®è©³ç´°
+            GM.level * GM.levelUpSpanã€€â€¦â€¦ãƒ¬ãƒ™ãƒ«ä¸Šæ˜‡ã®ã‚¿ã‚¤ãƒŸãƒ³ã‚°ï¼ˆã‚¹ã‚³ã‚¢æ›ç®—ï¼‰
+            300ã€€â€¦â€¦çµ‚äº†æ¼”å‡ºã«ä½¿ç”¨ã™ã‚‹æ™‚é–“ï¼ˆã‚¹ã‚³ã‚¢æ›ç®—ï¼‰
+            3200 / TM.moveSpeedã€€â€¦â€¦éšœå®³ç‰©ãŒç”»é¢å¤–ã«ç§»å‹•ã™ã‚‹ã®ã«ã‹ã‹ã‚‹æ™‚é–“ï¼ˆã‚¹ã‚³ã‚¢æ›ç®—ï¼‰
         */
 
-        //BGM‚ÌØ‚è‘Ö‚¦
+        //BGMã®åˆ‡ã‚Šæ›¿ãˆ
         if (GM.level <= 5)
         {
             if (AudioManager.Instance.audioSource_BGM.clip != AudioManager.Instance.BGM_Play_1)
@@ -90,7 +90,7 @@ public class PlayStateState_LevelStart : PlayStateStateBase
             }
         }
 
-        //ƒgƒŒ[ƒjƒ“ƒOƒ‚[ƒh‚È‚çáŠQ•¨¶¬I—¹‚ğ’x‚ç‚¹‚é
+        //ãƒˆãƒ¬ãƒ¼ãƒ‹ãƒ³ã‚°ãƒ¢ãƒ¼ãƒ‰ãªã‚‰éšœå®³ç‰©ç”Ÿæˆçµ‚äº†ã‚’é…ã‚‰ã›ã‚‹
         if (GM.isTraining)
             ((PlayStateState_Play)stateMachine.state_Play).levelEndScore += 250;
     }
@@ -101,13 +101,13 @@ public class PlayStateState_LevelStart : PlayStateStateBase
     {
         base.Update(deltaTime);
 
-        //ƒŒƒxƒ‹ƒeƒLƒXƒg‚ÌˆÊ’uE‘å‚«‚³EF’²®
+        //ãƒ¬ãƒ™ãƒ«ãƒ†ã‚­ã‚¹ãƒˆã®ä½ç½®ãƒ»å¤§ãã•ãƒ»è‰²èª¿æ•´
         int shortageScore = levelStartScore - scoreCorrection - GM.score;
         levelTf.position = Vector3.Lerp(levelMarker.position, centerPos, shortageScore / 75f);
         levelText.fontSize = Mathf.Lerp(72, 300, shortageScore / 75f);
         levelText.color = Color.Lerp(Color.black, Color.clear, (shortageScore - 200) / 50f);
 
-        //ƒXƒRƒA‚ªŠî€‚ğ–‚½‚¹‚ÎƒXƒe[ƒg‘JˆÚ
+        //ã‚¹ã‚³ã‚¢ãŒåŸºæº–ã‚’æº€ãŸã›ã°ã‚¹ãƒ†ãƒ¼ãƒˆé·ç§»
         if (GM.score > levelStartScore - scoreCorrection)
             stateMachine.ChangeState(stateMachine.state_Play);
     }
@@ -116,7 +116,7 @@ public class PlayStateState_LevelStart : PlayStateStateBase
 
     public override void Exit()
     {
-        //ƒŒƒxƒ‹‚ÌƒeƒLƒXƒg‚ÌZÀ•W‚ğC³
+        //ãƒ¬ãƒ™ãƒ«ã®ãƒ†ã‚­ã‚¹ãƒˆã®Zåº§æ¨™ã‚’ä¿®æ­£
         Vector3 levelPos = levelTf.position;
         levelPos.z = GM.scoreSetTf.position.z;
         levelTf.position = levelPos;

@@ -1,3 +1,5 @@
+using UnityEngine;
+
 public class GameStateState_CheckStamina : GameStateStateBase
 {
     private int remainingStamina;
@@ -10,65 +12,69 @@ public class GameStateState_CheckStamina : GameStateStateBase
 
     public async override void Enter()
     {
-        //Á”ïŒã‚ÌƒXƒ^ƒ~ƒic—Ê‚ğæ“¾
+        //æ¶ˆè²»å¾Œã®ã‚¹ã‚¿ãƒŸãƒŠæ®‹é‡ã‚’å–å¾—
         remainingStamina = await FirestoreManager.Instance.UseStamina();
 
-        //ƒXƒ^ƒ~ƒi•s‘«’Ê’m
+        //ã‚¹ã‚¿ãƒŸãƒŠä¸è¶³é€šçŸ¥
         if (remainingStamina == -1)
         {
-            //L‹’®‰ñ”‚Ìæ“¾
+            //åºƒå‘Šè¦–è´å›æ•°ã®å–å¾—
             int adWatchCount = await FirestoreManager.Instance.GetAdWatchCount();
 
-            //‹’®‰ñ”‚ª3‰ñ–¢–‚È‚çL‹’®‚ğ’ñˆÄ
+            //è¦–è´å›æ•°ãŒ3å›æœªæº€ãªã‚‰åºƒå‘Šè¦–è´ã‚’ææ¡ˆ
             if (adWatchCount < 3)
             {
                 PopupUIManager.Instance.SetupPopup(
-                    "ƒXƒ^ƒ~ƒi•s‘«",
-                    @"ƒXƒ^ƒ~ƒi‚ª‚ ‚è‚Ü‚¹‚ñB\n\nL‚ğŒ©‚ÄƒXƒ^ƒ~ƒi‚ğ2‰ñ•œ‚µ‚Ü‚·‚©H\n–{“ú‚Ì‰ñ•œ‰Â”\‰ñ”F" + (3 - adWatchCount),
+                    "ã‚¹ã‚¿ãƒŸãƒŠä¸è¶³",
+                    "ã‚¹ã‚¿ãƒŸãƒŠãŒã‚ã‚Šã¾ã›ã‚“ã€‚\n\nåºƒå‘Šã‚’è¦‹ã¦ã‚¹ã‚¿ãƒŸãƒŠã‚’2å›å¾©ã—ã¾ã™ã‹ï¼Ÿ\næœ¬æ—¥ã®å›å¾©å¯èƒ½å›æ•°ï¼š" + (3 - adWatchCount),
                     AdmobManager.Instance.LoadAndShowRewardedAd,
                     BackToMenu);
             }
 
-            //L‹’®‰ñ”‚ªãŒÀ‚È‚ç‰ñ•œ‚ğ‘Ò‚Â‚æ‚¤‚É’Ê’m
+            //åºƒå‘Šè¦–è´å›æ•°ãŒä¸Šé™ãªã‚‰å›å¾©ã‚’å¾…ã¤ã‚ˆã†ã«é€šçŸ¥
             else
             {
                 PopupUIManager.Instance.SetupPopupMessage(
-                    "ƒXƒ^ƒ~ƒi•s‘«",
-                    @"ƒXƒ^ƒ~ƒi‚ª‚ ‚è‚Ü‚¹‚ñB\n\nƒXƒ^ƒ~ƒi‚Í–ˆ“ú4:00‚É‘S‰ñ•œ‚µ‚Ü‚·B");
+                    "ã‚¹ã‚¿ãƒŸãƒŠä¸è¶³",
+                    "ã‚¹ã‚¿ãƒŸãƒŠãŒã‚ã‚Šã¾ã›ã‚“ã€‚\n\nã‚¹ã‚¿ãƒŸãƒŠã¯æ¯æ—¥4:00ã«å…¨å›å¾©ã—ã¾ã™ã€‚");
                 stateMachine.ChangeState(stateMachine.state_Menu);
             }
 
             return;
         }
 
-        //ƒGƒ‰[’Ê’m
+        //ã‚¨ãƒ©ãƒ¼é€šçŸ¥
         else if (remainingStamina == -2)
         {
-            PopupUIManager.Instance.SetupMessageBand("ƒXƒ^ƒ~ƒiî•ñ‚ªæ“¾‚Å‚«‚Ü‚¹‚ñ‚Å‚µ‚½B", 2);
+            PopupUIManager.Instance.SetupMessageBand("ã‚¹ã‚¿ãƒŸãƒŠæƒ…å ±ãŒå–å¾—ã§ãã¾ã›ã‚“ã§ã—ãŸã€‚", 2);
             stateMachine.ChangeState(stateMachine.state_Menu);
             return;
         }
 
-        //’´‰ßƒXƒ^ƒ~ƒiÁ”ï‚Ìê‡‚Ìˆ—
+        //è¶…éã‚¹ã‚¿ãƒŸãƒŠæ¶ˆè²»ã®å ´åˆã®å‡¦ç†
         else if (remainingStamina >= 3)
             GM.UpdateOverStamina(remainingStamina);
 
-        //SEÄ¶
+        //SEå†ç”Ÿ
         AM.PlaySE(AM.SE_UseStama);
 
-        //–â‘è‚È‚¯‚ê‚ÎƒXƒe[ƒg‘JˆÚ
+        //å•é¡Œãªã‘ã‚Œã°ã‚¹ãƒ†ãƒ¼ãƒˆé·ç§»
         stateMachine.ChangeState(stateMachine.state_MenuToPlay);
     }
 
 
 
-    public override void Update(float deltaTime) { }
+    public override void Update(float deltaTime) 
+    {
+        //åœ°å½¢ã‚’ç®¡ç†
+        TM.ManageMovingTerrain();
+    }
 
 
 
     public override void Exit()
     {
-        //‘¼ƒXƒe[ƒg‚É•Ï”‚Ìó‚¯“n‚µ
+        //ä»–ã‚¹ãƒ†ãƒ¼ãƒˆã«å¤‰æ•°ã®å—ã‘æ¸¡ã—
         GameStateState_MenuToPlay.remainingStamina = remainingStamina;
     }
 

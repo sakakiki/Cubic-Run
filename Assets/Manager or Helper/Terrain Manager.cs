@@ -4,36 +4,36 @@ using UnityEngine.Pool;
 
 public class TerrainManager : MonoBehaviour
 {
-    //©g‚ÌƒCƒ“ƒXƒ^ƒ“ƒX
+    //è‡ªèº«ã®ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹
     public static TerrainManager Instance;
 
-    //ƒCƒ“ƒXƒyƒNƒ^[‚©‚ç“o˜^
+    //ã‚¤ãƒ³ã‚¹ãƒšã‚¯ã‚¿ãƒ¼ã‹ã‚‰ç™»éŒ²
     public GameObject[] TerrainList;
 
-    //”Ä—p•Ï”
+    //æ±ç”¨å¤‰æ•°
     private GameManager GM;
     private Transform playerTf;
     [HideInInspector] public float moveSpeed;
     [HideInInspector] public bool isCreateObstacle;
     private Transform previousTerrainTf;
-    public float stageRightEdge { get; private set; } //ƒ`ƒ…[ƒgƒŠƒAƒ‹‚Å“Ç‚İæ‚è
+    public float stageRightEdge { get; private set; } //ãƒãƒ¥ãƒ¼ãƒˆãƒªã‚¢ãƒ«ã§èª­ã¿å–ã‚Š
 
-    //ƒIƒuƒWƒFƒNƒgƒv[ƒ‹ŠÖ˜A•Ï”
+    //ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆãƒ—ãƒ¼ãƒ«é–¢é€£å¤‰æ•°
     private ObjectPool<GameObject>[] pool;
     private int poolNum;
 
-    //CreateTerrainRandomƒƒ\ƒbƒh—p•Ï”
+    //CreateTerrainRandomãƒ¡ã‚½ãƒƒãƒ‰ç”¨å¤‰æ•°
     private int previousTerrainNum1;
     private int previousTerrainNum2;
 
-    //TerrainŠÇ——p•Ï”
+    //Terrainç®¡ç†ç”¨å¤‰æ•°
     private Queue<Transform> activeTerrainTfQueue = new Queue<Transform>();
     private Queue<int> activeTerrainNumQueue = new Queue<int>();
     private Queue<Transform> approachingTerrainTfQueue = new Queue<Transform>();
     private Queue<int> approachingTerrainNumQueue = new Queue<int>();
     private Transform currentTerrainTf;
-    public int currentTerrainNum { get; private set; } //ƒQ[ƒ€ƒI[ƒo[ˆ—‚Å“Ç‚İæ‚è
-    public int nextTerrainNum { get; private set; } //ƒ`ƒ…[ƒgƒŠƒAƒ‹‚Å“Ç‚İæ‚è
+    public int currentTerrainNum { get; private set; } //ã‚²ãƒ¼ãƒ ã‚ªãƒ¼ãƒãƒ¼å‡¦ç†ã§èª­ã¿å–ã‚Š
+    public int nextTerrainNum { get; private set; } //ãƒãƒ¥ãƒ¼ãƒˆãƒªã‚¢ãƒ«ã§èª­ã¿å–ã‚Š
 
 
 
@@ -50,7 +50,7 @@ public class TerrainManager : MonoBehaviour
         GM = GameManager.Instance;
         playerTf = GM.playerTf;
 
-        //ƒIƒuƒWƒFƒNƒgƒv[ƒ‹ì¬
+        //ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆãƒ—ãƒ¼ãƒ«ä½œæˆ
         pool = new ObjectPool<GameObject>[TerrainList.Length];
         for (int i = 0; i < TerrainList.Length; i++)
         {
@@ -63,10 +63,10 @@ public class TerrainManager : MonoBehaviour
                 collectionCheck: true);
         }
 
-        //‰Šú‘¬“xİ’è
+        //åˆæœŸé€Ÿåº¦è¨­å®š
         moveSpeed = 8;
 
-        //‰Šú’n–Ê¶¬
+        //åˆæœŸåœ°é¢ç”Ÿæˆ
         CreateTerrain(0, -5, 5, 1, moveSpeed);
         CreateTerrain(0, previousTerrainTf.position.x, 5, 1, moveSpeed);
         CreateTerrain(0, previousTerrainTf.position.x, 5, 1, moveSpeed);
@@ -78,17 +78,17 @@ public class TerrainManager : MonoBehaviour
 
     public void ManageMovingTerrain()
     {
-        //ƒXƒe[ƒW‰E’[‚ÌÀ•W‚ğæ“¾
+        //ã‚¹ãƒ†ãƒ¼ã‚¸å³ç«¯ã®åº§æ¨™ã‚’å–å¾—
         stageRightEdge = previousTerrainTf.position.x;
 
-        //ƒXƒe[ƒW‚Ì’[‚ª‹ß‚Ã‚¢‚Ä‚¢‚ê‚Î’nŒ`‚ğ’Ç‰Á‚Å¶¬
+        //ã‚¹ãƒ†ãƒ¼ã‚¸ã®ç«¯ãŒè¿‘ã¥ã„ã¦ã„ã‚Œã°åœ°å½¢ã‚’è¿½åŠ ã§ç”Ÿæˆ
         if (stageRightEdge < 25)
         {
             if (isCreateObstacle) CreateTerrainRandom();
             else CreateTerrain(0, stageRightEdge, 3, 1, moveSpeed);
         }
 
-        //ƒvƒŒƒCƒ„[‚ÌˆÊ’u‚Ì’n–Ê‚Ìí—Ş‚ÌXV•K—v«‚ÌŠm”F
+        //ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®ä½ç½®ã®åœ°é¢ã®ç¨®é¡ã®æ›´æ–°å¿…è¦æ€§ã®ç¢ºèª
         switch (nextTerrainNum)
         {
             case 0:
@@ -111,7 +111,7 @@ public class TerrainManager : MonoBehaviour
                 break;
         }
 
-        //•s—v’nŒ`íœˆ—
+        //ä¸è¦åœ°å½¢å‰Šé™¤å‡¦ç†
         if (activeTerrainTfQueue.Peek().position.x < -5)
             pool[activeTerrainNumQueue.Dequeue()].Release(activeTerrainTfQueue.Dequeue().gameObject);
     }
@@ -120,14 +120,14 @@ public class TerrainManager : MonoBehaviour
 
     public void CreateTerrainRandom()
     {
-        //¶¬‚·‚éáŠQ•¨‚Ìí—Ş‚ğŒˆ’è
+        //ç”Ÿæˆã™ã‚‹éšœå®³ç‰©ã®ç¨®é¡ã‚’æ±ºå®š
         int createTerrainNum;
         do createTerrainNum = Random.Range(1, TerrainList.Length);
         while (createTerrainNum == previousTerrainNum1 || createTerrainNum == previousTerrainNum2);
         previousTerrainNum2 = previousTerrainNum1;
         previousTerrainNum1 = createTerrainNum;
 
-        //‘å‚«‚³‚ğƒ‰ƒ“ƒ_ƒ€‚ÉŒˆ’è‚µáŠQ•¨‚ğ¶¬
+        //å¤§ãã•ã‚’ãƒ©ãƒ³ãƒ€ãƒ ã«æ±ºå®šã—éšœå®³ç‰©ã‚’ç”Ÿæˆ
         float terrainWidth;
         float terrainHeight;
         switch (createTerrainNum)
@@ -161,7 +161,7 @@ public class TerrainManager : MonoBehaviour
                 break;
         }
 
-        //áŠQ•¨ŠÔ‚Ì’n–Ê‚ğ¶¬
+        //éšœå®³ç‰©é–“ã®åœ°é¢ã‚’ç”Ÿæˆ
         stageRightEdge = previousTerrainTf.position.x;
         terrainWidth = Random.Range(GM.level * 0.2f + 6.5f, GM.level * 0.2f + 7.5f);
         CreateTerrain(0, stageRightEdge, terrainWidth, 1, moveSpeed);
@@ -171,16 +171,16 @@ public class TerrainManager : MonoBehaviour
 
     public void CreateTerrain(int terrainNum, float leftEdgePosX, float width, float height, float moveSpeed)
     {
-        //ƒIƒuƒWƒFƒNƒgƒv[ƒ‹‚©‚ç’nŒ`‚ğ¶¬
+        //ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆãƒ—ãƒ¼ãƒ«ã‹ã‚‰åœ°å½¢ã‚’ç”Ÿæˆ
         poolNum = terrainNum;
         previousTerrainTf = pool[poolNum].Get().transform;
 
-        //ˆÊ’u‚ÆƒXƒP[ƒ‹‚ğ’²®‚µ‘¬“x‚ğ•t—^
+        //ä½ç½®ã¨ã‚¹ã‚±ãƒ¼ãƒ«ã‚’èª¿æ•´ã—é€Ÿåº¦ã‚’ä»˜ä¸
         previousTerrainTf.position = Vector2.right * (leftEdgePosX + width);
         previousTerrainTf.localScale = new Vector3(width, height, 1);
         previousTerrainTf.GetComponent<Rigidbody2D>().velocity = Vector3.left * moveSpeed;
 
-        //ŠÇ——pQueue‚É“o˜^
+        //ç®¡ç†ç”¨Queueã«ç™»éŒ²
         activeTerrainTfQueue.Enqueue(previousTerrainTf);
         activeTerrainNumQueue.Enqueue(terrainNum);
         approachingTerrainTfQueue.Enqueue(previousTerrainTf);
@@ -189,7 +189,7 @@ public class TerrainManager : MonoBehaviour
 
 
 
-    //ƒvƒŒƒCƒ„[‚ÌˆÊ’u‚Ì’n–Ê‚Ìí—Ş‚ğXV
+    //ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®ä½ç½®ã®åœ°é¢ã®ç¨®é¡ã‚’æ›´æ–°
     public void UpdateCurrentTerrain()
     {
         currentTerrainTf = approachingTerrainTfQueue.Dequeue();
@@ -199,7 +199,7 @@ public class TerrainManager : MonoBehaviour
 
 
 
-    //‘S‚Ä‚Ì’nŒ`‚Ì‘¬“x‚ğ•ÏX
+    //å…¨ã¦ã®åœ°å½¢ã®é€Ÿåº¦ã‚’å¤‰æ›´
     public void SetSpeed(float speed)
     {
         foreach (Transform terrainTf in activeTerrainTfQueue)

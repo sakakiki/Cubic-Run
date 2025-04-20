@@ -16,9 +16,9 @@ public class FirestoreManager : MonoBehaviour
     private FirebaseFirestore db;
     private FirebaseAuth auth;
 
-    private const int playerNameMaxLength = 12; // ‘SŠp2•¶šA”¼Šp1•¶š‚Æ‚µ‚ÄƒJƒEƒ“ƒg‚·‚éÅ‘å•¶š”
-    private const int maxStamina = 3; // ©“®‰ñ•œ‚É‚æ‚éƒXƒ^ƒ~ƒiÅ‘å’liL‹’®‚Å’´‰ß‰ñ•œ‰Â”\j
-    private const int resetStaminaHour = 4; // ƒXƒ^ƒ~ƒi‰ñ•œ
+    private const int playerNameMaxLength = 12; // å…¨è§’2æ–‡å­—ã€åŠè§’1æ–‡å­—ã¨ã—ã¦ã‚«ã‚¦ãƒ³ãƒˆã™ã‚‹æœ€å¤§æ–‡å­—æ•°
+    private const int maxStamina = 3; // è‡ªå‹•å›å¾©ã«ã‚ˆã‚‹ã‚¹ã‚¿ãƒŸãƒŠæœ€å¤§å€¤ï¼ˆåºƒå‘Šè¦–è´ã§è¶…éå›å¾©å¯èƒ½ï¼‰
+    private const int resetStaminaHour = 4; // ã‚¹ã‚¿ãƒŸãƒŠå›å¾©æ™‚åˆ»
 
 
 
@@ -28,44 +28,49 @@ public class FirestoreManager : MonoBehaviour
         if (Instance == null)
             Instance = this;
 
+        //GameManagerã®æ ¼ç´
+        GM = GameManager.Instance;
+
+#if UNITY_EDITOR
+        Debug.Log("Skipping Firebase init in editor to avoid native plugin errors.");
+        return;
+#endif
+
         auth = FirebaseAuth.DefaultInstance;
         db = FirebaseFirestore.DefaultInstance;
 
-        // Firestore‚ÌƒIƒtƒ‰ƒCƒ“ƒLƒƒƒbƒVƒ…‚ğ—LŒø‰» 
+        // Firestoreã®ã‚ªãƒ•ãƒ©ã‚¤ãƒ³ã‚­ãƒ£ãƒƒã‚·ãƒ¥ã‚’æœ‰åŠ¹åŒ– 
         db.Settings.PersistenceEnabled = true;
-
-        //GameManager‚ÌŠi”[
-        GM = GameManager.Instance;
     }
 
 
 
     /// <summary>
-    /// ƒvƒŒƒCƒ„[–¼‚ğ•Û‘¶
-    /// [ƒIƒ“ƒ‰ƒCƒ“ê—p]
+    /// ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼åã‚’ä¿å­˜
+    /// [ã‚ªãƒ³ãƒ©ã‚¤ãƒ³å°‚ç”¨]
     /// </summary>
     public async Task<string> SavePlayerName(string playerName)
     {
         if (auth.CurrentUser == null)
         {
-            Debug.LogError("Firebase”FØ‚³‚ê‚Ä‚¢‚Ü‚¹‚ñ");
+            Debug.LogError("Firebaseèªè¨¼ã•ã‚Œã¦ã„ã¾ã›ã‚“");
 
-            return "ˆÙíI—¹";
+            return "ç•°å¸¸çµ‚äº†";
         }
 
-        //V‚µ‚¢ƒvƒŒƒCƒ„[–¼‚ª’·‚·‚¬‚ê‚Î‹‘”Û
+        //æ–°ã—ã„ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼åãŒé•·ã™ãã‚Œã°æ‹’å¦
         if (CalculateTextLength(playerName) > playerNameMaxLength)
-            return "ƒvƒŒƒCƒ„[–¼‚ª’·‚·‚¬‚Ü‚·B’Z‚¢ƒvƒŒƒCƒ„[–¼‚ÅÄ“x‚¨‚µ‚­‚¾‚³‚¢B";
+            return "ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼åãŒé•·ã™ãã¾ã™ã€‚çŸ­ã„ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼åã§å†åº¦ãŠè©¦ã—ãã ã•ã„ã€‚";
 
         try
         {
-            // ƒlƒbƒgƒ[ƒNÚ‘±‚ğƒ`ƒFƒbƒNiƒIƒtƒ‰ƒCƒ“‚È‚ç‘¦ƒGƒ‰[‚ğ•Ô‚·j
+            // ãƒãƒƒãƒˆãƒ¯ãƒ¼ã‚¯æ¥ç¶šã‚’ãƒã‚§ãƒƒã‚¯ï¼ˆã‚ªãƒ•ãƒ©ã‚¤ãƒ³ãªã‚‰å³ã‚¨ãƒ©ãƒ¼ã‚’è¿”ã™ï¼‰
             if (Application.internetReachability == NetworkReachability.NotReachable)
             {
-                return "ƒlƒbƒgƒ[ƒN‚ª–³Œø‚Ü‚½‚ÍƒIƒtƒ‰ƒCƒ“‚Ì‚½‚ßAƒvƒŒƒCƒ„[–¼‚ğ•Û‘¶‚Å‚«‚Ü‚¹‚ñ‚Å‚µ‚½B";
+                return "ãƒãƒƒãƒˆãƒ¯ãƒ¼ã‚¯ãŒç„¡åŠ¹ã¾ãŸã¯ã‚ªãƒ•ãƒ©ã‚¤ãƒ³ã®ãŸã‚ã€ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼åã‚’ä¿å­˜ã§ãã¾ã›ã‚“ã§ã—ãŸã€‚";
             }
 
-            // Firebase‚Ìƒlƒbƒgƒ[ƒN‚ğ–¾¦“I‚É—LŒø‰»iƒIƒtƒ‰ƒCƒ“‚È‚çƒGƒ‰[‚ªo‚éj
+            // Firebaseã®ãƒãƒƒãƒˆãƒ¯ãƒ¼ã‚¯ã‚’æ˜ç¤ºçš„ã«æœ‰åŠ¹åŒ–ï¼ˆã‚ªãƒ•ãƒ©ã‚¤ãƒ³ãªã‚‰ã‚¨ãƒ©ãƒ¼ãŒå‡ºã‚‹ï¼‰
             await db.DisableNetworkAsync();
             await db.EnableNetworkAsync();
 
@@ -73,23 +78,23 @@ public class FirestoreManager : MonoBehaviour
 
             await docRef.SetAsync(new { name = playerName }, SetOptions.MergeAll);
 
-            //ƒ[ƒJƒ‹‚É‚à”½‰f
+            //ãƒ­ãƒ¼ã‚«ãƒ«ã«ã‚‚åæ˜ 
             GM.playerName = playerName;
 
-            return "³íI—¹";
+            return "æ­£å¸¸çµ‚äº†";
         }
         catch (FirebaseException e)
         {
-            return "ƒlƒbƒgƒ[ƒN‚ª–³Œø‚Ü‚½‚ÍƒIƒtƒ‰ƒCƒ“‚Ì‚½‚ßAƒvƒŒƒCƒ„[–¼‚ğ•Û‘¶‚Å‚«‚Ü‚¹‚ñ‚Å‚µ‚½B";
+            return "ãƒãƒƒãƒˆãƒ¯ãƒ¼ã‚¯ãŒç„¡åŠ¹ã¾ãŸã¯ã‚ªãƒ•ãƒ©ã‚¤ãƒ³ã®ãŸã‚ã€ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼åã‚’ä¿å­˜ã§ãã¾ã›ã‚“ã§ã—ãŸã€‚";
         }
         catch (Exception e)
         {
-            return "ˆÙíI—¹";
+            return "ç•°å¸¸çµ‚äº†";
         }
     }
 
     /// <summary>
-    /// ‘SŠp‚ğ2A”¼Šp‚ğ1‚Æ‚µ‚Ä•¶š”‚ğŒvZ‚·‚é
+    /// å…¨è§’ã‚’2ã€åŠè§’ã‚’1ã¨ã—ã¦æ–‡å­—æ•°ã‚’è¨ˆç®—ã™ã‚‹
     /// </summary>
     int CalculateTextLength(string text)
     {
@@ -102,23 +107,23 @@ public class FirestoreManager : MonoBehaviour
     }
 
     /// <summary>
-    /// ‘SŠp•¶š‚©‚Ç‚¤‚©‚ğ”»’è
+    /// å…¨è§’æ–‡å­—ã‹ã©ã†ã‹ã‚’åˆ¤å®š
     /// </summary>
     bool IsFullWidth(char c)
     {
-        return Regex.IsMatch(c.ToString(), @"[^\x00-\x7F]"); // ASCIIŠO‚Ì•¶š‚ğ‘SŠp‚Æ”»’è
+        return Regex.IsMatch(c.ToString(), @"[^\x00-\x7F]"); // ASCIIå¤–ã®æ–‡å­—ã‚’å…¨è§’ã¨åˆ¤å®š
     }
 
     /// <summary>
-    /// Šl“¾ŒoŒ±’l‚Ì‰ÁZ‚ğ•Û‘¶
-    /// [ƒIƒtƒ‰ƒCƒ“‘Î‰]
-    /// —İÏ‰ÁZ
+    /// ç²å¾—çµŒé¨“å€¤ã®åŠ ç®—ã‚’ä¿å­˜
+    /// [ã‚ªãƒ•ãƒ©ã‚¤ãƒ³å¯¾å¿œ]
+    /// ç´¯ç©åŠ ç®—
     /// </summary>
     public async Task SaveExperience(int additionalExp)
     {
         if (auth.CurrentUser == null)
         {
-            Debug.LogError("Firebase”FØ‚³‚ê‚Ä‚¢‚Ü‚¹‚ñ");
+            Debug.LogError("Firebaseèªè¨¼ã•ã‚Œã¦ã„ã¾ã›ã‚“");
             return;
         }
 
@@ -133,20 +138,20 @@ public class FirestoreManager : MonoBehaviour
         }
         catch (Exception e)
         {
-            Debug.LogError("ŒoŒ±’l‚Ì•Û‘¶‚É¸”s: " + e.Message);
+            Debug.LogError("çµŒé¨“å€¤ã®ä¿å­˜ã«å¤±æ•—: " + e.Message);
         }
     }
 
     /// <summary>
-    /// ƒnƒCƒXƒRƒA‚ğ•Û‘¶
-    /// [ƒIƒ“ƒ‰ƒCƒ“ê—p]
-    /// Œ»İ‚ÌƒXƒRƒA‚æ‚è‚‚¢ê‡‚Ì‚İXV
+    /// ãƒã‚¤ã‚¹ã‚³ã‚¢ã‚’ä¿å­˜
+    /// [ã‚ªãƒ³ãƒ©ã‚¤ãƒ³å°‚ç”¨]
+    /// ç¾åœ¨ã®ã‚¹ã‚³ã‚¢ã‚ˆã‚Šé«˜ã„å ´åˆã®ã¿æ›´æ–°
     /// </summary>
     public async Task SaveHighScore(int newScore)
     {
         if (auth.CurrentUser == null)
         {
-            Debug.LogError("Firebase”FØ‚³‚ê‚Ä‚¢‚Ü‚¹‚ñ");
+            Debug.LogError("Firebaseèªè¨¼ã•ã‚Œã¦ã„ã¾ã›ã‚“");
             return;
         }
 
@@ -165,50 +170,50 @@ public class FirestoreManager : MonoBehaviour
                 }
             });
 
-            //ƒNƒ‰ƒEƒh‚É–¢”½‰f‚Ìƒtƒ‰ƒO‚ğ‚¨‚ë‚·
+            //ã‚¯ãƒ©ã‚¦ãƒ‰ã«æœªåæ˜ ã®ãƒ•ãƒ©ã‚°ã‚’ãŠã‚ã™
             GM.isUnsavedHighScore = false;
             UnsavedHighScoreFlagManager.Save(false);
         }
         catch (Exception e)
         {
-            Debug.LogError("ƒnƒCƒXƒRƒA‚Ì•Û‘¶‚É¸”s: " + e.Message);
+            Debug.LogError("ãƒã‚¤ã‚¹ã‚³ã‚¢ã®ä¿å­˜ã«å¤±æ•—: " + e.Message);
 
-            //ƒNƒ‰ƒEƒh‚É–¢”½‰f‚Ìƒtƒ‰ƒO‚ğ—§‚Ä‚é
+            //ã‚¯ãƒ©ã‚¦ãƒ‰ã«æœªåæ˜ ã®ãƒ•ãƒ©ã‚°ã‚’ç«‹ã¦ã‚‹
             GM.isUnsavedHighScore = true;
             UnsavedHighScoreFlagManager.Save(true);
         }
     }
 
     /// <summary>
-    /// ƒvƒŒƒCƒ„[ƒXƒRƒA‚Ì•Û‘¶
-    /// [ƒIƒ“ƒ‰ƒCƒ“ê—p]
-    /// Queue<int> rankingScoreQueue “à‚Ìƒf[ƒ^‚ğ‘S‚ÄƒNƒ‰ƒEƒh‚Éƒf[ƒ^‚ğ”½‰f‚³‚¹‚é
+    /// ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã‚¹ã‚³ã‚¢ã®ä¿å­˜
+    /// [ã‚ªãƒ³ãƒ©ã‚¤ãƒ³å°‚ç”¨]
+    /// Queue<int> rankingScoreQueue å†…ã®ãƒ‡ãƒ¼ã‚¿ã‚’å…¨ã¦ã‚¯ãƒ©ã‚¦ãƒ‰ã«ãƒ‡ãƒ¼ã‚¿ã‚’åæ˜ ã•ã›ã‚‹
     /// </summary>
     public async Task SavePlayerScore()
     {
         if (auth.CurrentUser == null)
         {
-            Debug.LogError("Firebase”FØ‚³‚ê‚Ä‚¢‚Ü‚¹‚ñ");
+            Debug.LogError("Firebaseèªè¨¼ã•ã‚Œã¦ã„ã¾ã›ã‚“");
             return;
         }
 
         DocumentReference docRef = db.Collection("users").Document(auth.CurrentUser.UserId);
 
-        //XVŒã‚ÌƒvƒŒƒCƒ„[ƒXƒRƒA
+        //æ›´æ–°å¾Œã®ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã‚¹ã‚³ã‚¢
         int newPlayerScore = 0;
 
         try
         {
-            // Queue‚ÌƒRƒs[iƒgƒ‰ƒ“ƒUƒNƒVƒ‡ƒ“ŠO‚ÅˆÀ‘S‚Éƒf[ƒ^‚ğæ“¾j
+            // Queueã®ã‚³ãƒ”ãƒ¼ï¼ˆãƒˆãƒ©ãƒ³ã‚¶ã‚¯ã‚·ãƒ§ãƒ³å¤–ã§å®‰å…¨ã«ãƒ‡ãƒ¼ã‚¿ã‚’å–å¾—ï¼‰
             List<int> tempScores = GM.rankingScoreQueue.ToList();
 
             bool transactionSuccess = await db.RunTransactionAsync(async transaction =>
             {
-                // ƒvƒŒƒCƒ„[ƒXƒRƒA‚Ìæ“¾
+                // ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã‚¹ã‚³ã‚¢ã®å–å¾—
                 DocumentSnapshot snapshot = await transaction.GetSnapshotAsync(docRef);
                 newPlayerScore = snapshot.Exists ? snapshot.GetValue<int>("playerScore") : 0;
 
-                // –¢”½‰f‚Ìƒf[ƒ^‚ğ”½‰f
+                // æœªåæ˜ ã®ãƒ‡ãƒ¼ã‚¿ã‚’åæ˜ 
                 foreach (int resultScore in tempScores)
                 {
                     newPlayerScore += (resultScore - newPlayerScore) / 10;
@@ -218,43 +223,43 @@ public class FirestoreManager : MonoBehaviour
                 return true;
             });
 
-            // ƒgƒ‰ƒ“ƒUƒNƒVƒ‡ƒ“‚ª¬Œ÷‚µ‚½ê‡‚Ì‚İ
+            // ãƒˆãƒ©ãƒ³ã‚¶ã‚¯ã‚·ãƒ§ãƒ³ãŒæˆåŠŸã—ãŸå ´åˆã®ã¿
             if (transactionSuccess)
             {
-                // GM ‚Ì Queue ‚ğ‹ó‚É‚·‚é
+                // GM ã® Queue ã‚’ç©ºã«ã™ã‚‹
                 GM.rankingScoreQueue.Clear();
 
-                //ƒ[ƒJƒ‹ƒf[ƒ^‚É”½‰f
+                //ãƒ­ãƒ¼ã‚«ãƒ«ãƒ‡ãƒ¼ã‚¿ã«åæ˜ 
                 GM.playerScore = newPlayerScore;
 
-                // ƒ[ƒJƒ‹‚Ì Queue ‚Ì“à—e‚ğXV
+                // ãƒ­ãƒ¼ã‚«ãƒ«ã® Queue ã®å†…å®¹ã‚’æ›´æ–°
                 RankingScoreManager.Save(GM.rankingScoreQueue);
-                Debug.Log("Queue‚Ìî•ñ‚ğƒ[ƒJƒ‹ƒXƒgƒŒ[ƒW‚É•Û‘¶‚µ‚Ü‚µ‚½");
+                Debug.Log("Queueã®æƒ…å ±ã‚’ãƒ­ãƒ¼ã‚«ãƒ«ã‚¹ãƒˆãƒ¬ãƒ¼ã‚¸ã«ä¿å­˜ã—ã¾ã—ãŸ");
             }
         }
         catch (Exception e)
         {
-            Debug.LogError($"ƒvƒŒƒCƒ„[ƒXƒRƒA‚ÌXV‚É¸”s: {e.Message}");
+            Debug.LogError($"ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã‚¹ã‚³ã‚¢ã®æ›´æ–°ã«å¤±æ•—: {e.Message}");
 
-            // ƒ[ƒJƒ‹‚Ì Queue ‚Ì“à—e‚ğXVi¸”s‚Å‚à•Û‘¶‚·‚éj
+            // ãƒ­ãƒ¼ã‚«ãƒ«ã® Queue ã®å†…å®¹ã‚’æ›´æ–°ï¼ˆå¤±æ•—æ™‚ã§ã‚‚ä¿å­˜ã™ã‚‹ï¼‰
             RankingScoreManager.Save(GM.rankingScoreQueue);
-            Debug.Log("Queue‚Ìî•ñ‚ğƒ[ƒJƒ‹ƒXƒgƒŒ[ƒW‚É•Û‘¶‚µ‚Ü‚µ‚½");
+            Debug.Log("Queueã®æƒ…å ±ã‚’ãƒ­ãƒ¼ã‚«ãƒ«ã‚¹ãƒˆãƒ¬ãƒ¼ã‚¸ã«ä¿å­˜ã—ã¾ã—ãŸ");
         }
     }
 
     /// <summary>
-    /// ƒgƒŒ[ƒjƒ“ƒOƒ‚[ƒhƒŒƒxƒ‹ƒNƒŠƒA‰ñ”‚Ì‰ÁZ‚ğ•Û‘¶
-    /// [ƒIƒtƒ‰ƒCƒ“‘Î‰]
-    /// ‰ñ”1‰ÁZ
+    /// ãƒˆãƒ¬ãƒ¼ãƒ‹ãƒ³ã‚°ãƒ¢ãƒ¼ãƒ‰ãƒ¬ãƒ™ãƒ«ã‚¯ãƒªã‚¢å›æ•°ã®åŠ ç®—ã‚’ä¿å­˜
+    /// [ã‚ªãƒ•ãƒ©ã‚¤ãƒ³å¯¾å¿œ]
+    /// å›æ•°1åŠ ç®—
     /// </summary>
     public async Task SaveTrainingClearCount(int level)
     {
-        //ƒŒƒxƒ‹‚ğƒCƒ“ƒfƒbƒNƒX‚É•â³
+        //ãƒ¬ãƒ™ãƒ«ã‚’ã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹ã«è£œæ­£
         level--;
 
         if (auth.CurrentUser == null)
         {
-            Debug.LogError("Firebase”FØ‚³‚ê‚Ä‚¢‚Ü‚¹‚ñ");
+            Debug.LogError("Firebaseèªè¨¼ã•ã‚Œã¦ã„ã¾ã›ã‚“");
             return;
         }
 
@@ -263,7 +268,7 @@ public class FirestoreManager : MonoBehaviour
 
         try
         {
-            // w’èƒŒƒxƒ‹‚ÌƒJƒEƒ“ƒg‚ğ1‘‚â‚·
+            // æŒ‡å®šãƒ¬ãƒ™ãƒ«ã®ã‚«ã‚¦ãƒ³ãƒˆã‚’1å¢—ã‚„ã™
             await docRef.UpdateAsync(new Dictionary<string, object>
         {
             { fieldName, FieldValue.Increment(1) }
@@ -271,23 +276,23 @@ public class FirestoreManager : MonoBehaviour
         }
         catch (Exception e)
         {
-            Debug.LogError($"ƒŒƒxƒ‹ {level} ‚ÌƒNƒŠƒA‰ñ”‚Ì•Û‘¶‚É¸”s: " + e.Message);
+            Debug.LogError($"ãƒ¬ãƒ™ãƒ« {level} ã®ã‚¯ãƒªã‚¢å›æ•°ã®ä¿å­˜ã«å¤±æ•—: " + e.Message);
         }
     }
 
     /// <summary>
-    /// g—p’†‚ÌƒXƒLƒ“‚ğ•Û‘¶
-    /// [ƒIƒtƒ‰ƒCƒ“‘Î‰]
-    /// ƒIƒtƒ‰ƒCƒ“Às‚ÍƒT[ƒo[‘¤‚Ö‚ÌXV‚ª‘Ò‹@‚³‚êAŒã‚©‚ç‚ÌXV‚ğã‘‚«‚·‚é‚±‚Æ‚ª‚ ‚é
+    /// ä½¿ç”¨ä¸­ã®ã‚¹ã‚­ãƒ³ã‚’ä¿å­˜
+    /// [ã‚ªãƒ•ãƒ©ã‚¤ãƒ³å¯¾å¿œ]
+    /// ã‚ªãƒ•ãƒ©ã‚¤ãƒ³å®Ÿè¡Œæ™‚ã¯ã‚µãƒ¼ãƒãƒ¼å´ã¸ã®æ›´æ–°ãŒå¾…æ©Ÿã•ã‚Œã€å¾Œã‹ã‚‰ã®æ›´æ–°ã‚’ä¸Šæ›¸ãã™ã‚‹ã“ã¨ãŒã‚ã‚‹
     /// </summary>
     public async Task SaveUsingSkin()
     {
-        //GameManager‚Ì’l‚ğÌ—p
+        //GameManagerã®å€¤ã‚’æ¡ç”¨
         int skinID = GM.usingSkinID;
 
         if (auth.CurrentUser == null)
         {
-            Debug.LogError("Firebase”FØ‚³‚ê‚Ä‚¢‚Ü‚¹‚ñ");
+            Debug.LogError("Firebaseèªè¨¼ã•ã‚Œã¦ã„ã¾ã›ã‚“");
             return;
         }
 
@@ -295,25 +300,25 @@ public class FirestoreManager : MonoBehaviour
         {
             DocumentReference docRef = db.Collection("users").Document(auth.CurrentUser.UserId);
 
-            // •Û‘¶ƒf[ƒ^
+            // ä¿å­˜ãƒ‡ãƒ¼ã‚¿
             await docRef.SetAsync(new { usingSkin = skinID }, SetOptions.MergeAll);
         }
         catch (Exception e)
         {
-            Debug.LogError("g—p’†ƒXƒLƒ“‚Ì•Û‘¶‚É¸”s: " + e.Message);
+            Debug.LogError("ä½¿ç”¨ä¸­ã‚¹ã‚­ãƒ³ã®ä¿å­˜ã«å¤±æ•—: " + e.Message);
         }
     }
 
     /// <summary>
-    /// ‘–s‹——£‚Ì‰ÁZ‚ğ•Û‘¶
-    /// [ƒIƒtƒ‰ƒCƒ“‘Î‰]
-    /// —İÏ‰ÁZ
+    /// èµ°è¡Œè·é›¢ã®åŠ ç®—ã‚’ä¿å­˜
+    /// [ã‚ªãƒ•ãƒ©ã‚¤ãƒ³å¯¾å¿œ]
+    /// ç´¯ç©åŠ ç®—
     /// </summary>
     public async Task SaveRunDistance(int additionalDistance)
     {
         if (auth.CurrentUser == null)
         {
-            Debug.LogError("Firebase”FØ‚³‚ê‚Ä‚¢‚Ü‚¹‚ñ");
+            Debug.LogError("Firebaseèªè¨¼ã•ã‚Œã¦ã„ã¾ã›ã‚“");
             return;
         }
 
@@ -328,22 +333,40 @@ public class FirestoreManager : MonoBehaviour
         }
         catch (Exception e)
         {
-            Debug.LogError("‘–s‹——£‚Ì•Û‘¶‚É¸”s: " + e.Message);
+            Debug.LogError("èµ°è¡Œè·é›¢ã®ä¿å­˜ã«å¤±æ•—: " + e.Message);
         }
     }
 
 
 
     /// <summary>
-    /// ‘S‚Ä‚Ìƒf[ƒ^‚ğƒ[ƒh
-    /// [ƒNƒ‰ƒEƒhƒf[ƒ^—Dæ]
-    /// ƒ[ƒJƒ‹ƒf[ƒ^‚Æ‚Ì”äŠr‚àŠÜ‚Ş
+    /// å…¨ã¦ã®ãƒ‡ãƒ¼ã‚¿ã‚’ãƒ­ãƒ¼ãƒ‰
+    /// [ã‚¯ãƒ©ã‚¦ãƒ‰ãƒ‡ãƒ¼ã‚¿å„ªå…ˆ]
+    /// ãƒ­ãƒ¼ã‚«ãƒ«ãƒ‡ãƒ¼ã‚¿ã¨ã®æ¯”è¼ƒã‚‚å«ã‚€
     /// </summary>
     public async Task<bool> LoadAll()
     {
+        
+
+
+        
+#if UNITY_EDITOR
+        Debug.Log("Skipping Firebase init in editor to avoid native plugin errors.");
+        GM.playerName = "ãƒ†ã‚¹ãƒˆãƒ¦ãƒ¼ã‚¶ãƒ¼";
+        GM.totalExp = 100;
+        GM.highScore = 0;
+        GM.playerScore = 0;
+        GM.usingSkinID = 0;
+        GM.totalRunDistance = 0;
+        GM.trainingClearCounts = new List<int> { 0};
+        return false;
+#endif
+
+
+
         if (auth.CurrentUser == null)
         {
-            Debug.LogError("Firebase”FØ‚³‚ê‚Ä‚¢‚Ü‚¹‚ñ");
+            Debug.LogError("Firebaseèªè¨¼ã•ã‚Œã¦ã„ã¾ã›ã‚“");
             return false;
         }
 
@@ -351,48 +374,48 @@ public class FirestoreManager : MonoBehaviour
         {
             DocumentReference docRef = db.Collection("users").Document(auth.CurrentUser.UserId);
 
-            #region snapshot‚ğæ“¾iƒNƒ‰ƒEƒh‚ğ—Dæ‚µA¸”s‚·‚ê‚ÎƒLƒƒƒbƒVƒ…‚ğæ“¾j
+            #region snapshotã‚’å–å¾—ï¼ˆã‚¯ãƒ©ã‚¦ãƒ‰ã‚’å„ªå…ˆã—ã€å¤±æ•—ã™ã‚Œã°ã‚­ãƒ£ãƒƒã‚·ãƒ¥ã‚’å–å¾—ï¼‰
 
             DocumentSnapshot snapshot;
 
             try
             {
-                // ƒNƒ‰ƒEƒh‚ÌÅVƒf[ƒ^‚ğæ“¾i’ÊM‚ª”­¶j
+                // ã‚¯ãƒ©ã‚¦ãƒ‰ã®æœ€æ–°ãƒ‡ãƒ¼ã‚¿ã‚’å–å¾—ï¼ˆé€šä¿¡ãŒç™ºç”Ÿï¼‰
                 snapshot = await docRef.GetSnapshotAsync(Source.Server);
             }
             catch (Exception e)
             {
-                Debug.LogWarning($"ƒNƒ‰ƒEƒhƒf[ƒ^‚Ìæ“¾‚É¸”s: {e.Message}BƒLƒƒƒbƒVƒ…ƒf[ƒ^‚ğg—p‚µ‚Ü‚·B");
+                Debug.LogWarning($"ã‚¯ãƒ©ã‚¦ãƒ‰ãƒ‡ãƒ¼ã‚¿ã®å–å¾—ã«å¤±æ•—: {e.Message}ã€‚ã‚­ãƒ£ãƒƒã‚·ãƒ¥ãƒ‡ãƒ¼ã‚¿ã‚’ä½¿ç”¨ã—ã¾ã™ã€‚");
 
-                // ƒNƒ‰ƒEƒhæ“¾‚É¸”s‚µ‚½ê‡AƒLƒƒƒbƒVƒ…‚©‚çæ“¾iƒIƒtƒ‰ƒCƒ“‘Î‰j
+                // ã‚¯ãƒ©ã‚¦ãƒ‰å–å¾—ã«å¤±æ•—ã—ãŸå ´åˆã€ã‚­ãƒ£ãƒƒã‚·ãƒ¥ã‹ã‚‰å–å¾—ï¼ˆã‚ªãƒ•ãƒ©ã‚¤ãƒ³å¯¾å¿œï¼‰
                 snapshot = await docRef.GetSnapshotAsync(Source.Cache);
             }
 
-            //ƒf[ƒ^‚Ì‘¶İ‚ğƒ`ƒFƒbƒN
+            //ãƒ‡ãƒ¼ã‚¿ã®å­˜åœ¨ã‚’ãƒã‚§ãƒƒã‚¯
             if (!snapshot.Exists)
             {
-                Debug.LogWarning("[Firestore] ƒvƒŒƒCƒ„[ƒf[ƒ^‚ª‘¶İ‚µ‚Ü‚¹‚ñ");
+                Debug.LogWarning("[Firestore] ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ãƒ‡ãƒ¼ã‚¿ãŒå­˜åœ¨ã—ã¾ã›ã‚“");
                 return false;
             }
             #endregion
 
-            #region playerName‚Ìƒ[ƒh
+            #region playerNameã®ãƒ­ãƒ¼ãƒ‰
             if (snapshot.ContainsField("name"))
             {
-                //ƒ[ƒJƒ‹ƒLƒƒƒbƒVƒ…‚É“¯Šú
+                //ãƒ­ãƒ¼ã‚«ãƒ«ã‚­ãƒ£ãƒƒã‚·ãƒ¥ã«åŒæœŸ
                 GM.playerName = snapshot.GetValue<string>("name");
             }
             #endregion
 
-            #region playerExp‚Ìƒ[ƒh
+            #region playerExpã®ãƒ­ãƒ¼ãƒ‰
             if (snapshot.ContainsField("experience"))
             {
-                //ƒ[ƒJƒ‹ƒLƒƒƒbƒVƒ…‚É“¯Šú
+                //ãƒ­ãƒ¼ã‚«ãƒ«ã‚­ãƒ£ãƒƒã‚·ãƒ¥ã«åŒæœŸ
                 GM.totalExp = snapshot.GetValue<int>("experience");
             }
             #endregion
 
-            #region highScore‚Ìƒ[ƒh
+            #region highScoreã®ãƒ­ãƒ¼ãƒ‰
 
             int serverHighScore = 0;
 
@@ -401,30 +424,30 @@ public class FirestoreManager : MonoBehaviour
                 serverHighScore = snapshot.GetValue<int>("highScore");
             }
 
-            // ƒNƒ‰ƒEƒhƒf[ƒ^‚Æƒ[ƒJƒ‹ƒf[ƒ^‚Ì’l‚ğ”äŠr‚µ‚Ä‚‚¢•û‚ğƒ[ƒJƒ‹‚É“¯Šú
+            // ã‚¯ãƒ©ã‚¦ãƒ‰ãƒ‡ãƒ¼ã‚¿ã¨ãƒ­ãƒ¼ã‚«ãƒ«ãƒ‡ãƒ¼ã‚¿ã®å€¤ã‚’æ¯”è¼ƒã—ã¦é«˜ã„æ–¹ã‚’ãƒ­ãƒ¼ã‚«ãƒ«ã«åŒæœŸ
             GM.highScore = Math.Max(GM.highScore, serverHighScore);
             #endregion
 
-            #region playerExp‚Ìƒ[ƒh
+            #region playerScoreã®ãƒ­ãƒ¼ãƒ‰
             if (snapshot.ContainsField("playerScore"))
             {
-                //ƒ[ƒJƒ‹ƒLƒƒƒbƒVƒ…‚É“¯Šú
+                //ãƒ­ãƒ¼ã‚«ãƒ«ã‚­ãƒ£ãƒƒã‚·ãƒ¥ã«åŒæœŸ
                 GM.playerScore = snapshot.GetValue<int>("playerScore");
             }
             #endregion
 
-            #region trainingCount‚Ìƒ[ƒh
+            #region trainingCountã®ãƒ­ãƒ¼ãƒ‰
             if (snapshot.ContainsField("trainingCount"))
             {
                 Dictionary<string, object> rawData = snapshot.GetValue<Dictionary<string, object>>("trainingCount");
 
-                // Firestore‚Ì«‘ƒf[ƒ^‚ğ List<int> ‚É•ÏŠ·
+                // Firestoreã®è¾æ›¸ãƒ‡ãƒ¼ã‚¿ã‚’ List<int> ã«å¤‰æ›
                 foreach (var kvp in rawData)
                 {
-                    int index = int.Parse(kvp.Key); // key‚Í "0", "1", "2", ... ‚Ì‚æ‚¤‚È•¶š—ñ‚È‚Ì‚Å•ÏŠ·
+                    int index = int.Parse(kvp.Key); // keyã¯ "0", "1", "2", ... ã®ã‚ˆã†ãªæ–‡å­—åˆ—ãªã®ã§å¤‰æ›
                     int value = Convert.ToInt32(kvp.Value);
 
-                    // •K—v‚È‚çƒŠƒXƒg‚ğŠg’£
+                    // å¿…è¦ãªã‚‰ãƒªã‚¹ãƒˆã‚’æ‹¡å¼µ
                     while (GM.trainingClearCounts.Count <= index)
                     {
                         GM.trainingClearCounts.Add(0);
@@ -435,18 +458,18 @@ public class FirestoreManager : MonoBehaviour
             }
             #endregion
 
-            #region usingSkin‚Ìƒ[ƒh
+            #region usingSkinã®ãƒ­ãƒ¼ãƒ‰
             if (snapshot.ContainsField("usingSkin"))
             {
-                //ƒ[ƒJƒ‹ƒLƒƒƒbƒVƒ…‚É“¯Šú
+                //ãƒ­ãƒ¼ã‚«ãƒ«ã‚­ãƒ£ãƒƒã‚·ãƒ¥ã«åŒæœŸ
                 GM.usingSkinID = snapshot.GetValue<int>("usingSkin");
             }
             #endregion
 
-            #region runDistance‚Ìƒ[ƒh
+            #region runDistanceã®ãƒ­ãƒ¼ãƒ‰
             if (snapshot.ContainsField("runDistance"))
             {
-                //ƒ[ƒJƒ‹ƒLƒƒƒbƒVƒ…‚É“¯Šú
+                //ãƒ­ãƒ¼ã‚«ãƒ«ã‚­ãƒ£ãƒƒã‚·ãƒ¥ã«åŒæœŸ
                 GM.totalRunDistance = snapshot.GetValue<int>("runDistance");
             }
             #endregion
@@ -454,7 +477,7 @@ public class FirestoreManager : MonoBehaviour
         }
         catch (Exception e)
         {
-            Debug.LogError("ƒf[ƒ^‚Ìƒ[ƒh‚É¸”s: " + e.Message);
+            Debug.LogError("ãƒ‡ãƒ¼ã‚¿ã®ãƒ­ãƒ¼ãƒ‰ã«å¤±æ•—: " + e.Message);
             return false;
         }
 
@@ -464,13 +487,13 @@ public class FirestoreManager : MonoBehaviour
 
 
     /// <summary>
-    /// Firestore‚©‚çw’è‚µ‚½ƒXƒRƒAƒ‰ƒ“ƒLƒ“ƒO‚ğæ“¾
+    /// Firestoreã‹ã‚‰æŒ‡å®šã—ãŸã‚¹ã‚³ã‚¢ãƒ©ãƒ³ã‚­ãƒ³ã‚°ã‚’å–å¾—
     /// </summary>
-    /// <param name="scoreType">"highScore" ‚Ü‚½‚Í "playerScore"</param>
-    /// <returns>ƒ‰ƒ“ƒLƒ“ƒOãˆÊ10–¼‚ÌƒŠƒXƒg</returns>
+    /// <param name="scoreType">"highScore" ã¾ãŸã¯ "playerScore"</param>
+    /// <returns>ãƒ©ãƒ³ã‚­ãƒ³ã‚°ä¸Šä½10åã®ãƒªã‚¹ãƒˆ</returns>
     public async Task<List<(string name, int score, int experience, int skin)>> GetTop10Ranking(string scoreType)
     {
-        //ƒ‰ƒ“ƒLƒ“ƒO‚ÌƒŠƒXƒg
+        //ãƒ©ãƒ³ã‚­ãƒ³ã‚°ã®ãƒªã‚¹ãƒˆ
         List<(string name, int score, int experience, int skin)> ranking
             = new List<(string name, int score, int experience, int skin)>();
 
@@ -494,10 +517,10 @@ public class FirestoreManager : MonoBehaviour
         }
         catch (Exception e)
         {
-            Debug.LogError($"[Firestore] ƒ‰ƒ“ƒLƒ“ƒOæ“¾‚É¸”s: {e.Message}");
+            Debug.LogError($"[Firestore] ãƒ©ãƒ³ã‚­ãƒ³ã‚°å–å¾—ã«å¤±æ•—: {e.Message}");
         }
 
-        //æ“¾¸”s‚ÍList‚ğ‰Šú’l‚Å–„‚ß‚é
+        //å–å¾—å¤±æ•—æ™‚ã¯Listã‚’åˆæœŸå€¤ã§åŸ‹ã‚ã‚‹
         while(ranking.Count < RankingManager.RankingCount)
             ranking.Add(("Unknown", 0, 0, 0));
 
@@ -505,35 +528,35 @@ public class FirestoreManager : MonoBehaviour
     }
     
     /// <summary>
-    /// Firestore‚©‚çƒ†[ƒU[‚Ì‡ˆÊ‚ÆãˆÊ‰½%‚©‚ğæ“¾
+    /// Firestoreã‹ã‚‰ãƒ¦ãƒ¼ã‚¶ãƒ¼ã®é †ä½ã¨ä¸Šä½ä½•%ã‹ã‚’å–å¾—
     /// </summary>
-    /// <param name="scoreType">"highScore" ‚Ü‚½‚Í "playerScore"</param>
-    /// <param name="userScore">ƒ†[ƒU[‚ÌƒXƒRƒA</param>
-    /// <returns>(‡ˆÊ, ãˆÊ%)</returns>
+    /// <param name="scoreType">"highScore" ã¾ãŸã¯ "playerScore"</param>
+    /// <param name="userScore">ãƒ¦ãƒ¼ã‚¶ãƒ¼ã®ã‚¹ã‚³ã‚¢</param>
+    /// <returns>(é †ä½, ä¸Šä½%)</returns>
     public async Task<(int rank, float percentile)> GetUserRanking(string scoreType, int userScore)
     {
-        int rank = -1;  //‡ˆÊ‚ª-1‚È‚çƒGƒ‰[
+        int rank = -1;  //é †ä½ãŒ-1ãªã‚‰ã‚¨ãƒ©ãƒ¼
         float percentile = 0;
 
         try
         {
-            // ƒ†[ƒU[‚æ‚èƒXƒRƒA‚ª‚‚¢”‚ğæ“¾
+            // ãƒ¦ãƒ¼ã‚¶ãƒ¼ã‚ˆã‚Šã‚¹ã‚³ã‚¢ãŒé«˜ã„æ•°ã‚’å–å¾—
             Query countQuery = db.Collection("users").WhereGreaterThan(scoreType, userScore);
             QuerySnapshot countSnapshot = await countQuery.GetSnapshotAsync(Source.Server);
             int higherCount = countSnapshot.Count;
 
-            // ‘ƒ†[ƒU[”‚ğæ“¾
+            // ç·ãƒ¦ãƒ¼ã‚¶ãƒ¼æ•°ã‚’å–å¾—
             Query totalQuery = db.Collection("users");
             QuerySnapshot totalSnapshot = await totalQuery.GetSnapshotAsync(Source.Server);
             int totalUsers = totalSnapshot.Count;
 
-            // ƒ†[ƒU[‚Ì‡ˆÊ‚Æƒp[ƒZƒ“ƒ^ƒCƒ‹ŒvZ
+            // ãƒ¦ãƒ¼ã‚¶ãƒ¼ã®é †ä½ã¨ãƒ‘ãƒ¼ã‚»ãƒ³ã‚¿ã‚¤ãƒ«è¨ˆç®—
             rank = higherCount + 1;
             percentile = (float)rank / (float)totalUsers * 100;
         }
         catch (Exception e)
         {
-            Debug.LogError($"[Firestore] ƒ†[ƒU[‡ˆÊæ“¾‚É¸”s: {e.Message}");
+            Debug.LogError($"[Firestore] ãƒ¦ãƒ¼ã‚¶ãƒ¼é †ä½å–å¾—ã«å¤±æ•—: {e.Message}");
         }
 
         return (rank, percentile);
@@ -542,38 +565,49 @@ public class FirestoreManager : MonoBehaviour
 
 
     /// <summary>
-    /// ƒXƒ^ƒ~ƒi‚ÌÅVó‘Ô‚ğæ“¾
-    /// ƒXƒ^ƒ~ƒi‰ñ•œEL‹’®‰ñ”ƒŠƒZƒbƒg‚à‚±‚±‚ÅÀs
+    /// ã‚¹ã‚¿ãƒŸãƒŠã®æœ€æ–°çŠ¶æ…‹ã‚’å–å¾—
+    /// ã‚¹ã‚¿ãƒŸãƒŠå›å¾©ãƒ»åºƒå‘Šè¦–è´å›æ•°ãƒªã‚»ãƒƒãƒˆã‚‚ã“ã“ã§å®Ÿè¡Œ
     /// </summary>
     public async Task<int> CheckResetAndGetStamina()
     {
+        
+
+
+        
+#if UNITY_EDITOR
+        Debug.Log("Skipping Firebase init in editor to avoid native plugin errors.");
+        return -1;
+#endif
+
+
+
         if (auth.CurrentUser == null)
         {
-            Debug.LogError("Firebase”FØ‚³‚ê‚Ä‚¢‚Ü‚¹‚ñ");
-            return -1; //ˆÙíI—¹
+            Debug.LogError("Firebaseèªè¨¼ã•ã‚Œã¦ã„ã¾ã›ã‚“");
+            return -1; //ç•°å¸¸çµ‚äº†
         }
 
         try
         {
             DocumentReference docRef = db.Collection("users").Document(auth.CurrentUser.UserId);
 
-            //ƒIƒ“ƒ‰ƒCƒ“ê—p‰»
+            //ã‚ªãƒ³ãƒ©ã‚¤ãƒ³å°‚ç”¨åŒ–
             DocumentSnapshot snapshot = await docRef.GetSnapshotAsync(Source.Server);
 
             if (!snapshot.ContainsField("stamina") || !snapshot.ContainsField("lastUpdated"))
             {
-                //ƒXƒ^ƒ~ƒi‚Ìƒf[ƒ^‚ª‘¶İ‚µ‚È‚¯‚ê‚ÎÅ‘å’l‚Å‰Šú‰»
+                //ã‚¹ã‚¿ãƒŸãƒŠã®ãƒ‡ãƒ¼ã‚¿ãŒå­˜åœ¨ã—ãªã‘ã‚Œã°æœ€å¤§å€¤ã§åˆæœŸåŒ–
                 await docRef.SetAsync(new { stamina = maxStamina, lastUpdated = Timestamp.GetCurrentTimestamp() }, SetOptions.MergeAll);
             }
 
-            //Œ»İ‚ÌƒXƒ^ƒ~ƒi‚ğæ“¾
+            //ç¾åœ¨ã®ã‚¹ã‚¿ãƒŸãƒŠã‚’å–å¾—
             int currentStamina = snapshot.GetValue<int>("stamina");
 
-            //‘O‰ñ‚ÌƒXƒ^ƒ~ƒiî•ñXV“ú
+            //å‰å›ã®ã‚¹ã‚¿ãƒŸãƒŠæƒ…å ±æ›´æ–°æ—¥æ™‚
             Timestamp lastUpdatedTimestamp = snapshot.GetValue<Timestamp>("lastUpdated");
             DateTime lastUpdated = lastUpdatedTimestamp.ToDateTime();
 
-            //’¼‹ß‚ÌƒXƒ^ƒ~ƒi‰ñ•œ“ú
+            //ç›´è¿‘ã®ã‚¹ã‚¿ãƒŸãƒŠå›å¾©æ—¥æ™‚
             DateTime now = DateTime.UtcNow;
             DateTime lastReset = new DateTime(now.Year, now.Month, now.Day, resetStaminaHour, 0, 0, DateTimeKind.Utc);
             if (now.Hour < resetStaminaHour)
@@ -581,12 +615,12 @@ public class FirestoreManager : MonoBehaviour
                 lastReset = lastReset.AddDays(-1);
             }
 
-            //‘O‰ñ‚ÌƒXƒ^ƒ~ƒiî•ñXV‚ª’¼‹ß‚ÌƒXƒ^ƒ~ƒi‰ñ•œ“ú‚æ‚è‘O‚È‚çƒXƒ^ƒ~ƒi‰ñ•œ
+            //å‰å›ã®ã‚¹ã‚¿ãƒŸãƒŠæƒ…å ±æ›´æ–°ãŒç›´è¿‘ã®ã‚¹ã‚¿ãƒŸãƒŠå›å¾©æ—¥æ™‚ã‚ˆã‚Šå‰ãªã‚‰ã‚¹ã‚¿ãƒŸãƒŠå›å¾©
             if (lastUpdated < lastReset)
             {
                 int newStamina = Mathf.Max(currentStamina, maxStamina);
 
-                //“¯‚ÉL‹’®‰ñ”‚àƒŠƒZƒbƒg
+                //åŒæ™‚ã«åºƒå‘Šè¦–è´å›æ•°ã‚‚ãƒªã‚»ãƒƒãƒˆ
                 await docRef.SetAsync(new { 
                     stamina = newStamina, 
                     lastUpdated = Timestamp.GetCurrentTimestamp(),
@@ -601,27 +635,27 @@ public class FirestoreManager : MonoBehaviour
         }
         catch (Exception e)
         {
-            Debug.LogError("ƒXƒ^ƒ~ƒi‚Ìæ“¾‚É¸”s: " + e.Message);
-            return -1; //ˆÙíI—¹
+            Debug.LogError("ã‚¹ã‚¿ãƒŸãƒŠã®å–å¾—ã«å¤±æ•—: " + e.Message);
+            return -1; //ç•°å¸¸çµ‚äº†
         }
     }
 
     /// <summary>
-    /// ƒXƒ^ƒ~ƒi‚ğÁ”ï
+    /// ã‚¹ã‚¿ãƒŸãƒŠã‚’æ¶ˆè²»
     /// </summary>
     public async Task<int> UseStamina()
     {
         if (auth.CurrentUser == null)
         {
-            Debug.LogError("Firebase”FØ‚³‚ê‚Ä‚¢‚Ü‚¹‚ñ");
-            return -2; //ˆÙíI—¹
+            Debug.LogError("Firebaseèªè¨¼ã•ã‚Œã¦ã„ã¾ã›ã‚“");
+            return -2; //ç•°å¸¸çµ‚äº†
         }
 
         try
         {
             DocumentReference docRef = db.Collection("users").Document(auth.CurrentUser.UserId);
 
-            int returnValue = -2; // •ÏX‚ª–³‚¯‚ê‚ÎˆÙíI—¹‚Æ‚µ‚Äˆµ‚¤
+            int returnValue = -2; // å¤‰æ›´ãŒç„¡ã‘ã‚Œã°ç•°å¸¸çµ‚äº†ã¨ã—ã¦æ‰±ã†
 
             await db.RunTransactionAsync(async transaction =>
             {
@@ -644,27 +678,27 @@ public class FirestoreManager : MonoBehaviour
         }
         catch (Exception e)
         {
-            Debug.LogError("ƒXƒ^ƒ~ƒi‚ÌÁ”ï‚É¸”s: " + e.Message);
-            return -2; //ˆÙíI—¹
+            Debug.LogError("ã‚¹ã‚¿ãƒŸãƒŠã®æ¶ˆè²»ã«å¤±æ•—: " + e.Message);
+            return -2; //ç•°å¸¸çµ‚äº†
         }
     }
 
     /// <summary>
-    /// ƒXƒ^ƒ~ƒi‚ğ‰ñ•œ
+    /// ã‚¹ã‚¿ãƒŸãƒŠã‚’å›å¾©
     /// </summary>
     public async Task<int> AddStamina(int addNum)
     {
         if (auth.CurrentUser == null)
         {
-            Debug.LogError("Firebase”FØ‚³‚ê‚Ä‚¢‚Ü‚¹‚ñ");
-            return -2; //ˆÙíI—¹
+            Debug.LogError("Firebaseèªè¨¼ã•ã‚Œã¦ã„ã¾ã›ã‚“");
+            return -2; //ç•°å¸¸çµ‚äº†
         }
 
         try
         {
             DocumentReference docRef = db.Collection("users").Document(auth.CurrentUser.UserId);
 
-            int returnValue = -2; // •ÏX‚ª–³‚¯‚ê‚ÎˆÙíI—¹‚Æ‚µ‚Äˆµ‚¤
+            int returnValue = -2; // å¤‰æ›´ãŒç„¡ã‘ã‚Œã°ç•°å¸¸çµ‚äº†ã¨ã—ã¦æ‰±ã†
 
             await db.RunTransactionAsync(async transaction =>
             {
@@ -674,13 +708,13 @@ public class FirestoreManager : MonoBehaviour
                 int currentStamina = snapshot.GetValue<int>("stamina");
                 int currentAdWatchCount = snapshot.GetValue<int>("adWatchCount");
 
-                //Šù‚É3‰ñˆÈãL‚ğ‹’®‚µ‚Ä‚¢‚ê‚Î‰ñ•œ‚µ‚È‚¢
+                //æ—¢ã«3å›ä»¥ä¸Šåºƒå‘Šã‚’è¦–è´ã—ã¦ã„ã‚Œã°å›å¾©ã—ãªã„
                 if (currentAdWatchCount >= 3)
                 {
                     return false;
                 }
 
-                //L‹’®‰ñ”‚ğ‰ÁZ‚µ‚Â‚ÂƒXƒ^ƒ~ƒi‰ñ•œ
+                //åºƒå‘Šè¦–è´å›æ•°ã‚’åŠ ç®—ã—ã¤ã¤ã‚¹ã‚¿ãƒŸãƒŠå›å¾©
                 transaction.Set(docRef, new { 
                     stamina = currentStamina + 2, 
                     adWatchCount = currentAdWatchCount + 1 
@@ -695,29 +729,29 @@ public class FirestoreManager : MonoBehaviour
         }
         catch (Exception e)
         {
-            Debug.LogError("ƒXƒ^ƒ~ƒi‚Ì‰ñ•œ‚É¸”s: " + e.Message);
-            return -2; //ˆÙíI—¹
+            Debug.LogError("ã‚¹ã‚¿ãƒŸãƒŠã®å›å¾©ã«å¤±æ•—: " + e.Message);
+            return -2; //ç•°å¸¸çµ‚äº†
         }
     }
 
 
 
     /// <summary>
-    /// L‹’®‰ñ”‚ğæ“¾
+    /// åºƒå‘Šè¦–è´å›æ•°ã‚’å–å¾—
     /// </summary>
     public async Task<int> GetAdWatchCount()
     {
         if (auth.CurrentUser == null)
         {
-            Debug.LogError("Firebase”FØ‚³‚ê‚Ä‚¢‚Ü‚¹‚ñ");
-            return 4; //ˆÙíI—¹
+            Debug.LogError("Firebaseèªè¨¼ã•ã‚Œã¦ã„ã¾ã›ã‚“");
+            return 4; //ç•°å¸¸çµ‚äº†
         }
 
         try
         {
             DocumentReference docRef = db.Collection("users").Document(auth.CurrentUser.UserId);
 
-            //ƒIƒ“ƒ‰ƒCƒ“ê—p‰»
+            //ã‚ªãƒ³ãƒ©ã‚¤ãƒ³å°‚ç”¨åŒ–
             DocumentSnapshot snapshot = await docRef.GetSnapshotAsync(Source.Server);
 
 
@@ -727,14 +761,14 @@ public class FirestoreManager : MonoBehaviour
             }
             else
             {
-                //L‹’®‰ñ”‚Ìƒf[ƒ^‚ª‘¶İ‚µ‚È‚¯‚ê‚Î‰Šú’l‚ğ•Ô‚·
+                //åºƒå‘Šè¦–è´å›æ•°ã®ãƒ‡ãƒ¼ã‚¿ãŒå­˜åœ¨ã—ãªã‘ã‚Œã°åˆæœŸå€¤ã‚’è¿”ã™
                 return 0;
             }
         }
         catch (Exception e)
         {
-            Debug.LogError("L‹’®‰ñ”‚Ìæ“¾‚É¸”s: " + e.Message);
-            return 4; //ˆÙíI—¹
+            Debug.LogError("åºƒå‘Šè¦–è´å›æ•°ã®å–å¾—ã«å¤±æ•—: " + e.Message);
+            return 4; //ç•°å¸¸çµ‚äº†
         }
     }
 
@@ -743,7 +777,7 @@ public class FirestoreManager : MonoBehaviour
 
 
     /// <summary>
-    /// V‹Kƒf[ƒ^ì¬
+    /// æ–°è¦ãƒ‡ãƒ¼ã‚¿ä½œæˆ
     /// </summary>
     public async Task<bool> SaveNewPlayerData()
     {
@@ -767,7 +801,7 @@ public class FirestoreManager : MonoBehaviour
         {
             await docRef.SetAsync(newData);
 
-            #region ƒ[ƒJƒ‹ƒf[ƒ^‚à‰Šú‰»
+            #region ãƒ­ãƒ¼ã‚«ãƒ«ãƒ‡ãƒ¼ã‚¿ã‚‚åˆæœŸåŒ–
             HighScoreManager.Save(0);
             RankingScoreManager.Save(new Queue<int>());
             UnsavedHighScoreFlagManager.Save(false);
@@ -775,12 +809,12 @@ public class FirestoreManager : MonoBehaviour
             GM.rankingScoreQueue.Clear();
             #endregion
 
-            //³íI—¹
+            //æ­£å¸¸çµ‚äº†
             return true;
         }
         catch (Exception e)
         {
-            //ˆÙíI—¹
+            //ç•°å¸¸çµ‚äº†
             return false;
         }
     }
@@ -788,7 +822,7 @@ public class FirestoreManager : MonoBehaviour
 
 
     /// <summary>
-    /// ƒf[ƒ^íœ
+    /// ãƒ‡ãƒ¼ã‚¿å‰Šé™¤
     /// </summary>
     public async Task DeleteDocument(string documentId)
     {
@@ -796,11 +830,11 @@ public class FirestoreManager : MonoBehaviour
         {
             DocumentReference docRef = db.Collection("users").Document(documentId);
             await docRef.DeleteAsync();
-            Debug.Log($"ƒhƒLƒ…ƒƒ“ƒg {documentId} ‚ğíœ‚µ‚Ü‚µ‚½");
+            Debug.Log($"ãƒ‰ã‚­ãƒ¥ãƒ¡ãƒ³ãƒˆ {documentId} ã‚’å‰Šé™¤ã—ã¾ã—ãŸ");
         }
         catch (System.Exception e)
         {
-            Debug.LogError($"ƒhƒLƒ…ƒƒ“ƒgíœƒGƒ‰[: {e.Message}");
+            Debug.LogError($"ãƒ‰ã‚­ãƒ¥ãƒ¡ãƒ³ãƒˆå‰Šé™¤ã‚¨ãƒ©ãƒ¼: {e.Message}");
             Debug.Log(documentId);
         }
     }

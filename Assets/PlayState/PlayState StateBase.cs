@@ -28,17 +28,17 @@ public abstract class PlayStateStateBase
 
     public virtual void Update(float deltaTime)
     {
-        //ƒvƒŒƒCŠÔ‰ÁZ
+        //ãƒ—ãƒ¬ã‚¤æ™‚é–“åŠ ç®—
         playTime += deltaTime;
 
-        //ˆÚ“®’†‚Ì’nŒ`‚ğŠÇ—
+        //ç§»å‹•ä¸­ã®åœ°å½¢ã‚’ç®¡ç†
         TM.ManageMovingTerrain();
 
-        //ƒXƒRƒAXV
+        //ã‚¹ã‚³ã‚¢æ›´æ–°
         GM.score = (int)(playTime * 100);
         scoreText.SetText("" + GM.score);
 
-        //ƒXƒRƒAƒQ[ƒW’²®
+        //ã‚¹ã‚³ã‚¢ã‚²ãƒ¼ã‚¸èª¿æ•´
         if (GM.isTraining)
             scoreGageTf.localScale = Vector3.right + Vector3.forward + Vector3.up * GM.score / 5000f * 2;
         else if (GM.highScore != 0)

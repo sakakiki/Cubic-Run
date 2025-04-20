@@ -33,52 +33,52 @@ public class RankingBoard: MonoBehaviour, IPointerDownHandler
             gameStateMachine = GameManager.Instance.gameStateMachine;
     }
 
-    //ƒ^ƒbƒvFƒ^ƒbƒv‚ÉÀs
-    //ƒ}ƒEƒXFƒNƒŠƒbƒN‚ÉÀs
+    //ã‚¿ãƒƒãƒ—ï¼šã‚¿ãƒƒãƒ—æ™‚ã«å®Ÿè¡Œ
+    //ãƒã‚¦ã‚¹ï¼šã‚¯ãƒªãƒƒã‚¯æ™‚ã«å®Ÿè¡Œ
     public async void OnPointerDown(PointerEventData eventData)
     {
-        //ƒƒjƒ…[‰æ–Ê‚Å‚È‚¯‚ê‚Î‰½‚à‚µ‚È‚¢
+        //ãƒ¡ãƒ‹ãƒ¥ãƒ¼ç”»é¢ã§ãªã‘ã‚Œã°ä½•ã‚‚ã—ãªã„
         if (gameStateMachine.currentState != gameStateMachine.state_Menu) return;
 
-        //SE‚ÌÄ¶
+        //SEã®å†ç”Ÿ
         AudioManager.Instance.PlaySE(AudioManager.Instance.SE_Close);
 
-        //‚±‚ÌƒXƒNƒŠƒvƒg‚ğ–³Œø‰»
+        //ã“ã®ã‚¹ã‚¯ãƒªãƒ—ãƒˆã‚’ç„¡åŠ¹åŒ–
         this.enabled = false;
 
         await UpdateRanking();
 
-        //•¶š‚ğ”Z‚­
+        //æ–‡å­—ã‚’æ¿ƒã
         tabText.color = Color.black;
 
-        //‘¼•û‚ÌƒXƒNƒŠƒvƒg‚ğ—LŒø‰»
+        //ä»–æ–¹ã®ã‚¹ã‚¯ãƒªãƒ—ãƒˆã‚’æœ‰åŠ¹åŒ–
         anotherTab.enabled = true;
     }
 
 
 
-    //î•ñ‚Ìæ“¾E•\¦‚ÌXV
+    //æƒ…å ±ã®å–å¾—ãƒ»è¡¨ç¤ºã®æ›´æ–°
     public async Task UpdateRanking()
     {
-        //ƒXƒNƒŠƒvƒg‚ª—LŒøó‘Ô‚È‚ç‰½‚à‚µ‚È‚¢
+        //ã‚¹ã‚¯ãƒªãƒ—ãƒˆãŒæœ‰åŠ¹çŠ¶æ…‹ãªã‚‰ä½•ã‚‚ã—ãªã„
         if (this.enabled) return;
 
-        //•p“x§ŒÀ•t‚«ƒ‰ƒ“ƒLƒ“ƒOXV
+        //é »åº¦åˆ¶é™ä»˜ããƒ©ãƒ³ã‚­ãƒ³ã‚°æ›´æ–°
         await RankingManager.CheckUpdateNecessity(RankingType);
 
-        //ƒ‰ƒ“ƒLƒ“ƒO•\¦ˆÊ’u‚ğ1ˆÊ‚ÌêŠ‚É–ß‚·
+        //ãƒ©ãƒ³ã‚­ãƒ³ã‚°è¡¨ç¤ºä½ç½®ã‚’1ä½ã®å ´æ‰€ã«æˆ»ã™
         contentFieldRtf.localPosition = Vector2.zero;
 
-        //ƒpƒlƒ‹‚ÉF‚ª‚Â‚¢‚Ä‚¢‚ê‚ÎƒŠƒZƒbƒg
+        //ãƒ‘ãƒãƒ«ã«è‰²ãŒã¤ã„ã¦ã„ã‚Œã°ãƒªã‚»ãƒƒãƒˆ
         for (int i = 0; i < panelCovers.Length; i++)
             panelCovers[i].color = Color.clear;
 
-        //ƒ‰ƒ“ƒLƒ“ƒO•\¦XV
+        //ãƒ©ãƒ³ã‚­ãƒ³ã‚°è¡¨ç¤ºæ›´æ–°
         switch (RankingType)
         {
             case RankingType.HighScore:
 
-                //ƒgƒbƒv10ƒ‰ƒ“ƒLƒ“ƒO‚Ì”½‰f
+                //ãƒˆãƒƒãƒ—10ãƒ©ãƒ³ã‚­ãƒ³ã‚°ã®åæ˜ 
                 for (int i = 0; RankingManager.rankingList_highScore.Count > i; i++)
                 {
                     scoreTexts[i].SetText(RankingManager.rankingList_highScore[i].score.ToString());
@@ -90,14 +90,14 @@ public class RankingBoard: MonoBehaviour, IPointerDownHandler
                     playerRankTexts[i].SetText(GM.CalculatePlayerRank(RankingManager.rankingList_highScore[i].experience).ToString());
                 }
 
-                //ƒ†[ƒU[‚Ì•\¦‚ğXV
-                scoreNameText.SetText("ƒnƒCƒXƒRƒA");
+                //ãƒ¦ãƒ¼ã‚¶ãƒ¼ã®è¡¨ç¤ºã‚’æ›´æ–°
+                scoreNameText.SetText("ãƒã‚¤ã‚¹ã‚³ã‚¢");
                 userScoreText.SetText((GM.highScore).ToString());
                 userRankPercentileText.SetText(
-                    RankingManager.userRankData_highScore.userRank + "ˆÊ\nãˆÊ" +
+                    RankingManager.userRankData_highScore.userRank + "ä½\nä¸Šä½" +
                     RankingManager.userRankData_highScore.userPercentile.ToString("F1", CultureInfo.CurrentCulture) + "%");
 
-                //ƒ†[ƒU[‚ªƒgƒbƒv10‚É“ü‚Á‚Ä‚¢‚ê‚Îƒpƒlƒ‹‚ğ–Ú—§‚½‚¹‚é
+                //ãƒ¦ãƒ¼ã‚¶ãƒ¼ãŒãƒˆãƒƒãƒ—10ã«å…¥ã£ã¦ã„ã‚Œã°ãƒ‘ãƒãƒ«ã‚’ç›®ç«‹ãŸã›ã‚‹
                 if (RankingManager.userRankData_highScore.userRank <= RankingManager.rankingList_highScore.Count
                     && RankingManager.userRankData_highScore.userRank > 0)
                     panelCovers[RankingManager.userRankData_highScore.userRank - 1].color 
@@ -109,7 +109,7 @@ public class RankingBoard: MonoBehaviour, IPointerDownHandler
 
             case RankingType.PlayerScore:
 
-                //ƒgƒbƒv10ƒ‰ƒ“ƒLƒ“ƒO‚Ì”½‰f
+                //ãƒˆãƒƒãƒ—10ãƒ©ãƒ³ã‚­ãƒ³ã‚°ã®åæ˜ 
                 for (int i = 0; RankingManager.rankingList_playerScore.Count > i; i++)
                 {
                     scoreTexts[i].SetText(RankingManager.rankingList_playerScore[i].score.ToString());
@@ -121,14 +121,14 @@ public class RankingBoard: MonoBehaviour, IPointerDownHandler
                     playerRankTexts[i].SetText(GM.CalculatePlayerRank(RankingManager.rankingList_playerScore[i].experience).ToString());
                 }
 
-                //ƒ†[ƒU[‚Ì•\¦‚ğXV
-                scoreNameText.SetText("ƒvƒŒƒCƒ„[ƒXƒRƒA");
+                //ãƒ¦ãƒ¼ã‚¶ãƒ¼ã®è¡¨ç¤ºã‚’æ›´æ–°
+                scoreNameText.SetText("ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã‚¹ã‚³ã‚¢");
                 userScoreText.SetText(GM.GetPlayerScore().ToString());
                 userRankPercentileText.SetText(
-                    RankingManager.userRankData_playerScore.userRank + "ˆÊ\nãˆÊ" +
+                    RankingManager.userRankData_playerScore.userRank + "ä½\nä¸Šä½" +
                     RankingManager.userRankData_playerScore.userPercentile.ToString("F1", CultureInfo.CurrentCulture) + "%");
 
-                //ƒ†[ƒU[‚ªƒgƒbƒv10‚É“ü‚Á‚Ä‚¢‚ê‚Îƒpƒlƒ‹‚ğ–Ú—§‚½‚¹‚é
+                //ãƒ¦ãƒ¼ã‚¶ãƒ¼ãŒãƒˆãƒƒãƒ—10ã«å…¥ã£ã¦ã„ã‚Œã°ãƒ‘ãƒãƒ«ã‚’ç›®ç«‹ãŸã›ã‚‹
                 if (RankingManager.userRankData_playerScore.userRank <= RankingManager.rankingList_playerScore.Count
                     && RankingManager.userRankData_playerScore.userRank > 0)
                     panelCovers[RankingManager.userRankData_playerScore.userRank - 1].color
@@ -140,10 +140,10 @@ public class RankingBoard: MonoBehaviour, IPointerDownHandler
 
 
 
-    //ƒXƒNƒŠƒvƒg‚ª—LŒø‰»i‘I‘ğ‰ğœj
+    //ã‚¹ã‚¯ãƒªãƒ—ãƒˆãŒæœ‰åŠ¹åŒ–ï¼ˆé¸æŠè§£é™¤ï¼‰æ™‚
     private void OnEnable()
     {
-        //•¶š‚ğ”–‚­
+        //æ–‡å­—ã‚’è–„ã
         tabText.color = Color.gray;
     }
 }

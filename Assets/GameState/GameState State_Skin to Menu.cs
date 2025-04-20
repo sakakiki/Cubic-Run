@@ -24,26 +24,26 @@ public class GameStateState_SkinToMenu : GameStateStateBase
 
     public async override void Enter()
     {
-        //Œo‰ßŠÔƒŠƒZƒbƒg
+        //çµŒéæ™‚é–“ãƒªã‚»ãƒƒãƒˆ
         elapsedTime = 0;
 
-        //ƒtƒ‰ƒOƒŠƒZƒbƒg
+        //ãƒ•ãƒ©ã‚°ãƒªã‚»ãƒƒãƒˆ
         isMoving = false;
         isNeedReset = !IM.isSkinSelect;
 
-        //ƒŠƒZƒbƒg‚Ì•K—v‚ª–³‚¯‚ê‚Î
+        //ãƒªã‚»ãƒƒãƒˆã®å¿…è¦ãŒç„¡ã‘ã‚Œã°
         if (!isNeedReset)
         {
-            //g—p’†‚ÌƒXƒLƒ“î•ñ‚ğƒNƒ‰ƒEƒh‚É•Û‘¶
+            //ä½¿ç”¨ä¸­ã®ã‚¹ã‚­ãƒ³æƒ…å ±ã‚’ã‚¯ãƒ©ã‚¦ãƒ‰ã«ä¿å­˜
             await FirestoreManager.Instance.SaveUsingSkin();
 
-            //ƒ‰ƒ“ƒLƒ“ƒO‚ğXV
+            //ãƒ©ãƒ³ã‚­ãƒ³ã‚°ã‚’æ›´æ–°
             await RankingManager.UpdateRanking(RankingManager.RankingType.HighScore);
             await RankingManager.UpdateRanking(RankingManager.RankingType.PlayerScore);
             GM.highScoreRankingBoard.UpdateRanking();
             GM.playerScoreRankingBoard.UpdateRanking();
         }
-        //ƒŠƒZƒbƒg‚ª•K—v‚È‚çUI‚ÌF‚¾‚¯æ‚É–ß‚·
+        //ãƒªã‚»ãƒƒãƒˆãŒå¿…è¦ãªã‚‰UIã®è‰²ã ã‘å…ˆã«æˆ»ã™
         else GM.ChangeUIColor(GM.previousSkinID);
     }
 
@@ -51,49 +51,49 @@ public class GameStateState_SkinToMenu : GameStateStateBase
 
     public override void Update(float deltaTime)
     {
-        //Œo‰ßŠÔ‰ÁZ
+        //çµŒéæ™‚é–“åŠ ç®—
         elapsedTime += deltaTime;
 
-        //’nŒ`‚ğŠÇ—
+        //åœ°å½¢ã‚’ç®¡ç†
         TM.ManageMovingTerrain();
 
-        //0.5•b‘Ò‹@
+        //0.5ç§’å¾…æ©Ÿ
         if (elapsedTime < 0.5) return;
 
-        //ƒXƒLƒ“ƒZƒŒƒNƒ^[ƒXƒNƒŠƒvƒg‚ÌÄ—LŒø‰»iSkinƒXƒe[ƒg‚É‚Ä–³Œø‰»j
+        //ã‚¹ã‚­ãƒ³ã‚»ãƒ¬ã‚¯ã‚¿ãƒ¼ã‚¹ã‚¯ãƒªãƒ—ãƒˆã®å†æœ‰åŠ¹åŒ–ï¼ˆSkinã‚¹ãƒ†ãƒ¼ãƒˆã«ã¦ç„¡åŠ¹åŒ–ï¼‰
         if (!isMoving)
         {
             isMoving = true;
             skinSelecter.enabled = true;
         }
 
-        //–‘OŒvZ
+        //äº‹å‰è¨ˆç®—
         float lerpValue = (elapsedTime - 0.5f) / 1.5f;
 
-        //UI‚ğ‰ñ“]
+        //UIã‚’å›è»¢
         menuHingeRtf_L.localEulerAngles = Vector3.Lerp(Vector3.up * -180, Vector3.zero, lerpValue);
         menuHingeRtf_R.localEulerAngles = Vector3.Lerp(Vector3.up * 180, Vector3.zero, lerpValue);
         skinHingeRtf_U.localEulerAngles = Vector3.Lerp(Vector3.zero, Vector3.right * -180, lerpValue);
         skinHingeRtf_B.localEulerAngles = Vector3.Lerp(Vector3.zero, Vector3.right * 180, Mathf.Pow(lerpValue, 1.7f));
 
-        //1.5•bŒo‰ß‚Ü‚Åc‚è‚Ìˆ—‚ğ”ò‚Î‚·
+        //1.5ç§’çµŒéã¾ã§æ®‹ã‚Šã®å‡¦ç†ã‚’é£›ã°ã™
         if (elapsedTime < 1.5) return;
 
-        //ƒŠƒZƒbƒg‚Ì•K—v‚ª‚ ‚é‚È‚ç
+        //ãƒªã‚»ãƒƒãƒˆã®å¿…è¦ãŒã‚ã‚‹ãªã‚‰
         if (isNeedReset)
         {
-            //ƒŠƒZƒbƒg—v‹ƒtƒ‰ƒO‚ğ‰º‚ë‚·
+            //ãƒªã‚»ãƒƒãƒˆè¦æ±‚ãƒ•ãƒ©ã‚°ã‚’ä¸‹ã‚ã™
             isNeedReset = false;
 
-            //ƒXƒLƒ“‚ÌF‚ğ–ß‚·
+            //ã‚¹ã‚­ãƒ³ã®è‰²ã‚’æˆ»ã™
             GM.ChangePlayerSkin(GM.previousSkinID);
 
-            //ƒ‰ƒ“ƒLƒ“ƒO‚ğXV
+            //ãƒ©ãƒ³ã‚­ãƒ³ã‚°ã‚’æ›´æ–°
             GM.highScoreRankingBoard.UpdateRanking();
             GM.playerScoreRankingBoard.UpdateRanking();
         }
 
-        //w’èŠÔŒo‰ß‚ÅƒXƒe[ƒg‘JˆÚ
+        //æŒ‡å®šæ™‚é–“çµŒéã§ã‚¹ãƒ†ãƒ¼ãƒˆé·ç§»
         if (elapsedTime > 2)
             stateMachine.ChangeState(stateMachine.state_Menu);
     }
@@ -102,11 +102,11 @@ public class GameStateState_SkinToMenu : GameStateStateBase
 
     public override async void Exit()
     {
-        //•K—v‚É‰‚¶‚ÄƒXƒLƒ“ƒZƒŒƒNƒ^[‚ğ‰ñ“]
+        //å¿…è¦ã«å¿œã˜ã¦ã‚¹ã‚­ãƒ³ã‚»ãƒ¬ã‚¯ã‚¿ãƒ¼ã‚’å›è»¢
         if (!IM.isSkinSelect)
             skinSelecter.SetWheelAngle(GM.previousSkinID);
 
-        //ƒXƒLƒ“ƒZƒŒƒNƒ^[ƒXƒNƒŠƒvƒg‚Ì–³Œø‰»
+        //ã‚¹ã‚­ãƒ³ã‚»ãƒ¬ã‚¯ã‚¿ãƒ¼ã‚¹ã‚¯ãƒªãƒ—ãƒˆã®ç„¡åŠ¹åŒ–
         skinSelecter.enabled = false;
     }
 }

@@ -9,66 +9,66 @@ public class Button_Push : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 
     private void Start()
     {
-        //Šî–{‚ÌƒXƒP[ƒ‹‚ğ‹L‰¯
+        //åŸºæœ¬ã®ã‚¹ã‚±ãƒ¼ãƒ«ã‚’è¨˜æ†¶
         defaultScale = transform.localScale;
     }
 
-    //ƒ^ƒbƒvFƒ^ƒbƒv‚ÉÀs
-    //ƒ}ƒEƒXFƒNƒŠƒbƒN‚ÉÀs
+    //ã‚¿ãƒƒãƒ—ï¼šã‚¿ãƒƒãƒ—æ™‚ã«å®Ÿè¡Œ
+    //ãƒã‚¦ã‚¹ï¼šã‚¯ãƒªãƒƒã‚¯æ™‚ã«å®Ÿè¡Œ
     public void OnPointerDown(PointerEventData eventData)
     {
-        //ƒXƒP[ƒ‹‚ğŠg‘å
+        //ã‚¹ã‚±ãƒ¼ãƒ«ã‚’æ‹¡å¤§
         transform.localScale *= 1.05f;
 
-        //ƒJƒo[‚ğ’…F
+        //ã‚«ãƒãƒ¼ã‚’ç€è‰²
         cover.color = GameManager.Instance.panelSelectedColor - Color.black * 0.95f;
 
-        //SE‚ğÄ¶
+        //SEã‚’å†ç”Ÿ
         AudioManager.Instance.PlaySE(AudioManager.Instance.SE_Button);
     }
 
-    //ƒ^ƒbƒvFƒ^ƒbƒvŒã‚Éw‚ª‰æ–Ê‚©‚ç—£‚ê‚½‚Æ‚«Aw‚ÌêŠ‚ÉŠÖ‚í‚ç‚¸Às
-    //ƒ}ƒEƒXFƒNƒŠƒbƒNŒã‚Éƒ}ƒEƒXƒ{ƒ^ƒ“‚ğ—£‚µ‚½‚Æ‚«AƒJ[ƒ\ƒ‹‚ÌˆÊ’u‚ÉŠÖ‚í‚ç‚¸Às
+    //ã‚¿ãƒƒãƒ—ï¼šã‚¿ãƒƒãƒ—å¾Œã«æŒ‡ãŒç”»é¢ã‹ã‚‰é›¢ã‚ŒãŸã¨ãã€æŒ‡ã®å ´æ‰€ã«é–¢ã‚ã‚‰ãšå®Ÿè¡Œ
+    //ãƒã‚¦ã‚¹ï¼šã‚¯ãƒªãƒƒã‚¯å¾Œã«ãƒã‚¦ã‚¹ãƒœã‚¿ãƒ³ã‚’é›¢ã—ãŸã¨ãã€ã‚«ãƒ¼ã‚½ãƒ«ã®ä½ç½®ã«é–¢ã‚ã‚‰ãšå®Ÿè¡Œ
     public void OnPointerUp(PointerEventData eventData)
     {
-        //ƒXƒP[ƒ‹‚ğŠî–{‚ÌƒXƒP[ƒ‹‚É–ß‚·
+        //ã‚¹ã‚±ãƒ¼ãƒ«ã‚’åŸºæœ¬ã®ã‚¹ã‚±ãƒ¼ãƒ«ã«æˆ»ã™
         transform.localScale = defaultScale;
 
-        //ƒJƒo[‚ğ“§–¾‚É
+        //ã‚«ãƒãƒ¼ã‚’é€æ˜ã«
         cover.color = Color.clear;
     }
 
-    //ƒ^ƒbƒvFƒ^ƒbƒvŒã‚Éw‚ª‰æ–Ê‚©‚ç—£‚ê‚½‚Æ‚«Aw‚ªƒIƒuƒWƒFƒNƒgã‚È‚çÀs
-    //ƒ}ƒEƒXFƒNƒŠƒbƒNŒã‚Éƒ}ƒEƒXƒ{ƒ^ƒ“‚ğ—£‚µ‚½‚Æ‚«AƒJ[ƒ\ƒ‹‚ªƒIƒuƒWƒFƒNƒgã‚È‚çÀs
+    //ã‚¿ãƒƒãƒ—ï¼šã‚¿ãƒƒãƒ—å¾Œã«æŒ‡ãŒç”»é¢ã‹ã‚‰é›¢ã‚ŒãŸã¨ãã€æŒ‡ãŒã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆä¸Šãªã‚‰å®Ÿè¡Œ
+    //ãƒã‚¦ã‚¹ï¼šã‚¯ãƒªãƒƒã‚¯å¾Œã«ãƒã‚¦ã‚¹ãƒœã‚¿ãƒ³ã‚’é›¢ã—ãŸã¨ãã€ã‚«ãƒ¼ã‚½ãƒ«ãŒã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆä¸Šãªã‚‰å®Ÿè¡Œ
     public void OnPointerClick(PointerEventData eventData)
     {
-        //‰Ÿ‰º‚Ìƒtƒ‰ƒO‚ğ—§‚Ä‚é
+        //æŠ¼ä¸‹ã®ãƒ•ãƒ©ã‚°ã‚’ç«‹ã¦ã‚‹
         isPushed = true;
     }
 
-    //Input Manager‘¤‚©‚çŒÄ‚Ño‚µ
-    //‰Ÿ‰º‚Ì—L–³‚ğ•Ô‚·
+    //Input Managerå´ã‹ã‚‰å‘¼ã³å‡ºã—
+    //æŠ¼ä¸‹ã®æœ‰ç„¡ã‚’è¿”ã™
     public bool GetIsPushed()
     {
-        //•Ô‚è’l‚ğ•Û‘¶
+        //è¿”ã‚Šå€¤ã‚’ä¿å­˜
         bool returnValue = isPushed;
 
-        //‰Ÿ‰º‚Ìƒtƒ‰ƒO‚ğƒŠƒZƒbƒg
+        //æŠ¼ä¸‹ã®ãƒ•ãƒ©ã‚°ã‚’ãƒªã‚»ãƒƒãƒˆ
         isPushed = false;
 
         return returnValue;
     }
 
-    //ƒXƒNƒŠƒvƒg‚ª–³Œø‰»‚³‚ê‚ê‚ÎƒŠƒZƒbƒgˆ—
+    //ã‚¹ã‚¯ãƒªãƒ—ãƒˆãŒç„¡åŠ¹åŒ–ã•ã‚Œã‚Œã°ãƒªã‚»ãƒƒãƒˆå‡¦ç†
     private void OnDisable()
     {
-        //ƒXƒP[ƒ‹‚ğŠî–{‚ÌƒXƒP[ƒ‹‚É–ß‚·
+        //ã‚¹ã‚±ãƒ¼ãƒ«ã‚’åŸºæœ¬ã®ã‚¹ã‚±ãƒ¼ãƒ«ã«æˆ»ã™
         transform.localScale = defaultScale;
 
-        //ƒJƒo[‚ğ“§–¾‚É
+        //ã‚«ãƒãƒ¼ã‚’é€æ˜ã«
         cover.color = Color.clear;
 
-        //‰Ÿ‰º‚Ìƒtƒ‰ƒO‚ğƒŠƒZƒbƒg
+        //æŠ¼ä¸‹ã®ãƒ•ãƒ©ã‚°ã‚’ãƒªã‚»ãƒƒãƒˆ
         isPushed = false;
     }
 }

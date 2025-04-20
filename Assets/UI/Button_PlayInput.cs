@@ -17,7 +17,7 @@ public class Button_PlayInput : MonoBehaviour, IPointerDownHandler, IPointerUpHa
         eventOnRelease?.Invoke();
     }
 
-    //ƒXƒNƒŠƒvƒg‚ª–³Œø‰»‚³‚ê‚ê‚ÎƒŠƒZƒbƒgˆ—
+    //ã‚¹ã‚¯ãƒªãƒ—ãƒˆãŒç„¡åŠ¹åŒ–ã•ã‚Œã‚Œã°ãƒªã‚»ãƒƒãƒˆå‡¦ç†
     private void OnDisable()
     {
         eventOnRelease?.Invoke();

@@ -10,7 +10,7 @@ public class GameStateState_Login : GameStateStateBase
 
     public GameStateState_Login(GameStateStateMachine stateMachine) : base(stateMachine)
     {
-        //ƒƒOƒCƒ“ƒXƒe[ƒgƒ}ƒVƒ“‚Ìì¬
+        //ãƒ­ã‚°ã‚¤ãƒ³ã‚¹ãƒ†ãƒ¼ãƒˆãƒã‚·ãƒ³ã®ä½œæˆ
         loginStateMachine = new LoginStateStateMachine(stateMachine);
         
         screenCover = GM.frontScreenCover;
@@ -20,32 +20,38 @@ public class GameStateState_Login : GameStateStateBase
 
     public override void Enter()
     {
-        //ƒƒOƒCƒ“ƒXƒe[ƒgƒ}ƒVƒ“‚Ì‰Šú‰»
+        //ãƒ­ã‚°ã‚¤ãƒ³ã‚¹ãƒ†ãƒ¼ãƒˆãƒã‚·ãƒ³ã®åˆæœŸåŒ–
         loginStateMachine.Initialize(loginStateMachine.state_Login);
 
-        //áŠQ•¨‚Ì¶¬‚ğ—LŒø‰»
+        //éšœå®³ç‰©ã®ç”Ÿæˆã‚’æœ‰åŠ¹åŒ–
         TM.isCreateObstacle = true;
 
-        //ƒƒOƒCƒ“‰æ–Ê‚Ì‰æ–ÊƒJƒo[‚ğ”’‚É
+        //ãƒ­ã‚°ã‚¤ãƒ³ç”»é¢ã®ç”»é¢ã‚«ãƒãƒ¼ã‚’ç™½ã«
         screenCover.color = Color.white;
+
+        //ãƒ­ãƒ¼ãƒ‡ã‚£ãƒ³ã‚°ã‚­ãƒ¥ãƒ¼ãƒ–ã‚’è¡¨ç¤º
+        GM.loadingCube.SetActive(true);
     }
 
 
 
     public override void Update(float deltaTime)
     {
-        //ƒXƒe[ƒgƒ}ƒVƒ“‚ÌUpdate‚ğÀs
+        //ã‚¹ãƒ†ãƒ¼ãƒˆãƒã‚·ãƒ³ã®Updateã‚’å®Ÿè¡Œ
         loginStateMachine.Update();
 
-        //’nŒ`‚ÌŠÇ—
+        //åœ°å½¢ã®ç®¡ç†
         TM.ManageMovingTerrain();
+
+        //ãƒ­ãƒ¼ãƒ‡ã‚£ãƒ³ã‚°ã‚­ãƒ¥ãƒ¼ãƒ–ã®å›è»¢
+        GM.loadingCube.transform.Rotate(Vector3.up, 180 * deltaTime);
     }
 
 
 
     public override void Exit()
     {
-        //ƒƒOƒCƒ“‰æ–Ê‚Ì‰æ–ÊƒJƒo[‚ğ“§–¾‚É
+        //ãƒ­ã‚°ã‚¤ãƒ³ç”»é¢ã®ç”»é¢ã‚«ãƒãƒ¼ã‚’é€æ˜ã«
         screenCover.color = Color.clear;
     }
 }

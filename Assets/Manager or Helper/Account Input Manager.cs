@@ -3,14 +3,14 @@ using UnityEngine;
 
 public class AccountInputManager : MonoBehaviour
 {
-    #region ƒAƒJƒEƒ“ƒg“o˜^
+    #region ã‚¢ã‚«ã‚¦ãƒ³ãƒˆç™»éŒ²
     public void Registration()
     {
         PopupUIManager.Instance.SetupPopup(
-            "ƒAƒJƒEƒ“ƒg“o˜^",
-            "ƒAƒJƒEƒ“ƒg‚Æ‚µ‚Äg—p‚·‚éƒ[ƒ‹ƒAƒhƒŒƒX‚ğ“ü—Í‚µ‚Ä‚­‚¾‚³‚¢B",
+            "ã‚¢ã‚«ã‚¦ãƒ³ãƒˆç™»éŒ²",
+            "ã‚¢ã‚«ã‚¦ãƒ³ãƒˆã¨ã—ã¦ä½¿ç”¨ã™ã‚‹ãƒ¡ãƒ¼ãƒ«ã‚¢ãƒ‰ãƒ¬ã‚¹ã‚’å…¥åŠ›ã—ã¦ãã ã•ã„ã€‚",
             TMP_InputField.ContentType.EmailAddress,
-            "ƒAƒJƒEƒ“ƒg‚É“o˜^‚·‚éƒpƒXƒ[ƒh‚ğ“ü—Í‚µ‚Ä‚­‚¾‚³‚¢B",
+            "ã‚¢ã‚«ã‚¦ãƒ³ãƒˆã«ç™»éŒ²ã™ã‚‹ãƒ‘ã‚¹ãƒ¯ãƒ¼ãƒ‰ã‚’å…¥åŠ›ã—ã¦ãã ã•ã„ã€‚",
             TMP_InputField.ContentType.Password,
             this.Registration_Result);
     }
@@ -23,39 +23,39 @@ public class AccountInputManager : MonoBehaviour
 
         switch (resultMessage)
         {
-            case"³íI—¹":
+            case"æ­£å¸¸çµ‚äº†":
                 PopupUIManager.Instance.SetupPopupMessage(
-                    "ƒAƒJƒEƒ“ƒg“o˜^Š®—¹",
-                    "ƒ[ƒ‹ƒAƒhƒŒƒX‚ÆƒpƒXƒ[ƒh‚ğ“o˜^‚µ‚Ü‚µ‚½B\n\n" +
+                    "ã‚¢ã‚«ã‚¦ãƒ³ãƒˆç™»éŒ²å®Œäº†",
+                    "ãƒ¡ãƒ¼ãƒ«ã‚¢ãƒ‰ãƒ¬ã‚¹ã¨ãƒ‘ã‚¹ãƒ¯ãƒ¼ãƒ‰ã‚’ç™»éŒ²ã—ã¾ã—ãŸã€‚\n\n" +
                     AuthManager.Instance.GetEmail() + "\n\n" +
-                    "ã‹Lƒ[ƒ‹ƒAƒhƒŒƒX‚É”FØƒ[ƒ‹‚ğ‘—M‚µ‚Ä‚¢‚Ü‚·B\n" +
-                    "ƒŠƒ“ƒN‚ğŠJ‚«AƒAƒhƒŒƒX‚Ì”FØ‚ğs‚Á‚Ä‚­‚¾‚³‚¢B");
+                    "ä¸Šè¨˜ãƒ¡ãƒ¼ãƒ«ã‚¢ãƒ‰ãƒ¬ã‚¹ã«èªè¨¼ãƒ¡ãƒ¼ãƒ«ã‚’é€ä¿¡ã—ã¦ã„ã¾ã™ã€‚\n" +
+                    "ãƒªãƒ³ã‚¯ã‚’é–‹ãã€ã‚¢ãƒ‰ãƒ¬ã‚¹ã®èªè¨¼ã‚’è¡Œã£ã¦ãã ã•ã„ã€‚");
                 break;
 
-            case "ˆÙíI—¹":
-                PopupUIManager.Instance.SetupMessageBand("ƒGƒ‰[‚ª”­¶‚µ‚Ü‚µ‚½B", 2);
+            case "ç•°å¸¸çµ‚äº†":
+                PopupUIManager.Instance.SetupMessageBand("ã‚¨ãƒ©ãƒ¼ãŒç™ºç”Ÿã—ã¾ã—ãŸã€‚", 2);
                 break;
 
-            case "ƒlƒbƒgƒ[ƒNƒGƒ‰[":
+            case "ãƒãƒƒãƒˆãƒ¯ãƒ¼ã‚¯ã‚¨ãƒ©ãƒ¼":
                 PopupUIManager.Instance.SetupMessageBand(
-                    "ƒlƒbƒgƒ[ƒNƒGƒ‰[‚ª”­¶‚µ‚Ü‚µ‚½BÚ‘±‚ğŠm”F‚µ‚Ä‚­‚¾‚³‚¢B", 2);
+                    "ãƒãƒƒãƒˆãƒ¯ãƒ¼ã‚¯ã‚¨ãƒ©ãƒ¼ãŒç™ºç”Ÿã—ã¾ã—ãŸã€‚æ¥ç¶šã‚’ç¢ºèªã—ã¦ãã ã•ã„ã€‚", 2);
                 break;
 
             default:
-                PopupUIManager.Instance.SetupPopupMessage("ƒAƒJƒEƒ“ƒg“o˜^ƒGƒ‰[", resultMessage, Registration);
+                PopupUIManager.Instance.SetupPopupMessage("ã‚¢ã‚«ã‚¦ãƒ³ãƒˆç™»éŒ²ã‚¨ãƒ©ãƒ¼", resultMessage, Registration);
                 break;
         }
     }
     #endregion
 
-    #region ƒƒOƒCƒ“
+    #region ãƒ­ã‚°ã‚¤ãƒ³
     public void Login()
     {
         PopupUIManager.Instance.SetupPopup(
-            "ƒƒOƒCƒ“",
-            "ƒAƒJƒEƒ“ƒg‚É“o˜^‚³‚ê‚Ä‚¢‚éƒ[ƒ‹ƒAƒhƒŒƒX‚ğ“ü—Í‚µ‚Ä‚­‚¾‚³‚¢B",
+            "ãƒ­ã‚°ã‚¤ãƒ³",
+            "ã‚¢ã‚«ã‚¦ãƒ³ãƒˆã«ç™»éŒ²ã•ã‚Œã¦ã„ã‚‹ãƒ¡ãƒ¼ãƒ«ã‚¢ãƒ‰ãƒ¬ã‚¹ã‚’å…¥åŠ›ã—ã¦ãã ã•ã„ã€‚",
             TMP_InputField.ContentType.EmailAddress,
-            "ƒAƒJƒEƒ“ƒg‚Éİ’è‚µ‚½ƒpƒXƒ[ƒh‚ğ“ü—Í‚µ‚Ä‚­‚¾‚³‚¢B",
+            "ã‚¢ã‚«ã‚¦ãƒ³ãƒˆã«è¨­å®šã—ãŸãƒ‘ã‚¹ãƒ¯ãƒ¼ãƒ‰ã‚’å…¥åŠ›ã—ã¦ãã ã•ã„ã€‚",
             TMP_InputField.ContentType.Password,
             this.Login_Result);
     }
@@ -68,38 +68,38 @@ public class AccountInputManager : MonoBehaviour
 
         switch (resultMessage)
         {
-            case "³íI—¹":
+            case "æ­£å¸¸çµ‚äº†":
                 PopupUIManager.Instance.SetupPopupMessage(
-                    "ƒƒOƒCƒ“¬Œ÷",
-                    "ƒAƒJƒEƒ“ƒg‚ÌƒƒOƒCƒ“‚É¬Œ÷‚µ‚Ü‚µ‚½B\n\n" +
-                    "ÄƒƒOƒCƒ“‚µ‚Ü‚·B",
+                    "ãƒ­ã‚°ã‚¤ãƒ³æˆåŠŸ",
+                    "ã‚¢ã‚«ã‚¦ãƒ³ãƒˆã®ãƒ­ã‚°ã‚¤ãƒ³ã«æˆåŠŸã—ã¾ã—ãŸã€‚\n\n" +
+                    "å†ãƒ­ã‚°ã‚¤ãƒ³ã—ã¾ã™ã€‚",
                     ReLogin);
                 break;
 
-            case "ˆÙíI—¹":
-                PopupUIManager.Instance.SetupPopupMessage("ƒƒOƒCƒ“¸”s", "ƒƒOƒCƒ“‚É¸”s‚µ‚Ü‚µ‚½B", this.Login);
+            case "ç•°å¸¸çµ‚äº†":
+                PopupUIManager.Instance.SetupPopupMessage("ãƒ­ã‚°ã‚¤ãƒ³å¤±æ•—", "ãƒ­ã‚°ã‚¤ãƒ³ã«å¤±æ•—ã—ã¾ã—ãŸã€‚", this.Login);
                 break;
 
-            case "ƒlƒbƒgƒ[ƒNƒGƒ‰[":
+            case "ãƒãƒƒãƒˆãƒ¯ãƒ¼ã‚¯ã‚¨ãƒ©ãƒ¼":
                 PopupUIManager.Instance.SetupMessageBand(
-                    "ƒlƒbƒgƒ[ƒNƒGƒ‰[‚ª”­¶‚µ‚Ü‚µ‚½BÚ‘±‚ğŠm”F‚µ‚Ä‚­‚¾‚³‚¢B", 2);
+                    "ãƒãƒƒãƒˆãƒ¯ãƒ¼ã‚¯ã‚¨ãƒ©ãƒ¼ãŒç™ºç”Ÿã—ã¾ã—ãŸã€‚æ¥ç¶šã‚’ç¢ºèªã—ã¦ãã ã•ã„ã€‚", 2);
                 break;
 
             default:
-                PopupUIManager.Instance.SetupPopupMessage("ƒƒOƒCƒ“¸”s", resultMessage, this.Login);
+                PopupUIManager.Instance.SetupPopupMessage("ãƒ­ã‚°ã‚¤ãƒ³å¤±æ•—", resultMessage, this.Login);
                 break;
         }
     }
     #endregion
 
-    #region ƒ[ƒ‹ƒAƒhƒŒƒX•ÏX
+    #region ãƒ¡ãƒ¼ãƒ«ã‚¢ãƒ‰ãƒ¬ã‚¹å¤‰æ›´
     public void CangeEmail_Reauthenticate()
     {
         PopupUIManager.Instance.SetupPopup(
-            "ÄƒƒOƒCƒ“",
-            "Œ»İ‚Ìƒ[ƒ‹ƒAƒhƒŒƒX‚ğ“ü—Í‚µ‚Ä‚­‚¾‚³‚¢B",
+            "å†ãƒ­ã‚°ã‚¤ãƒ³",
+            "ç¾åœ¨ã®ãƒ¡ãƒ¼ãƒ«ã‚¢ãƒ‰ãƒ¬ã‚¹ã‚’å…¥åŠ›ã—ã¦ãã ã•ã„ã€‚",
             TMP_InputField.ContentType.EmailAddress,
-            "ƒAƒJƒEƒ“ƒg‚Éİ’è‚µ‚½ƒpƒXƒ[ƒh‚ğ“ü—Í‚µ‚Ä‚­‚¾‚³‚¢B",
+            "ã‚¢ã‚«ã‚¦ãƒ³ãƒˆã«è¨­å®šã—ãŸãƒ‘ã‚¹ãƒ¯ãƒ¼ãƒ‰ã‚’å…¥åŠ›ã—ã¦ãã ã•ã„ã€‚",
             TMP_InputField.ContentType.Password,
             this.CangeEmail);
 
@@ -113,25 +113,25 @@ public class AccountInputManager : MonoBehaviour
 
         switch (resultMessage)
         {
-            case "³íI—¹":
+            case "æ­£å¸¸çµ‚äº†":
                 PopupUIManager.Instance.SetupPopup(
-                    "ƒ[ƒ‹ƒAƒhƒŒƒX•ÏX",
-                    "V‚µ‚¢ƒ[ƒ‹ƒAƒhƒŒƒX‚ğ“ü—Í‚µ‚Ä‚­‚¾‚³‚¢B",
+                    "ãƒ¡ãƒ¼ãƒ«ã‚¢ãƒ‰ãƒ¬ã‚¹å¤‰æ›´",
+                    "æ–°ã—ã„ãƒ¡ãƒ¼ãƒ«ã‚¢ãƒ‰ãƒ¬ã‚¹ã‚’å…¥åŠ›ã—ã¦ãã ã•ã„ã€‚",
                     TMP_InputField.ContentType.EmailAddress,
                     this.CangeEmail_Result);
                 break;
 
-            case "ˆÙíI—¹":
-                PopupUIManager.Instance.SetupMessageBand("ƒGƒ‰[‚ª”­¶‚µ‚Ü‚µ‚½B", 2);
+            case "ç•°å¸¸çµ‚äº†":
+                PopupUIManager.Instance.SetupMessageBand("ã‚¨ãƒ©ãƒ¼ãŒç™ºç”Ÿã—ã¾ã—ãŸã€‚", 2);
                 break;
 
-            case "ƒlƒbƒgƒ[ƒNƒGƒ‰[":
+            case "ãƒãƒƒãƒˆãƒ¯ãƒ¼ã‚¯ã‚¨ãƒ©ãƒ¼":
                 PopupUIManager.Instance.SetupMessageBand(
-                    "ƒlƒbƒgƒ[ƒNƒGƒ‰[‚ª”­¶‚µ‚Ü‚µ‚½BÚ‘±‚ğŠm”F‚µ‚Ä‚­‚¾‚³‚¢B", 2);
+                    "ãƒãƒƒãƒˆãƒ¯ãƒ¼ã‚¯ã‚¨ãƒ©ãƒ¼ãŒç™ºç”Ÿã—ã¾ã—ãŸã€‚æ¥ç¶šã‚’ç¢ºèªã—ã¦ãã ã•ã„ã€‚", 2);
                 break;
 
             default:
-                PopupUIManager.Instance.SetupPopupMessage("ÄƒƒOƒCƒ“¸”s", resultMessage, this.CangeEmail_Reauthenticate);
+                PopupUIManager.Instance.SetupPopupMessage("å†ãƒ­ã‚°ã‚¤ãƒ³å¤±æ•—", resultMessage, this.CangeEmail_Reauthenticate);
                 break;
         }
     }
@@ -143,32 +143,32 @@ public class AccountInputManager : MonoBehaviour
 
         switch (resultMessage)
         {
-            case "³íI—¹":
+            case "æ­£å¸¸çµ‚äº†":
                 PopupUIManager.Instance.SetupPopupMessage(
-                    "ƒ[ƒ‹ƒAƒhƒŒƒX•ÏX",
+                    "ãƒ¡ãƒ¼ãƒ«ã‚¢ãƒ‰ãƒ¬ã‚¹å¤‰æ›´",
                     PopupUIManager.Instance.inputText1 + "\n\n" +
-                    "ã‹Lƒ[ƒ‹ƒAƒhƒŒƒX‚É”FØƒ[ƒ‹‚ğ‘—M‚µ‚Ä‚¢‚Ü‚·B\n" +
-                    "ƒŠƒ“ƒN‚ğŠJ‚¢‚ÄƒAƒhƒŒƒX‚Ì”FØ‚ğs‚¢A‰º‚Ì OK ‚Ìƒ{ƒ^ƒ“‚ğ‚ğ‰Ÿ‚µ‚Ä‚­‚¾‚³‚¢B",
+                    "ä¸Šè¨˜ãƒ¡ãƒ¼ãƒ«ã‚¢ãƒ‰ãƒ¬ã‚¹ã«èªè¨¼ãƒ¡ãƒ¼ãƒ«ã‚’é€ä¿¡ã—ã¦ã„ã¾ã™ã€‚\n" +
+                    "ãƒªãƒ³ã‚¯ã‚’é–‹ã„ã¦ã‚¢ãƒ‰ãƒ¬ã‚¹ã®èªè¨¼ã‚’è¡Œã„ã€ä¸‹ã® OK ã®ãƒœã‚¿ãƒ³ã‚’ã‚’æŠ¼ã—ã¦ãã ã•ã„ã€‚",
                     this.CangeEmail_Check);
                 break;
 
-            case "ˆÙíI—¹":
-                PopupUIManager.Instance.SetupMessageBand("ƒGƒ‰[‚ª”­¶‚µ‚Ü‚µ‚½B", 2);
+            case "ç•°å¸¸çµ‚äº†":
+                PopupUIManager.Instance.SetupMessageBand("ã‚¨ãƒ©ãƒ¼ãŒç™ºç”Ÿã—ã¾ã—ãŸã€‚", 2);
                 break;
 
-            case "ƒlƒbƒgƒ[ƒNƒGƒ‰[":
+            case "ãƒãƒƒãƒˆãƒ¯ãƒ¼ã‚¯ã‚¨ãƒ©ãƒ¼":
                 PopupUIManager.Instance.SetupMessageBand(
-                    "ƒlƒbƒgƒ[ƒNƒGƒ‰[‚ª”­¶‚µ‚Ü‚µ‚½BÚ‘±‚ğŠm”F‚µ‚Ä‚­‚¾‚³‚¢B", 2);
+                    "ãƒãƒƒãƒˆãƒ¯ãƒ¼ã‚¯ã‚¨ãƒ©ãƒ¼ãŒç™ºç”Ÿã—ã¾ã—ãŸã€‚æ¥ç¶šã‚’ç¢ºèªã—ã¦ãã ã•ã„ã€‚", 2);
                 break;
 
             default:
-                PopupUIManager.Instance.SetupPopupMessage("ƒ[ƒ‹ƒAƒhƒŒƒX•ÏX¸”s", resultMessage, this.CangeEmail);
+                PopupUIManager.Instance.SetupPopupMessage("ãƒ¡ãƒ¼ãƒ«ã‚¢ãƒ‰ãƒ¬ã‚¹å¤‰æ›´å¤±æ•—", resultMessage, this.CangeEmail);
                 break;
         }
     }
     public async void CangeEmail_Check()
     {
-        Debug.Log("ƒ`ƒFƒbƒN");
+        Debug.Log("ãƒã‚§ãƒƒã‚¯");
 
         string resultMessage =
             await AuthManager.Instance.Reauthenticate(
@@ -177,46 +177,46 @@ public class AccountInputManager : MonoBehaviour
 
         switch (resultMessage)
         {
-            case "³íI—¹":
+            case "æ­£å¸¸çµ‚äº†":
                 PopupUIManager.Instance.SetupPopupMessage(
-                    "ƒ[ƒ‹ƒAƒhƒŒƒX•ÏXŠ®—¹",
-                    "ƒ[ƒ‹ƒAƒhƒŒƒX‚Ì•ÏX‚ªŠ®—¹‚µ‚Ü‚µ‚½B");
+                    "ãƒ¡ãƒ¼ãƒ«ã‚¢ãƒ‰ãƒ¬ã‚¹å¤‰æ›´å®Œäº†",
+                    "ãƒ¡ãƒ¼ãƒ«ã‚¢ãƒ‰ãƒ¬ã‚¹ã®å¤‰æ›´ãŒå®Œäº†ã—ã¾ã—ãŸã€‚");
                 break;
 
-            case "ˆÙíI—¹":
+            case "ç•°å¸¸çµ‚äº†":
                 PopupUIManager.Instance.SetupPopup(
-                    "ƒ[ƒ‹ƒAƒhƒŒƒX–¢”FØ",
+                    "ãƒ¡ãƒ¼ãƒ«ã‚¢ãƒ‰ãƒ¬ã‚¹æœªèªè¨¼",
                     PopupUIManager.Instance.inputText1 + "\n\n" +
-                    "ã‹Lƒ[ƒ‹ƒAƒhƒŒƒX‚É”FØƒ[ƒ‹‚ğ‘—M‚µ‚Ä‚¢‚Ü‚·B\n" +
-                    "ƒŠƒ“ƒN‚ğŠJ‚¢‚ÄƒAƒhƒŒƒX‚Ì”FØ‚ğs‚¢A‰º‚Ì OK ‚Ìƒ{ƒ^ƒ“‚ğ‚ğ‰Ÿ‚µ‚Ä‚­‚¾‚³‚¢B",
+                    "ä¸Šè¨˜ãƒ¡ãƒ¼ãƒ«ã‚¢ãƒ‰ãƒ¬ã‚¹ã«èªè¨¼ãƒ¡ãƒ¼ãƒ«ã‚’é€ä¿¡ã—ã¦ã„ã¾ã™ã€‚\n" +
+                    "ãƒªãƒ³ã‚¯ã‚’é–‹ã„ã¦ã‚¢ãƒ‰ãƒ¬ã‚¹ã®èªè¨¼ã‚’è¡Œã„ã€ä¸‹ã® OK ã®ãƒœã‚¿ãƒ³ã‚’ã‚’æŠ¼ã—ã¦ãã ã•ã„ã€‚",
                     this.CangeEmail_Check);
                 break;
 
-            case "ƒlƒbƒgƒ[ƒNƒGƒ‰[":
+            case "ãƒãƒƒãƒˆãƒ¯ãƒ¼ã‚¯ã‚¨ãƒ©ãƒ¼":
                 PopupUIManager.Instance.SetupMessageBand(
-                    "ƒlƒbƒgƒ[ƒNƒGƒ‰[‚ª”­¶‚µ‚Ü‚µ‚½BÚ‘±‚ğŠm”F‚µ‚Ä‚­‚¾‚³‚¢B", 2);
+                    "ãƒãƒƒãƒˆãƒ¯ãƒ¼ã‚¯ã‚¨ãƒ©ãƒ¼ãŒç™ºç”Ÿã—ã¾ã—ãŸã€‚æ¥ç¶šã‚’ç¢ºèªã—ã¦ãã ã•ã„ã€‚", 2);
                 break;
 
             default:
                 PopupUIManager.Instance.SetupPopup(
-                    "ƒ[ƒ‹ƒAƒhƒŒƒX–¢”FØ",
+                    "ãƒ¡ãƒ¼ãƒ«ã‚¢ãƒ‰ãƒ¬ã‚¹æœªèªè¨¼",
                     PopupUIManager.Instance.inputText1 + "\n\n" +
-                    "ã‹Lƒ[ƒ‹ƒAƒhƒŒƒX‚É”FØƒ[ƒ‹‚ğ‘—M‚µ‚Ä‚¢‚Ü‚·B\n" +
-                    "ƒŠƒ“ƒN‚ğŠJ‚¢‚ÄƒAƒhƒŒƒX‚Ì”FØ‚ğs‚¢A‰º‚Ì OK ‚Ìƒ{ƒ^ƒ“‚ğ‚ğ‰Ÿ‚µ‚Ä‚­‚¾‚³‚¢B",
+                    "ä¸Šè¨˜ãƒ¡ãƒ¼ãƒ«ã‚¢ãƒ‰ãƒ¬ã‚¹ã«èªè¨¼ãƒ¡ãƒ¼ãƒ«ã‚’é€ä¿¡ã—ã¦ã„ã¾ã™ã€‚\n" +
+                    "ãƒªãƒ³ã‚¯ã‚’é–‹ã„ã¦ã‚¢ãƒ‰ãƒ¬ã‚¹ã®èªè¨¼ã‚’è¡Œã„ã€ä¸‹ã® OK ã®ãƒœã‚¿ãƒ³ã‚’ã‚’æŠ¼ã—ã¦ãã ã•ã„ã€‚",
                     this.CangeEmail_Check);
                 break;
         }
     }
     #endregion
 
-    #region ƒpƒXƒ[ƒh•ÏX
+    #region ãƒ‘ã‚¹ãƒ¯ãƒ¼ãƒ‰å¤‰æ›´
     public void CangePassword_Reauthenticate()
     {
         PopupUIManager.Instance.SetupPopup(
-            "ÄƒƒOƒCƒ“",
-            "ƒAƒJƒEƒ“ƒg‚É“o˜^‚µ‚½ƒ[ƒ‹ƒAƒhƒŒƒX‚ğ“ü—Í‚µ‚Ä‚­‚¾‚³‚¢B",
+            "å†ãƒ­ã‚°ã‚¤ãƒ³",
+            "ã‚¢ã‚«ã‚¦ãƒ³ãƒˆã«ç™»éŒ²ã—ãŸãƒ¡ãƒ¼ãƒ«ã‚¢ãƒ‰ãƒ¬ã‚¹ã‚’å…¥åŠ›ã—ã¦ãã ã•ã„ã€‚",
             TMP_InputField.ContentType.EmailAddress,
-            "Œ»İ‚ÌƒpƒXƒ[ƒh‚ğ“ü—Í‚µ‚Ä‚­‚¾‚³‚¢B",
+            "ç¾åœ¨ã®ãƒ‘ã‚¹ãƒ¯ãƒ¼ãƒ‰ã‚’å…¥åŠ›ã—ã¦ãã ã•ã„ã€‚",
             TMP_InputField.ContentType.Password,
             this.CangePassword);
     }
@@ -229,25 +229,25 @@ public class AccountInputManager : MonoBehaviour
 
         switch (resultMessage)
         {
-            case "³íI—¹":
+            case "æ­£å¸¸çµ‚äº†":
                 PopupUIManager.Instance.SetupPopup(
-                    "ƒpƒXƒ[ƒh•ÏX",
-                    "V‚µ‚¢ƒpƒXƒ[ƒh‚ğ“ü—Í‚µ‚Ä‚­‚¾‚³‚¢B",
+                    "ãƒ‘ã‚¹ãƒ¯ãƒ¼ãƒ‰å¤‰æ›´",
+                    "æ–°ã—ã„ãƒ‘ã‚¹ãƒ¯ãƒ¼ãƒ‰ã‚’å…¥åŠ›ã—ã¦ãã ã•ã„ã€‚",
                     TMP_InputField.ContentType.Password,
                     this.CangePassword_Result);
                 break;
 
-            case "ˆÙíI—¹":
-                PopupUIManager.Instance.SetupMessageBand("ƒGƒ‰[‚ª”­¶‚µ‚Ü‚µ‚½B", 2);
+            case "ç•°å¸¸çµ‚äº†":
+                PopupUIManager.Instance.SetupMessageBand("ã‚¨ãƒ©ãƒ¼ãŒç™ºç”Ÿã—ã¾ã—ãŸã€‚", 2);
                 break;
 
-            case "ƒlƒbƒgƒ[ƒNƒGƒ‰[":
+            case "ãƒãƒƒãƒˆãƒ¯ãƒ¼ã‚¯ã‚¨ãƒ©ãƒ¼":
                 PopupUIManager.Instance.SetupMessageBand(
-                    "ƒlƒbƒgƒ[ƒNƒGƒ‰[‚ª”­¶‚µ‚Ü‚µ‚½BÚ‘±‚ğŠm”F‚µ‚Ä‚­‚¾‚³‚¢B", 2);
+                    "ãƒãƒƒãƒˆãƒ¯ãƒ¼ã‚¯ã‚¨ãƒ©ãƒ¼ãŒç™ºç”Ÿã—ã¾ã—ãŸã€‚æ¥ç¶šã‚’ç¢ºèªã—ã¦ãã ã•ã„ã€‚", 2);
                 break;
 
             default:
-                PopupUIManager.Instance.SetupPopupMessage("ÄƒƒOƒCƒ“¸”s", resultMessage, this.CangePassword_Reauthenticate);
+                PopupUIManager.Instance.SetupPopupMessage("å†ãƒ­ã‚°ã‚¤ãƒ³å¤±æ•—", resultMessage, this.CangePassword_Reauthenticate);
                 break;
         }
     }
@@ -259,35 +259,35 @@ public class AccountInputManager : MonoBehaviour
 
         switch (resultMessage)
         {
-            case "³íI—¹":
+            case "æ­£å¸¸çµ‚äº†":
                 PopupUIManager.Instance.SetupPopupMessage(
-                    "ƒpƒXƒ[ƒh•ÏX",
-                    "ƒpƒXƒ[ƒh‚Ì•ÏX‚ªŠ®—¹‚µ‚Ü‚µ‚½B");
+                    "ãƒ‘ã‚¹ãƒ¯ãƒ¼ãƒ‰å¤‰æ›´",
+                    "ãƒ‘ã‚¹ãƒ¯ãƒ¼ãƒ‰ã®å¤‰æ›´ãŒå®Œäº†ã—ã¾ã—ãŸã€‚");
                 break;
 
-            case "ˆÙíI—¹":
-                PopupUIManager.Instance.SetupMessageBand("ƒGƒ‰[‚ª”­¶‚µ‚Ü‚µ‚½B", 2);
+            case "ç•°å¸¸çµ‚äº†":
+                PopupUIManager.Instance.SetupMessageBand("ã‚¨ãƒ©ãƒ¼ãŒç™ºç”Ÿã—ã¾ã—ãŸã€‚", 2);
                 break;
 
-            case "ƒlƒbƒgƒ[ƒNƒGƒ‰[":
+            case "ãƒãƒƒãƒˆãƒ¯ãƒ¼ã‚¯ã‚¨ãƒ©ãƒ¼":
                 PopupUIManager.Instance.SetupMessageBand(
-                    "ƒlƒbƒgƒ[ƒNƒGƒ‰[‚ª”­¶‚µ‚Ü‚µ‚½BÚ‘±‚ğŠm”F‚µ‚Ä‚­‚¾‚³‚¢B", 2);
+                    "ãƒãƒƒãƒˆãƒ¯ãƒ¼ã‚¯ã‚¨ãƒ©ãƒ¼ãŒç™ºç”Ÿã—ã¾ã—ãŸã€‚æ¥ç¶šã‚’ç¢ºèªã—ã¦ãã ã•ã„ã€‚", 2);
                 break;
 
             default:
-                PopupUIManager.Instance.SetupPopupMessage("ƒpƒXƒ[ƒh•ÏX¸”s", resultMessage, this.CangePassword);
+                PopupUIManager.Instance.SetupPopupMessage("ãƒ‘ã‚¹ãƒ¯ãƒ¼ãƒ‰å¤‰æ›´å¤±æ•—", resultMessage, this.CangePassword);
                 break;
         }
     }
     #endregion
 
-    #region ƒpƒXƒ[ƒhƒŠƒZƒbƒg
+    #region ãƒ‘ã‚¹ãƒ¯ãƒ¼ãƒ‰ãƒªã‚»ãƒƒãƒˆ
     public void ResetPassword()
     {
         PopupUIManager.Instance.SetupPopup(
-            "ƒpƒXƒ[ƒhƒŠƒZƒbƒg",
+            "ãƒ‘ã‚¹ãƒ¯ãƒ¼ãƒ‰ãƒªã‚»ãƒƒãƒˆ",
             AuthManager.Instance.GetEmail() + "\n\n" +
-            "ã‹Lƒ[ƒ‹ƒAƒhƒŒƒX‚ÉƒpƒXƒ[ƒhÄİ’è—p‚Ìƒ[ƒ‹‚ğ‘—M‚µ‚Ü‚·B",
+            "ä¸Šè¨˜ãƒ¡ãƒ¼ãƒ«ã‚¢ãƒ‰ãƒ¬ã‚¹ã«ãƒ‘ã‚¹ãƒ¯ãƒ¼ãƒ‰å†è¨­å®šç”¨ã®ãƒ¡ãƒ¼ãƒ«ã‚’é€ä¿¡ã—ã¾ã™ã€‚",
             this.ResetPassword_Result);
 
     }
@@ -299,48 +299,48 @@ public class AccountInputManager : MonoBehaviour
 
         switch (resultMessage)
         {
-            case "³íI—¹":
+            case "æ­£å¸¸çµ‚äº†":
                 PopupUIManager.Instance.SetupPopupMessage(
-                    "ƒ[ƒ‹‘—MŠ®—¹",
-                    "ƒpƒXƒ[ƒhÄİ’è—p‚Ìƒ[ƒ‹‚ğ‘—M‚µ‚Ü‚µ‚½B\n" +
-                    "ƒŠƒ“ƒN‚ğŠJ‚«AƒpƒXƒ[ƒh‚ğƒŠƒZƒbƒg‚µ‚Ä‚­‚¾‚³‚¢B\n\n" +
-                    "<color=#E20000><B>ƒpƒXƒ[ƒh•ÏXŒã‚ÍÄƒƒOƒCƒ“‚ª•K—v‚Å‚·B</color></B>",
+                    "ãƒ¡ãƒ¼ãƒ«é€ä¿¡å®Œäº†",
+                    "ãƒ‘ã‚¹ãƒ¯ãƒ¼ãƒ‰å†è¨­å®šç”¨ã®ãƒ¡ãƒ¼ãƒ«ã‚’é€ä¿¡ã—ã¾ã—ãŸã€‚\n" +
+                    "ãƒªãƒ³ã‚¯ã‚’é–‹ãã€ãƒ‘ã‚¹ãƒ¯ãƒ¼ãƒ‰ã‚’ãƒªã‚»ãƒƒãƒˆã—ã¦ãã ã•ã„ã€‚\n\n" +
+                    "<color=#E20000><B>ãƒ‘ã‚¹ãƒ¯ãƒ¼ãƒ‰å¤‰æ›´å¾Œã¯å†ãƒ­ã‚°ã‚¤ãƒ³ãŒå¿…è¦ã§ã™ã€‚</color></B>",
                 ResetPassword_ReLogin);
                 break;
 
-            case "ˆÙíI—¹":
-                PopupUIManager.Instance.SetupMessageBand("ƒGƒ‰[‚ª”­¶‚µ‚Ü‚µ‚½B", 2);
+            case "ç•°å¸¸çµ‚äº†":
+                PopupUIManager.Instance.SetupMessageBand("ã‚¨ãƒ©ãƒ¼ãŒç™ºç”Ÿã—ã¾ã—ãŸã€‚", 2);
                 break;
 
-            case "ƒlƒbƒgƒ[ƒNƒGƒ‰[":
+            case "ãƒãƒƒãƒˆãƒ¯ãƒ¼ã‚¯ã‚¨ãƒ©ãƒ¼":
                 PopupUIManager.Instance.SetupMessageBand(
-                    "ƒlƒbƒgƒ[ƒNƒGƒ‰[‚ª”­¶‚µ‚Ü‚µ‚½BÚ‘±‚ğŠm”F‚µ‚Ä‚­‚¾‚³‚¢B", 2);
+                    "ãƒãƒƒãƒˆãƒ¯ãƒ¼ã‚¯ã‚¨ãƒ©ãƒ¼ãŒç™ºç”Ÿã—ã¾ã—ãŸã€‚æ¥ç¶šã‚’ç¢ºèªã—ã¦ãã ã•ã„ã€‚", 2);
                 break;
 
             default:
-                PopupUIManager.Instance.SetupPopupMessage("ƒ[ƒ‹‘—M¸”s", resultMessage);
+                PopupUIManager.Instance.SetupPopupMessage("ãƒ¡ãƒ¼ãƒ«é€ä¿¡å¤±æ•—", resultMessage);
                 break;
         }
     }
     public void ResetPassword_ReLogin()
     {
         PopupUIManager.Instance.SetupPopup(
-            "ƒƒOƒCƒ“",
-            "ƒAƒJƒEƒ“ƒg‚É“o˜^‚³‚ê‚Ä‚¢‚éƒ[ƒ‹ƒAƒhƒŒƒX‚ğ“ü—Í‚µ‚Ä‚­‚¾‚³‚¢B",
+            "ãƒ­ã‚°ã‚¤ãƒ³",
+            "ã‚¢ã‚«ã‚¦ãƒ³ãƒˆã«ç™»éŒ²ã•ã‚Œã¦ã„ã‚‹ãƒ¡ãƒ¼ãƒ«ã‚¢ãƒ‰ãƒ¬ã‚¹ã‚’å…¥åŠ›ã—ã¦ãã ã•ã„ã€‚",
             TMP_InputField.ContentType.EmailAddress,
-            "ƒAƒJƒEƒ“ƒg‚Éİ’è‚µ‚½ƒpƒXƒ[ƒh‚ğ“ü—Í‚µ‚Ä‚­‚¾‚³‚¢B",
+            "ã‚¢ã‚«ã‚¦ãƒ³ãƒˆã«è¨­å®šã—ãŸãƒ‘ã‚¹ãƒ¯ãƒ¼ãƒ‰ã‚’å…¥åŠ›ã—ã¦ãã ã•ã„ã€‚",
             TMP_InputField.ContentType.Password,
             this.Login_Result);
     }
     #endregion
 
-    #region ”FØƒ[ƒ‹Ä‘—
+    #region èªè¨¼ãƒ¡ãƒ¼ãƒ«å†é€
     public void SendEmail()
     {
         PopupUIManager.Instance.SetupPopup(
-            "”FØƒ[ƒ‹Ä‘—",
+            "èªè¨¼ãƒ¡ãƒ¼ãƒ«å†é€",
             AuthManager.Instance.GetEmail() + "\n\n" +
-            "ã‹Lƒ[ƒ‹ƒAƒhƒŒƒX‚É”FØƒ[ƒ‹‚ğ‘—M‚µ‚Ü‚·B",
+            "ä¸Šè¨˜ãƒ¡ãƒ¼ãƒ«ã‚¢ãƒ‰ãƒ¬ã‚¹ã«èªè¨¼ãƒ¡ãƒ¼ãƒ«ã‚’é€ä¿¡ã—ã¾ã™ã€‚",
             this.SendEmail_Result);
 
     }
@@ -351,37 +351,37 @@ public class AccountInputManager : MonoBehaviour
 
         switch (resultMessage)
         {
-            case "³íI—¹":
+            case "æ­£å¸¸çµ‚äº†":
                 PopupUIManager.Instance.SetupPopupMessage(
-                    "ƒ[ƒ‹‘—MŠ®—¹",
-                    "”FØƒ[ƒ‹‚ğ‘—M‚µ‚Ü‚µ‚½B\n\n" +
-                    "ƒŠƒ“ƒN‚ğŠJ‚«AƒAƒhƒŒƒX‚Ì”FØ‚ğs‚Á‚Ä‚­‚¾‚³‚¢B");
+                    "ãƒ¡ãƒ¼ãƒ«é€ä¿¡å®Œäº†",
+                    "èªè¨¼ãƒ¡ãƒ¼ãƒ«ã‚’é€ä¿¡ã—ã¾ã—ãŸã€‚\n\n" +
+                    "ãƒªãƒ³ã‚¯ã‚’é–‹ãã€ã‚¢ãƒ‰ãƒ¬ã‚¹ã®èªè¨¼ã‚’è¡Œã£ã¦ãã ã•ã„ã€‚");
                 break;
 
-            case "ˆÙíI—¹":
-                PopupUIManager.Instance.SetupMessageBand("ƒGƒ‰[‚ª”­¶‚µ‚Ü‚µ‚½B", 2);
+            case "ç•°å¸¸çµ‚äº†":
+                PopupUIManager.Instance.SetupMessageBand("ã‚¨ãƒ©ãƒ¼ãŒç™ºç”Ÿã—ã¾ã—ãŸã€‚", 2);
                 break;
 
-            case "ƒlƒbƒgƒ[ƒNƒGƒ‰[":
+            case "ãƒãƒƒãƒˆãƒ¯ãƒ¼ã‚¯ã‚¨ãƒ©ãƒ¼":
                 PopupUIManager.Instance.SetupMessageBand(
-                    "ƒlƒbƒgƒ[ƒNƒGƒ‰[‚ª”­¶‚µ‚Ü‚µ‚½BÚ‘±‚ğŠm”F‚µ‚Ä‚­‚¾‚³‚¢B", 2);
+                    "ãƒãƒƒãƒˆãƒ¯ãƒ¼ã‚¯ã‚¨ãƒ©ãƒ¼ãŒç™ºç”Ÿã—ã¾ã—ãŸã€‚æ¥ç¶šã‚’ç¢ºèªã—ã¦ãã ã•ã„ã€‚", 2);
                 break;
 
             default:
-                PopupUIManager.Instance.SetupPopupMessage("ƒƒOƒCƒ“¸”s", resultMessage, this.Login);
+                PopupUIManager.Instance.SetupPopupMessage("ãƒ­ã‚°ã‚¤ãƒ³å¤±æ•—", resultMessage, this.Login);
                 break;
         }
     }
     #endregion
 
-    #region ƒf[ƒ^íœ
+    #region ãƒ‡ãƒ¼ã‚¿å‰Šé™¤
     public void DeleteData()
     {
         PopupUIManager.Instance.SetupPopup(
-            "ƒf[ƒ^íœ",
-            "Œ»İ‚ÌƒAƒJƒEƒ“ƒg‚Ìƒf[ƒ^‚ğíœ‚µ‚Ü‚·B\n" +
-            "<color=#E20000><B>‚±‚Ì‘€ì‚Íæ‚èÁ‚¹‚Ü‚¹‚ñB</color></B>\n\n" +
-            "–{“–‚É‚æ‚ë‚µ‚¢‚Å‚·‚©H",
+            "ãƒ‡ãƒ¼ã‚¿å‰Šé™¤",
+            "ç¾åœ¨ã®ã‚¢ã‚«ã‚¦ãƒ³ãƒˆã®ãƒ‡ãƒ¼ã‚¿ã‚’å‰Šé™¤ã—ã¾ã™ã€‚\n" +
+            "<color=#E20000><B>ã“ã®æ“ä½œã¯å–ã‚Šæ¶ˆã›ã¾ã›ã‚“ã€‚</color></B>\n\n" +
+            "æœ¬å½“ã«ã‚ˆã‚ã—ã„ã§ã™ã‹ï¼Ÿ",
             DeleteData_Result);
     }
     public async void DeleteData_Result()
@@ -389,14 +389,14 @@ public class AccountInputManager : MonoBehaviour
         if (await FirestoreManager.Instance.SaveNewPlayerData())
         {
             PopupUIManager.Instance.SetupPopupMessage(
-                "ƒf[ƒ^íœŠ®—¹",
-                "ƒf[ƒ^‚Ìíœ‚ªŠ®—¹‚µ‚Ü‚µ‚½B\n\n" +
-                "ÄƒƒOƒCƒ“‚µ‚Ü‚·B",
+                "ãƒ‡ãƒ¼ã‚¿å‰Šé™¤å®Œäº†",
+                "ãƒ‡ãƒ¼ã‚¿ã®å‰Šé™¤ãŒå®Œäº†ã—ã¾ã—ãŸã€‚\n\n" +
+                "å†ãƒ­ã‚°ã‚¤ãƒ³ã—ã¾ã™ã€‚",
                 ReLogin);
         }
         else
         {
-            PopupUIManager.Instance.SetupMessageBand("ƒGƒ‰[‚ª”­¶‚µ‚Ü‚µ‚½B", 2);
+            PopupUIManager.Instance.SetupMessageBand("ã‚¨ãƒ©ãƒ¼ãŒç™ºç”Ÿã—ã¾ã—ãŸã€‚", 2);
         }
     }
     public void ReLogin()

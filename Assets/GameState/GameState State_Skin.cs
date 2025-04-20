@@ -13,13 +13,13 @@ public class GameStateState_Skin : GameStateStateBase
 
     public override void Enter()
     {
-        //ƒXƒLƒ“‘I‘ğ‰æ–Ê‚ÌUI‚ğ—LŒø‰»
+        //ã‚¹ã‚­ãƒ³é¸æŠç”»é¢ã®UIã‚’æœ‰åŠ¹åŒ–
         IM.InputUISetActive_Skin(true);
 
-        //ƒXƒLƒ“ƒZƒŒƒNƒ^[‚Ì—LŒø‰»
+        //ã‚¹ã‚­ãƒ³ã‚»ãƒ¬ã‚¯ã‚¿ãƒ¼ã®æœ‰åŠ¹åŒ–
         GM.skinSelecter.isActive = true;
 
-        //•ÏX‘O‚ÌƒXƒLƒ“‚ğ•Û‘¶
+        //å¤‰æ›´å‰ã®ã‚¹ã‚­ãƒ³ã‚’ä¿å­˜
         GM.previousSkinID = GM.usingSkinID;
     }
 
@@ -27,13 +27,13 @@ public class GameStateState_Skin : GameStateStateBase
 
     public override void Update(float deltaTime)
     {
-        //“ü—Í‚Ìæ“¾
+        //å…¥åŠ›ã®å–å¾—
         IM.GetInput_Skin();
 
-        //’nŒ`‚ğŠÇ—
+        //åœ°å½¢ã‚’ç®¡ç†
         TM.ManageMovingTerrain();
 
-        //“ü—Í‚ª‚ ‚èƒZƒŒƒNƒ^[‚ÌƒzƒC[ƒ‹‚ª’â~‚µ‚Ä‚¢‚ê‚ÎƒXƒe[ƒg‘JˆÚ
+        //å…¥åŠ›ãŒã‚ã‚Šã‚»ãƒ¬ã‚¯ã‚¿ãƒ¼ã®ãƒ›ã‚¤ãƒ¼ãƒ«ãŒåœæ­¢ã—ã¦ã„ã‚Œã°ã‚¹ãƒ†ãƒ¼ãƒˆé·ç§»
         if (IM.is_Skin_OK_Push || IM.is_Skin_Cancel_Push)
             if (skinSelecter.isStop)
                 stateMachine.ChangeState(stateMachine.state_SkinToMenu);
@@ -43,10 +43,10 @@ public class GameStateState_Skin : GameStateStateBase
 
     public override void Exit()
     {
-        //ƒXƒLƒ“‘I‘ğ‰æ–Ê‚ÌUI‚ğ–³Œø‰»
+        //ã‚¹ã‚­ãƒ³é¸æŠç”»é¢ã®UIã‚’ç„¡åŠ¹åŒ–
         IM.InputUISetActive_Skin(false);
 
-        //ƒXƒLƒ“ƒZƒŒƒNƒ^[ƒXƒNƒŠƒvƒg‚ğˆê“I‚É–³Œø‰»iSkinToMenuƒXƒe[ƒg‚É‚ÄÄ—LŒø‰»j
+        //ã‚¹ã‚­ãƒ³ã‚»ãƒ¬ã‚¯ã‚¿ãƒ¼ã‚¹ã‚¯ãƒªãƒ—ãƒˆã‚’ä¸€æ™‚çš„ã«ç„¡åŠ¹åŒ–ï¼ˆSkinToMenuã‚¹ãƒ†ãƒ¼ãƒˆã«ã¦å†æœ‰åŠ¹åŒ–ï¼‰
         skinSelecter.enabled = false;
     }
 }

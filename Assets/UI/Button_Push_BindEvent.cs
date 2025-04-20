@@ -11,53 +11,53 @@ public class Button_Push_BindEvent : MonoBehaviour, IPointerDownHandler, IPointe
 
     private void Start()
     {
-        //��{�̃X�P�[�����L��
+        //基本のスケールを記憶
         defaultScale = transform.localScale;
 
-        //���ʉ������ݒ�Ȃ�f�t�H���g�̌��ʉ���o�^
+        //効果音が未設定ならデフォルトの効果音を登録
         if (clipSE == null) clipSE = AudioManager.Instance.SE_Button;
     }
 
-    //�^�b�v�F�^�b�v���Ɏ��s
-    //�}�E�X�F�N���b�N���Ɏ��s
+    //タップ：タップ時に実行
+    //マウス：クリック時に実行
     public void OnPointerDown(PointerEventData eventData)
     {
-        //�X�P�[�����g��
+        //スケールを拡大
         transform.localScale *= 1.05f;
 
-        //�J�o�[�𒅐F
+        //カバーを着色
         cover.color = GameManager.Instance.panelSelectedColor - Color.black * 0.95f;
 
-        //SE���Đ�
+        //SEを再生
         AudioManager.Instance.PlaySE(clipSE);
     }
 
-    //�^�b�v�F�^�b�v��Ɏw����ʂ��痣�ꂽ�Ƃ��A�w�̏ꏊ�Ɋւ�炸���s
-    //�}�E�X�F�N���b�N��Ƀ}�E�X�{�^���𗣂����Ƃ��A�J�[�\���̈ʒu�Ɋւ�炸���s
+    //タップ：タップ後に指が画面から離れたとき、指の場所に関わらず実行
+    //マウス：クリック後にマウスボタンを離したとき、カーソルの位置に関わらず実行
     public void OnPointerUp(PointerEventData eventData)
     {
-        //�X�P�[������{�̃X�P�[���ɖ߂�
+        //スケールを基本のスケールに戻す
         transform.localScale = defaultScale;
 
-        //�J�o�[�𓧖���
+        //カバーを透明に
         cover.color = Color.clear;
     }
 
-    //�^�b�v�F�^�b�v��Ɏw����ʂ��痣�ꂽ�Ƃ��A�w���I�u�W�F�N�g��Ȃ���s
-    //�}�E�X�F�N���b�N��Ƀ}�E�X�{�^���𗣂����Ƃ��A�J�[�\�����I�u�W�F�N�g��Ȃ���s
+    //タップ：タップ後に指が画面から離れたとき、指がオブジェクト上なら実行
+    //マウス：クリック後にマウスボタンを離したとき、カーソルがオブジェクト上なら実行
     public void OnPointerClick(PointerEventData eventData)
     {
-        //�C�x���g�����s
+        //イベントを実行
         eventOnPush?.Invoke();
     }
 
-    //�X�N���v�g�������������΃��Z�b�g����
+    //スクリプトが無効化されればリセット処理
     private void OnDisable()
     {
-        //�X�P�[������{�̃X�P�[���ɖ߂�
+        //スケールを基本のスケールに戻す
         transform.localScale = defaultScale;
 
-        //�J�o�[�𓧖���
+        //カバーを透明に
         cover.color = Color.clear;
     }
 }

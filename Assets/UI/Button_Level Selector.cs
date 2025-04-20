@@ -15,45 +15,45 @@ public class Button_LevelSelector: MonoBehaviour, IPointerClickHandler
     private Color panelColor;
     private Color defaultColor = Color.black;
 
-    //ƒ^ƒbƒvFƒ^ƒbƒvŒã‚Éw‚ª‰æ–Ê‚©‚ç—£‚ê‚½‚Æ‚«Aw‚ªƒIƒuƒWƒFƒNƒgã‚È‚çÀs
-    //ƒ}ƒEƒXFƒNƒŠƒbƒNŒã‚Éƒ}ƒEƒXƒ{ƒ^ƒ“‚ğ—£‚µ‚½‚Æ‚«AƒJ[ƒ\ƒ‹‚ªƒIƒuƒWƒFƒNƒgã‚È‚çÀs
+    //ã‚¿ãƒƒãƒ—ï¼šã‚¿ãƒƒãƒ—å¾Œã«æŒ‡ãŒç”»é¢ã‹ã‚‰é›¢ã‚ŒãŸã¨ãã€æŒ‡ãŒã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆä¸Šãªã‚‰å®Ÿè¡Œ
+    //ãƒã‚¦ã‚¹ï¼šã‚¯ãƒªãƒƒã‚¯å¾Œã«ãƒã‚¦ã‚¹ãƒœã‚¿ãƒ³ã‚’é›¢ã—ãŸã¨ãã€ã‚«ãƒ¼ã‚½ãƒ«ãŒã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆä¸Šãªã‚‰å®Ÿè¡Œ
     public void OnPointerClick(PointerEventData eventData)
     {
-        //—LŒøó‘Ô‚Å‚È‚¯‚ê‚ÎI—¹
+        //æœ‰åŠ¹çŠ¶æ…‹ã§ãªã‘ã‚Œã°çµ‚äº†
         if (!isEnable) return;
 
-        //“ü—Í‚Ìó‚¯“n‚µ
+        //å…¥åŠ›ã®å—ã‘æ¸¡ã—
         GameManager.Instance.SetTrainingLevel(level);
 
-        //SE‚ÌÄ¶
+        //SEã®å†ç”Ÿ
         AudioManager.Instance.PlaySE(AudioManager.Instance.SE_Panel);
 
         PushButton();
     }
 
-    //‰Ÿ‰ºˆ—
+    //æŠ¼ä¸‹å‡¦ç†
     public void PushButton()
     {
-        //•\¦‚ğ‘I‘ğó‘Ô‚Ö•Ï‰»
+        //è¡¨ç¤ºã‚’é¸æŠçŠ¶æ…‹ã¸å¤‰åŒ–
         image.color = GameManager.Instance.panelSelectedColor;
         cover.color = GameManager.Instance.panelSelectedColor - Color.black * 0.95f;
 
-        //“ü—Í‚ğ–³Œø‰»
+        //å…¥åŠ›ã‚’ç„¡åŠ¹åŒ–
         isEnable = false;
     }
 
-    //‰Šú‰»ˆ—
+    //åˆæœŸåŒ–å‡¦ç†
     public void Initialize()
     {
-        //•\¦‚ğ”ñ‘I‘ğó‘Ô‚Ö•Ï‰»
+        //è¡¨ç¤ºã‚’éé¸æŠçŠ¶æ…‹ã¸å¤‰åŒ–
         image.color = defaultColor;
         cover.color = Color.clear;
 
-        //“ü—Í‚ğ—LŒø‰»
+        //å…¥åŠ›ã‚’æœ‰åŠ¹åŒ–
         isEnable = true;
     }
 
-    //‚±‚ÌƒXƒNƒŠƒvƒg‚ÌƒŒƒxƒ‹‚ğİ’è
+    //ã“ã®ã‚¹ã‚¯ãƒªãƒ—ãƒˆã®ãƒ¬ãƒ™ãƒ«ã‚’è¨­å®š
     public void SetLevel(int level)
     {
         this.level = level;

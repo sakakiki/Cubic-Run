@@ -4,7 +4,7 @@ using UnityEngine.Events;
 
 public class PopupUIManager : MonoBehaviour
 {
-    //©g‚ÌƒCƒ“ƒXƒ^ƒ“ƒX
+    //è‡ªèº«ã®ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹
     public static PopupUIManager Instance;
 
     public string inputText1 { private set; get; }
@@ -52,25 +52,25 @@ public class PopupUIManager : MonoBehaviour
 
     private void Update()
     {
-        //ƒAƒNƒeƒBƒuó‘Ô‚Å‚È‚¯‚ê‚Î‰½‚à‚µ‚È‚¢
+        //ã‚¢ã‚¯ãƒ†ã‚£ãƒ–çŠ¶æ…‹ã§ãªã‘ã‚Œã°ä½•ã‚‚ã—ãªã„
         if (!isActiveBand) return;
 
-        //c‚è•\¦ŠÔ‚ğŒ¸‚ç‚·
+        //æ®‹ã‚Šè¡¨ç¤ºæ™‚é–“ã‚’æ¸›ã‚‰ã™
         displayTime -= Time.deltaTime;
 
-        //•\¦I—¹0.5•bˆÈ“à‚È‚çÁ‚µ‚Ä‚¢‚­
+        //è¡¨ç¤ºçµ‚äº†0.5ç§’ä»¥å†…ãªã‚‰æ¶ˆã—ã¦ã„ã
         if (displayTime < 0.5)
             colorAlpha -= Time.deltaTime * 2;
-        //•\¦ŠJn0.5•b‚©‚¯‚Ä”Z‚­‚·‚é
+        //è¡¨ç¤ºé–‹å§‹0.5ç§’ã‹ã‘ã¦æ¿ƒãã™ã‚‹
         else if (colorAlpha < 1)
             colorAlpha += Time.deltaTime * 2;
         else return;
 
-        //F‚ÌXV
+        //è‰²ã®æ›´æ–°
         bandBack.color = Color.white - Color.black * (1 - colorAlpha * 0.9f);
         bandMessage.color = Color.black * colorAlpha;
 
-        //•\¦ŠÔ‚ªI—¹‚µ‚½‚ç”ñƒAƒNƒeƒBƒuó‘Ô‚É
+        //è¡¨ç¤ºæ™‚é–“ãŒçµ‚äº†ã—ãŸã‚‰éã‚¢ã‚¯ãƒ†ã‚£ãƒ–çŠ¶æ…‹ã«
         if (displayTime < 0)
         {
             isActiveBand = false;
@@ -82,17 +82,17 @@ public class PopupUIManager : MonoBehaviour
 
 
 
-    //ƒeƒLƒXƒgƒ|ƒbƒvƒAƒbƒv‚Ìì¬
+    //ãƒ†ã‚­ã‚¹ãƒˆãƒãƒƒãƒ—ã‚¢ãƒƒãƒ—ã®ä½œæˆ
     public void SetupMessageText(string message)
     {
         textMessage.SetText(message);
     }
-    //ƒeƒLƒXƒgƒ|ƒbƒvƒAƒbƒv‚Ìíœ
+    //ãƒ†ã‚­ã‚¹ãƒˆãƒãƒƒãƒ—ã‚¢ãƒƒãƒ—ã®å‰Šé™¤
     public void DeleteMessageText()
     {
         textMessage.SetText("");
     }
-    //ƒeƒLƒXƒgƒ|ƒbƒvƒAƒbƒv‚ÌF•ÏX
+    //ãƒ†ã‚­ã‚¹ãƒˆãƒãƒƒãƒ—ã‚¢ãƒƒãƒ—ã®è‰²å¤‰æ›´
     public void SetMessageTextColor(Color textColor)
     {
         textMessage.color = textColor;
@@ -100,7 +100,7 @@ public class PopupUIManager : MonoBehaviour
 
 
 
-    //ƒoƒ“ƒhƒ|ƒbƒvƒAƒbƒv‚Ìì¬
+    //ãƒãƒ³ãƒ‰ãƒãƒƒãƒ—ã‚¢ãƒƒãƒ—ã®ä½œæˆ
     public void SetupMessageBand(string message, float displayTime)
     {
         isActiveBand = true;
@@ -110,7 +110,7 @@ public class PopupUIManager : MonoBehaviour
 
 
 
-    //ƒƒbƒZ[ƒW—pƒ|ƒbƒvƒAƒbƒv‚Ìì¬iŒã‘±ˆ—‚È‚µj
+    //ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ç”¨ãƒãƒƒãƒ—ã‚¢ãƒƒãƒ—ã®ä½œæˆï¼ˆå¾Œç¶šå‡¦ç†ãªã—ï¼‰
     public void SetupPopupMessage(string title, string explanation)
     {
         boardPopup.SetActive(true);
@@ -122,7 +122,7 @@ public class PopupUIManager : MonoBehaviour
 
 
 
-    //ƒƒbƒZ[ƒW—pƒ|ƒbƒvƒAƒbƒv‚Ìì¬iŒã‘±ˆ—‚ ‚èj
+    //ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ç”¨ãƒãƒƒãƒ—ã‚¢ãƒƒãƒ—ã®ä½œæˆï¼ˆå¾Œç¶šå‡¦ç†ã‚ã‚Šï¼‰
     public void SetupPopupMessage(string title, string explanation, UnityAction onPushOK)
     {
         boardPopup.SetActive(true);
@@ -136,7 +136,7 @@ public class PopupUIManager : MonoBehaviour
 
 
 
-    //Šm”F—pƒ|ƒbƒvƒAƒbƒv‚Ìì¬
+    //ç¢ºèªç”¨ãƒãƒƒãƒ—ã‚¢ãƒƒãƒ—ã®ä½œæˆ
     public void SetupPopup(string title, string explanation, UnityAction onPushOK)
     {
         boardPopup.SetActive(true);
@@ -150,7 +150,7 @@ public class PopupUIManager : MonoBehaviour
 
 
 
-    //Šm”F—pƒ|ƒbƒvƒAƒbƒv‚Ìì¬iƒLƒƒƒ“ƒZƒ‹ˆ—‚ ‚èj
+    //ç¢ºèªç”¨ãƒãƒƒãƒ—ã‚¢ãƒƒãƒ—ã®ä½œæˆï¼ˆã‚­ãƒ£ãƒ³ã‚»ãƒ«å‡¦ç†ã‚ã‚Šï¼‰
     public void SetupPopup(string title, string explanation, UnityAction onPushOK, UnityAction onCancel)
     {
         boardPopup.SetActive(true);
@@ -166,7 +166,7 @@ public class PopupUIManager : MonoBehaviour
 
 
 
-    //’Pˆê“ü—Íƒ|ƒbƒvƒAƒbƒv‚Ìì¬
+    //å˜ä¸€å…¥åŠ›ãƒãƒƒãƒ—ã‚¢ãƒƒãƒ—ã®ä½œæˆ
     public void SetupPopup(
         string title, string explanation, TMP_InputField.ContentType contentType, UnityAction onPushOK)
     {
@@ -179,11 +179,11 @@ public class PopupUIManager : MonoBehaviour
         switch (contentType)
         {
             case TMP_InputField.ContentType.EmailAddress:
-                inputfieldExplanation_SI.SetText("ƒ[ƒ‹ƒAƒhƒŒƒX‚ğ“ü—Í");
+                inputfieldExplanation_SI.SetText("ãƒ¡ãƒ¼ãƒ«ã‚¢ãƒ‰ãƒ¬ã‚¹ã‚’å…¥åŠ›");
                 break;
 
             case TMP_InputField.ContentType.Password:
-                inputfieldExplanation_SI.SetText("ƒpƒXƒ[ƒh‚ğ“ü—Í");
+                inputfieldExplanation_SI.SetText("ãƒ‘ã‚¹ãƒ¯ãƒ¼ãƒ‰ã‚’å…¥åŠ›");
                 break;
 
             default: break;
@@ -195,7 +195,7 @@ public class PopupUIManager : MonoBehaviour
 
 
 
-    //ƒvƒŒƒCƒ„[–¼—p’Pˆê“ü—Íƒ|ƒbƒvƒAƒbƒv‚Ìì¬
+    //ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼åç”¨å˜ä¸€å…¥åŠ›ãƒãƒƒãƒ—ã‚¢ãƒƒãƒ—ã®ä½œæˆ
     public void SetupPopup(
         string title, string explanation, string currentPlayerName, UnityAction onPushOK)
     {
@@ -205,7 +205,7 @@ public class PopupUIManager : MonoBehaviour
         boardTitle.SetText(title);
         explanation_SI.SetText(explanation);
         inputfield_SI.contentType = TMP_InputField.ContentType.Standard;
-        inputfieldExplanation_SI.SetText("ƒvƒŒƒCƒ„[–¼‚ğ“ü—Í");
+        inputfieldExplanation_SI.SetText("ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼åã‚’å…¥åŠ›");
         inputfield_SI.text = currentPlayerName;
         eventOnPushOK.AddListener(onPushOK);
         listenActionOnPushOK = onPushOK;
@@ -214,7 +214,7 @@ public class PopupUIManager : MonoBehaviour
 
 
 
-    //2“ü—Íƒ|ƒbƒvƒAƒbƒv‚Ìì¬
+    //2å…¥åŠ›ãƒãƒƒãƒ—ã‚¢ãƒƒãƒ—ã®ä½œæˆ
     public void SetupPopup(
         string title,
         string explanation1, TMP_InputField.ContentType contentType1, 
@@ -232,8 +232,8 @@ public class PopupUIManager : MonoBehaviour
         switch (contentType1)
         {
             case TMP_InputField.ContentType.EmailAddress:
-                inputfieldExplanation_DI_1.SetText("ƒ[ƒ‹ƒAƒhƒŒƒX‚ğ“ü—Í");
-                inputfieldExplanation_DI_2.SetText("ƒpƒXƒ[ƒh‚ğ“ü—Í");
+                inputfieldExplanation_DI_1.SetText("ãƒ¡ãƒ¼ãƒ«ã‚¢ãƒ‰ãƒ¬ã‚¹ã‚’å…¥åŠ›");
+                inputfieldExplanation_DI_2.SetText("ãƒ‘ã‚¹ãƒ¯ãƒ¼ãƒ‰ã‚’å…¥åŠ›");
                 break;
 
             default: break;
@@ -245,7 +245,7 @@ public class PopupUIManager : MonoBehaviour
 
 
 
-    //OKƒ{ƒ^ƒ“‚ª‰Ÿ‚³‚ê‚½ê‡‚Ìˆ—
+    //OKãƒœã‚¿ãƒ³ãŒæŠ¼ã•ã‚ŒãŸå ´åˆã®å‡¦ç†
     public void OnPushOK()
     {
         eventSaveInput?.Invoke();
@@ -268,7 +268,7 @@ public class PopupUIManager : MonoBehaviour
 
 
 
-    //ƒLƒƒƒ“ƒZƒ‹ƒ{ƒ^ƒ“‚ª‰Ÿ‚³‚ê‚½ê‡‚Ìˆ—
+    //ã‚­ãƒ£ãƒ³ã‚»ãƒ«ãƒœã‚¿ãƒ³ãŒæŠ¼ã•ã‚ŒãŸå ´åˆã®å‡¦ç†
 
     public void OnPushCancel()
     {
@@ -291,7 +291,7 @@ public class PopupUIManager : MonoBehaviour
 
 
 
-    //’Pˆê“ü—Í‚Ì“ü—Í“à—e‚ğ‹L‰¯
+    //å˜ä¸€å…¥åŠ›ã®å…¥åŠ›å†…å®¹ã‚’è¨˜æ†¶
     public void SaveInput1()
     {
         if (inputfield_SI.text != "")
@@ -303,7 +303,7 @@ public class PopupUIManager : MonoBehaviour
 
 
 
-    //2“ü—Í‚Ì“ü—Í“à—e‚ğ‹L‰¯
+    //2å…¥åŠ›ã®å…¥åŠ›å†…å®¹ã‚’è¨˜æ†¶
     public void SaveInput2()
     {
         if (inputfield_DI_1.text != "")

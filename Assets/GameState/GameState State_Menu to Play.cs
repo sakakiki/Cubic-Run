@@ -32,28 +32,28 @@ public class GameStateState_MenuToPlay : GameStateStateBase
 
     public override void Enter()
     {
-        //Œo‰ßŠÔƒŠƒZƒbƒg
+        //çµŒéæ™‚é–“ãƒªã‚»ãƒƒãƒˆ
         elapsedTime = 0;
 
-        //áŠQ•¨‚Ì¶¬‚ğ–³Œø‰»
+        //éšœå®³ç‰©ã®ç”Ÿæˆã‚’ç„¡åŠ¹åŒ–
         TM.isCreateObstacle = false;
 
-        //”wŒi‚Ì’nŒ`‚ğ‰Á‘¬
+        //èƒŒæ™¯ã®åœ°å½¢ã‚’åŠ é€Ÿ
         TM.moveSpeed = 20;
         TM.SetSpeed(20);
 
-        //ƒŒƒxƒ‹‚ÌƒŠƒZƒbƒg
+        //ãƒ¬ãƒ™ãƒ«ã®ãƒªã‚»ãƒƒãƒˆ
         if (GM.isTraining)
             GM.level = GM.trainingLevel - 1;
         else GM.level = 0;
         GM.levelText.SetText("");
 
-        //ƒXƒRƒA‚ÌƒŠƒZƒbƒg
+        //ã‚¹ã‚³ã‚¢ã®ãƒªã‚»ãƒƒãƒˆ
         GM.score = 0;
         PlayStateStateBase.scoreCorrection = GM.level * 5000;
         GM.scoreText.SetText("0");
 
-        //ƒXƒRƒAƒQ[ƒWƒŠƒZƒbƒg
+        //ã‚¹ã‚³ã‚¢ã‚²ãƒ¼ã‚¸ãƒªã‚»ãƒƒãƒˆ
         GM.scoreGageTf.localScale = Vector3.right + Vector3.forward;
     }
 
@@ -61,36 +61,36 @@ public class GameStateState_MenuToPlay : GameStateStateBase
 
     public override void Update(float deltaTime)
     {
-        //Œo‰ßŠÔ‰ÁZ
+        //çµŒéæ™‚é–“åŠ ç®—
         elapsedTime += deltaTime;
 
-        //–‘OŒvZ
+        //äº‹å‰è¨ˆç®—
         float lerpValue = (elapsedTime - 0.5f) / 1.5f;
 
-        //’nŒ`‚ğŠÇ—
+        //åœ°å½¢ã‚’ç®¡ç†
         TM.ManageMovingTerrain();
 
-        //UI‚ğ‰ñ“]
+        //UIã‚’å›è»¢
         menuHingeRtf_L.localEulerAngles = Vector3.Lerp(Vector3.zero, Vector3.up * -180, lerpValue);
         menuHingeRtf_R.localEulerAngles = Vector3.Lerp(Vector3.zero, Vector3.up * 180, lerpValue);
         playHingeRtf_L.localEulerAngles = Vector3.Lerp(Vector3.up * 180, Vector3.zero, lerpValue);
         playHingeRtf_R.localEulerAngles = Vector3.Lerp(Vector3.up * -180, Vector3.zero, lerpValue);
 
-        //ƒXƒNƒŠ[ƒ“ƒJƒo[‚ÌF‚ğ•ÏX
+        //ã‚¹ã‚¯ãƒªãƒ¼ãƒ³ã‚«ãƒãƒ¼ã®è‰²ã‚’å¤‰æ›´
         screenCover.color = 
             startCoverColor - Color.black * Mathf.Lerp(targetCoverColor.a, startCoverColor.a, lerpValue);
 
-        //BGM‚Ìƒ{ƒŠƒ…[ƒ€•ÏX
+        //BGMã®ãƒœãƒªãƒ¥ãƒ¼ãƒ å¤‰æ›´
         audioSource_BGM.volume = (2 - elapsedTime) * AM.volume_BGM;
 
-        //ƒXƒ^ƒ~ƒi‚ÌÁ”ï‰‰o
+        //ã‚¹ã‚¿ãƒŸãƒŠã®æ¶ˆè²»æ¼”å‡º
         if (0 <= remainingStamina && remainingStamina < 3)
         {
             staminaSprite[remainingStamina].color = GM.staminaColor - Color.black * elapsedTime * 3;
             staminaRtf[remainingStamina].localScale = Vector3.one * 130 * (1 + elapsedTime);
         }
 
-        //w’èŠÔŒo‰ß‚ÅƒXƒe[ƒg‘JˆÚ
+        //æŒ‡å®šæ™‚é–“çµŒéã§ã‚¹ãƒ†ãƒ¼ãƒˆé·ç§»
         if (elapsedTime > 2)
             stateMachine.ChangeState(stateMachine.state_Play);
     }
@@ -99,12 +99,12 @@ public class GameStateState_MenuToPlay : GameStateStateBase
 
     public override void Exit()
     {
-        //ƒŒƒxƒ‹ƒeƒLƒXƒg‚ÌˆÊ’uE‘å‚«‚³EF’²®
+        //ãƒ¬ãƒ™ãƒ«ãƒ†ã‚­ã‚¹ãƒˆã®ä½ç½®ãƒ»å¤§ãã•ãƒ»è‰²èª¿æ•´
         GM.levelTf.position = GM.centerPos_World;
         GM.levelText.fontSize = 300;
         GM.levelText.color = Color.clear;
 
-        //ƒXƒ^ƒ~ƒiƒAƒCƒRƒ“‚Ì‘å‚«‚³‚ğ–ß‚·
+        //ã‚¹ã‚¿ãƒŸãƒŠã‚¢ã‚¤ã‚³ãƒ³ã®å¤§ãã•ã‚’æˆ»ã™
         if (0 <= remainingStamina && remainingStamina < 3)
             staminaRtf[remainingStamina].localScale = Vector3.one * 130;
     }

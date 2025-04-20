@@ -5,18 +5,19 @@ public class AdmobManager : MonoBehaviour
 {
     public static AdmobManager Instance;
     public bool isReady { private set; get; } = false;
-    private NativeOverlayAd _nativeOverlayAd; //ƒlƒCƒeƒBƒuL–{‘Ì
-    private RewardedAd _rewardedAd; //ƒŠƒ[ƒhL–{‘Ì
+    private NativeOverlayAd _nativeOverlayAd; //ãƒã‚¤ãƒ†ã‚£ãƒ–åºƒå‘Šæœ¬ä½“
+    private RewardedAd _rewardedAd; //ãƒªãƒ¯ãƒ¼ãƒ‰åºƒå‘Šæœ¬ä½“
+    private bool isGetRewarded = false; //ãƒªãƒ¯ãƒ¼ãƒ‰åºƒå‘Šã®å ±é…¬ã‚’å–å¾—ã—ãŸã‹ã©ã†ã‹
 
-    // Lƒ†ƒjƒbƒg
+    // åºƒå‘Šãƒ¦ãƒ‹ãƒƒãƒˆ
 #if UNITY_ANDROID
-    private string _adUnitId_nativeOverlay = "ca-app-pub-3940256099942544/2247696110"; //ƒeƒXƒg—p
+    private string _adUnitId_nativeOverlay = "ca-app-pub-3940256099942544/2247696110"; //ãƒ†ã‚¹ãƒˆç”¨
     //private string _adUnitId_nativeOverlay = "ca-app-pub-3396760301690878/9424445321";
-    private string _adUnitId_reward = "ca-app-pub-3940256099942544/5224354917"; //ƒeƒXƒg—p
+    private string _adUnitId_reward = "ca-app-pub-3940256099942544/5224354917"; //ãƒ†ã‚¹ãƒˆç”¨
     //private string _adUnitId_reward = "ca-app-pub-3396760301690878/6470855214";
 #elif UNITY_IPHONE
-    private string _adUnitId_nativeOverlay = "ca-app-pub-3940256099942544/3986624511"; //ƒeƒXƒg—p
-    private string _adUnitId_reward = "ca-app-pub-3940256099942544/1712485313"; //ƒeƒXƒg—p
+    private string _adUnitId_nativeOverlay = "ca-app-pub-3940256099942544/3986624511"; //ãƒ†ã‚¹ãƒˆç”¨
+    private string _adUnitId_reward = "ca-app-pub-3940256099942544/1712485313"; //ãƒ†ã‚¹ãƒˆç”¨
 #else
     private string _adUnitId_nativeOverlay = "unused";
     private string _adUnitId_reward = "unused";
@@ -34,7 +35,7 @@ public class AdmobManager : MonoBehaviour
 
     void Start()
     {
-        //‰Šú‰»ˆ—
+        //åˆæœŸåŒ–å‡¦ç†
         MobileAds.RaiseAdEventsOnUnityMainThread = true;
         MobileAds.Initialize(initializeStatus =>
         {
@@ -46,39 +47,39 @@ public class AdmobManager : MonoBehaviour
 
 
     /// <summary>
-    /// ƒlƒCƒeƒBƒuL‚Ìƒ[ƒh‚Æ•\¦
+    /// ãƒã‚¤ãƒ†ã‚£ãƒ–åºƒå‘Šã®ãƒ­ãƒ¼ãƒ‰ã¨è¡¨ç¤º
     /// </summary>
     public void LoadAndRenderNativeAd(RectTransform targetRect)
     {
-        // V‚µ‚¢L‚ğƒ[ƒh‚·‚é‘O‚ÉŒÃ‚¢L‚ğƒNƒŠ[ƒ“ƒAƒbƒv
+        // æ–°ã—ã„åºƒå‘Šã‚’ãƒ­ãƒ¼ãƒ‰ã™ã‚‹å‰ã«å¤ã„åºƒå‘Šã‚’ã‚¯ãƒªãƒ¼ãƒ³ã‚¢ãƒƒãƒ—
         if (_nativeOverlayAd != null)
         {
             DestroyNativeAd();
         }
 
-        Debug.Log("Lƒ[ƒhŠJn");
+        Debug.Log("åºƒå‘Šãƒ­ãƒ¼ãƒ‰é–‹å§‹");
 
-        // L‚ğ“Ç‚İ‚Ş‚½‚ß‚ÌƒŠƒNƒGƒXƒg‚ğì¬
+        // åºƒå‘Šã‚’èª­ã¿è¾¼ã‚€ãŸã‚ã®ãƒªã‚¯ã‚¨ã‚¹ãƒˆã‚’ä½œæˆ
         var adRequest = new AdRequest();
-        Debug.Log("ƒŠƒNƒGƒXƒg‚ğì¬");
+        Debug.Log("ãƒªã‚¯ã‚¨ã‚¹ãƒˆã‚’ä½œæˆ");
 
-        // ƒIƒvƒVƒ‡ƒ“FƒlƒCƒeƒBƒuL‚ÌƒIƒvƒVƒ‡ƒ“‚ğ’è‹`
-        // ƒAƒXƒyƒNƒg”ä‚É‰‚¶‚ÄL‚ÌŒ`‚ğ•ÏX
+        // ã‚ªãƒ—ã‚·ãƒ§ãƒ³ï¼šãƒã‚¤ãƒ†ã‚£ãƒ–åºƒå‘Šã®ã‚ªãƒ—ã‚·ãƒ§ãƒ³ã‚’å®šç¾©
+        // ã‚¢ã‚¹ãƒšã‚¯ãƒˆæ¯”ã«å¿œã˜ã¦åºƒå‘Šã®å½¢ã‚’å¤‰æ›´
         var options = new NativeAdOptions { };
         float targetAspect = targetRect.localScale.x / targetRect.localScale.y;
         switch (targetAspect)
         {
-            case < 0.8f: options.MediaAspectRatio = MediaAspectRatio.Portrait; break; //c’·‚ÌL
-            case > 1.2f: options.MediaAspectRatio = MediaAspectRatio.Landscape; break; //‰¡’·‚ÌL
+            case < 0.8f: options.MediaAspectRatio = MediaAspectRatio.Portrait; break; //ç¸¦é•·ã®åºƒå‘Š
+            case > 1.2f: options.MediaAspectRatio = MediaAspectRatio.Landscape; break; //æ¨ªé•·ã®åºƒå‘Š
             default: options.MediaAspectRatio = MediaAspectRatio.Square; break;
         }
-        Debug.Log("ƒIƒvƒVƒ‡ƒ“‚ğ’è‹`");
+        Debug.Log("ã‚ªãƒ—ã‚·ãƒ§ãƒ³ã‚’å®šç¾©");
 
-        // L‚ğ“Ç‚İ‚ŞƒŠƒNƒGƒXƒg‚ğ‘—M
+        // åºƒå‘Šã‚’èª­ã¿è¾¼ã‚€ãƒªã‚¯ã‚¨ã‚¹ãƒˆã‚’é€ä¿¡
         NativeOverlayAd.Load(_adUnitId_nativeOverlay, adRequest, options,
             (NativeOverlayAd ad, LoadAdError error) =>
             {
-                Debug.Log("ƒR[ƒ‹ƒoƒbƒN“’B");
+                Debug.Log("ã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯åˆ°é”");
 
                 if (error != null)
                 {
@@ -87,8 +88,8 @@ public class AdmobManager : MonoBehaviour
                     return;
                 }
 
-                // ƒGƒ‰[‚ªnull‚Ìê‡AL‚Íí‚Énull‚Å‚Í‚È‚¢‚Í‚¸‚¾‚ª
-                // ƒNƒ‰ƒbƒVƒ…‚ğ”ğ‚¯‚é‚½‚ß‚Éƒ_ƒuƒ‹ƒ`ƒFƒbƒN‚ğs‚¤
+                // ã‚¨ãƒ©ãƒ¼ãŒnullã®å ´åˆã€åºƒå‘Šã¯å¸¸ã«nullã§ã¯ãªã„ã¯ãšã ãŒ
+                // ã‚¯ãƒ©ãƒƒã‚·ãƒ¥ã‚’é¿ã‘ã‚‹ãŸã‚ã«ãƒ€ãƒ–ãƒ«ãƒã‚§ãƒƒã‚¯ã‚’è¡Œã†
                 if (ad == null)
                 {
                     Debug.LogError("Unexpected error: Native Overlay ad load event " +
@@ -96,69 +97,126 @@ public class AdmobManager : MonoBehaviour
                     return;
                 }
 
-                // ³í‚ÉI—¹
+                // æ­£å¸¸ã«çµ‚äº†
                 Debug.Log("Native Overlay ad loaded with response : " +
                        ad.GetResponseInfo());
                 _nativeOverlayAd = ad;
 
-                // L‚ğ•\¦
+                // åºƒå‘Šã‚’è¡¨ç¤º
                 RenderNativeAd(targetRect);
             });
     }
 
     /// <summary>
-    /// ƒlƒCƒeƒBƒuL‚ÌƒŒƒ“ƒ_ƒŠƒ“ƒO
+    /// ãƒã‚¤ãƒ†ã‚£ãƒ–åºƒå‘Šã®ãƒ¬ãƒ³ãƒ€ãƒªãƒ³ã‚°
     /// </summary>
     private void RenderNativeAd(RectTransform targetRect)
     {
         if (_nativeOverlayAd != null)
         {
-            Debug.Log("L‚ÌƒŒƒ“ƒ_ƒŠƒ“ƒO");
+            Debug.Log("åºƒå‘Šã®ãƒ¬ãƒ³ãƒ€ãƒªãƒ³ã‚°");
 
-            // ƒJƒXƒ^ƒ€ƒXƒ^ƒCƒ‹‚ÅƒlƒCƒeƒBƒuƒeƒ“ƒvƒŒ[ƒgƒXƒ^ƒCƒ‹‚ğ’è‹`‚·‚é
+            // ã‚«ã‚¹ã‚¿ãƒ ã‚¹ã‚¿ã‚¤ãƒ«ã§ãƒã‚¤ãƒ†ã‚£ãƒ–ãƒ†ãƒ³ãƒ—ãƒ¬ãƒ¼ãƒˆã‚¹ã‚¿ã‚¤ãƒ«ã‚’å®šç¾©ã™ã‚‹
             var style = new NativeTemplateStyle
             {
                 TemplateId = NativeTemplateId.Medium,
-                MainBackgroundColor = Color.red,
+                MainBackgroundColor = Color.white,
                 CallToActionText = new NativeTemplateTextStyle
                 {
-                    BackgroundColor = Color.green,
+                    BackgroundColor = Color.gray,
                     TextColor = Color.white,
                     FontSize = 9,
                     Style = NativeTemplateFontStyle.Bold
                 }
             };
-
-            // L•`‰æ‘ÎÛ‚ÌlŠpŒ`‚Ìl‹÷‚ÌÀ•W‚ğæ“¾
+            /*
+            // åºƒå‘Šæç”»å¯¾è±¡ã®å››è§’å½¢ã®å››éš…ã®åº§æ¨™ã‚’å–å¾—
             Vector3[] corners = new Vector3[4];
             targetRect.GetWorldCorners(corners);
 
-            // ¶‰ºE‰Eã‚ÌƒXƒNƒŠ[ƒ“À•W‚ğæ“¾
-            Vector3 bottomLeft = RectTransformUtility.WorldToScreenPoint(null, corners[0]);
-            Vector3 topRight = RectTransformUtility.WorldToScreenPoint(null, corners[2]);
+            // å·¦ä¸‹ãƒ»å³ä¸Šã®ã‚¹ã‚¯ãƒªãƒ¼ãƒ³åº§æ¨™ã‚’å–å¾—
+            Vector3 bottomLeft = Camera.main.WorldToScreenPoint(corners[0]);
+            Vector3 topRight = Camera.main.WorldToScreenPoint(corners[2]);
 
-            // •‚Æ‚‚³‚ğŒvZiƒsƒNƒZƒ‹j
-            int adWidth = Mathf.RoundToInt(topRight.x - bottomLeft.x);
-            int adHeight = Mathf.RoundToInt(topRight.y - bottomLeft.y);
+            // å¹…ã¨é«˜ã•ã‚’è¨ˆç®—ï¼ˆãƒ”ã‚¯ã‚»ãƒ«ï¼‰
+            int adWidth = Mathf.RoundToInt((topRight.x - bottomLeft.x)/3);
+            int adHeight = Mathf.RoundToInt((topRight.y - bottomLeft.y)/3);
 
-            // ¶ãÀ•W‚ğŒvZiRenderTemplate‚ÌŒ´“_‚Í¶ãj
-            int adPosX = Mathf.RoundToInt(bottomLeft.x);
-            int adPosY = Mathf.RoundToInt(Screen.height - topRight.y); // Y²”½“]‚É’ˆÓ
+            // å·¦ä¸Šåº§æ¨™ã‚’è¨ˆç®—ï¼ˆRenderTemplateã®åŸç‚¹ã¯å·¦ä¸Šï¼‰
+            int adPosX = Mathf.RoundToInt(bottomLeft.x/2);
+            int adPosY = Mathf.RoundToInt(topRight.y/2);
 
-            // ƒlƒCƒeƒBƒuƒI[ƒo[ƒŒƒCL‚ğw’èêŠ‚ÉƒŒƒ“ƒ_ƒŠƒ“ƒO
+
+            // ãƒã‚¤ãƒ†ã‚£ãƒ–ã‚ªãƒ¼ãƒãƒ¼ãƒ¬ã‚¤åºƒå‘Šã‚’æŒ‡å®šå ´æ‰€ã«ãƒ¬ãƒ³ãƒ€ãƒªãƒ³ã‚°
             _nativeOverlayAd.RenderTemplate(style, new AdSize(adWidth, adHeight), adPosX, adPosY);
+            //_nativeOverlayAd.RenderTemplate(style, new AdSize(adWidth, adHeight), 50, 10);
+
+            Debug.Log($"Ad position (top-left): x={adPosX}, y={adPosY}, width={adWidth}, height={adHeight}");
+            */
+
+            Vector3[] corners = new Vector3[4];
+            targetRect.GetWorldCorners(corners);
+
+            // å·¦ä¸Šã¨å³ä¸‹ï¼ˆUnityã®åº§æ¨™ç³»ï¼šå·¦ä¸‹åŸç‚¹ï¼‰
+            Vector3 screenTopLeft = RectTransformUtility.WorldToScreenPoint(Camera.main, corners[1]);
+            Vector3 screenBottomRight = RectTransformUtility.WorldToScreenPoint(Camera.main, corners[3]);
+
+            // åº§æ¨™ï¼ˆãƒ”ã‚¯ã‚»ãƒ«ï¼‰
+            float pxX = screenTopLeft.x;
+            float pxY = Screen.height - screenTopLeft.y; // ä¸Šã‹ã‚‰ã®è·é›¢ã«å¤‰æ›
+            float pxWidth = screenBottomRight.x - screenTopLeft.x;
+            float pxHeight = screenTopLeft.y - screenBottomRight.y;
+
+            // dpi â†’ dpå¤‰æ›
+            float dpi = Screen.dpi;
+            if (dpi == 0) dpi = 320f; // fallbackã€‚ç«¯æœ«ã«ã‚ˆã£ã¦0ã«ãªã‚‹ã“ã¨ãŒã‚ã‚‹
+
+            float dpX = pxX / (dpi / 160f);
+            float dpY = pxY / (dpi / 160f);
+            float dpWidth = pxWidth / (dpi / 160f);
+            float dpHeight = pxHeight / (dpi / 160f);
+            int minDpSize = 120;
+            int maxDpX = Mathf.RoundToInt(Screen.width / (dpi / 160f));
+            int maxDpY = Mathf.RoundToInt(Screen.height / (dpi / 160f));
+
+            // ã‚µã‚¤ã‚ºåˆ¶é™
+            int adDpWidth = Mathf.Max(Mathf.RoundToInt(dpWidth), minDpSize);
+            int adDpHeight = Mathf.Max(Mathf.RoundToInt(dpHeight), minDpSize);
+
+            // ä½ç½®åˆ¶é™ï¼ˆç”»é¢å¤–ã«å‡ºãªã„ã‚ˆã†ã«è£œæ­£ï¼‰
+            int adDpX = Mathf.Clamp(Mathf.RoundToInt(dpX), 0, maxDpX - adDpWidth);
+            int adDpY = Mathf.Clamp(Mathf.RoundToInt(dpY), 0, maxDpY - adDpHeight);
+
+            // AdMobæç”»
+            /*
+            // è¡¨ç¤º
+            _nativeOverlayAd.RenderTemplate(
+                style,
+                new AdSize(adDpWidth, adDpHeight),
+                adDpX,
+                adDpY
+            );
+            _nativeOverlayAd.RenderTemplate(
+                style,
+                new AdSize(adDpWidth, adDpHeight),
+                0,
+                0
+            );
+            */
+
+            Debug.Log($"Ad in dp â†’ pos:({dpX}, {dpY}) size:({dpWidth}, {dpHeight}) | dpi: {dpi}");
         }
     }
 
     /// <summary>
-    /// ƒlƒCƒeƒBƒuL‚ğ”jŠü
+    /// ãƒã‚¤ãƒ†ã‚£ãƒ–åºƒå‘Šã‚’ç ´æ£„
     /// </summary>
     public void DestroyNativeAd()
     {
-        Debug.Log("L‚ğ”jŠü");
+        Debug.Log("åºƒå‘Šã‚’ç ´æ£„");
         if (_nativeOverlayAd != null)
         {
-            Debug.Log("L‚ğ”jŠü");
+            Debug.Log("åºƒå‘Šã‚’ç ´æ£„");
             _nativeOverlayAd.Destroy();
             _nativeOverlayAd = null;
         }
@@ -167,36 +225,36 @@ public class AdmobManager : MonoBehaviour
 
 
     /// <summary>
-    /// ƒŠƒ[ƒhL‚Ìƒ[ƒh‚ÆÄ¶
+    /// ãƒªãƒ¯ãƒ¼ãƒ‰åºƒå‘Šã®ãƒ­ãƒ¼ãƒ‰ã¨å†ç”Ÿ
     /// </summary>
     public void LoadAndShowRewardedAd()
     {
-        // V‚µ‚¢L‚ğƒ[ƒh‚·‚é‘O‚ÉŒÃ‚¢L‚ğƒNƒŠ[ƒ“ƒAƒbƒv
+        // æ–°ã—ã„åºƒå‘Šã‚’ãƒ­ãƒ¼ãƒ‰ã™ã‚‹å‰ã«å¤ã„åºƒå‘Šã‚’ã‚¯ãƒªãƒ¼ãƒ³ã‚¢ãƒƒãƒ—
         if (_rewardedAd != null)
         {
             _rewardedAd.Destroy();
             _rewardedAd = null;
         }
 
-        Debug.Log("Lƒ[ƒhŠJn");
+        Debug.Log("åºƒå‘Šãƒ­ãƒ¼ãƒ‰é–‹å§‹");
 
-        // L‚ğ“Ç‚İ‚Ş‚½‚ß‚ÌƒŠƒNƒGƒXƒg‚ğì¬
+        // åºƒå‘Šã‚’èª­ã¿è¾¼ã‚€ãŸã‚ã®ãƒªã‚¯ã‚¨ã‚¹ãƒˆã‚’ä½œæˆ
         var adRequest = new AdRequest();
-        Debug.Log("ƒŠƒNƒGƒXƒg‚ğì¬");
+        Debug.Log("ãƒªã‚¯ã‚¨ã‚¹ãƒˆã‚’ä½œæˆ");
 
-        // L‚ğƒ[ƒh‚·‚éƒŠƒNƒGƒXƒg‚ğ‘—M
+        // åºƒå‘Šã‚’ãƒ­ãƒ¼ãƒ‰ã™ã‚‹ãƒªã‚¯ã‚¨ã‚¹ãƒˆã‚’é€ä¿¡
         RewardedAd.Load(_adUnitId_reward, adRequest,
             (RewardedAd ad, LoadAdError error) =>
             {
-                Debug.Log("ƒR[ƒ‹ƒoƒbƒN“’B");
+                Debug.Log("ã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯åˆ°é”");
 
-                // ƒGƒ‰[‚ªnull‚Å‚È‚¢‚©L‚ªnull‚Ìê‡Aƒ[ƒh¸”s
+                // ã‚¨ãƒ©ãƒ¼ãŒnullã§ãªã„ã‹åºƒå‘ŠãŒnullã®å ´åˆã€ãƒ­ãƒ¼ãƒ‰å¤±æ•—
                 if (error != null || ad == null)
                 {
                     Debug.LogError("Rewarded ad failed to load an ad " +
                                    "with error : " + error);
 
-                    //ƒƒjƒ…[‰æ–Ê‚É–ß‚µ‚ÄI—¹
+                    //ãƒ¡ãƒ‹ãƒ¥ãƒ¼ç”»é¢ã«æˆ»ã—ã¦çµ‚äº†
                     GameManager.Instance.gameStateMachine.ChangeState(GameManager.Instance.gameStateMachine.state_Menu);
                     return;
                 }
@@ -206,57 +264,79 @@ public class AdmobManager : MonoBehaviour
 
                 _rewardedAd = ad;
 
-                //L‚ÌÄ¶
+                //åºƒå‘Šã®å†ç”Ÿ
                 ShowRewardedAd();
             });
-
-        //ƒƒjƒ…[‰æ–Ê‚É–ß‚µ‚ÄI—¹
-        GameManager.Instance.gameStateMachine.ChangeState(GameManager.Instance.gameStateMachine.state_Menu);
     }
 
 
 
     /// <summary>
-    /// ƒŠƒ[ƒhL‚ÌÄ¶
+    /// ãƒªãƒ¯ãƒ¼ãƒ‰åºƒå‘Šã®å†ç”Ÿ
     /// </summary>
     private void ShowRewardedAd()
     {
-        // L‚ªÄ¶‰Â”\‚©Šm”F
+        // ãƒ•ãƒ©ã‚°ã®ãƒªã‚»ãƒƒãƒˆ
+        isGetRewarded = false;
+
+        // åºƒå‘ŠãŒå†ç”Ÿå¯èƒ½ã‹ç¢ºèª
         if (_rewardedAd != null && _rewardedAd.CanShowAd())
         {
+            // ã‚ªãƒ¼ãƒ‡ã‚£ã‚ªã®åœæ­¢
+            AudioManager.Instance.audioSource_BGM.Stop();
+            AudioManager.Instance.audioSource_SE.Stop();
+
+            // ShowRewardedAd ã®ä¸­ã§ã€ã‚¤ãƒ™ãƒ³ãƒˆç™»éŒ²ã‚’è¿½åŠ 
+            _rewardedAd.OnAdFullScreenContentClosed += () =>
+            {
+                // åºƒå‘ŠãŒé–‰ã˜ã‚‰ã‚ŒãŸå¾Œã«éŸ³ã‚’å¾©æ—§
+                AudioSettings.Reset(AudioSettings.GetConfiguration());
+                AudioManager.Instance.audioSource_BGM.Play();
+                AudioManager.Instance.audioSource_SE.Play();
+
+                if (isGetRewarded)
+                {
+                    // ã‚¹ã‚¿ãƒŸãƒŠå›å¾©ã®é€šçŸ¥
+                    PopupUIManager.Instance.SetupMessageBand("ã‚¹ã‚¿ãƒŸãƒŠã‚’2å›å¾©ã—ã¾ã—ãŸã€‚", 2);
+                }
+
+                //ãƒ¡ãƒ‹ãƒ¥ãƒ¼ç”»é¢ã«æˆ»ã—ã¦çµ‚äº†
+                GameManager.Instance.gameStateMachine.ChangeState(GameManager.Instance.gameStateMachine.state_Menu);
+            };
+
             _rewardedAd.Show(async (Reward reward) =>
             {
-                // •ñV‚Ì•t—^
-                Debug.Log("RewardF" + reward.Type + " ~ " + reward.Amount);
+                // å ±é…¬ã®ä»˜ä¸
+                Debug.Log("Rewardï¼š" + reward.Type + " Ã— " + reward.Amount);
 
-                //‰ñ•œŒã‚ÌƒXƒ^ƒ~ƒic—Ê‚ğæ“¾
+                //å›å¾©å¾Œã®ã‚¹ã‚¿ãƒŸãƒŠæ®‹é‡ã‚’å–å¾—
                 int remainingStamina = await FirestoreManager.Instance.AddStamina(2);
 
-                //’ÊMƒGƒ‰[’Ê’m
+                //é€šä¿¡ã‚¨ãƒ©ãƒ¼é€šçŸ¥
                 if (remainingStamina == -2)
                 {
-                    PopupUIManager.Instance.SetupMessageBand("’ÊMƒGƒ‰[‚ª”­¶‚µ‚Ü‚µ‚½B", 2);
+                    PopupUIManager.Instance.SetupMessageBand("é€šä¿¡ã‚¨ãƒ©ãƒ¼ãŒç™ºç”Ÿã—ã¾ã—ãŸã€‚", 2);
                 }
 
                 else
                 {
-                    //ƒXƒ^ƒ~ƒi•\¦‚ÌXV
+                    //ã‚¹ã‚¿ãƒŸãƒŠè¡¨ç¤ºã®æ›´æ–°
                     GameManager.Instance.UpdateStamina(remainingStamina);
 
-                    //’´‰ßƒXƒ^ƒ~ƒiÁ”ï‚Ìê‡‚Ìˆ—
+                    //è¶…éã‚¹ã‚¿ãƒŸãƒŠæ¶ˆè²»ã®å ´åˆã®å‡¦ç†
                     if (remainingStamina >= 3)
                         GameManager.Instance.UpdateOverStamina(remainingStamina);
-                }
 
-                // ƒXƒ^ƒ~ƒi‰ñ•œ‚Ì’Ê’m
-                PopupUIManager.Instance.SetupMessageBand("ƒXƒ^ƒ~ƒi‚ğ2‰ñ•œ‚µ‚Ü‚µ‚½B", 2);
+                    //å ±é…¬ã®ä»˜ä¸ãƒ•ãƒ©ã‚°ã‚’trueã«
+                    isGetRewarded = true;
+                }
             });
         }
-        // L‚ªÄ¶‚Å‚«‚È‚¢ê‡
+        // åºƒå‘ŠãŒå†ç”Ÿã§ããªã„å ´åˆ
         else
         {
-            // L‚ª€”õ‚Å‚«‚Ä‚¢‚È‚¢‚±‚Æ‚Ì’Ê’m
-            PopupUIManager.Instance.SetupMessageBand("L‚Ìæ“¾‚É¸”s‚µ‚Ü‚µ‚½B", 2);
+            // åºƒå‘ŠãŒæº–å‚™ã§ãã¦ã„ãªã„ã“ã¨ã®é€šçŸ¥
+            PopupUIManager.Instance.SetupMessageBand("åºƒå‘Šã®å–å¾—ã«å¤±æ•—ã—ã¾ã—ãŸã€‚", 2);
         }
     }
 }

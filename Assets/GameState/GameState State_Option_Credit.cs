@@ -8,10 +8,10 @@ public class GameStateState_Option_Credit : GameStateState_OptionBase
     {
         base.Enter();
 
-        //ƒIƒvƒVƒ‡ƒ“‚Ìƒ^ƒCƒgƒ‹‚ğ•ÒW
-        GameManager.Instance.optionTitle.SetText("ƒNƒŒƒWƒbƒg");
+        //ã‚ªãƒ—ã‚·ãƒ§ãƒ³ã®ã‚¿ã‚¤ãƒˆãƒ«ã‚’ç·¨é›†
+        GameManager.Instance.optionTitle.SetText("ã‚¯ãƒ¬ã‚¸ãƒƒãƒˆ");
 
-        //Account‚ÌUI‚ğ—LŒø‰»
+        //Accountã®UIã‚’æœ‰åŠ¹åŒ–
         GameManager.Instance.optionUI_Credit.SetActive(true);
     }
 
@@ -28,7 +28,7 @@ public class GameStateState_Option_Credit : GameStateState_OptionBase
     {
         base.Exit();
 
-        //Volume‚ÌUI‚ğ”ñ•\¦E–³Œø‰»
+        //Volumeã®UIã‚’éè¡¨ç¤ºãƒ»ç„¡åŠ¹åŒ–
         GameManager.Instance.optionUI_Credit.SetActive(false);
     }
 }

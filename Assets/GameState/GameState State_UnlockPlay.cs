@@ -16,24 +16,24 @@ public class GameStateState_UnlockPlay : GameStateStateBase
 
     public override void Enter()
     {
-        //ƒvƒŒƒCƒ‚[ƒhƒAƒ“ƒƒbƒN‰æ–Ê‚Ì—LŒø‰»
+        //ãƒ—ãƒ¬ã‚¤ãƒ¢ãƒ¼ãƒ‰ã‚¢ãƒ³ãƒ­ãƒƒã‚¯ç”»é¢ã®æœ‰åŠ¹åŒ–
         GM.unlockPlay.SetActive(true);
 
-        //Œo‰ßŠÔƒŠƒZƒbƒg
+        //çµŒéæ™‚é–“ãƒªã‚»ãƒƒãƒˆ
         elapsedTime = 0;
 
-        //‰æ–Êƒ^ƒbƒvŒŸoƒ{ƒ^ƒ“‚Ì—LŒø‰»
+        //ç”»é¢ã‚¿ãƒƒãƒ—æ¤œå‡ºãƒœã‚¿ãƒ³ã®æœ‰åŠ¹åŒ–
         IM.InputUISetActive_Screen(true);
 
-        //ƒXƒP[ƒ‹E“§–¾“x‚Ì‰Šú‰»
+        //ã‚¹ã‚±ãƒ¼ãƒ«ãƒ»é€æ˜åº¦ã®åˆæœŸåŒ–
         unlockPlayModeRtf[0].localScale = Vector3.zero;
         unlockPlayModeRtf[1].localScale = Vector3.zero;
         unlockPlayMessage.color = Color.clear;
 
-        //SE‚ÌÄ¶
+        //SEã®å†ç”Ÿ
         AudioManager.Instance.PlaySE(AudioManager.Instance.SE_SkinUnlock);
 
-        //ƒvƒŒƒCƒ{ƒ^ƒ“‚ğƒAƒ“ƒƒbƒN
+        //ãƒ—ãƒ¬ã‚¤ãƒœã‚¿ãƒ³ã‚’ã‚¢ãƒ³ãƒ­ãƒƒã‚¯
         InputManager.Instance.SetPlayButtonLock(false);
     }
 
@@ -41,33 +41,33 @@ public class GameStateState_UnlockPlay : GameStateStateBase
 
     public override void Update(float deltaTime)
     {
-        //Œo‰ßŠÔ‚Ì‰ÁZ
+        //çµŒéæ™‚é–“ã®åŠ ç®—
         elapsedTime += deltaTime;
 
-        //ƒ^ƒbƒv‚ÌŒŸo
+        //ã‚¿ãƒƒãƒ—ã®æ¤œå‡º
         IM.GetInput_Screen();
 
-        //ŠJnŒã2•bˆÈ“à‚È‚ç
+        //é–‹å§‹å¾Œ2ç§’ä»¥å†…ãªã‚‰
         if (elapsedTime < 2)
         {
-            //‰æ–Ê‚ªƒ^ƒbƒv‚³‚ê‚ê‚Î‰‰o‚ğ”ò‚Î‚·
+            //ç”»é¢ãŒã‚¿ãƒƒãƒ—ã•ã‚Œã‚Œã°æ¼”å‡ºã‚’é£›ã°ã™
             if (IM.is_Screen_Tap) elapsedTime = 2;
 
-            //ƒXƒP[ƒ‹•ÏX
+            //ã‚¹ã‚±ãƒ¼ãƒ«å¤‰æ›´
             unlockPlayModeRtf[0].localScale = Vector3.one * Mathf.Lerp(0, 1, elapsedTime * 2);
             unlockPlayModeRtf[1].localScale = Vector3.one * Mathf.Lerp(0, 1, elapsedTime * 2);
 
-            //ƒeƒLƒXƒg“§–¾“x•ÏX
+            //ãƒ†ã‚­ã‚¹ãƒˆé€æ˜åº¦å¤‰æ›´
             unlockPlayMessage.color = Color.Lerp(Color.clear, Color.black, elapsedTime - 1);
         }
 
-        //2•bŒo‰ßˆÈ~‚Í
+        //2ç§’çµŒéä»¥é™ã¯
         else
         {
-            //ƒeƒLƒXƒg‚Ì–¾–Å
+            //ãƒ†ã‚­ã‚¹ãƒˆã®æ˜æ»…
             unlockPlayMessage.color = Color.Lerp(Color.clear, Color.black, (Mathf.Cos(elapsedTime * Mathf.PI) + 1) / 2f);
 
-            //‰æ–Ê‚ªƒ^ƒbƒv‚³‚ê‚ê‚ÎƒXƒe[ƒg‘JˆÚ
+            //ç”»é¢ãŒã‚¿ãƒƒãƒ—ã•ã‚Œã‚Œã°ã‚¹ãƒ†ãƒ¼ãƒˆé·ç§»
             if (IM.is_Screen_Tap)
             {
                 if (GM.newSkinQueue.Count > 0) stateMachine.ChangeState(stateMachine.state_UnlockSkin);
@@ -80,10 +80,10 @@ public class GameStateState_UnlockPlay : GameStateStateBase
 
     public override void Exit()
     {
-        //ƒvƒŒƒCƒ‚[ƒhƒAƒ“ƒƒbƒN‰æ–Ê‚Ì–³Œø‰»
+        //ãƒ—ãƒ¬ã‚¤ãƒ¢ãƒ¼ãƒ‰ã‚¢ãƒ³ãƒ­ãƒƒã‚¯ç”»é¢ã®ç„¡åŠ¹åŒ–
         GM.unlockPlay.SetActive(false);
 
-        //‰æ–Êƒ^ƒbƒvŒŸoƒ{ƒ^ƒ“‚Ì–³Œø‰»
+        //ç”»é¢ã‚¿ãƒƒãƒ—æ¤œå‡ºãƒœã‚¿ãƒ³ã®ç„¡åŠ¹åŒ–
         IM.InputUISetActive_Screen(false);
     }
 }

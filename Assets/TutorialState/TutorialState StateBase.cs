@@ -28,16 +28,16 @@ public abstract class TutorialStateStateBase
 
     public virtual void Enter()
     {
-        //Œo‰ßŠÔƒŠƒZƒbƒg
+        //çµŒéæ™‚é–“ãƒªã‚»ãƒƒãƒˆ
         elapsedTime = 0;
     }
 
     public virtual void Update(float deltaTime)
     {
-        //Œo‰ßŠÔ‚ğ‰ÁZ
+        //çµŒéæ™‚é–“ã‚’åŠ ç®—
         elapsedTime += deltaTime;
 
-        //ˆÚ“®’†‚Ì’nŒ`‚ğŠÇ—
+        //ç§»å‹•ä¸­ã®åœ°å½¢ã‚’ç®¡ç†
         TM.ManageMovingTerrain();
     }
 

@@ -2,10 +2,10 @@ using UnityEngine;
 
 public class GameStateState_Play : GameStateStateBase
 {
-    //ƒvƒŒƒC—pƒXƒe[ƒgƒ}ƒVƒ“
+    //ãƒ—ãƒ¬ã‚¤ç”¨ã‚¹ãƒ†ãƒ¼ãƒˆãƒã‚·ãƒ³
     private PlayStateStateMachine playStateMachine;
 
-    //ƒ|[ƒYˆ—ŠÖŒW•Ï”
+    //ãƒãƒ¼ã‚ºå‡¦ç†é–¢ä¿‚å¤‰æ•°
     private int countinueCount;
     private int countinueCircleCount;
     public enum PauseState
@@ -22,7 +22,7 @@ public class GameStateState_Play : GameStateStateBase
     {
         playStateMachine = new PlayStateStateMachine(stateMachine);
 
-        //ƒ|[ƒYó‘Ô‚ğ‰ğœ
+        //ãƒãƒ¼ã‚ºçŠ¶æ…‹ã‚’è§£é™¤
         InitializePauseState();
     }
 
@@ -30,22 +30,22 @@ public class GameStateState_Play : GameStateStateBase
 
     public override void Enter()
     {
-        //ƒvƒŒƒC‰æ–Ê“ü—ÍUI‚Ì—LŒø‰»
+        //ãƒ—ãƒ¬ã‚¤ç”»é¢å…¥åŠ›UIã®æœ‰åŠ¹åŒ–
         IM.InputUISetActive_Play(true);
         IM.InputUISetActive_Player(true);
         IM.isPauseGame = false;
 
-        //ƒvƒŒƒC—pƒXƒe[ƒgƒ}ƒVƒ“‚Ì‰Šú‰»
+        //ãƒ—ãƒ¬ã‚¤ç”¨ã‚¹ãƒ†ãƒ¼ãƒˆãƒã‚·ãƒ³ã®åˆæœŸåŒ–
         playStateMachine.Initialize(playStateMachine.state_LevelStart);
 
-        //ƒvƒŒƒCƒ„[‚Ì‘SƒAƒNƒVƒ‡ƒ“‚Ì—LŒø‰»
+        //ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®å…¨ã‚¢ã‚¯ã‚·ãƒ§ãƒ³ã®æœ‰åŠ¹åŒ–
         PlayerStateBase_Play.EnableAllAction();
 
-        //’nŒ`‚ğŒ¸‘¬
+        //åœ°å½¢ã‚’æ¸›é€Ÿ
         TM.moveSpeed = 5 + Mathf.Pow(GM.level, 0.7f) * 3;
         TM.SetSpeed(5 + Mathf.Pow(GM.level, 0.7f) * 3);
 
-        //ƒvƒŒƒC—pBGM‚ÌÄ¶
+        //ãƒ—ãƒ¬ã‚¤ç”¨BGMã®å†ç”Ÿ
         audioSource_BGM.volume = AM.volume_BGM;
     }
 
@@ -57,19 +57,19 @@ public class GameStateState_Play : GameStateStateBase
         {
             case PauseState.Play:
 
-                //ƒvƒŒƒC—pƒXƒe[ƒgƒ}ƒVƒ“‚ÌUpdate‚ğÀs
+                //ãƒ—ãƒ¬ã‚¤ç”¨ã‚¹ãƒ†ãƒ¼ãƒˆãƒã‚·ãƒ³ã®Updateã‚’å®Ÿè¡Œ
                 playStateMachine.Update(deltaTime);
 
-                //ƒvƒŒƒC‰æ–ÊUI‚Ì“ü—Í‚Ìæ“¾
+                //ãƒ—ãƒ¬ã‚¤ç”»é¢UIã®å…¥åŠ›ã®å–å¾—
                 IM.GetInput_Play();
 
-                //ƒ|[ƒY
+                //ãƒãƒ¼ã‚º
                 if (IM.is_Play_Pause_Tap)
                 {
-                    //SE‚ÌÄ¶
+                    //SEã®å†ç”Ÿ
                     AudioManager.Instance.PlaySE(AudioManager.Instance.SE_Panel);
 
-                    //ƒ|[ƒYó‘Ô‚Ö
+                    //ãƒãƒ¼ã‚ºçŠ¶æ…‹ã¸
                     EnterPause();
                 }
                 break;
@@ -77,41 +77,41 @@ public class GameStateState_Play : GameStateStateBase
 
             case PauseState.Pause:
 
-                //ƒ|[ƒY‰æ–Ê“ü—Í‚Ìæ“¾
+                //ãƒãƒ¼ã‚ºç”»é¢å…¥åŠ›ã®å–å¾—
                 IM.GetInput_Pause();
 
-                //“ü—Í‚É‰‚¶‚½‘JˆÚ
+                //å…¥åŠ›ã«å¿œã˜ãŸé·ç§»
                 if (IM.is_Pause_Continue_Push)
                 {
-                    //ƒ|[ƒY‰æ–ÊUI‚ğ”ñ•\¦E–³Œø‰»
+                    //ãƒãƒ¼ã‚ºç”»é¢UIã‚’éè¡¨ç¤ºãƒ»ç„¡åŠ¹åŒ–
                     IM.InputUISetActive_Pause(false);
                     GM.pauseUI.SetActive(false);
 
-                    //–Ú•WƒtƒŒ[ƒ€ƒŒ[ƒg‚ğ30‚Éİ’è
+                    //ç›®æ¨™ãƒ•ãƒ¬ãƒ¼ãƒ ãƒ¬ãƒ¼ãƒˆã‚’30ã«è¨­å®š
                     Application.targetFrameRate = 30;
 
-                    //ÄŠJ‚Ü‚Å‚ÌƒJƒEƒ“ƒgƒ_ƒEƒ“‚ğ3‚É
+                    //å†é–‹ã¾ã§ã®ã‚«ã‚¦ãƒ³ãƒˆãƒ€ã‚¦ãƒ³ã‚’3ã«
                     countinueCount = 3;
                     GM.countinueCountText.SetText("" + countinueCount);
 
-                    //ƒJƒEƒ“ƒgƒT[ƒNƒ‹‚Ì•\¦
+                    //ã‚«ã‚¦ãƒ³ãƒˆã‚µãƒ¼ã‚¯ãƒ«ã®è¡¨ç¤º
                     countinueCircleCount = 30;
                     for (int i = 0; i < GM.countinueCircleSquares.Length; i++)
                         GM.countinueCircleSquares[i].SetActive(true);
 
-                    //ÄŠJ‚ÌƒJƒEƒ“ƒgƒ_ƒEƒ“‚ÉˆÚs
+                    //å†é–‹ã®ã‚«ã‚¦ãƒ³ãƒˆãƒ€ã‚¦ãƒ³ã«ç§»è¡Œ
                     currentPauseState = PauseState.PauseToPlay;
                 }
                 else if (IM.is_Pause_Retire_Push)
                 {
-                    //ƒ|[ƒY‰æ–ÊUI‚ğ”ñ•\¦E–³Œø‰»
+                    //ãƒãƒ¼ã‚ºç”»é¢UIã‚’éè¡¨ç¤ºãƒ»ç„¡åŠ¹åŒ–
                     IM.InputUISetActive_Pause(false);
                     GM.pauseUI.SetActive(false);
 
-                    //ƒIƒuƒWƒFƒNƒg‚ğ“®‚©‚·
+                    //ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’å‹•ã‹ã™
                     Time.timeScale = 1;
 
-                    //ƒƒjƒ…[‰æ–Ê‚Ö‘JˆÚ
+                    //ãƒ¡ãƒ‹ãƒ¥ãƒ¼ç”»é¢ã¸é·ç§»
                     stateMachine.ChangeState(stateMachine.state_PauseToMenu);
                 }
                 break;
@@ -119,46 +119,46 @@ public class GameStateState_Play : GameStateStateBase
 
             case PauseState.PauseToPlay:
 
-                //ƒJƒEƒ“ƒgƒT[ƒNƒ‹‚Ì”‚ğŒ¸‚ç‚·
+                //ã‚«ã‚¦ãƒ³ãƒˆã‚µãƒ¼ã‚¯ãƒ«ã®æ•°ã‚’æ¸›ã‚‰ã™
                 countinueCircleCount--;
 
-                //‚Ü‚¾ƒJƒEƒ“ƒgƒT[ƒNƒ‹‚ª‚ ‚é‚È‚ç”ñ•\¦‚É
+                //ã¾ã ã‚«ã‚¦ãƒ³ãƒˆã‚µãƒ¼ã‚¯ãƒ«ãŒã‚ã‚‹ãªã‚‰éè¡¨ç¤ºã«
                 if (countinueCircleCount >= 0)
                     GM.countinueCircleSquares[countinueCircleCount].SetActive(false);
-                //ƒJƒEƒ“ƒgƒT[ƒNƒ‹‚ª–³‚¢‚È‚ç
+                //ã‚«ã‚¦ãƒ³ãƒˆã‚µãƒ¼ã‚¯ãƒ«ãŒç„¡ã„ãªã‚‰
                 else
                 {
-                    //ÄŠJ‚ÌƒJƒEƒ“ƒgƒ_ƒEƒ“‚ğŒ¸‚ç‚·
+                    //å†é–‹ã®ã‚«ã‚¦ãƒ³ãƒˆãƒ€ã‚¦ãƒ³ã‚’æ¸›ã‚‰ã™
                     countinueCount--;
 
-                    //ƒJƒEƒ“ƒgƒ_ƒEƒ“‚ª‘±‚­‚È‚ç
+                    //ã‚«ã‚¦ãƒ³ãƒˆãƒ€ã‚¦ãƒ³ãŒç¶šããªã‚‰
                     if (countinueCount > 0)
                     {
-                        //ÄŠJ‚ÌƒJƒEƒ“ƒgƒ_ƒEƒ“‚ğXV
+                        //å†é–‹ã®ã‚«ã‚¦ãƒ³ãƒˆãƒ€ã‚¦ãƒ³ã‚’æ›´æ–°
                         GM.countinueCountText.SetText("" + countinueCount);
 
-                        //ƒJƒEƒ“ƒgƒT[ƒNƒ‹‚ÌÄ•\¦
+                        //ã‚«ã‚¦ãƒ³ãƒˆã‚µãƒ¼ã‚¯ãƒ«ã®å†è¡¨ç¤º
                         countinueCircleCount = 30;
                         for (int i = 0; i < GM.countinueCircleSquares.Length; i++)
                             GM.countinueCircleSquares[i].SetActive(true);
                     }
-                    //ƒJƒEƒ“ƒgƒ_ƒEƒ“‚ªI‚í‚é‚È‚ç
+                    //ã‚«ã‚¦ãƒ³ãƒˆãƒ€ã‚¦ãƒ³ãŒçµ‚ã‚ã‚‹ãªã‚‰
                     else
                     {
-                        //ÄŠJ‚ÌƒJƒEƒ“ƒgƒ_ƒEƒ“‚ğ”ñ•\¦
+                        //å†é–‹ã®ã‚«ã‚¦ãƒ³ãƒˆãƒ€ã‚¦ãƒ³ã‚’éè¡¨ç¤º
                         GM.countinueCountText.SetText("");
 
-                        //–Ú•WƒtƒŒ[ƒ€ƒŒ[ƒg‚ğ–ß‚·
+                        //ç›®æ¨™ãƒ•ãƒ¬ãƒ¼ãƒ ãƒ¬ãƒ¼ãƒˆã‚’æˆ»ã™
                         Application.targetFrameRate = GM.defaultFrameRate;
 
-                        //ƒvƒŒƒC‰æ–ÊUI‚ğ—LŒø‰»
+                        //ãƒ—ãƒ¬ã‚¤ç”»é¢UIã‚’æœ‰åŠ¹åŒ–
                         IM.InputUISetActive_Play(true);
                         IM.isPauseGame = false;
 
-                        //ƒIƒuƒWƒFƒNƒg‚ğ“®‚©‚·
+                        //ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’å‹•ã‹ã™
                         Time.timeScale = 1;
 
-                        //ƒ|[ƒYó‘Ô‚ğI—¹
+                        //ãƒãƒ¼ã‚ºçŠ¶æ…‹ã‚’çµ‚äº†
                         currentPauseState = PauseState.Play;
                     }
                 }
@@ -173,11 +173,11 @@ public class GameStateState_Play : GameStateStateBase
 
     public override void Exit()
     {
-        //ƒvƒŒƒC‰æ–Ê“ü—ÍUI‚Ì–³Œø‰»
+        //ãƒ—ãƒ¬ã‚¤ç”»é¢å…¥åŠ›UIã®ç„¡åŠ¹åŒ–
         IM.InputUISetActive_Play(false);
         IM.InputUISetActive_Player(false);
 
-        //ƒ|[ƒYó‘Ô‚ğ‰ğœ
+        //ãƒãƒ¼ã‚ºçŠ¶æ…‹ã‚’è§£é™¤
         InitializePauseState();
     }
 
@@ -185,7 +185,7 @@ public class GameStateState_Play : GameStateStateBase
 
     private static void InitializePauseState()
     {
-        //ƒ|[ƒYó‘Ô‚ğ‰ğœ
+        //ãƒãƒ¼ã‚ºçŠ¶æ…‹ã‚’è§£é™¤
         currentPauseState = PauseState.Play;
     }
 
@@ -193,25 +193,25 @@ public class GameStateState_Play : GameStateStateBase
 
     public static void EnterPause()
     {
-        //ƒvƒŒƒC‰æ–ÊUI‚ğ–³Œø‰»
+        //ãƒ—ãƒ¬ã‚¤ç”»é¢UIã‚’ç„¡åŠ¹åŒ–
         InputManager.Instance.InputUISetActive_Play(false);
         InputManager.Instance.isPauseGame = true;
 
-        //ƒ|[ƒY‰æ–ÊUI‚ğ•\¦E—LŒø‰»
+        //ãƒãƒ¼ã‚ºç”»é¢UIã‚’è¡¨ç¤ºãƒ»æœ‰åŠ¹åŒ–
         GameManager.Instance.pauseUI.SetActive(true);
         InputManager.Instance.InputUISetActive_Pause(true);
 
-        //ƒIƒuƒWƒFƒNƒg‚ğ’â~
+        //ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’åœæ­¢
         Time.timeScale = 0;
 
-        //ÄŠJ‚ÌƒJƒEƒ“ƒgƒ_ƒEƒ“‚ğ”ñ•\¦
+        //å†é–‹ã®ã‚«ã‚¦ãƒ³ãƒˆãƒ€ã‚¦ãƒ³ã‚’éè¡¨ç¤º
         GameManager.Instance.countinueCountText.SetText("");
 
-        //ƒJƒEƒ“ƒgƒT[ƒNƒ‹‚ğ”ñ•\¦
+        //ã‚«ã‚¦ãƒ³ãƒˆã‚µãƒ¼ã‚¯ãƒ«ã‚’éè¡¨ç¤º
         for (int i = 0; i < GameManager.Instance.countinueCircleSquares.Length; i++)
             GameManager.Instance.countinueCircleSquares[i].SetActive(false);
 
-        //ƒ|[ƒYó‘Ô‚Ö
+        //ãƒãƒ¼ã‚ºçŠ¶æ…‹ã¸
         currentPauseState = PauseState.Pause;
     }
 }

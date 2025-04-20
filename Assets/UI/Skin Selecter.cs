@@ -40,11 +40,11 @@ public class SkinSelecter : MonoBehaviour, IPointerDownHandler, IDragHandler, IP
 
     public void OnEnable()
     {
-        //ƒtƒ‰ƒO‚Ì‰Šú‰»
+        //ãƒ•ãƒ©ã‚°ã®åˆæœŸåŒ–
         isStop = false;
         isActive = false;
 
-        //OKƒ{ƒ^ƒ“‚Ì—LŒø‰»
+        //OKãƒœã‚¿ãƒ³ã®æœ‰åŠ¹åŒ–
         buttonOK.SetActive(true);
     }
 
@@ -52,16 +52,16 @@ public class SkinSelecter : MonoBehaviour, IPointerDownHandler, IDragHandler, IP
 
     public void OnPointerDown(PointerEventData eventData)
     {
-        //”ñƒAƒNƒeƒBƒuó‘Ô‚È‚ç‰½‚à‚µ‚È‚¢
+        //éã‚¢ã‚¯ãƒ†ã‚£ãƒ–çŠ¶æ…‹ãªã‚‰ä½•ã‚‚ã—ãªã„
         if (!isActive) return;
 
-        //‰ñ“]ó‘Ô‚É•Ï‰»
+        //å›è»¢çŠ¶æ…‹ã«å¤‰åŒ–
         isDragged = true;
 
-        //ƒ{ƒ^ƒ“‚Ì–³Œø‰»
+        //ãƒœã‚¿ãƒ³ã®ç„¡åŠ¹åŒ–
         IM.InputUISetActive_Skin(false);
 
-        //Œ»İ’l‚Ì‹L‰¯‚ÆQueue‚Ö‚ÌŠi”[
+        //ç¾åœ¨å€¤ã®è¨˜æ†¶ã¨Queueã¸ã®æ ¼ç´
         currentPointY = eventData.position.y;
         currentTime = Time.time;
         pointQueue.Enqueue(currentPointY);
@@ -72,42 +72,42 @@ public class SkinSelecter : MonoBehaviour, IPointerDownHandler, IDragHandler, IP
 
     public void OnDrag(PointerEventData eventData)
     {
-        //”ñƒAƒNƒeƒBƒuó‘Ô‚È‚ç‰½‚à‚µ‚È‚¢
+        //éã‚¢ã‚¯ãƒ†ã‚£ãƒ–çŠ¶æ…‹ãªã‚‰ä½•ã‚‚ã—ãªã„
         if (!isActive) return;
 
-        //”ñƒAƒNƒeƒBƒuó‘Ô‚ÌŠÔ‚Éƒhƒ‰ƒbƒO‚ªŠJn‚³‚ê‚Ä‚¢‚é‚È‚çŠJnˆ—‚ÌÀs
+        //éã‚¢ã‚¯ãƒ†ã‚£ãƒ–çŠ¶æ…‹ã®é–“ã«ãƒ‰ãƒ©ãƒƒã‚°ãŒé–‹å§‹ã•ã‚Œã¦ã„ã‚‹ãªã‚‰é–‹å§‹å‡¦ç†ã®å®Ÿè¡Œ
         if (!isDragged)
         {
-            //‰ñ“]ó‘Ô‚É•Ï‰»
+            //å›è»¢çŠ¶æ…‹ã«å¤‰åŒ–
             isDragged = true;
 
-            //ƒ{ƒ^ƒ“‚Ì–³Œø‰»
+            //ãƒœã‚¿ãƒ³ã®ç„¡åŠ¹åŒ–
             IM.InputUISetActive_Skin(false);
 
-            //Œ»İ’l‚Ì‹L‰¯‚ÆQueue‚Ö‚ÌŠi”[
+            //ç¾åœ¨å€¤ã®è¨˜æ†¶ã¨Queueã¸ã®æ ¼ç´
             currentPointY = eventData.position.y;
             currentTime = Time.time;
             pointQueue.Enqueue(currentPointY);
             timeQueue.Enqueue(currentTime);
         }
 
-        //’â~ó‘Ô‚ğ‰ğœ
+        //åœæ­¢çŠ¶æ…‹ã‚’è§£é™¤
         isStop = false;
 
-        //ƒ^ƒbƒvˆÊ’u
+        //ã‚¿ãƒƒãƒ—ä½ç½®
         float newScreenPointY = eventData.position.y;
 
-        //ƒzƒC[ƒ‹‚Ì‰ñ“]
+        //ãƒ›ã‚¤ãƒ¼ãƒ«ã®å›è»¢
         wheelEulerAnglesX += (newScreenPointY - currentPointY) / Screen.height * 160;
         wheelTf.localEulerAngles = wheelEulerAnglesX * Vector3.right;
 
-        //Œ»İ’l‚Ì‹L‰¯‚ÆQueue‚Ö‚ÌŠi”[
+        //ç¾åœ¨å€¤ã®è¨˜æ†¶ã¨Queueã¸ã®æ ¼ç´
         currentPointY = newScreenPointY;
         currentTime = Time.time;
         pointQueue.Enqueue(currentPointY);
         timeQueue.Enqueue(currentTime);
 
-        //Queue“à•s—vƒf[ƒ^íœ
+        //Queueå†…ä¸è¦ãƒ‡ãƒ¼ã‚¿å‰Šé™¤
         while (currentTime - timeQueue.Peek() > 0.1)
         {
             pointQueue.Dequeue();
@@ -119,23 +119,23 @@ public class SkinSelecter : MonoBehaviour, IPointerDownHandler, IDragHandler, IP
 
     public void OnPointerUp(PointerEventData eventData)
     {
-        //”ñƒAƒNƒeƒBƒuó‘Ô‚È‚ç‰½‚à‚µ‚È‚¢
+        //éã‚¢ã‚¯ãƒ†ã‚£ãƒ–çŠ¶æ…‹ãªã‚‰ä½•ã‚‚ã—ãªã„
         if (!isActive) return;
 
-        //‰ñ“]ó‘Ô‚ğI—¹
+        //å›è»¢çŠ¶æ…‹ã‚’çµ‚äº†
         isDragged = false;
 
-        //ƒXƒiƒbƒvó‘Ô‰ğœ
+        //ã‚¹ãƒŠãƒƒãƒ—çŠ¶æ…‹è§£é™¤
         isSnapping = false;
 
-        //‘¬“x•t—^
+        //é€Ÿåº¦ä»˜ä¸
         if (timeQueue.Count >= 2)
             angleVelocityX = (currentPointY - pointQueue.Dequeue()) / (currentTime - timeQueue.Dequeue()) / Screen.height * 64;
         else angleVelocityX = 0;
         if (angleVelocityX > 1800) 
             angleVelocityX = 1800;
 
-        //Queue“àƒf[ƒ^íœ
+        //Queueå†…ãƒ‡ãƒ¼ã‚¿å‰Šé™¤
         timeQueue.Clear();
         pointQueue.Clear();
     }
@@ -144,23 +144,23 @@ public class SkinSelecter : MonoBehaviour, IPointerDownHandler, IDragHandler, IP
 
     private void Update()
     {
-        //‰ñ“]’†‚Ü‚½‚Í”ñƒAƒNƒeƒBƒuó‘Ô‚È‚ç
+        //å›è»¢ä¸­ã¾ãŸã¯éã‚¢ã‚¯ãƒ†ã‚£ãƒ–çŠ¶æ…‹ãªã‚‰
         if (!isStop || !isActive)
         {
-            //ƒpƒlƒ‹‚Ì“§–¾“xEƒXƒP[ƒ‹•ÏX
+            //ãƒ‘ãƒãƒ«ã®é€æ˜åº¦ãƒ»ã‚¹ã‚±ãƒ¼ãƒ«å¤‰æ›´
             for (int ID = frontSkinID - 2; ID <= frontSkinID + 2; ID++)
             {
                 int panelID = ID;
 
-                //ƒXƒLƒ“ID‚ğ•â³
+                //ã‚¹ã‚­ãƒ³IDã‚’è£œæ­£
                 if (panelID < 0) panelID += 16;
                 else if (panelID > 15) panelID -= 16;
 
-                //–‘OŒvZ
-                //ƒpƒlƒ‹‚ÌŠp“x‚ğƒx[ƒX‚ÉƒzƒC[ƒ‹‚Ìƒ[ƒ‹ƒhÀ•W‚Å•â³‚ğ‚©‚¯‚é
+                //äº‹å‰è¨ˆç®—
+                //ãƒ‘ãƒãƒ«ã®è§’åº¦ã‚’ãƒ™ãƒ¼ã‚¹ã«ãƒ›ã‚¤ãƒ¼ãƒ«ã®ãƒ¯ãƒ¼ãƒ«ãƒ‰åº§æ¨™ã§è£œæ­£ã‚’ã‹ã‘ã‚‹
                 float temp = (1 - panels_tf[panelID].forward.z + (wheelTf.position.z - 90) / 25) * 5;
 
-                //“§–¾“x•ÏX
+                //é€æ˜åº¦å¤‰æ›´
                 Color tempColor_white = Color.white - Color.black * temp;
                 Color tempColor_black = Color.black - Color.black * temp;
                 panels_sprite[panelID].color = tempColor_white;
@@ -171,13 +171,13 @@ public class SkinSelecter : MonoBehaviour, IPointerDownHandler, IDragHandler, IP
                     panels_skinEyes_L[panelID].color = tempColor_white;
                     panels_skinEyes_R[panelID].color = tempColor_white;
                 }
-                //ƒƒbƒN’†‚ÌCrystalƒXƒLƒ“‚Ì‚İ—áŠOˆ—
+                //ãƒ­ãƒƒã‚¯ä¸­ã®Crystalã‚¹ã‚­ãƒ³ã®ã¿ä¾‹å¤–å‡¦ç†
                 else
                 {
                     panels_skinModel[panelID].color = tempColor_black;
                     panels_skinModelText[panelID/8].color = tempColor_white * 0.5f;
                 }
-                //ƒƒbƒN’†‚Ìƒpƒlƒ‹‚Ìˆ—
+                //ãƒ­ãƒƒã‚¯ä¸­ã®ãƒ‘ãƒãƒ«ã®å‡¦ç†
                 if (!GM.isSkinUnlocked[panelID])
                 {
                     panels_lockPanel[panelID].color = tempColor_black * 0.8f;
@@ -185,108 +185,108 @@ public class SkinSelecter : MonoBehaviour, IPointerDownHandler, IDragHandler, IP
                     panels_lockText[panelID].outlineColor = tempColor_black;
                 }
 
-                //ƒXƒP[ƒ‹•ÏX
+                //ã‚¹ã‚±ãƒ¼ãƒ«å¤‰æ›´
                 panels_tf[panelID].localScale = Vector3.one * (1 - temp / 5);
             }
         }
 
-        //”ñƒAƒNƒeƒBƒuó‘Ô‚È‚çc‚è‚Ìˆ—‚ğ”ò‚Î‚·
+        //éã‚¢ã‚¯ãƒ†ã‚£ãƒ–çŠ¶æ…‹ãªã‚‰æ®‹ã‚Šã®å‡¦ç†ã‚’é£›ã°ã™
         if (!isActive) return;
 
-        //‰ñ“]—Ê•â³
+        //å›è»¢é‡è£œæ­£
         while (wheelEulerAnglesX > 360)
             wheelEulerAnglesX -= 360;
         while (wheelEulerAnglesX < 0)
             wheelEulerAnglesX += 360;
 
-        //ƒzƒC[ƒ‹‚ªŒ»İ‚ÌƒXƒLƒ“ƒpƒlƒ‹‚ÌˆÊ’u‚ÌŠO‚Ü‚Å‰ñ“]‚µ‚½‚ç
+        //ãƒ›ã‚¤ãƒ¼ãƒ«ãŒç¾åœ¨ã®ã‚¹ã‚­ãƒ³ãƒ‘ãƒãƒ«ã®ä½ç½®ã®å¤–ã¾ã§å›è»¢ã—ãŸã‚‰
         while (Mathf.Abs(wheelEulerAnglesX - 22.5f * frontSkinID) > 11.25)
         {
-            //‰ñ“]‚Ì’[‚Í—áŠO‚Æ‚µ‚Äˆ—
+            //å›è»¢ã®ç«¯ã¯ä¾‹å¤–ã¨ã—ã¦å‡¦ç†
             if (wheelEulerAnglesX > 348.75 && frontSkinID == 0)
                 break;
 
-            //ƒtƒƒ“ƒg‚ÌƒXƒLƒ“ID‚ğXV
+            //ãƒ•ãƒ­ãƒ³ãƒˆã®ã‚¹ã‚­ãƒ³IDã‚’æ›´æ–°
             float misalignment = wheelEulerAnglesX - 22.5f * frontSkinID;
             frontSkinID += (int)(Mathf.Sign(misalignment) * Mathf.Sign(180 - Mathf.Abs(misalignment)));
 
-            //ƒXƒLƒ“ID‚ğ•â³
+            //ã‚¹ã‚­ãƒ³IDã‚’è£œæ­£
             if (frontSkinID < 0) frontSkinID += 16;
             else if (frontSkinID > 15) frontSkinID -= 16;
 
-            //‰¹‚ğ–Â‚ç‚·ˆ—
+            //éŸ³ã‚’é³´ã‚‰ã™å‡¦ç†
             AM.PlaySE(AM.SE_SkinSelecter);
 
-            /* ‚±‚±‚Åƒpƒlƒ‹‚ÌXVˆ—‚ğ‚·‚ê‚ÎƒXƒLƒ“‚ğ‘‚â‚¹‚éi‘¼‚Ìˆ—‚Ì•ÏX‚à•K—vj */
+            /* ã“ã“ã§ãƒ‘ãƒãƒ«ã®æ›´æ–°å‡¦ç†ã‚’ã™ã‚Œã°ã‚¹ã‚­ãƒ³ã‚’å¢—ã‚„ã›ã‚‹ï¼ˆä»–ã®å‡¦ç†ã®å¤‰æ›´ã‚‚å¿…è¦ï¼‰ */
         }
 
-        //ƒhƒ‰ƒbƒO’†‚Íc‚è‚Ìˆ—‚ğ”ò‚Î‚·
+        //ãƒ‰ãƒ©ãƒƒã‚°ä¸­ã¯æ®‹ã‚Šã®å‡¦ç†ã‚’é£›ã°ã™
         if (isDragged) return;
 
-        //Œ¸‘¬‚µ‚È‚ª‚ç‰ñ“]
+        //æ¸›é€Ÿã—ãªãŒã‚‰å›è»¢
         if (Mathf.Abs(angleVelocityX) > 15)
         {
-            //ˆ——‚¿‚µ‚Ä‚¢‚½‚ç‰ñ“]‚ğ’â~i‹t‰ñ“]–h~j
+            //å‡¦ç†è½ã¡ã—ã¦ã„ãŸã‚‰å›è»¢ã‚’åœæ­¢ï¼ˆé€†å›è»¢é˜²æ­¢ï¼‰
             if (Time.deltaTime * 2 > 1)
                 angleVelocityX = 0;
 
-            //‰ñ“]‚ğŒ¸‘¬
+            //å›è»¢ã‚’æ¸›é€Ÿ
             angleVelocityX *= (1 - Time.deltaTime * 2);
 
-            //ƒzƒC[ƒ‹‚ğ‰ñ“]
+            //ãƒ›ã‚¤ãƒ¼ãƒ«ã‚’å›è»¢
             wheelEulerAnglesX += angleVelocityX * Time.deltaTime;
             wheelTf.localEulerAngles = wheelEulerAnglesX * Vector3.right;
         }
 
-        //ƒXƒiƒbƒvˆ—
+        //ã‚¹ãƒŠãƒƒãƒ—å‡¦ç†
         else
         {
-            //ŠJnˆ—
+            //é–‹å§‹å‡¦ç†
             if (!isSnapping)
             {
-                //ƒXƒiƒbƒv“®ìŠJn
+                //ã‚¹ãƒŠãƒƒãƒ—å‹•ä½œé–‹å§‹
                 isSnapping = true;
 
-                //‰ñ“]•ûŒü‚É•â³‚ğ‚©‚¯‚Â‚Â–Ú•W‰ñ“]—Ê‚ğZo
+                //å›è»¢æ–¹å‘ã«è£œæ­£ã‚’ã‹ã‘ã¤ã¤ç›®æ¨™å›è»¢é‡ã‚’ç®—å‡º
                 targetAngleX = Mathf.Floor(wheelEulerAnglesX / 22.5f) * 22.5f;
                 if (wheelEulerAnglesX + angleVelocityX/5 - targetAngleX > 11.25f)
                     targetAngleX += 22.5f;
 
-                //‰ñ“]‚ğ’â~
+                //å›è»¢ã‚’åœæ­¢
                 angleVelocityX = 0;
             }
 
-            //‰ñ“]‚ª•K—v‚È‚ç
+            //å›è»¢ãŒå¿…è¦ãªã‚‰
             if (Mathf.Abs(wheelEulerAnglesX - targetAngleX) > 1)
             {
-                //•âŠÔ‰ñ“]
+                //è£œé–“å›è»¢
                 wheelEulerAnglesX = Mathf.Lerp(wheelEulerAnglesX, targetAngleX, Time.deltaTime * 10);
                 wheelTf.localEulerAngles = wheelEulerAnglesX * Vector3.right;
             }
 
-            //’â~ˆ—
+            //åœæ­¢å‡¦ç†
             else if (!isStop)
             {
-                //’â~ó‘Ô‚É
+                //åœæ­¢çŠ¶æ…‹ã«
                 isStop = true;
 
-                //ƒXƒLƒ“•ÏXˆ—
+                //ã‚¹ã‚­ãƒ³å¤‰æ›´å‡¦ç†
                 GM.ChangePlayerSkin(frontSkinID);
 
-                //ƒXƒLƒ“‚ª—LŒø‚È‚ç
+                //ã‚¹ã‚­ãƒ³ãŒæœ‰åŠ¹ãªã‚‰
                 if (GM.isSkinUnlocked[frontSkinID])
                 {
 
-                    //OKƒ{ƒ^ƒ“‚Ì—LŒø‰»
+                    //OKãƒœã‚¿ãƒ³ã®æœ‰åŠ¹åŒ–
                     buttonOK.SetActive(true);
                 }
-                //ƒXƒLƒ“‚ª–³Œø‚È‚çOKƒ{ƒ^ƒ“‚Ì–³Œø‰»
+                //ã‚¹ã‚­ãƒ³ãŒç„¡åŠ¹ãªã‚‰OKãƒœã‚¿ãƒ³ã®ç„¡åŠ¹åŒ–
                 else buttonOK.SetActive(false);
 
-                //ƒpƒlƒ‹‚ÌƒXƒP[ƒ‹•ÏX
+                //ãƒ‘ãƒãƒ«ã®ã‚¹ã‚±ãƒ¼ãƒ«å¤‰æ›´
                 panels_tf[frontSkinID].localScale = Vector3.one * 1.03f;
 
-                //ƒ{ƒ^ƒ“‚Ì—LŒø‰»
+                //ãƒœã‚¿ãƒ³ã®æœ‰åŠ¹åŒ–
                 IM.InputUISetActive_Skin(true);
             }
         }
@@ -294,13 +294,13 @@ public class SkinSelecter : MonoBehaviour, IPointerDownHandler, IDragHandler, IP
 
 
 
-    //g—p‚µ‚Ä‚¢‚éƒXƒLƒ“‚ÉƒZƒŒƒNƒ^[‚Ìİ’è‚ğ‡‚í‚¹‚é
+    //ä½¿ç”¨ã—ã¦ã„ã‚‹ã‚¹ã‚­ãƒ³ã«ã‚»ãƒ¬ã‚¯ã‚¿ãƒ¼ã®è¨­å®šã‚’åˆã‚ã›ã‚‹
     public void SetWheelAngle(int usingSkinID)
     {
-        //ƒXƒLƒ“ID‚ğŠi”[
+        //ã‚¹ã‚­ãƒ³IDã‚’æ ¼ç´
         frontSkinID = usingSkinID;
 
-        //ƒZƒŒƒNƒ^[‚ğ‰ñ“]
+        //ã‚»ãƒ¬ã‚¯ã‚¿ãƒ¼ã‚’å›è»¢
         targetAngleX = 22.5f * usingSkinID;
         wheelEulerAnglesX = 22.5f * usingSkinID;
         wheelTf.localEulerAngles = wheelEulerAnglesX * Vector3.right;
@@ -308,37 +308,37 @@ public class SkinSelecter : MonoBehaviour, IPointerDownHandler, IDragHandler, IP
 
 
 
-    //ƒXƒLƒ“ƒpƒlƒ‹‚ğ¶¬i‘S‚ÄƒƒbƒNó‘Ô‚Å¶¬j
+    //ã‚¹ã‚­ãƒ³ãƒ‘ãƒãƒ«ã‚’ç”Ÿæˆï¼ˆå…¨ã¦ãƒ­ãƒƒã‚¯çŠ¶æ…‹ã§ç”Ÿæˆï¼‰
     public void CreateSkinPanel()
     {
         for (int ID = 0; ID < skinDataBase.skinData.Count; ID++)
         {
-            //ƒƒbƒN‰ğœğŒ‚ğİ’è
+            //ãƒ­ãƒƒã‚¯è§£é™¤æ¡ä»¶ã‚’è¨­å®š
             panels_lockText[ID].SetText(GM.GetUnlockSkinCondition(ID));
 
             if (ID % 8 != 7)
             {
-                //ƒXƒLƒ“–¼•\¦
+                //ã‚¹ã‚­ãƒ³åè¡¨ç¤º
                 panels_skinName[ID].SetText(skinDataBase.skinData[ID].name);
 
-                //Œ`‚Ìİ’è
+                //å½¢ã®è¨­å®š
                 panels_skinModel[ID].sprite = 
                     skinDataBase.skinData[ID].bodyType == SkinData.BodyType.Cube ? GM.squarSprite : GM.cicleSprite;
             }
-            //CrystalƒXƒLƒ“‚Í—áŠOˆ—
+            //Crystalã‚¹ã‚­ãƒ³ã¯ä¾‹å¤–å‡¦ç†
             else
             {
-                //–¼‘O‚ğ‰B‚·
-                panels_skinName[ID].SetText("HHH");
+                //åå‰ã‚’éš ã™
+                panels_skinName[ID].SetText("ï¼Ÿï¼Ÿï¼Ÿ");
 
-                //ƒeƒNƒXƒ`ƒƒ‚ğƒ}ƒXƒN‚µ‚È‚¢
+                //ãƒ†ã‚¯ã‚¹ãƒãƒ£ã‚’ãƒã‚¹ã‚¯ã—ãªã„
                 panels_skinModel[ID].maskInteraction = SpriteMaskInteraction.None;
 
-                //–Ú‚ğ“§–¾‰»
+                //ç›®ã‚’é€æ˜åŒ–
                 panels_skinEyes_L[ID].color = Color.clear;
                 panels_skinEyes_R[ID].color = Color.clear;
 
-                //ƒeƒNƒXƒ`ƒƒã‚Ì"?"‚ğ•\¦
+                //ãƒ†ã‚¯ã‚¹ãƒãƒ£ä¸Šã®"?"ã‚’è¡¨ç¤º
                 panels_skinModelText[ID / 8].SetText("?");
             }
         }
@@ -346,22 +346,22 @@ public class SkinSelecter : MonoBehaviour, IPointerDownHandler, IDragHandler, IP
 
 
 
-    //ƒpƒlƒ‹‚ğƒAƒ“ƒƒbƒNó‘Ô‚É
+    //ãƒ‘ãƒãƒ«ã‚’ã‚¢ãƒ³ãƒ­ãƒƒã‚¯çŠ¶æ…‹ã«
     public void UnlockPanel(int skinID)
     {
-        //ƒƒbƒN‰ğœğŒ‚ğ”ñ•\¦‚É
+        //ãƒ­ãƒƒã‚¯è§£é™¤æ¡ä»¶ã‚’éè¡¨ç¤ºã«
         panels_lockText[skinID].SetText("");
 
-        //CrystalƒXƒLƒ“‚Ì‚İ—áŠOˆ—
+        //Crystalã‚¹ã‚­ãƒ³ã®ã¿ä¾‹å¤–å‡¦ç†
         if (skinID % 8 == 7)
         {
-            //–¼‘O‚ğ•\¦
+            //åå‰ã‚’è¡¨ç¤º
             panels_skinName[skinID].SetText(skinDataBase.skinData[skinID].name);
 
-            //ƒeƒNƒXƒ`ƒƒ‚ğƒ}ƒXƒN
+            //ãƒ†ã‚¯ã‚¹ãƒãƒ£ã‚’ãƒã‚¹ã‚¯
             panels_skinModel[skinID].maskInteraction = SpriteMaskInteraction.VisibleInsideMask;
 
-            //ƒeƒNƒXƒ`ƒƒã‚Ì"?"‚ğ”ñ•\¦‚É
+            //ãƒ†ã‚¯ã‚¹ãƒãƒ£ä¸Šã®"?"ã‚’éè¡¨ç¤ºã«
             panels_skinModelText[skinID / 8].SetText("");
         }
     }

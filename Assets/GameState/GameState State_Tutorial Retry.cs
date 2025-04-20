@@ -9,20 +9,20 @@ public class GameStateState_TutorialRetry : GameStateStateBase
 
     public override void Enter()
     {
-        //Œo‰ßŠÔƒŠƒZƒbƒg
+        //çµŒéæ™‚é–“ãƒªã‚»ãƒƒãƒˆ
         elapsedTime = - 1;
 
-        //“®ìƒtƒ‰ƒOƒŠƒZƒbƒg
+        //å‹•ä½œãƒ•ãƒ©ã‚°ãƒªã‚»ãƒƒãƒˆ
         isMoveTerrein = false;
 
-        //’nŒ`‚Ì’â~
+        //åœ°å½¢ã®åœæ­¢
         TM.SetSpeed(0);
 
-        //ƒvƒŒƒCƒ„[‚ªƒgƒ“ƒlƒ‹“à‚È‚ç‰‰o‚ğ‘‚ß‚é
+        //ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ãŒãƒˆãƒ³ãƒãƒ«å†…ãªã‚‰æ¼”å‡ºã‚’æ—©ã‚ã‚‹
         if (TM.currentTerrainNum == 3)
             elapsedTime = 0;
 
-        //ƒvƒŒƒCƒ„[‚ª‰æ–ÊŠO‚È‚ç‰‰o‚ğ‘‚ß‚é
+        //ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ãŒç”»é¢å¤–ãªã‚‰æ¼”å‡ºã‚’æ—©ã‚ã‚‹
         if (playerCon.tf.position.y < -5 || playerCon.tf.position.x < -6)
             elapsedTime = 0.5f;
     }
@@ -31,13 +31,13 @@ public class GameStateState_TutorialRetry : GameStateStateBase
 
     public override void Update(float deltaTime)
     {
-        //Œo‰ßŠÔ‰ÁZ
+        //çµŒéæ™‚é–“åŠ ç®—
         elapsedTime += deltaTime;
 
-        //1.5•b‘Ò‹@
+        //1.5ç§’å¾…æ©Ÿ
         if (elapsedTime < 1.5) return;
 
-        //’nŒ`‰Á‘¬ˆ—
+        //åœ°å½¢åŠ é€Ÿå‡¦ç†
         if (!isMoveTerrein)
         {
             isMoveTerrein = true;
@@ -45,12 +45,12 @@ public class GameStateState_TutorialRetry : GameStateStateBase
             TM.SetSpeed(30);
         }
 
-        //’nŒ`‚ğŠÇ—
-        //’nŒ`“®ìŠJnŒã0.1•bŠÔ‚ÍPlayer‘¤‚Ì”»’è‚Ì‚½‚ß‚ÉÀs‚µ‚È‚¢
+        //åœ°å½¢ã‚’ç®¡ç†
+        //åœ°å½¢å‹•ä½œé–‹å§‹å¾Œ0.1ç§’é–“ã¯Playerå´ã®åˆ¤å®šã®ãŸã‚ã«å®Ÿè¡Œã—ãªã„
         if (elapsedTime > 1.6)
             TM.ManageMovingTerrain();
 
-        //w’èŠÔŒo‰ß‚ÅƒXƒe[ƒg‘JˆÚ
+        //æŒ‡å®šæ™‚é–“çµŒéã§ã‚¹ãƒ†ãƒ¼ãƒˆé·ç§»
         if (elapsedTime > 3)
             stateMachine.ChangeState(stateMachine.state_Tutorial);
     }

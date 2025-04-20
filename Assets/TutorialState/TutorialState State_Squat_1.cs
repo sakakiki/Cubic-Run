@@ -8,13 +8,13 @@ public class TutorialStateState_Squat_1 : TutorialStateStateBase
     {
         base.Enter();
 
-        //áŠQ•¨‚Ì¶¬
+        //éšœå®³ç‰©ã®ç”Ÿæˆ
         TM.CreateTerrain(3, TM.stageRightEdge, 6, 1, TM.moveSpeed);
 
-        //Ä’§íƒXƒe[ƒg‚ÌXV
+        //å†æŒ‘æˆ¦ã‚¹ãƒ†ãƒ¼ãƒˆã®æ›´æ–°
         continueState = this;
 
-        //ƒWƒƒƒ“ƒvƒAƒNƒVƒ‡ƒ“‚Ì–³Œø‰»
+        //ã‚¸ãƒ£ãƒ³ãƒ—ã‚¢ã‚¯ã‚·ãƒ§ãƒ³ã®ç„¡åŠ¹åŒ–
         PlayerStateBase_Play.isActive_Jump = false;
     }
 

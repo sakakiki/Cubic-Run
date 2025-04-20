@@ -8,20 +8,20 @@ public class GameStateState_Option_Account : GameStateState_OptionBase
     {
         base.Enter();
 
-        //ƒIƒvƒVƒ‡ƒ“‚Ìƒ^ƒCƒgƒ‹‚ğ•ÒW
-        GameManager.Instance.optionTitle.SetText("ƒAƒJƒEƒ“ƒg");
+        //ã‚ªãƒ—ã‚·ãƒ§ãƒ³ã®ã‚¿ã‚¤ãƒˆãƒ«ã‚’ç·¨é›†
+        GameManager.Instance.optionTitle.SetText("ã‚¢ã‚«ã‚¦ãƒ³ãƒˆ");
 
-        //Account‚ÌUI‚ğ—LŒø‰»
+        //Accountã®UIã‚’æœ‰åŠ¹åŒ–
         GameManager.Instance.optionUI_Account.SetActive(true);
 
-        //ƒAƒJƒEƒ“ƒg‚ÌÅVó‘Ô‚ğæ“¾
+        //ã‚¢ã‚«ã‚¦ãƒ³ãƒˆã®æœ€æ–°çŠ¶æ…‹ã‚’å–å¾—
         if (await AuthManager.Instance.UpdateUserData())
         {
-            //ƒAƒJƒEƒ“ƒg‚Ìó‘Ô‚É‰‚¶‚½•\¦“à—e•ÏX
+            //ã‚¢ã‚«ã‚¦ãƒ³ãƒˆã®çŠ¶æ…‹ã«å¿œã˜ãŸè¡¨ç¤ºå†…å®¹å¤‰æ›´
             if (AuthManager.Instance.GetIsAnonymous())
             {
-                GameManager.Instance.optionUI_Account_CurrentAccount.SetText("–¢İ’è");
-                GameManager.Instance.optionUI_Account_Status.SetText("ƒ[ƒ‹ƒAƒhƒŒƒX–¢“o˜^");
+                GameManager.Instance.optionUI_Account_CurrentAccount.SetText("æœªè¨­å®š");
+                GameManager.Instance.optionUI_Account_Status.SetText("ãƒ¡ãƒ¼ãƒ«ã‚¢ãƒ‰ãƒ¬ã‚¹æœªç™»éŒ²");
                 GameManager.Instance.optionUI_Account_Anonymous.SetActive(true);
                 GameManager.Instance.optionUI_Account_Email.SetActive(false);
             }
@@ -29,10 +29,10 @@ public class GameStateState_Option_Account : GameStateState_OptionBase
             {
                 GameManager.Instance.optionUI_Account_CurrentAccount.SetText(AuthManager.Instance.GetEmail());
                 if (AuthManager.Instance.GetIsEmailVerified())
-                    GameManager.Instance.optionUI_Account_Status.SetText("ƒ[ƒ‹ƒAƒhƒŒƒX“o˜^ÏE”FØÏ");
+                    GameManager.Instance.optionUI_Account_Status.SetText("ãƒ¡ãƒ¼ãƒ«ã‚¢ãƒ‰ãƒ¬ã‚¹ç™»éŒ²æ¸ˆãƒ»èªè¨¼æ¸ˆ");
                 else
                 {
-                    GameManager.Instance.optionUI_Account_Status.SetText("ƒ[ƒ‹ƒAƒhƒŒƒX“o˜^ÏE–¢”FØ");
+                    GameManager.Instance.optionUI_Account_Status.SetText("ãƒ¡ãƒ¼ãƒ«ã‚¢ãƒ‰ãƒ¬ã‚¹ç™»éŒ²æ¸ˆãƒ»æœªèªè¨¼");
                     GameManager.Instance.optionUI_Account_SendEmail.SetActive(true);
                 }
 
@@ -40,12 +40,12 @@ public class GameStateState_Option_Account : GameStateState_OptionBase
                 GameManager.Instance.optionUI_Account_Email.SetActive(true);
             }
 
-            //‹¤’Ê‚Ìƒ{ƒ^ƒ“‚ğ•\¦
+            //å…±é€šã®ãƒœã‚¿ãƒ³ã‚’è¡¨ç¤º
             GameManager.Instance.optionUI_Account_DeleteData.SetActive(true);
         }
         else
         {
-            GameManager.Instance.optionUI_Account_Status.SetText("ƒAƒJƒEƒ“ƒg‚Ìó‘Ô‚ğæ“¾‚Å‚«‚Ü‚¹‚ñ‚Å‚µ‚½B");
+            GameManager.Instance.optionUI_Account_Status.SetText("ã‚¢ã‚«ã‚¦ãƒ³ãƒˆã®çŠ¶æ…‹ã‚’å–å¾—ã§ãã¾ã›ã‚“ã§ã—ãŸã€‚");
             GameManager.Instance.optionUI_Account_Relogin.SetActive(false);
         }
     }
@@ -63,7 +63,7 @@ public class GameStateState_Option_Account : GameStateState_OptionBase
     {
         base.Exit();
 
-        //Account‚ÌUI‚ğ”ñ•\¦E–³Œø‰»
+        //Accountã®UIã‚’éè¡¨ç¤ºãƒ»ç„¡åŠ¹åŒ–
         GameManager.Instance.optionUI_Account_Status.SetText("");
         GameManager.Instance.optionUI_Account_Anonymous.SetActive(false);
         GameManager.Instance.optionUI_Account_Email.SetActive(false);

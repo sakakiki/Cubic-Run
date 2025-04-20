@@ -15,17 +15,17 @@ public class TutorialStateState_SmallJump_2 : TutorialStateStateBase
     {
         base.Enter();
 
-        //ƒQ[ƒ€‚Ìˆê’â~
+        //ã‚²ãƒ¼ãƒ ã®ä¸€æ™‚åœæ­¢
         Time.timeScale = 0;
 
-        //ƒWƒƒƒ“ƒvƒAƒNƒVƒ‡ƒ“‚Ì–³Œø‰»
+        //ã‚¸ãƒ£ãƒ³ãƒ—ã‚¢ã‚¯ã‚·ãƒ§ãƒ³ã®ç„¡åŠ¹åŒ–
         PlayerStateBase_Play.isActive_Jump = false;
-        //‚µ‚á‚ª‚İƒAƒNƒVƒ‡ƒ“‚Ì—LŒø‰»
+        //ã—ã‚ƒãŒã¿ã‚¢ã‚¯ã‚·ãƒ§ãƒ³ã®æœ‰åŠ¹åŒ–
         PlayerStateBase_Play.isActive_Squat = true;
-        //UŒ‚ƒAƒNƒVƒ‡ƒ“‚Ì–³Œø‰»
+        //æ”»æ’ƒã‚¢ã‚¯ã‚·ãƒ§ãƒ³ã®ç„¡åŠ¹åŒ–
         PlayerStateBase_Play.isActive_Attack = false;
 
-        //‚µ‚á‚ª‚İƒ{ƒ^ƒ“‚ğŒõ‚ç‚¹A‚»‚êˆÈŠO‚ğˆÃ‚­
+        //ã—ã‚ƒãŒã¿ãƒœã‚¿ãƒ³ã‚’å…‰ã‚‰ã›ã€ãã‚Œä»¥å¤–ã‚’æš—ã
         for (int i = 0; i < IM.actionAllocation.Length; i++)
             if (IM.actionAllocation[i] == actionNum_Squat)
             {
@@ -35,8 +35,8 @@ public class TutorialStateState_SmallJump_2 : TutorialStateStateBase
             else
                 IM.playButtonSet[IM.playButtonPatternNum].playButtonSprite[i].color = Color.black * 0.8f;
 
-        //‘€ì•û–@•\¦
-        PopupUIManager.Instance.SetupMessageText("‚µ‚á‚ª‚İ’†‚ÉƒWƒƒƒ“ƒv‚·‚é‚Æ¬ƒWƒƒƒ“ƒv");
+        //æ“ä½œæ–¹æ³•è¡¨ç¤º
+        PopupUIManager.Instance.SetupMessageText("ã—ã‚ƒãŒã¿ä¸­ã«ã‚¸ãƒ£ãƒ³ãƒ—ã™ã‚‹ã¨å°ã‚¸ãƒ£ãƒ³ãƒ—");
     }
 
 
@@ -45,13 +45,13 @@ public class TutorialStateState_SmallJump_2 : TutorialStateStateBase
     {
         base.Update(deltaTime);
 
-        //ŠÔ’â~’†‚Ì‚½‚ß‹^—ŠÔ‰ÁZ
+        //æ™‚é–“åœæ­¢ä¸­ã®ãŸã‚ç–‘ä¼¼æ™‚é–“åŠ ç®—
         elapsedTime += 1f / GM.defaultFrameRate;
 
-        //ƒ^ƒbƒv‚·‚éƒ{ƒ^ƒ“‚ğŒõ‚ç‚¹‚é
+        //ã‚¿ãƒƒãƒ—ã™ã‚‹ãƒœã‚¿ãƒ³ã‚’å…‰ã‚‰ã›ã‚‹
         buttonSprite_Squat.color = Color.white - Color.black * (1 - Mathf.Abs(elapsedTime % 2 - 1) * 0.1f);
 
-        //w’è‚Ì“ü—Í‚ğ–‚½‚¹‚ÎƒXƒe[ƒg‘JˆÚ
+        //æŒ‡å®šã®å…¥åŠ›ã‚’æº€ãŸã›ã°ã‚¹ãƒ†ãƒ¼ãƒˆé·ç§»
         if (IM.is_Player_Squat_Push)
             stateMachine.ChangeState(stateMachine.state_SmallJump_3);
     }

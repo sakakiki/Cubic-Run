@@ -24,13 +24,13 @@ public class GameStateState_MenuToTutorial : GameStateStateBase
 
     public override void Enter()
     {
-        //Œo‰ßŽžŠÔƒŠƒZƒbƒg
+        //çµŒéŽæ™‚é–“ãƒªã‚»ãƒƒãƒˆ
         elapsedTime = 0;
 
-        //áŠQ•¨‚Ì¶¬‚ð–³Œø‰»
+        //éšœå®³ç‰©ã®ç”Ÿæˆã‚’ç„¡åŠ¹åŒ–
         TM.isCreateObstacle = false;
 
-        //”wŒi‚Ì’nŒ`‚ð‰Á‘¬
+        //èƒŒæ™¯ã®åœ°å½¢ã‚’åŠ é€Ÿ
         TM.moveSpeed = 20;
         TM.SetSpeed(20);
     }
@@ -39,28 +39,28 @@ public class GameStateState_MenuToTutorial : GameStateStateBase
 
     public override void Update(float deltaTime)
     {
-        //Œo‰ßŽžŠÔ‰ÁŽZ
+        //çµŒéŽæ™‚é–“åŠ ç®—
         elapsedTime += deltaTime;
 
-        //Ž–‘OŒvŽZ
+        //äº‹å‰è¨ˆç®—
         float lerpValue = (elapsedTime - 0.5f) / 1.5f;
 
-        //’nŒ`‚ðŠÇ—
+        //åœ°å½¢ã‚’ç®¡ç†
         TM.ManageMovingTerrain();
 
-        //UI‚ð‰ñ“]
+        //UIã‚’å›žè»¢
         menuHingeRtf_L.localEulerAngles = Vector3.Lerp(Vector3.zero, Vector3.up * -180, lerpValue);
         menuHingeRtf_R.localEulerAngles = Vector3.Lerp(Vector3.zero, Vector3.up * 180, lerpValue);
         playHingeRtf_R.localEulerAngles = Vector3.Lerp(Vector3.up * -180, Vector3.zero, lerpValue);
 
-        //ƒXƒNƒŠ[ƒ“ƒJƒo[‚ÌF‚ð•ÏX
+        //ã‚¹ã‚¯ãƒªãƒ¼ãƒ³ã‚«ãƒãƒ¼ã®è‰²ã‚’å¤‰æ›´
         screenCover.color = 
             startCoverColor - Color.black * Mathf.Lerp(targetCoverColor.a, startCoverColor.a, lerpValue);
 
-        //BGM‚Ìƒ{ƒŠƒ…[ƒ€•ÏX
+        //BGMã®ãƒœãƒªãƒ¥ãƒ¼ãƒ å¤‰æ›´
         audioSource_BGM.volume = (2 - elapsedTime) * AM.volume_BGM;
 
-        //Žw’èŽžŠÔŒo‰ß‚ÅƒXƒe[ƒg‘JˆÚ
+        //æŒ‡å®šæ™‚é–“çµŒéŽã§ã‚¹ãƒ†ãƒ¼ãƒˆé·ç§»
         if (elapsedTime > 2)
             stateMachine.ChangeState(stateMachine.state_Tutorial);
     }

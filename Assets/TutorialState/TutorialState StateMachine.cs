@@ -68,7 +68,7 @@ public class TutorialStateStateMachine
 
     public void Update(float deltaTime)
     {
-        //ƒXƒe[ƒg‚É‰‚¶‚½Update‚ÌÀs
+        //ã‚¹ãƒ†ãƒ¼ãƒˆã«å¿œã˜ãŸUpdateã®å®Ÿè¡Œ
         if (currentState != null) currentState.Update(deltaTime);
     }
 }

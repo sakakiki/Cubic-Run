@@ -8,13 +8,13 @@ public abstract class GameStateState_OptionBase : GameStateStateBase
 
     public override void Enter()
     {
-        //ƒIƒvƒVƒ‡ƒ“‰æ–Ê‚Ì“ü—Í‚ğ—LŒø‰»
+        //ã‚ªãƒ—ã‚·ãƒ§ãƒ³ç”»é¢ã®å…¥åŠ›ã‚’æœ‰åŠ¹åŒ–
         IM.InputUISetActive_Option(true);
 
-        //ƒIƒvƒVƒ‡ƒ“‰æ–Ê‚ÌUI‚ğ—LŒø‰»
+        //ã‚ªãƒ—ã‚·ãƒ§ãƒ³ç”»é¢ã®UIã‚’æœ‰åŠ¹åŒ–
         GameManager.Instance.optionUIBase.SetActive(true);
 
-        //–³Œø•”•ª‚ÉƒJƒo[
+        //ç„¡åŠ¹éƒ¨åˆ†ã«ã‚«ãƒãƒ¼
         GameManager.Instance.frontScreenCover.color = Color.white - Color.black * 0.2f;
     }
 
@@ -22,16 +22,16 @@ public abstract class GameStateState_OptionBase : GameStateStateBase
 
     public override void Update(float deltaTime)
     {
-        //“ü—Í‚Ìæ“¾
+        //å…¥åŠ›ã®å–å¾—
         IM.GetInput_Option();
 
-        //’nŒ`‚ğŠÇ—
+        //åœ°å½¢ã‚’ç®¡ç†
         TM.ManageMovingTerrain();
 
-        //“ü—Í‚É‰‚¶‚½ƒXƒe[ƒg‘JˆÚ
+        //å…¥åŠ›ã«å¿œã˜ãŸã‚¹ãƒ†ãƒ¼ãƒˆé·ç§»
         if (IM.is_Option_Close_Tap)
         {
-            //SE‚ÌÄ¶
+            //SEã®å†ç”Ÿ
             AudioManager.Instance.PlaySE(AudioManager.Instance.SE_Close);
 
             stateMachine.ChangeState(stateMachine.state_Menu);
@@ -42,13 +42,13 @@ public abstract class GameStateState_OptionBase : GameStateStateBase
 
     public override void Exit()
     {
-        //ƒIƒvƒVƒ‡ƒ“‰æ–Ê‚Ì“ü—Í‚ğ–³Œø‰»
+        //ã‚ªãƒ—ã‚·ãƒ§ãƒ³ç”»é¢ã®å…¥åŠ›ã‚’ç„¡åŠ¹åŒ–
         IM.InputUISetActive_Option(false);
 
-        //ƒIƒvƒVƒ‡ƒ“‰æ–Ê‚ÌUI‚ğ–³Œø‰»
+        //ã‚ªãƒ—ã‚·ãƒ§ãƒ³ç”»é¢ã®UIã‚’ç„¡åŠ¹åŒ–
         GameManager.Instance.optionUIBase.SetActive(false);
 
-        //ƒJƒo[‚ğ“§–¾‚É
+        //ã‚«ãƒãƒ¼ã‚’é€æ˜ã«
         GameManager.Instance.frontScreenCover.color = Color.clear;
     }
 }

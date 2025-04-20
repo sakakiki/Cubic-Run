@@ -11,7 +11,7 @@ public class AuthManager : MonoBehaviour
     private FirebaseAuth auth;
     private FirebaseUser user;
 
-    //ŠO•”‚©‚ç‚Ìó‘ÔŠm”F—p
+    //å¤–éƒ¨ã‹ã‚‰ã®çŠ¶æ…‹ç¢ºèªç”¨
     public enum LoginState
     {
         Unchecked,
@@ -23,19 +23,25 @@ public class AuthManager : MonoBehaviour
 
 
     /// <summary>
-    /// ‹N“®Œã‚Ì‰Šúİ’è
+    /// èµ·å‹•å¾Œã®åˆæœŸè¨­å®š
     /// </summary>
     private void Awake()
     {
         if (Instance == null)
             Instance = this;
+        
+#if UNITY_EDITOR
+        Debug.Log("Skipping Firebase init in editor to avoid native plugin errors.");
+        loginState = LoginState.Login;
+        return;
+#endif
 
         auth = FirebaseAuth.DefaultInstance;
 
-        // ”FØó‘Ô‚Ì•ÏX‚ğŠÄ‹
+        // èªè¨¼çŠ¶æ…‹ã®å¤‰æ›´ã‚’ç›£è¦–
         auth.StateChanged += AuthStateChanged;
 
-        //–¢ƒ`ƒFƒbƒNó‘Ô‚Å‰Šú‰»
+        //æœªãƒã‚§ãƒƒã‚¯çŠ¶æ…‹ã§åˆæœŸåŒ–
         loginState = LoginState.Unchecked;
 
 
@@ -46,7 +52,7 @@ public class AuthManager : MonoBehaviour
 
 
     /// <summary>
-    /// ƒCƒxƒ“ƒgƒnƒ“ƒhƒ‰‚Ì‰ğœiƒƒ‚ƒŠƒŠ[ƒN–h~j
+    /// ã‚¤ãƒ™ãƒ³ãƒˆãƒãƒ³ãƒ‰ãƒ©ã®è§£é™¤ï¼ˆãƒ¡ãƒ¢ãƒªãƒªãƒ¼ã‚¯é˜²æ­¢ï¼‰
     /// </summary>
     private void OnDestroy()
     {
@@ -59,7 +65,7 @@ public class AuthManager : MonoBehaviour
 
 
     /// <summary>
-    /// ”FØî•ñ‚ªæ“¾‚Å‚«‚ê‚Î©“®ƒƒOƒCƒ“‚ğÀs
+    /// èªè¨¼æƒ…å ±ãŒå–å¾—ã§ãã‚Œã°è‡ªå‹•ãƒ­ã‚°ã‚¤ãƒ³ã‚’å®Ÿè¡Œ
     /// </summary>
     private async void AuthStateChanged(object sender, System.EventArgs eventArgs)
     {
@@ -68,15 +74,15 @@ public class AuthManager : MonoBehaviour
 
         if (user != null)
         {
-            // ÅV‚Ìƒ†[ƒU[ƒf[ƒ^‚ğæ“¾
+            // æœ€æ–°ã®ãƒ¦ãƒ¼ã‚¶ãƒ¼ãƒ‡ãƒ¼ã‚¿ã‚’å–å¾—
             await UpdateUserData();
 
-            Debug.Log("ƒƒOƒCƒ“Ï‚İ@@ƒAƒhƒŒƒX“o˜^F " + !string.IsNullOrEmpty(user.Email) + "@”FØF" + user.IsEmailVerified);
+            Debug.Log("ãƒ­ã‚°ã‚¤ãƒ³æ¸ˆã¿ã€€ã€€ã‚¢ãƒ‰ãƒ¬ã‚¹ç™»éŒ²ï¼š " + !string.IsNullOrEmpty(user.Email) + "ã€€èªè¨¼ï¼š" + user.IsEmailVerified);
             loginState = LoginState.Login;
         }
         else
         {
-            Debug.Log("ƒƒOƒCƒ“‚µ‚Ä‚¢‚Ü‚¹‚ñ");
+            Debug.Log("ãƒ­ã‚°ã‚¤ãƒ³ã—ã¦ã„ã¾ã›ã‚“");
             loginState = LoginState.NoAccount;
         }
     }
@@ -84,269 +90,269 @@ public class AuthManager : MonoBehaviour
 
 
     /// <summary>
-    /// “½–¼ƒƒOƒCƒ“
+    /// åŒ¿åãƒ­ã‚°ã‚¤ãƒ³
     /// </summary>
     public async Task<int> SignInAnonymously()
     {
         try
         {
             var result = await auth.SignInAnonymouslyAsync();
-            Debug.Log("“½–¼ƒƒOƒCƒ“¬Œ÷");
+            Debug.Log("åŒ¿åãƒ­ã‚°ã‚¤ãƒ³æˆåŠŸ");
 
-            //ŠO•”‚©‚ç‚ÌŠm”F—p
+            //å¤–éƒ¨ã‹ã‚‰ã®ç¢ºèªç”¨
             loginState = LoginState.Login;
 
-            // Firestore‚ÉV‹Kƒf[ƒ^‚ğì¬
+            // Firestoreã«æ–°è¦ãƒ‡ãƒ¼ã‚¿ã‚’ä½œæˆ
             if (await FirestoreManager.Instance.SaveNewPlayerData())
-                //³íI—¹
+                //æ­£å¸¸çµ‚äº†
                 return 0;
         }
         catch (FirebaseException e)
         {
-            //ƒlƒbƒgƒ[ƒNƒGƒ‰[‚ÍƒGƒ‰[ƒR[ƒh1‚ğ•Ô‚·
+            //ãƒãƒƒãƒˆãƒ¯ãƒ¼ã‚¯ã‚¨ãƒ©ãƒ¼ã¯ã‚¨ãƒ©ãƒ¼ã‚³ãƒ¼ãƒ‰1ã‚’è¿”ã™
             if (e.ErrorCode == (int)AuthError.NetworkRequestFailed)
                 return 1;
 
-            //‚»‚Ì‘¼ƒGƒ‰[‚ÍƒGƒ‰[ƒR[ƒh9‚ğ•Ô‚·
+            //ãã®ä»–ã‚¨ãƒ©ãƒ¼ã¯ã‚¨ãƒ©ãƒ¼ã‚³ãƒ¼ãƒ‰9ã‚’è¿”ã™
             else return 9;
         }
         catch (Exception ex)
         {
 
         }
-        //‚»‚Ì‘¼ƒGƒ‰[‚ÍƒGƒ‰[ƒR[ƒh9‚ğ•Ô‚·
+        //ãã®ä»–ã‚¨ãƒ©ãƒ¼ã¯ã‚¨ãƒ©ãƒ¼ã‚³ãƒ¼ãƒ‰9ã‚’è¿”ã™
         return 9;
     }
 
 
 
     /// <summary>
-    /// “½–¼ƒAƒJƒEƒ“ƒg‚©‚çƒ[ƒ‹ƒAƒhƒŒƒX”FØ‚ÉØ‚è‘Ö‚¦
+    /// åŒ¿åã‚¢ã‚«ã‚¦ãƒ³ãƒˆã‹ã‚‰ãƒ¡ãƒ¼ãƒ«ã‚¢ãƒ‰ãƒ¬ã‚¹èªè¨¼ã«åˆ‡ã‚Šæ›¿ãˆ
     /// </summary>
     public async Task<string> ConvertAnonymousToEmail(string email, string password)
     {
-        user = auth.CurrentUser; // Œ»İ‚Ì“½–¼ƒ†[ƒU[
+        user = auth.CurrentUser; // ç¾åœ¨ã®åŒ¿åãƒ¦ãƒ¼ã‚¶ãƒ¼
 
         if (user == null || !user.IsAnonymous)
         {
-            //“½–¼ƒ†[ƒU[‚Å‚È‚¢
-            return "ˆÙíI—¹";
+            //åŒ¿åãƒ¦ãƒ¼ã‚¶ãƒ¼ã§ãªã„
+            return "ç•°å¸¸çµ‚äº†";
         }
 
         try
         {
-            // ƒ[ƒ‹ & ƒpƒXƒ[ƒh‚Ì”FØî•ñ‚ğì¬
+            // ãƒ¡ãƒ¼ãƒ« & ãƒ‘ã‚¹ãƒ¯ãƒ¼ãƒ‰ã®èªè¨¼æƒ…å ±ã‚’ä½œæˆ
             Credential credential = EmailAuthProvider.GetCredential(email, password);
 
-            // “½–¼ƒAƒJƒEƒ“ƒg‚Æƒ[ƒ‹ƒAƒJƒEƒ“ƒg‚ğƒŠƒ“ƒN
+            // åŒ¿åã‚¢ã‚«ã‚¦ãƒ³ãƒˆã¨ãƒ¡ãƒ¼ãƒ«ã‚¢ã‚«ã‚¦ãƒ³ãƒˆã‚’ãƒªãƒ³ã‚¯
             await user.LinkWithCredentialAsync(credential);
-            Debug.Log("“½–¼ƒAƒJƒEƒ“ƒg‚ğƒ[ƒ‹”FØ‚ÉØ‚è‘Ö‚¦¬Œ÷: " + email);
+            Debug.Log("åŒ¿åã‚¢ã‚«ã‚¦ãƒ³ãƒˆã‚’ãƒ¡ãƒ¼ãƒ«èªè¨¼ã«åˆ‡ã‚Šæ›¿ãˆæˆåŠŸ: " + email);
 
-            // ”FØƒ[ƒ‹‘—M
+            // èªè¨¼ãƒ¡ãƒ¼ãƒ«é€ä¿¡
             await user.SendEmailVerificationAsync();
 
-            return "³íI—¹";
+            return "æ­£å¸¸çµ‚äº†";
         }
         catch (FirebaseException e)
         {
             switch (e.ErrorCode)
             {
                 case (int)AuthError.InvalidEmail:
-                    return "–³Œø‚Èƒ[ƒ‹ƒAƒhƒŒƒX‚Å‚·";
+                    return "ç„¡åŠ¹ãªãƒ¡ãƒ¼ãƒ«ã‚¢ãƒ‰ãƒ¬ã‚¹ã§ã™";
 
                 case (int)AuthError.EmailAlreadyInUse:
-                    return "‚±‚Ìƒ[ƒ‹ƒAƒhƒŒƒX‚Í‚·‚Å‚Ég—p‚³‚ê‚Ä‚¢‚Ü‚·";
+                    return "ã“ã®ãƒ¡ãƒ¼ãƒ«ã‚¢ãƒ‰ãƒ¬ã‚¹ã¯ã™ã§ã«ä½¿ç”¨ã•ã‚Œã¦ã„ã¾ã™";
 
                 case (int)AuthError.WeakPassword:
                     return
-                        "ƒpƒXƒ[ƒh‚ªÆã‚Å‚·\n\n" +
-                        "ƒpƒXƒ[ƒh‚Í6•¶šˆÈã‚ÅA‰p”š‚ğŠÜ‚ß‚Ä‚­‚¾‚³‚¢B\n" +
-                        "8•¶šˆÈãA‰pšE”šE‹L†‚ğ‘g‚İ‡‚í‚¹‚é‚±‚Æ‚ÅˆÀ‘S«‚ªŒüã‚µ‚Ü‚·B";
+                        "ãƒ‘ã‚¹ãƒ¯ãƒ¼ãƒ‰ãŒè„†å¼±ã§ã™\n\n" +
+                        "ãƒ‘ã‚¹ãƒ¯ãƒ¼ãƒ‰ã¯6æ–‡å­—ä»¥ä¸Šã§ã€è‹±æ•°å­—ã‚’å«ã‚ã¦ãã ã•ã„ã€‚\n" +
+                        "8æ–‡å­—ä»¥ä¸Šã€è‹±å­—ãƒ»æ•°å­—ãƒ»è¨˜å·ã‚’çµ„ã¿åˆã‚ã›ã‚‹ã“ã¨ã§å®‰å…¨æ€§ãŒå‘ä¸Šã—ã¾ã™ã€‚";
 
                 case (int)AuthError.CredentialAlreadyInUse:
-                    return "‚±‚Ì”FØî•ñ‚Í‚·‚Å‚É•Ê‚ÌƒAƒJƒEƒ“ƒg‚ÉƒŠƒ“ƒN‚³‚ê‚Ä‚¢‚Ü‚·";
+                    return "ã“ã®èªè¨¼æƒ…å ±ã¯ã™ã§ã«åˆ¥ã®ã‚¢ã‚«ã‚¦ãƒ³ãƒˆã«ãƒªãƒ³ã‚¯ã•ã‚Œã¦ã„ã¾ã™";
 
                 case (int)AuthError.NetworkRequestFailed:
-                    return "ƒlƒbƒgƒ[ƒNƒGƒ‰[";
+                    return "ãƒãƒƒãƒˆãƒ¯ãƒ¼ã‚¯ã‚¨ãƒ©ãƒ¼";
 
                 default:
-                    return "ˆÙíI—¹";
+                    return "ç•°å¸¸çµ‚äº†";
             }
         }
         catch (Exception ex)
         {
-            return "ˆÙíI—¹";
+            return "ç•°å¸¸çµ‚äº†";
         }
     }
 
 
 
     /// <summary>
-    /// ƒ[ƒ‹ƒAƒhƒŒƒX‚ÆƒpƒXƒ[ƒh‚Å‚ÌƒƒOƒCƒ“
-    /// ƒƒOƒCƒ“‘O‚ª“½–¼ƒAƒJƒEƒ“ƒg‚¾‚Á‚½ê‡‚ÍƒAƒJƒEƒ“ƒgíœ
+    /// ãƒ¡ãƒ¼ãƒ«ã‚¢ãƒ‰ãƒ¬ã‚¹ã¨ãƒ‘ã‚¹ãƒ¯ãƒ¼ãƒ‰ã§ã®ãƒ­ã‚°ã‚¤ãƒ³
+    /// ãƒ­ã‚°ã‚¤ãƒ³å‰ãŒåŒ¿åã‚¢ã‚«ã‚¦ãƒ³ãƒˆã ã£ãŸå ´åˆã¯ã‚¢ã‚«ã‚¦ãƒ³ãƒˆå‰Šé™¤
     /// </summary>
     public async Task<string> Login(string email, string password)
     {
         try
         {
-            //ƒƒOƒCƒ“‘O‚ª“½–¼ƒAƒJƒEƒ“ƒg‚È‚çíœ
+            //ãƒ­ã‚°ã‚¤ãƒ³å‰ãŒåŒ¿åã‚¢ã‚«ã‚¦ãƒ³ãƒˆãªã‚‰å‰Šé™¤
             if (user.IsAnonymous)
             {
                 await FirestoreManager.Instance.DeleteDocument(user.UserId);
                 await user.DeleteAsync();
-                Debug.Log("“½–¼ƒAƒJƒEƒ“ƒg‚ğíœ‚µ‚Ü‚µ‚½B");
+                Debug.Log("åŒ¿åã‚¢ã‚«ã‚¦ãƒ³ãƒˆã‚’å‰Šé™¤ã—ã¾ã—ãŸã€‚");
                 await UpdateUserData();
             }
 
-            //ƒ[ƒ‹ƒAƒhƒŒƒX‚ÆƒpƒXƒ[ƒh‚ÅƒƒOƒCƒ“
+            //ãƒ¡ãƒ¼ãƒ«ã‚¢ãƒ‰ãƒ¬ã‚¹ã¨ãƒ‘ã‚¹ãƒ¯ãƒ¼ãƒ‰ã§ãƒ­ã‚°ã‚¤ãƒ³
             var result = await auth.SignInWithEmailAndPasswordAsync(email, password);
 
-            //ƒAƒJƒEƒ“ƒgî•ñXV
+            //ã‚¢ã‚«ã‚¦ãƒ³ãƒˆæƒ…å ±æ›´æ–°
             user = result.User;
 
-            return "³íI—¹";
+            return "æ­£å¸¸çµ‚äº†";
         }
         catch (FirebaseException e)
         {
             switch (e.ErrorCode)
             {
                 case (int)AuthError.MissingEmail:
-                    return"ƒ[ƒ‹ƒAƒhƒŒƒX‚ğ“ü—Í‚µ‚Ä‚­‚¾‚³‚¢B";
+                    return"ãƒ¡ãƒ¼ãƒ«ã‚¢ãƒ‰ãƒ¬ã‚¹ã‚’å…¥åŠ›ã—ã¦ãã ã•ã„ã€‚";
 
                 case (int)AuthError.MissingPassword:
-                    return"ƒpƒXƒ[ƒh‚ğ“ü—Í‚µ‚Ä‚­‚¾‚³‚¢B";
+                    return"ãƒ‘ã‚¹ãƒ¯ãƒ¼ãƒ‰ã‚’å…¥åŠ›ã—ã¦ãã ã•ã„ã€‚";
 
                 case (int)AuthError.InvalidEmail:
-                    return"ƒ[ƒ‹ƒAƒhƒŒƒX‚ÌŒ`®‚ª³‚µ‚­‚ ‚è‚Ü‚¹‚ñB";
+                    return"ãƒ¡ãƒ¼ãƒ«ã‚¢ãƒ‰ãƒ¬ã‚¹ã®å½¢å¼ãŒæ­£ã—ãã‚ã‚Šã¾ã›ã‚“ã€‚";
 
                 case (int)AuthError.WrongPassword:
-                    return"ƒpƒXƒ[ƒh‚ªŠÔˆá‚Á‚Ä‚¢‚Ü‚·B";
+                    return"ãƒ‘ã‚¹ãƒ¯ãƒ¼ãƒ‰ãŒé–“é•ã£ã¦ã„ã¾ã™ã€‚";
 
                 case (int)AuthError.UserNotFound:
-                    return"‚±‚Ìƒ[ƒ‹ƒAƒhƒŒƒX‚Ìƒ†[ƒU[‚Í“o˜^‚³‚ê‚Ä‚¢‚Ü‚¹‚ñB";
+                    return"ã“ã®ãƒ¡ãƒ¼ãƒ«ã‚¢ãƒ‰ãƒ¬ã‚¹ã®ãƒ¦ãƒ¼ã‚¶ãƒ¼ã¯ç™»éŒ²ã•ã‚Œã¦ã„ã¾ã›ã‚“ã€‚";
 
                 case (int)AuthError.NetworkRequestFailed:
-                    return "ƒlƒbƒgƒ[ƒNƒGƒ‰[";
+                    return "ãƒãƒƒãƒˆãƒ¯ãƒ¼ã‚¯ã‚¨ãƒ©ãƒ¼";
 
                 case (int)AuthError.TooManyRequests:
-                    return"s‰ñ”‚ª‘½‚·‚¬‚Ü‚·B‚µ‚Î‚ç‚­‘Ò‚Á‚Ä‚©‚çÄs‚µ‚Ä‚­‚¾‚³‚¢B";
+                    return"è©¦è¡Œå›æ•°ãŒå¤šã™ãã¾ã™ã€‚ã—ã°ã‚‰ãå¾…ã£ã¦ã‹ã‚‰å†è©¦è¡Œã—ã¦ãã ã•ã„ã€‚";
 
                 case (int)AuthError.UserDisabled:
-                    return"‚±‚ÌƒAƒJƒEƒ“ƒg‚Í–³Œø‰»‚³‚ê‚Ä‚¢‚Ü‚·B";
+                    return"ã“ã®ã‚¢ã‚«ã‚¦ãƒ³ãƒˆã¯ç„¡åŠ¹åŒ–ã•ã‚Œã¦ã„ã¾ã™ã€‚";
 
                 default:
-                    return "ˆÙíI—¹";
+                    return "ç•°å¸¸çµ‚äº†";
             }
         }
         catch (Exception ex)
         {
-            return "ˆÙíI—¹";
+            return "ç•°å¸¸çµ‚äº†";
         }
     }
 
 
 
     /// <summary>
-    /// Ä”FØ
+    /// å†èªè¨¼
     /// </summary>
     public async Task<string> Reauthenticate(string email, string password)
     {
         if (auth.CurrentUser == null)
         {
-            return "ƒ†[ƒU[‚ª”FØ‚³‚ê‚Ä‚¢‚Ü‚¹‚ñB";
+            return "ãƒ¦ãƒ¼ã‚¶ãƒ¼ãŒèªè¨¼ã•ã‚Œã¦ã„ã¾ã›ã‚“ã€‚";
         }
 
         try
         {
             var credential = EmailAuthProvider.GetCredential(email, password);
             await auth.CurrentUser.ReauthenticateAsync(credential);
-            return "³íI—¹";
+            return "æ­£å¸¸çµ‚äº†";
         }
         catch (FirebaseException e)
         {
             switch (e.ErrorCode)
             {
                 case (int)AuthError.InvalidEmail:
-                    return "–³Œø‚Èƒ[ƒ‹ƒAƒhƒŒƒX‚Å‚·B";
+                    return "ç„¡åŠ¹ãªãƒ¡ãƒ¼ãƒ«ã‚¢ãƒ‰ãƒ¬ã‚¹ã§ã™ã€‚";
 
                 case (int)AuthError.WrongPassword:
-                    return "ƒpƒXƒ[ƒh‚ªŠÔˆá‚Á‚Ä‚¢‚Ü‚·B";
+                    return "ãƒ‘ã‚¹ãƒ¯ãƒ¼ãƒ‰ãŒé–“é•ã£ã¦ã„ã¾ã™ã€‚";
 
                 case (int)AuthError.UserNotFound:
-                    return "‚±‚Ìƒ[ƒ‹ƒAƒhƒŒƒX‚ÌƒAƒJƒEƒ“ƒg‚Í‘¶İ‚µ‚Ü‚¹‚ñB";
+                    return "ã“ã®ãƒ¡ãƒ¼ãƒ«ã‚¢ãƒ‰ãƒ¬ã‚¹ã®ã‚¢ã‚«ã‚¦ãƒ³ãƒˆã¯å­˜åœ¨ã—ã¾ã›ã‚“ã€‚";
 
                 case (int)AuthError.UserDisabled:
-                    return "‚±‚ÌƒAƒJƒEƒ“ƒg‚Í–³Œø‰»‚³‚ê‚Ä‚¢‚Ü‚·B";
+                    return "ã“ã®ã‚¢ã‚«ã‚¦ãƒ³ãƒˆã¯ç„¡åŠ¹åŒ–ã•ã‚Œã¦ã„ã¾ã™ã€‚";
 
                 case (int)AuthError.NetworkRequestFailed:
-                    return "ƒlƒbƒgƒ[ƒNƒGƒ‰[";
+                    return "ãƒãƒƒãƒˆãƒ¯ãƒ¼ã‚¯ã‚¨ãƒ©ãƒ¼";
 
                 default:
-                    return "ˆÙíI—¹";
+                    return "ç•°å¸¸çµ‚äº†";
             }
         }
         catch (Exception e)
         {
-            return "ˆÙíI—¹";
+            return "ç•°å¸¸çµ‚äº†";
         }
     }
 
 
 
     /// <summary>
-    /// ƒ[ƒ‹ƒAƒhƒŒƒX•ÏX
+    /// ãƒ¡ãƒ¼ãƒ«ã‚¢ãƒ‰ãƒ¬ã‚¹å¤‰æ›´
     /// </summary>
     public async Task<string> UpdateUserEmail(string newEmail)
     {
         if (auth.CurrentUser == null)
         {
-            return "ƒ†[ƒU[‚ª”FØ‚³‚ê‚Ä‚¢‚Ü‚¹‚ñB";
+            return "ãƒ¦ãƒ¼ã‚¶ãƒ¼ãŒèªè¨¼ã•ã‚Œã¦ã„ã¾ã›ã‚“ã€‚";
         }
 
         try
         {
             await auth.CurrentUser.SendEmailVerificationBeforeUpdatingEmailAsync(newEmail);
-            return "³íI—¹";
+            return "æ­£å¸¸çµ‚äº†";
         }
         catch (FirebaseException e)
         {
             switch (e.ErrorCode)
             {
                 case (int)AuthError.InvalidEmail:
-                    return "–³Œø‚Èƒ[ƒ‹ƒAƒhƒŒƒX‚Å‚·B";
+                    return "ç„¡åŠ¹ãªãƒ¡ãƒ¼ãƒ«ã‚¢ãƒ‰ãƒ¬ã‚¹ã§ã™ã€‚";
 
                 case (int)AuthError.EmailAlreadyInUse:
-                    return "‚±‚Ìƒ[ƒ‹ƒAƒhƒŒƒX‚Í‚·‚Å‚Ég—p‚³‚ê‚Ä‚¢‚Ü‚·B";
+                    return "ã“ã®ãƒ¡ãƒ¼ãƒ«ã‚¢ãƒ‰ãƒ¬ã‚¹ã¯ã™ã§ã«ä½¿ç”¨ã•ã‚Œã¦ã„ã¾ã™ã€‚";
 
                 case (int)AuthError.NetworkRequestFailed:
-                    return "ƒlƒbƒgƒ[ƒNƒGƒ‰[";
+                    return "ãƒãƒƒãƒˆãƒ¯ãƒ¼ã‚¯ã‚¨ãƒ©ãƒ¼";
 
                 default:
-                    return "ˆÙíI—¹";
+                    return "ç•°å¸¸çµ‚äº†";
             }
         }
         catch (Exception e)
         {
-            return "ˆÙíI—¹";
+            return "ç•°å¸¸çµ‚äº†";
         }
     }
 
 
 
     /// <summary>
-    /// ƒpƒXƒ[ƒh•ÏX
+    /// ãƒ‘ã‚¹ãƒ¯ãƒ¼ãƒ‰å¤‰æ›´
     /// </summary>
     public async Task<string> UpdatePassword(string newPassword)
     {
         if (auth.CurrentUser == null)
         {
-            return "ƒ†[ƒU[‚ª”FØ‚³‚ê‚Ä‚¢‚Ü‚¹‚ñB";
+            return "ãƒ¦ãƒ¼ã‚¶ãƒ¼ãŒèªè¨¼ã•ã‚Œã¦ã„ã¾ã›ã‚“ã€‚";
         }
 
         try
         {
             await auth.CurrentUser.UpdatePasswordAsync(newPassword);
-            return "³íI—¹";
+            return "æ­£å¸¸çµ‚äº†";
         }
 
         catch (FirebaseException e)
@@ -355,86 +361,86 @@ public class AuthManager : MonoBehaviour
             {
                 case (int)AuthError.WeakPassword:
                     return
-                        "ƒpƒXƒ[ƒh‚ªÆã‚Å‚·\n\n" +
-                        "ƒpƒXƒ[ƒh‚Í6•¶šˆÈã‚ÅA‰p”š‚ğŠÜ‚ß‚Ä‚­‚¾‚³‚¢B\n" +
-                        "8•¶šˆÈãA‰pšE”šE‹L†‚ğ‘g‚İ‡‚í‚¹‚é‚±‚Æ‚ÅˆÀ‘S«‚ªŒüã‚µ‚Ü‚·B";
+                        "ãƒ‘ã‚¹ãƒ¯ãƒ¼ãƒ‰ãŒè„†å¼±ã§ã™\n\n" +
+                        "ãƒ‘ã‚¹ãƒ¯ãƒ¼ãƒ‰ã¯6æ–‡å­—ä»¥ä¸Šã§ã€è‹±æ•°å­—ã‚’å«ã‚ã¦ãã ã•ã„ã€‚\n" +
+                        "8æ–‡å­—ä»¥ä¸Šã€è‹±å­—ãƒ»æ•°å­—ãƒ»è¨˜å·ã‚’çµ„ã¿åˆã‚ã›ã‚‹ã“ã¨ã§å®‰å…¨æ€§ãŒå‘ä¸Šã—ã¾ã™ã€‚";
 
                 case (int)AuthError.NetworkRequestFailed:
-                    return "ƒlƒbƒgƒ[ƒNƒGƒ‰[";
+                    return "ãƒãƒƒãƒˆãƒ¯ãƒ¼ã‚¯ã‚¨ãƒ©ãƒ¼";
 
                 default:
-                    return "ˆÙíI—¹";
+                    return "ç•°å¸¸çµ‚äº†";
             }
         }
         catch (Exception ex)
         {
-            return "ˆÙíI—¹";
+            return "ç•°å¸¸çµ‚äº†";
         }
     }
 
 
 
     /// <summary>
-    /// ƒpƒXƒ[ƒh‚ÌƒŠƒZƒbƒg
+    /// ãƒ‘ã‚¹ãƒ¯ãƒ¼ãƒ‰ã®ãƒªã‚»ãƒƒãƒˆ
     /// </summary>
     public async Task<string> SendPasswordResetEmail(string email)
     {
         if (string.IsNullOrEmpty(email))
         {
-            return "ƒ[ƒ‹ƒAƒhƒŒƒXî•ñ‚ªŒ©‚Â‚©‚è‚Ü‚¹‚ñ‚Å‚µ‚½B";
+            return "ãƒ¡ãƒ¼ãƒ«ã‚¢ãƒ‰ãƒ¬ã‚¹æƒ…å ±ãŒè¦‹ã¤ã‹ã‚Šã¾ã›ã‚“ã§ã—ãŸã€‚";
         }
 
         try
         {
             await auth.SendPasswordResetEmailAsync(email);
-            return "³íI—¹";
+            return "æ­£å¸¸çµ‚äº†";
         }
         catch (FirebaseException e)
         {
             switch (e.ErrorCode)
             {
                 case (int)AuthError.TooManyRequests:
-                    return "’ZŠÔ‚ÉƒŠƒNƒGƒXƒg‚ª‘½‚·‚¬‚Ü‚·B‚µ‚Î‚ç‚­‘Ò‚Á‚Ä‚©‚çÄs‚µ‚Ä‚­‚¾‚³‚¢B";
+                    return "çŸ­æ™‚é–“ã«ãƒªã‚¯ã‚¨ã‚¹ãƒˆãŒå¤šã™ãã¾ã™ã€‚ã—ã°ã‚‰ãå¾…ã£ã¦ã‹ã‚‰å†è©¦è¡Œã—ã¦ãã ã•ã„ã€‚";
 
                 case (int)AuthError.NetworkRequestFailed:
-                    return "ƒlƒbƒgƒ[ƒNƒGƒ‰[";
+                    return "ãƒãƒƒãƒˆãƒ¯ãƒ¼ã‚¯ã‚¨ãƒ©ãƒ¼";
 
                 default:
-                    return "ˆÙíI—¹";
+                    return "ç•°å¸¸çµ‚äº†";
             }
         }
         catch (Exception e)
         {
-            return "ˆÙíI—¹";
+            return "ç•°å¸¸çµ‚äº†";
         }
     }
 
 
 
     /// <summary>
-    /// ”FØƒ[ƒ‹‚ÌÄ‘—
+    /// èªè¨¼ãƒ¡ãƒ¼ãƒ«ã®å†é€
     /// </summary>
     public async Task<string> SendEmailVerification()
     {
         try
         {
             await user.SendEmailVerificationAsync();
-            return "³íI—¹";
+            return "æ­£å¸¸çµ‚äº†";
         }
         catch (FirebaseException e)
         {
             switch (e.ErrorCode)
             {
                 case (int)AuthError.NetworkRequestFailed:
-                    return "ƒlƒbƒgƒ[ƒNƒGƒ‰[";
+                    return "ãƒãƒƒãƒˆãƒ¯ãƒ¼ã‚¯ã‚¨ãƒ©ãƒ¼";
 
                 default:
-                    return "ˆÙíI—¹";
+                    return "ç•°å¸¸çµ‚äº†";
             }
         }
         catch (Exception e)
         {
-            return "ˆÙíI—¹";
+            return "ç•°å¸¸çµ‚äº†";
         }
     }
 
@@ -443,7 +449,7 @@ public class AuthManager : MonoBehaviour
 
 
     /// <summary>
-    /// ƒƒOƒCƒ“ó‘Ô‚©‚Ç‚¤‚©‚ğæ“¾
+    /// ãƒ­ã‚°ã‚¤ãƒ³çŠ¶æ…‹ã‹ã©ã†ã‹ã‚’å–å¾—
     /// </summary>
     public LoginState GetLoginState()
     {
@@ -453,7 +459,7 @@ public class AuthManager : MonoBehaviour
 
 
     /// <summary>
-    /// “½–¼ƒƒOƒCƒ“‚©‚Ç‚¤‚©‚ğæ“¾
+    /// åŒ¿åãƒ­ã‚°ã‚¤ãƒ³ã‹ã©ã†ã‹ã‚’å–å¾—
     /// </summary>
     public bool GetIsAnonymous()
     {
@@ -464,7 +470,7 @@ public class AuthManager : MonoBehaviour
 
 
     /// <summary>
-    /// ƒ[ƒ‹ƒAƒhƒŒƒX‚ª”FØÏ‚©‚Ç‚¤‚©‚ğæ“¾
+    /// ãƒ¡ãƒ¼ãƒ«ã‚¢ãƒ‰ãƒ¬ã‚¹ãŒèªè¨¼æ¸ˆã‹ã©ã†ã‹ã‚’å–å¾—
     /// </summary>
     public bool GetIsEmailVerified()
     {
@@ -475,7 +481,7 @@ public class AuthManager : MonoBehaviour
 
 
     /// <summary>
-    /// ƒ[ƒ‹ƒAƒhƒŒƒX‚ğæ“¾
+    /// ãƒ¡ãƒ¼ãƒ«ã‚¢ãƒ‰ãƒ¬ã‚¹ã‚’å–å¾—
     /// </summary>
     public string GetEmail()
     {
@@ -483,29 +489,29 @@ public class AuthManager : MonoBehaviour
         {
             user = auth.CurrentUser;
             string result = user.Email;
-            return result; // ³íI—¹
+            return result; // æ­£å¸¸çµ‚äº†
         }
         catch (Exception ex)
         {
-            return "–¢İ’è"; // ˆÙíI—¹
+            return "æœªè¨­å®š"; // ç•°å¸¸çµ‚äº†
         }
     }
 
 
 
     /// <summary>
-    /// ÅV‚Ìƒ†[ƒU[ƒf[ƒ^‚ğæ“¾
+    /// æœ€æ–°ã®ãƒ¦ãƒ¼ã‚¶ãƒ¼ãƒ‡ãƒ¼ã‚¿ã‚’å–å¾—
     /// </summary>
     public async Task<bool> UpdateUserData()
     {
         try
         {
             await user.ReloadAsync();
-            return true; // ³íI—¹
+            return true; // æ­£å¸¸çµ‚äº†
         }
         catch (Exception ex)
         {
-            return false; // ˆÙíI—¹
+            return false; // ç•°å¸¸çµ‚äº†
         }
     }
 }

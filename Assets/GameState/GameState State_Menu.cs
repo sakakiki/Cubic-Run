@@ -1,18 +1,20 @@
+using System.Threading.Tasks;
+
 public class GameStateState_Menu : GameStateStateBase
 {
     public GameStateState_Menu(GameStateStateMachine stateMachine) : base(stateMachine) { }
 
 
 
-    public override void Enter()
+    public override async void Enter()
     {
-        //ƒƒjƒ…[‰æ–Ê‚ÌUI‚ğ—LŒø‰»
+        //ãƒ¡ãƒ‹ãƒ¥ãƒ¼ç”»é¢ã®UIã‚’æœ‰åŠ¹åŒ–
         IM.InputUISetActive_Menu(true);
 
-        //áŠQ•¨‚Ì¶¬‚ğ—LŒø‰»
+        //éšœå®³ç‰©ã®ç”Ÿæˆã‚’æœ‰åŠ¹åŒ–
         TM.isCreateObstacle = true;
 
-        //BGM‚ªƒƒjƒ…[‰æ–Ê‚Ì‚à‚Ì‚Å‚È‚¯‚ê‚Î•ÏX‚µ‚ÄÄ¶
+        //BGMãŒãƒ¡ãƒ‹ãƒ¥ãƒ¼ç”»é¢ã®ã‚‚ã®ã§ãªã‘ã‚Œã°å¤‰æ›´ã—ã¦å†ç”Ÿ
         if (audioSource_BGM.clip != AM.BGM_Menu)
         {
             audioSource_BGM.volume = AM.volume_BGM;
@@ -21,21 +23,24 @@ public class GameStateState_Menu : GameStateStateBase
             audioSource_BGM.Play();
         }
 
-        //L‚ğ•\¦
+        //åºƒå‘Šã‚’è¡¨ç¤º
         AdmobManager.Instance.LoadAndRenderNativeAd(GM.adRtf_Menu);
+
+        //ã‚¹ã‚¿ãƒŸãƒŠã®æ›´æ–°
+        GM.UpdateStamina(await FirestoreManager.Instance.CheckResetAndGetStamina());
     }
 
 
 
     public override void Update(float deltaTime)
     {
-        //“ü—Í‚Ìæ“¾
+        //å…¥åŠ›ã®å–å¾—
         IM.GetInput_Menu();
 
-        //’nŒ`‚ğŠÇ—
+        //åœ°å½¢ã‚’ç®¡ç†
         TM.ManageMovingTerrain();
 
-        //“ü—Í‚É‰‚¶‚½ƒXƒe[ƒg‘JˆÚ
+        //å…¥åŠ›ã«å¿œã˜ãŸã‚¹ãƒ†ãƒ¼ãƒˆé·ç§»
         if (IM.is_Menu_Play_Push)
         {
             GameStateState_MenuToPlay.remainingStamina = -1;
@@ -59,10 +64,10 @@ public class GameStateState_Menu : GameStateStateBase
 
     public override void Exit()
     {
-        //ƒƒjƒ…[‰æ–Ê‚ÌUI‚ğ–³Œø‰»
+        //ãƒ¡ãƒ‹ãƒ¥ãƒ¼ç”»é¢ã®UIã‚’ç„¡åŠ¹åŒ–
         IM.InputUISetActive_Menu(false);
 
-        //L‚ğ”jŠü
+        //åºƒå‘Šã‚’ç ´æ£„
         AdmobManager.Instance.DestroyNativeAd();
     }
 }

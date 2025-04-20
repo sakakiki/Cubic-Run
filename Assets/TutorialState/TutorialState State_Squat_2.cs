@@ -15,13 +15,13 @@ public class TutorialStateState_Squat_2 : TutorialStateStateBase
     {
         base.Enter();
 
-        //ƒQ[ƒ€‚Ìˆê’â~
+        //ã‚²ãƒ¼ãƒ ã®ä¸€æ™‚åœæ­¢
         Time.timeScale = 0;
 
-        //‚µ‚á‚ª‚İƒAƒNƒVƒ‡ƒ“‚Ì—LŒø‰»
+        //ã—ã‚ƒãŒã¿ã‚¢ã‚¯ã‚·ãƒ§ãƒ³ã®æœ‰åŠ¹åŒ–
         PlayerStateBase_Play.isActive_Squat = true;
 
-        //‚µ‚á‚ª‚İƒ{ƒ^ƒ“‚ğŒõ‚ç‚¹A‚»‚êˆÈŠO‚ğˆÃ‚­
+        //ã—ã‚ƒãŒã¿ãƒœã‚¿ãƒ³ã‚’å…‰ã‚‰ã›ã€ãã‚Œä»¥å¤–ã‚’æš—ã
         for (int i = 0; i < IM.actionAllocation.Length; i++)
             if (IM.actionAllocation[i] == actionNum_Squat)
             {
@@ -31,8 +31,8 @@ public class TutorialStateState_Squat_2 : TutorialStateStateBase
             else
                 IM.playButtonSet[IM.playButtonPatternNum].playButtonSprite[i].color = Color.black * 0.8f;
 
-        //‘€ì•û–@•\¦
-        PopupUIManager.Instance.SetupMessageText("Œõ‚Á‚Ä‚¢‚é•”•ª‚ğƒ^ƒbƒv‚µ‚Ä‚µ‚á‚ª‚Ş");
+        //æ“ä½œæ–¹æ³•è¡¨ç¤º
+        PopupUIManager.Instance.SetupMessageText("å…‰ã£ã¦ã„ã‚‹éƒ¨åˆ†ã‚’ã‚¿ãƒƒãƒ—ã—ã¦ã—ã‚ƒãŒã‚€");
     }
 
 
@@ -41,13 +41,13 @@ public class TutorialStateState_Squat_2 : TutorialStateStateBase
     {
         base.Update(deltaTime);
 
-        //ŠÔ’â~’†‚Ì‚½‚ß‹^—ŠÔ‰ÁZ
+        //æ™‚é–“åœæ­¢ä¸­ã®ãŸã‚ç–‘ä¼¼æ™‚é–“åŠ ç®—
         elapsedTime += 1f / GM.defaultFrameRate;
 
-        //ƒ^ƒbƒv‚·‚éƒ{ƒ^ƒ“‚ğŒõ‚ç‚¹‚é
+        //ã‚¿ãƒƒãƒ—ã™ã‚‹ãƒœã‚¿ãƒ³ã‚’å…‰ã‚‰ã›ã‚‹
         buttonSprite_Squat.color = Color.white - Color.black * (1 - Mathf.Abs(elapsedTime % 2 - 1) * 0.1f);
 
-        //w’è‚Ì“ü—Í‚ğ–‚½‚¹‚ÎƒXƒe[ƒg‘JˆÚ
+        //æŒ‡å®šã®å…¥åŠ›ã‚’æº€ãŸã›ã°ã‚¹ãƒ†ãƒ¼ãƒˆé·ç§»
         if (IM.is_Player_Squat_Push)
             stateMachine.ChangeState(stateMachine.state_Squat_3);
     }
@@ -56,17 +56,17 @@ public class TutorialStateState_Squat_2 : TutorialStateStateBase
 
     public override void Exit()
     {
-        //ƒ{ƒ^ƒ“‚ğ–ß‚·
+        //ãƒœã‚¿ãƒ³ã‚’æˆ»ã™
         for (int i = 0; i < IM.actionAllocation.Length; i++)
             IM.playButtonSet[IM.playButtonPatternNum].playButtonSprite[i].color = Color.clear;
 
-        //‘€ì•û–@”ñ•\¦
+        //æ“ä½œæ–¹æ³•éè¡¨ç¤º
         PopupUIManager.Instance.DeleteMessageText();
 
-        //ƒQ[ƒ€‚ÌÄŠJ
+        //ã‚²ãƒ¼ãƒ ã®å†é–‹
         Time.timeScale = 1;
 
-        //ƒWƒƒƒ“ƒvƒAƒNƒVƒ‡ƒ“‚Ì—LŒø‰»
+        //ã‚¸ãƒ£ãƒ³ãƒ—ã‚¢ã‚¯ã‚·ãƒ§ãƒ³ã®æœ‰åŠ¹åŒ–
         PlayerStateBase_Play.isActive_Jump = true;
     }
 }

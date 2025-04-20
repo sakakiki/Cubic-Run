@@ -5,8 +5,8 @@ using System.Text;
 
 public static class EncryptionHelper
 {
-    // ˆÃ†‰»ƒL[
-    // 16•¶šˆÈã„§
+    // æš—å·åŒ–ã‚­ãƒ¼
+    // 16æ–‡å­—ä»¥ä¸Šæ¨å¥¨
     private static readonly string encryptionKey = "CubicRunLock214SecretKey"; 
 
     public static byte[] Encrypt(string plainText)

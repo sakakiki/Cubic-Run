@@ -30,30 +30,30 @@ public class GameStateState_PauseToMenu : GameStateStateBase
 
     public override void Enter()
     {
-        //Œo‰ßŠÔƒŠƒZƒbƒg
+        //çµŒéæ™‚é–“ãƒªã‚»ãƒƒãƒˆ
         elapsedTime = 0;
 
-        //“®ìƒtƒ‰ƒOƒŠƒZƒbƒg
+        //å‹•ä½œãƒ•ãƒ©ã‚°ãƒªã‚»ãƒƒãƒˆ
         isMoveStart = false;
-        //ˆê•”‚Ìˆ—‚Íƒ`ƒ…[ƒgƒŠƒAƒ‹‚©‚ç‚ÌƒŠƒ^ƒCƒA‚Å‚ÍÀs‚µ‚È‚¢
+        //ä¸€éƒ¨ã®å‡¦ç†ã¯ãƒãƒ¥ãƒ¼ãƒˆãƒªã‚¢ãƒ«ã‹ã‚‰ã®ãƒªã‚¿ã‚¤ã‚¢ã§ã¯å®Ÿè¡Œã—ãªã„
         isTutorial =
             TutorialStateStateBase.continueState !=
             ((GameStateState_Tutorial)stateMachine.state_Tutorial).tutorialStateMachine.state_Start;
 
-        //ƒ`ƒ…[ƒgƒŠƒAƒ‹’†‚È‚çƒ`ƒ…[ƒgƒŠƒAƒ‹i“x‚ğƒŠƒZƒbƒg
+        //ãƒãƒ¥ãƒ¼ãƒˆãƒªã‚¢ãƒ«ä¸­ãªã‚‰ãƒãƒ¥ãƒ¼ãƒˆãƒªã‚¢ãƒ«é€²åº¦ã‚’ãƒªã‚»ãƒƒãƒˆ
         if (isTutorial)
             TutorialStateStateBase.continueState = 
                 ((GameStateState_Tutorial)stateMachine.state_Tutorial).tutorialStateMachine.state_Start;
 
-        //ƒvƒŒƒCƒ„[‚ªƒgƒ“ƒlƒ‹“à‚È‚ç‰‰o‚ğ‘‚ß‚é
+        //ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ãŒãƒˆãƒ³ãƒãƒ«å†…ãªã‚‰æ¼”å‡ºã‚’æ—©ã‚ã‚‹
         if (TM.currentTerrainNum == 3)
             elapsedTime = 1;
 
-        //”wŒi‚Ì’nŒ`‚ğ’â~
+        //èƒŒæ™¯ã®åœ°å½¢ã‚’åœæ­¢
         TM.moveSpeed = 0;
         TM.SetSpeed(0);
 
-        //ƒ‰ƒ“ƒLƒ“ƒO‚ğXV
+        //ãƒ©ãƒ³ã‚­ãƒ³ã‚°ã‚’æ›´æ–°
         GM.highScoreRankingBoard.UpdateRanking();
         GM.playerScoreRankingBoard.UpdateRanking();
     }
@@ -62,22 +62,22 @@ public class GameStateState_PauseToMenu : GameStateStateBase
 
     public override void Update(float deltaTime)
     {
-        //Œo‰ßŠÔ‰ÁZ
+        //çµŒéæ™‚é–“åŠ ç®—
         elapsedTime += deltaTime;
 
-        //1.5•b‘Ò‹@
+        //1.5ç§’å¾…æ©Ÿ
         if (elapsedTime < 1) return;
 
-        //BGM‚Ìƒ{ƒŠƒ…[ƒ€•ÏX
+        //BGMã®ãƒœãƒªãƒ¥ãƒ¼ãƒ å¤‰æ›´
         audioSource_BGM.volume = (2 - elapsedTime) * AM.volume_BGM;
 
-        //UI“®ìŠJnˆ—
+        //UIå‹•ä½œé–‹å§‹å‡¦ç†
         if (!isMoveStart)
         {
-            //ˆ—ÀsÏ‚İ‚Ìƒtƒ‰ƒO‚ğ—§‚Ä‚é
+            //å‡¦ç†å®Ÿè¡Œæ¸ˆã¿ã®ãƒ•ãƒ©ã‚°ã‚’ç«‹ã¦ã‚‹
             isMoveStart = true;
 
-            //”wŒi‚Ì’nŒ`‚ğ“®‚©‚·
+            //èƒŒæ™¯ã®åœ°å½¢ã‚’å‹•ã‹ã™
             if (GM.isTraining)
             {
                 TM.moveSpeed = 5 + Mathf.Pow(GM.trainingLevel, 0.7f) * 3;
@@ -89,7 +89,7 @@ public class GameStateState_PauseToMenu : GameStateStateBase
                 TM.SetSpeed(8);
             }
 
-            //ƒŒƒxƒ‹‚ÌƒeƒLƒXƒg‚ÌZÀ•W‚ğC³
+            //ãƒ¬ãƒ™ãƒ«ã®ãƒ†ã‚­ã‚¹ãƒˆã®Zåº§æ¨™ã‚’ä¿®æ­£
             if (!isTutorial)
             {
                 Vector3 levelPos = GM.levelTf.position;
@@ -98,26 +98,26 @@ public class GameStateState_PauseToMenu : GameStateStateBase
             }
         }
 
-        //’nŒ`‚ğŠÇ—
-        //Player‘¤‚Ì”»’èŠ®—¹‚Ü‚Å‚ÍÀs‚µ‚È‚¢
+        //åœ°å½¢ã‚’ç®¡ç†
+        //Playerå´ã®åˆ¤å®šå®Œäº†ã¾ã§ã¯å®Ÿè¡Œã—ãªã„
         if (isPlayerCheck)
             TM.ManageMovingTerrain();
 
-        //–‘OŒvZ
+        //äº‹å‰è¨ˆç®—
         float lerpValue = (elapsedTime - 1) / 1.5f;
 
-        //UI‚ğ‰ñ“]
+        //UIã‚’å›è»¢
         menuHingeRtf_L.localEulerAngles = Vector3.Lerp(Vector3.up * -180, Vector3.zero, lerpValue);
         menuHingeRtf_R.localEulerAngles = Vector3.Lerp(Vector3.up * 180, Vector3.zero, lerpValue);
         if (!isTutorial)
             playHingeRtf_L.localEulerAngles = Vector3.Lerp(Vector3.zero, Vector3.up * -180, lerpValue);
         playHingeRtf_R.localEulerAngles = Vector3.Lerp(Vector3.zero, Vector3.up * 180, lerpValue);
 
-        //ƒXƒNƒŠ[ƒ“ƒJƒo[‚ÌF‚ğ•ÏX
+        //ã‚¹ã‚¯ãƒªãƒ¼ãƒ³ã‚«ãƒãƒ¼ã®è‰²ã‚’å¤‰æ›´
         screenCover.color =
             targetCoverColor - Color.black * Mathf.Lerp(targetCoverColor.a, startCoverColor.a, lerpValue);
 
-        //w’èŠÔŒo‰ß‚ÅƒXƒe[ƒg‘JˆÚ
+        //æŒ‡å®šæ™‚é–“çµŒéã§ã‚¹ãƒ†ãƒ¼ãƒˆé·ç§»
         if (elapsedTime > 2.5)
             stateMachine.ChangeState(stateMachine.state_Menu);
     }

@@ -14,40 +14,40 @@ public class Button_BoardTab : MonoBehaviour, IPointerDownHandler
         gameStateMachine = GameManager.Instance.gameStateMachine;
     }
 
-    //ƒ^ƒbƒvFƒ^ƒbƒv‚ÉÀs
-    //ƒ}ƒEƒXFƒNƒŠƒbƒN‚ÉÀs
+    //ã‚¿ãƒƒãƒ—ï¼šã‚¿ãƒƒãƒ—æ™‚ã«å®Ÿè¡Œ
+    //ãƒã‚¦ã‚¹ï¼šã‚¯ãƒªãƒƒã‚¯æ™‚ã«å®Ÿè¡Œ
     public void OnPointerDown(PointerEventData eventData)
     {
-        //ƒƒjƒ…[‰æ–Ê‚Å‚È‚¯‚ê‚Î‰½‚à‚µ‚È‚¢
+        //ãƒ¡ãƒ‹ãƒ¥ãƒ¼ç”»é¢ã§ãªã‘ã‚Œã°ä½•ã‚‚ã—ãªã„
         if (gameStateMachine.currentState != gameStateMachine.state_Menu) return;
 
-        //ƒ{[ƒh‚Ì•\¦‚ğ‘O‚É
+        //ãƒœãƒ¼ãƒ‰ã®è¡¨ç¤ºã‚’å‰ã«
         this.boardSprite.sortingOrder = 0;
 
-        //‘¼•û‚ÌƒXƒNƒŠƒvƒg‚ğ—LŒø‰»
+        //ä»–æ–¹ã®ã‚¹ã‚¯ãƒªãƒ—ãƒˆã‚’æœ‰åŠ¹åŒ–
         anotherTab.enabled = true;
 
-        //ƒQ[ƒ€ƒ}ƒl[ƒWƒƒ[‚Ìİ’è‚ğ•ÏX
+        //ã‚²ãƒ¼ãƒ ãƒãƒãƒ¼ã‚¸ãƒ£ãƒ¼ã®è¨­å®šã‚’å¤‰æ›´
         GameManager.Instance.SetTrainingMode(isTraining);
 
-        //ƒRƒ“ƒeƒ“ƒc‚Ì—LŒø‰»
+        //ã‚³ãƒ³ãƒ†ãƒ³ãƒ„ã®æœ‰åŠ¹åŒ–
         foreach (var item in contents)
             item.SetActive(true);
 
-        //SE‚ÌÄ¶
+        //SEã®å†ç”Ÿ
         AudioManager.Instance.PlaySE(AudioManager.Instance.SE_Panel);
 
-        //‚±‚ÌƒXƒNƒŠƒvƒg‚ğ–³Œø‰»
+        //ã“ã®ã‚¹ã‚¯ãƒªãƒ—ãƒˆã‚’ç„¡åŠ¹åŒ–
         this.enabled = false;
     }
 
-    //ƒXƒNƒŠƒvƒg‚ª—LŒø‰»
+    //ã‚¹ã‚¯ãƒªãƒ—ãƒˆãŒæœ‰åŠ¹åŒ–æ™‚
     private void OnEnable()
     {
-        //ƒ{[ƒh‚Ì•\¦‚ğŒã‚ë‚É
+        //ãƒœãƒ¼ãƒ‰ã®è¡¨ç¤ºã‚’å¾Œã‚ã«
         this.boardSprite.sortingOrder = -1;
 
-        //ƒRƒ“ƒeƒ“ƒc‚Ì–³Œø‰»
+        //ã‚³ãƒ³ãƒ†ãƒ³ãƒ„ã®ç„¡åŠ¹åŒ–
         foreach (var item in contents)
             item.SetActive(false);
     }

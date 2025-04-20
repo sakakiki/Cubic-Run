@@ -78,8 +78,8 @@ public class InputManager : MonoBehaviour
 
 
 
-    #region SetActiveƒƒ\ƒbƒh
-    //—LŒøE–³Œø‚ÌØ‚è‘Ö‚¦‚Ég—p
+    #region SetActiveãƒ¡ã‚½ãƒƒãƒ‰
+    //æœ‰åŠ¹ãƒ»ç„¡åŠ¹ã®åˆ‡ã‚Šæ›¿ãˆã«ä½¿ç”¨
     public void InputUISetActive_Screen(bool isActive)
     {
         screenButtonObj.SetActive(isActive);
@@ -138,8 +138,8 @@ public class InputManager : MonoBehaviour
 
 
 
-    #region GetInputƒƒ\ƒbƒh
-    //“ü—Íî•ñ‚ğÅV‚ÉXV
+    #region GetInputãƒ¡ã‚½ãƒƒãƒ‰
+    //å…¥åŠ›æƒ…å ±ã‚’æœ€æ–°ã«æ›´æ–°
     public void GetInput_Screen()
     {
         is_Screen_Tap = button_Screen.GetIsTapped();
@@ -169,7 +169,7 @@ public class InputManager : MonoBehaviour
         is_Play_Pause_Tap = button_Play_Pause.GetIsTapped();
     }
 
-    /* ŠJ”­—pƒƒ\ƒbƒh */
+    /* é–‹ç™ºç”¨ãƒ¡ã‚½ãƒƒãƒ‰ */
     public void GetInput_Player()
     {
         if (Input.GetKeyDown(KeyCode.UpArrow)) InputEvent_Jump_Push();
@@ -178,12 +178,12 @@ public class InputManager : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.RightArrow)) InputEvent_Attack_Push();
         if (Input.GetKeyUp(KeyCode.RightArrow)) InputEvent_Attack_Release();
     }
-    //PushERelease‚ğ1ƒtƒŒ[ƒ€‚Ì‚İ‚É§ŒÀ
+    //Pushãƒ»Releaseã‚’1ãƒ•ãƒ¬ãƒ¼ãƒ ã®ã¿ã«åˆ¶é™
     public void ResetInput_Player()
     {
         is_Player_Jump_Push = false;
 
-        //ƒ|[ƒYó‘Ô‚È‚çˆÈ‰º‚ÍƒŠƒZƒbƒg‚µ‚È‚¢
+        //ãƒãƒ¼ã‚ºçŠ¶æ…‹ãªã‚‰ä»¥ä¸‹ã¯ãƒªã‚»ãƒƒãƒˆã—ãªã„
         if (isPauseGame) return;
 
         is_Player_Squat_Push = false;
@@ -213,7 +213,7 @@ public class InputManager : MonoBehaviour
 
 
 
-    #region ƒvƒŒƒC“ü—Í—pƒCƒxƒ“ƒg
+    #region ãƒ—ãƒ¬ã‚¤å…¥åŠ›ç”¨ã‚¤ãƒ™ãƒ³ãƒˆ
     public void BindEvent()
     {
         Button_PlayInput[] playButton = playButtonSet[playButtonPatternNum].playButton;
@@ -222,17 +222,17 @@ public class InputManager : MonoBehaviour
         {
             switch (actionAllocation[i])
             {
-                case 0: //ƒWƒƒƒ“ƒv‚Ì“o˜^
+                case 0: //ã‚¸ãƒ£ãƒ³ãƒ—ã®ç™»éŒ²
                     playButton[i].eventOnPush = InputEvent_Jump_Push;
                     playButton[i].eventOnRelease = null;
                     break;
 
-                case 1: //‚µ‚á‚ª‚İE‹}~‰º‚Ì“o˜^
+                case 1: //ã—ã‚ƒãŒã¿ãƒ»æ€¥é™ä¸‹ã®ç™»éŒ²
                     playButton[i].eventOnPush = InputEvent_Squat_Push;
                     playButton[i].eventOnRelease = InputEvent_Squat_Release;
                     break;
 
-                case 2: //UŒ‚‚Ì“o˜^
+                case 2: //æ”»æ’ƒã®ç™»éŒ²
                     playButton[i].eventOnPush = InputEvent_Attack_Push;
                     playButton[i].eventOnRelease = InputEvent_Attack_Release;
                     break;

@@ -6,16 +6,16 @@ public class GameStateState_Result : GameStateStateBase
 
     public override void Enter()
     {
-        //ƒŠƒUƒ‹ƒg‰æ–Ê‚ÌUI‚ğ—LŒø‰»
+        //ãƒªã‚¶ãƒ«ãƒˆç”»é¢ã®UIã‚’æœ‰åŠ¹åŒ–
         IM.InputUISetActive_Result(true);
 
-        //ƒvƒŒƒCƒ„[‚ÆUI‚ÌŠ±Â–h~•Ç‚Ì—LŒø‰»
+        //ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã¨UIã®å¹²æ¸‰é˜²æ­¢å£ã®æœ‰åŠ¹åŒ–
         GM.resultWallCol.enabled = true;
 
-        //ƒvƒŒƒCƒ„[ˆÚ“®‰Â”\ƒGƒŠƒA‚Ì’†S‚Ì•ÏX
+        //ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ç§»å‹•å¯èƒ½ã‚¨ãƒªã‚¢ã®ä¸­å¿ƒã®å¤‰æ›´
         GM.centerPos_PlayerArea = GM.centerPos_PlayerArea_Result;
 
-        //L‚ğ•\¦
+        //åºƒå‘Šã‚’è¡¨ç¤º
         AdmobManager.Instance.LoadAndRenderNativeAd(GM.adRtf_Result);
     }
 
@@ -23,10 +23,10 @@ public class GameStateState_Result : GameStateStateBase
 
     public override void Update(float deltaTime)
     {
-        //“ü—Í‚Ìæ“¾
+        //å…¥åŠ›ã®å–å¾—
         IM.GetInput_Result();
 
-        //“ü—Í‚É‰‚¶‚½ƒXƒe[ƒg‘JˆÚ
+        //å…¥åŠ›ã«å¿œã˜ãŸã‚¹ãƒ†ãƒ¼ãƒˆé·ç§»
         if (IM.is_Result_Title_Push)
             stateMachine.ChangeState(stateMachine.state_ResultToMenu);
         else if (IM.is_Result_Retry_Push)
@@ -37,16 +37,16 @@ public class GameStateState_Result : GameStateStateBase
 
     public override void Exit()
     {
-        //ƒŠƒUƒ‹ƒg‰æ–Ê‚ÌUI‚ğ–³Œø‰»
+        //ãƒªã‚¶ãƒ«ãƒˆç”»é¢ã®UIã‚’ç„¡åŠ¹åŒ–
         IM.InputUISetActive_Result(false);
 
-        //ƒvƒŒƒCƒ„[‚ÆUI‚ÌŠ±Â–h~•Ç‚Ì–³Œø‰»
+        //ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã¨UIã®å¹²æ¸‰é˜²æ­¢å£ã®ç„¡åŠ¹åŒ–
         GM.resultWallCol.enabled = false;
 
-        //ƒvƒŒƒCƒ„[ˆÚ“®‰Â”\ƒGƒŠƒA‚Ì’†S‚Ì•ÏX
+        //ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ç§»å‹•å¯èƒ½ã‚¨ãƒªã‚¢ã®ä¸­å¿ƒã®å¤‰æ›´
         GM.centerPos_PlayerArea = GM.centerPos_World;
 
-        //L‚ğ”jŠü
+        //åºƒå‘Šã‚’ç ´æ£„
         AdmobManager.Instance.DestroyNativeAd();
     }
 }

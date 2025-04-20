@@ -25,35 +25,35 @@ public class GameStateState_ResultToMenu : GameStateStateBase
 
     public override void Enter()
     {
-        //Œo‰ßŠÔƒŠƒZƒbƒg
+        //çµŒéæ™‚é–“ãƒªã‚»ãƒƒãƒˆ
         elapsedTime = 0;
 
-        //ƒtƒ‰ƒOƒŠƒZƒbƒg
+        //ãƒ•ãƒ©ã‚°ãƒªã‚»ãƒƒãƒˆ
         isMoveStart = false;
         isPlayerCheck = false;
-        //ˆê•”‚Ìˆ—‚Íƒ`ƒ…[ƒgƒŠƒAƒ‹‚©‚ç‚ÌƒNƒŠƒA‚Å‚ÍÀs‚µ‚È‚¢
+        //ä¸€éƒ¨ã®å‡¦ç†ã¯ãƒãƒ¥ãƒ¼ãƒˆãƒªã‚¢ãƒ«ã‹ã‚‰ã®ã‚¯ãƒªã‚¢ã§ã¯å®Ÿè¡Œã—ãªã„
         isTutorial =
             TutorialStateStateBase.continueState !=
             ((GameStateState_Tutorial)stateMachine.state_Tutorial).tutorialStateMachine.state_Start;
 
-        //ƒ`ƒ…[ƒgƒŠƒAƒ‹ƒNƒŠƒA‚Íƒ`ƒ…[ƒgƒŠƒAƒ‹i“x‚ğƒŠƒZƒbƒg
+        //ãƒãƒ¥ãƒ¼ãƒˆãƒªã‚¢ãƒ«ã‚¯ãƒªã‚¢æ™‚ã¯ãƒãƒ¥ãƒ¼ãƒˆãƒªã‚¢ãƒ«é€²åº¦ã‚’ãƒªã‚»ãƒƒãƒˆ
         if (isTutorial)
             TutorialStateStateBase.continueState =
                 ((GameStateState_Tutorial)stateMachine.state_Tutorial).tutorialStateMachine.state_Start;
 
-        //ƒvƒŒƒCƒ„[‚ªƒgƒ“ƒlƒ‹“à‚È‚ç‰‰o‚ğ‘‚ß‚é
+        //ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ãŒãƒˆãƒ³ãƒãƒ«å†…ãªã‚‰æ¼”å‡ºã‚’æ—©ã‚ã‚‹
         if (TM.currentTerrainNum == 3)
             elapsedTime = 1;
 
-        //ƒvƒŒƒCƒ„[‚ª‰æ–ÊŠO‚È‚ç‰‰o‚ğ‘‚ß‚é
+        //ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ãŒç”»é¢å¤–ãªã‚‰æ¼”å‡ºã‚’æ—©ã‚ã‚‹
         if (playerCon.tf.position.y < -5 || playerCon.tf.position.x < -6)
             elapsedTime = 1.5f;
 
-        //ƒNƒŠƒA‚Í‰‰o‚ğ‘‚ß‚é
+        //ã‚¯ãƒªã‚¢æ™‚ã¯æ¼”å‡ºã‚’æ—©ã‚ã‚‹
         if (GM.score == 5000 && GM.isTraining || isTutorial)
             elapsedTime = 1.5f;
 
-        //ƒ‰ƒ“ƒLƒ“ƒO‚ğXV
+        //ãƒ©ãƒ³ã‚­ãƒ³ã‚°ã‚’æ›´æ–°
         GM.highScoreRankingBoard.UpdateRanking();
         GM.playerScoreRankingBoard.UpdateRanking();
     }
@@ -62,22 +62,22 @@ public class GameStateState_ResultToMenu : GameStateStateBase
 
     public override void Update(float deltaTime)
     {
-        //Œo‰ßŠÔ‰ÁZ
+        //çµŒéæ™‚é–“åŠ ç®—
         elapsedTime += deltaTime;
 
-        //1.5•b‘Ò‹@
+        //1.5ç§’å¾…æ©Ÿ
         if (elapsedTime < 1.5) return;
 
-        //BGM‚Ìƒ{ƒŠƒ…[ƒ€•ÏX
+        //BGMã®ãƒœãƒªãƒ¥ãƒ¼ãƒ å¤‰æ›´
         audioSource_BGM.volume = (2.5f - elapsedTime) * AM.volume_BGM;
 
-        //UI“®ìŠJnˆ—
+        //UIå‹•ä½œé–‹å§‹å‡¦ç†
         if (!isMoveStart)
         {
-            //ˆ—ÀsÏ‚İ‚Ìƒtƒ‰ƒO‚ğ—§‚Ä‚é
+            //å‡¦ç†å®Ÿè¡Œæ¸ˆã¿ã®ãƒ•ãƒ©ã‚°ã‚’ç«‹ã¦ã‚‹
             isMoveStart = true;
 
-            //”wŒi‚Ì’nŒ`‚ğ“®‚©‚·
+            //èƒŒæ™¯ã®åœ°å½¢ã‚’å‹•ã‹ã™
             if (GM.isTraining)
             {
                 TM.moveSpeed = 5 + Mathf.Pow(GM.trainingLevel, 0.7f) * 3;
@@ -90,15 +90,15 @@ public class GameStateState_ResultToMenu : GameStateStateBase
             }
         }
 
-        //’nŒ`‚ğŠÇ—
-        //Player‘¤‚Ì”»’èŠ®—¹‚Ü‚Å‚ÍÀs‚µ‚È‚¢
+        //åœ°å½¢ã‚’ç®¡ç†
+        //Playerå´ã®åˆ¤å®šå®Œäº†ã¾ã§ã¯å®Ÿè¡Œã—ãªã„
         if (isPlayerCheck)
             TM.ManageMovingTerrain();
 
-        //–‘OŒvZ
+        //äº‹å‰è¨ˆç®—
         float lerpValue = (elapsedTime - 1.5f) / 1.5f;
 
-        //UI‚ğ‰ñ“]
+        //UIã‚’å›è»¢
         menuHingeRtf_L.localEulerAngles = Vector3.Lerp(Vector3.up * -180, Vector3.zero, lerpValue);
         menuHingeRtf_R.localEulerAngles = Vector3.Lerp(Vector3.up * 180, Vector3.zero, lerpValue);
         if (!isTutorial)
@@ -106,7 +106,7 @@ public class GameStateState_ResultToMenu : GameStateStateBase
         resultHingeRtf_R.localEulerAngles = Vector3.Lerp(Vector3.zero, Vector3.up * -180, lerpValue);
         resultHingeRtf_B.localEulerAngles = Vector3.Lerp(Vector3.zero, Vector3.right * 180, lerpValue);
 
-        //w’èŠÔŒo‰ß‚ÅƒXƒe[ƒg‘JˆÚ
+        //æŒ‡å®šæ™‚é–“çµŒéã§ã‚¹ãƒ†ãƒ¼ãƒˆé·ç§»
         if (elapsedTime > 3)
             stateMachine.ChangeState(stateMachine.state_Menu);
     }
@@ -115,7 +115,7 @@ public class GameStateState_ResultToMenu : GameStateStateBase
 
     public override void Exit()
     {
-        //ƒXƒRƒAƒ{[ƒh‚ÌˆÊ’u‚ğC³
+        //ã‚¹ã‚³ã‚¢ãƒœãƒ¼ãƒ‰ã®ä½ç½®ã‚’ä¿®æ­£
         GM.scoreSetTf.position = GM.scoreMarkerTf_Play.position;
         GM.scoreSetTf.localScale = Vector3.one;
     }

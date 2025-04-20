@@ -6,11 +6,11 @@ public class LoginStateState_Login : LoginStateStateBase
 
     public override void Update()
     {
-        //ƒƒOƒCƒ“¬Œ÷‚ÅƒQ[ƒ€ŠJŽnˆ—‚Ö
+        //ãƒ­ã‚°ã‚¤ãƒ³æˆåŠŸã§ã‚²ãƒ¼ãƒ é–‹å§‹å‡¦ç†ã¸
         if (AM.GetLoginState() == AuthManager.LoginState.Login) 
             stateMachine.ChangeState(stateMachine.state_Exit);
 
-        //ƒƒOƒCƒ“î•ñ‚ª–³‚¯‚ê‚Î“½–¼”FØ‚Å‚ÌƒAƒJƒEƒ“ƒgì¬‚Ö
+        //ãƒ­ã‚°ã‚¤ãƒ³æƒ…å ±ãŒç„¡ã‘ã‚Œã°åŒ¿åèªè¨¼ã§ã®ã‚¢ã‚«ã‚¦ãƒ³ãƒˆä½œæˆã¸
         else if (AM.GetLoginState() == AuthManager.LoginState.NoAccount)
             stateMachine.ChangeState(stateMachine.state_Register);
     }

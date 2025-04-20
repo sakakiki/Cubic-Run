@@ -5,19 +5,19 @@ using System.Threading.Tasks;
 using UnityEngine.UI;
 using System.Net.Http.Headers;
 
-//GameManager‚Íˆ—‚ğ—DæÀs
+//GameManagerã¯å‡¦ç†ã‚’å„ªå…ˆå®Ÿè¡Œ
 [DefaultExecutionOrder(-1)]
 public class GameManager : MonoBehaviour
 {
-    //©g‚ÌƒCƒ“ƒXƒ^ƒ“ƒX
+    //è‡ªèº«ã®ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹
     public static GameManager Instance;
 
-    //ManagerŒn
+    //Managerç³»
     private TerrainManager TM;
     private FirestoreManager FSM;
     private SkinDataBase SDB;
 
-    [Header("î•ñ‚ÌƒLƒƒƒbƒVƒ…iFirebase•Û‘¶ƒf[ƒ^j")]
+    [Header("æƒ…å ±ã®ã‚­ãƒ£ãƒƒã‚·ãƒ¥ï¼ˆFirebaseä¿å­˜ãƒ‡ãƒ¼ã‚¿ï¼‰")]
     public string playerName = "Noname";
     public int totalExp = 0;
     public int playerScore = 0;
@@ -26,25 +26,25 @@ public class GameManager : MonoBehaviour
     public int totalRunDistance = 0;
     [Space(30)]
 
-    [Header("î•ñ‚ÌƒLƒƒƒbƒVƒ…iFirebaseã‚Æƒ[ƒJƒ‹‚Ì—¼•û‚É•Û‘¶j")]
+    [Header("æƒ…å ±ã®ã‚­ãƒ£ãƒƒã‚·ãƒ¥ï¼ˆFirebaseä¸Šã¨ãƒ­ãƒ¼ã‚«ãƒ«ã®ä¸¡æ–¹ã«ä¿å­˜ï¼‰")]
     public int highScore = 0;
     [Space(30)]
 
-    [Header("î•ñ‚ÌƒLƒƒƒbƒVƒ…iƒ[ƒJƒ‹•Û‘¶ƒf[ƒ^j")]
+    [Header("æƒ…å ±ã®ã‚­ãƒ£ãƒƒã‚·ãƒ¥ï¼ˆãƒ­ãƒ¼ã‚«ãƒ«ä¿å­˜ãƒ‡ãƒ¼ã‚¿ï¼‰")]
     public bool isUnsavedHighScore;
-    public Queue<int> rankingScoreQueue = new Queue<int>();   //playerScore‚É–¢”½‰f‚Ìƒ‰ƒ“ƒLƒ“ƒOƒ‚[ƒh‚ÌƒXƒRƒA
+    public Queue<int> rankingScoreQueue = new Queue<int>();   //playerScoreã«æœªåæ˜ ã®ãƒ©ãƒ³ã‚­ãƒ³ã‚°ãƒ¢ãƒ¼ãƒ‰ã®ã‚¹ã‚³ã‚¢
     public bool isTraining { get; private set; }
     public int trainingLevel;
     [Space(30)]
 
-    [Header("ƒvƒŒƒC’†‚Ìƒf[ƒ^‚ğ•Û")]
+    [Header("ãƒ—ãƒ¬ã‚¤ä¸­ã®ãƒ‡ãƒ¼ã‚¿ã‚’ä¿æŒ")]
     public int score;
     public int level;
     public int levelUpSpan {  get; private set; }
-    public int playerRank = 0;  //totalExp‚©‚çZo
+    public int playerRank = 0;  //totalExpã‹ã‚‰ç®—å‡º
     public int requiredExp;
     public int highestTrainingLevel { get; private set; } = 1;    // = trainingClearCounts.Count;
-    public bool[] isSkinUnlocked { get; private set; } = new bool[16];    //totalExp‚ÆhighestTrainingLevel‚©‚çZo
+    public bool[] isSkinUnlocked { get; private set; } = new bool[16];    //totalExpã¨highestTrainingLevelã‹ã‚‰ç®—å‡º
     public int previousSkinID;
     public Color panelSelectedColor;
     public Vector2 centerPos_PlayerArea;
@@ -52,7 +52,7 @@ public class GameManager : MonoBehaviour
     public Color staminaColor { private set; get; }
     [Space(30)]
 
-    [Header("ƒCƒ“ƒXƒyƒNƒ^[‚©‚çİ’è")]
+    [Header("ã‚¤ãƒ³ã‚¹ãƒšã‚¯ã‚¿ãƒ¼ã‹ã‚‰è¨­å®š")]
     public AuthManager AuthManager;
     public Transform playerTf;
     public PlayerController playerCon;
@@ -158,11 +158,13 @@ public class GameManager : MonoBehaviour
     public RectTransform[] staminaRtf;
     public RectTransform adRtf_Menu;
     public RectTransform adRtf_Result;
+    public GameObject loadingCube;
+    public Transform loadingCubeTf;
 
-    //ƒXƒe[ƒgƒ}ƒVƒ“
+    //ã‚¹ãƒ†ãƒ¼ãƒˆãƒã‚·ãƒ³
     public GameStateStateMachine gameStateMachine {  get; private set; }
 
-    //’è”“o˜^E‹L‰¯
+    //å®šæ•°ç™»éŒ²ãƒ»è¨˜æ†¶
     public int defaultFrameRate { get; private set; } = 120;
     public Vector2 centerPos_World { get; private set; } = new Vector2(5, 3);
     public Vector2 centerPos_PlayerArea_Result { get; private set; } = new Vector2(-1, 3);
@@ -178,15 +180,15 @@ public class GameManager : MonoBehaviour
         if (Instance == null)
             Instance = this;
 
-        #region ƒŒƒ^[ƒ{ƒbƒNƒX
-        // Šî€ic•ûŒüjƒTƒCƒY‚ÆŠî€ƒAƒXƒyƒNƒg”ä‚©‚çŠî€‰¡•ûŒüƒTƒCƒY‚ğZo
+        #region ãƒ¬ã‚¿ãƒ¼ãƒœãƒƒã‚¯ã‚¹
+        // åŸºæº–ï¼ˆç¸¦æ–¹å‘ï¼‰ã‚µã‚¤ã‚ºã¨åŸºæº–ã‚¢ã‚¹ãƒšã‚¯ãƒˆæ¯”ã‹ã‚‰åŸºæº–æ¨ªæ–¹å‘ã‚µã‚¤ã‚ºã‚’ç®—å‡º
         var baseHorizontalSize = 5.622821f * 2560 / 1440;
-        // Šî€‰¡•ûŒüƒTƒCƒY‚Æ‘ÎÛƒAƒXƒyƒNƒg”ä‚Å‘ÎÛc•ûŒüƒTƒCƒY‚ğZo
+        // åŸºæº–æ¨ªæ–¹å‘ã‚µã‚¤ã‚ºã¨å¯¾è±¡ã‚¢ã‚¹ãƒšã‚¯ãƒˆæ¯”ã§å¯¾è±¡ç¸¦æ–¹å‘ã‚µã‚¤ã‚ºã‚’ç®—å‡º
         var verticalSize = baseHorizontalSize / Camera.main.aspect;
         Camera.main.orthographicSize = verticalSize;
         #endregion
 
-        //–Ú•WƒtƒŒ[ƒ€ƒŒ[ƒgİ’è
+        //ç›®æ¨™ãƒ•ãƒ¬ãƒ¼ãƒ ãƒ¬ãƒ¼ãƒˆè¨­å®š
         Application.targetFrameRate = defaultFrameRate;
     }
 
@@ -194,16 +196,16 @@ public class GameManager : MonoBehaviour
 
     private void Start()
     {
-        //Manager‚ÌƒCƒ“ƒXƒ^ƒ“ƒXŠi”[
+        //Managerã®ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹æ ¼ç´
         TM = TerrainManager.Instance;
         FSM = FirestoreManager.Instance;
         SDB = SkinDataBase.Instance;
 
-        //ƒXƒe[ƒgƒ}ƒVƒ“‚Ìì¬EŠi”[
+        //ã‚¹ãƒ†ãƒ¼ãƒˆãƒã‚·ãƒ³ã®ä½œæˆãƒ»æ ¼ç´
         gameStateMachine = new GameStateStateMachine();
         gameStateMachine.Initialize(gameStateMachine.state_Login);
 
-        //UI‚ğHinge‚ÉÚ‘±
+        //UIã‚’Hingeã«æ¥ç¶š
         for (int i = 0; i < menuUIs_L.Length; i++)
             menuUIs_L[i].SetParent(menuHingeRtf_L);
         for (int i = 0; i < menuUIs_R.Length; i++)
@@ -221,7 +223,7 @@ public class GameManager : MonoBehaviour
         for (int i = 0; i < resultUIs_B.Length; i++)
             resultUIs_B[i].SetParent(resultHingeRtf_B);
 
-        //ƒvƒŒƒCƒ„[ˆÚ“®‰Â”\ƒGƒŠƒA‚Ì’†S‚Ì•ÏX
+        //ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ç§»å‹•å¯èƒ½ã‚¨ãƒªã‚¢ã®ä¸­å¿ƒã®å¤‰æ›´
         centerPos_PlayerArea = centerPos_World;
     }
 
@@ -229,20 +231,20 @@ public class GameManager : MonoBehaviour
 
     private void Update()
     {
-        //ƒXƒe[ƒgƒ}ƒVƒ“‚ÌUpdate‚ğÀs
+        //ã‚¹ãƒ†ãƒ¼ãƒˆãƒã‚·ãƒ³ã®Updateã‚’å®Ÿè¡Œ
         gameStateMachine.Update(Time.deltaTime);
     }
 
 
 
-    //ƒf[ƒ^‚Ìƒ[ƒh‚ÆƒQ[ƒ€‚Ö‚Ì”½‰f
+    //ãƒ‡ãƒ¼ã‚¿ã®ãƒ­ãƒ¼ãƒ‰ã¨ã‚²ãƒ¼ãƒ ã¸ã®åæ˜ 
     public async Task GameInitialize()
     {
         //await AuthManager.Instance.Login("sakakiki.games@gmail.com", "Game3121Pass2222");
         //await AuthManager.Instance.Reauthenticate("sakakiki.sousaku@gmail.com", "Game3121Pass2222");
         //await AuthManager.Instance.UpdateUserEmail("sakakiki.games@gmail.com");
 
-        //•Ï”EƒIƒuƒWƒFƒNƒgEİ’è‚Ì‰Šú‰»
+        //å¤‰æ•°ãƒ»ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆãƒ»è¨­å®šã®åˆæœŸåŒ–
         SetTrainingMode(false);
         trainingClearCounts.Clear();
         button_LevelSelecters.Clear();
@@ -250,7 +252,7 @@ public class GameManager : MonoBehaviour
             Destroy(trainingPanels.Dequeue());
 
 
-        //ƒ[ƒJƒ‹ƒf[ƒ^‚Ìƒ[ƒh
+        //ãƒ­ãƒ¼ã‚«ãƒ«ãƒ‡ãƒ¼ã‚¿ã®ãƒ­ãƒ¼ãƒ‰
         highScore = HighScoreManager.Load();
         rankingScoreQueue = RankingScoreManager.Load();
         isUnsavedHighScore = UnsavedHighScoreFlagManager.Load();
@@ -261,7 +263,7 @@ public class GameManager : MonoBehaviour
             InputManager.Instance.actionAllocation[i] = PlayerPrefs.GetInt("ActionAllocation_" + i, (4-i)%3);
         InputManager.Instance.BindEvent();
 
-        //ƒNƒ‰ƒEƒh‚É–¢”½‰f‚Ìƒf[ƒ^‚ª‚ ‚ê‚Î”½‰f
+        //ã‚¯ãƒ©ã‚¦ãƒ‰ã«æœªåæ˜ ã®ãƒ‡ãƒ¼ã‚¿ãŒã‚ã‚Œã°åæ˜ 
         if (isUnsavedHighScore)
             await FSM.SaveHighScore(highScore);
         if (rankingScoreQueue.Count > 0)
@@ -270,251 +272,251 @@ public class GameManager : MonoBehaviour
 
         bool onlineSuccess = true;
 
-        //ƒNƒ‰ƒEƒhƒf[ƒ^‚Ìƒ[ƒh
+        //ã‚¯ãƒ©ã‚¦ãƒ‰ãƒ‡ãƒ¼ã‚¿ã®ãƒ­ãƒ¼ãƒ‰
         onlineSuccess &= await FSM.LoadAll();
 
 
-        //ƒvƒŒƒCƒ„[ƒ‰ƒ“ƒNZo
+        //ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ãƒ©ãƒ³ã‚¯ç®—å‡º
         playerRank = CalculatePlayerRank(totalExp);
 
-        //Ÿ‚Ìƒ‰ƒ“ƒN‚Ü‚Å‚É•K—v‚ÈŒoŒ±’l—Ê‚ğZo
+        //æ¬¡ã®ãƒ©ãƒ³ã‚¯ã¾ã§ã«å¿…è¦ãªçµŒé¨“å€¤é‡ã‚’ç®—å‡º
         requiredExp = (playerRank + 1) * (playerRank + 2) / 2 * 100 - totalExp;
 
 
-        //–¢ƒNƒŠƒA‚ÌƒgƒŒ[ƒjƒ“ƒOƒ‚[ƒh‚ÌƒŒƒxƒ‹‚ÌCount‚ğŠm•Û
+        //æœªã‚¯ãƒªã‚¢ã®ãƒˆãƒ¬ãƒ¼ãƒ‹ãƒ³ã‚°ãƒ¢ãƒ¼ãƒ‰ã®ãƒ¬ãƒ™ãƒ«ã®Countã‚’ç¢ºä¿
         if (trainingClearCounts[trainingClearCounts.Count - 1] > 0)
             trainingClearCounts.Add(0);
 
-        //ƒgƒŒ[ƒjƒ“ƒOƒ‚[ƒh“’BƒŒƒxƒ‹‚ğZo
+        //ãƒˆãƒ¬ãƒ¼ãƒ‹ãƒ³ã‚°ãƒ¢ãƒ¼ãƒ‰åˆ°é”ãƒ¬ãƒ™ãƒ«ã‚’ç®—å‡º
         highestTrainingLevel = trainingClearCounts.Count;
         trainingLevel = highestTrainingLevel;
 
-        //“’BƒŒƒxƒ‹‚Ü‚Å‚ÌƒgƒŒ[ƒjƒ“ƒOƒ‚[ƒhƒ{ƒ^ƒ“‚ğ”z’u
+        //åˆ°é”ãƒ¬ãƒ™ãƒ«ã¾ã§ã®ãƒˆãƒ¬ãƒ¼ãƒ‹ãƒ³ã‚°ãƒ¢ãƒ¼ãƒ‰ãƒœã‚¿ãƒ³ã‚’é…ç½®
         for (int i = 1; i <= highestTrainingLevel; i++)
             AddLevelPanel(i);
 
-        //ƒNƒŠƒA‰ñ”•\¦‚ğXV
+        //ã‚¯ãƒªã‚¢å›æ•°è¡¨ç¤ºã‚’æ›´æ–°
         UpdatePanelCount();
 
 
-        //ƒXƒLƒ“‚ğ‘S‚ÄƒƒbƒN
+        //ã‚¹ã‚­ãƒ³ã‚’å…¨ã¦ãƒ­ãƒƒã‚¯
         for (int i = 0; i < isSkinUnlocked.Length; i++)
             isSkinUnlocked[i] = false;
 
-        //ƒXƒLƒ“ƒpƒlƒ‹‚Ì¶¬
+        //ã‚¹ã‚­ãƒ³ãƒ‘ãƒãƒ«ã®ç”Ÿæˆ
         skinSelecter.CreateSkinPanel();
 
-        //ƒXƒLƒ“‚ÌƒƒbƒN‰ğœ
+        //ã‚¹ã‚­ãƒ³ã®ãƒ­ãƒƒã‚¯è§£é™¤
         CheckSkinUnlock();
 
-        //•\¦ƒXƒLƒ“‚ÆƒXƒLƒ“ƒZƒŒƒNƒ^[‰ñ“]—Ê‚Ì•ÏX
+        //è¡¨ç¤ºã‚¹ã‚­ãƒ³ã¨ã‚¹ã‚­ãƒ³ã‚»ãƒ¬ã‚¯ã‚¿ãƒ¼å›è»¢é‡ã®å¤‰æ›´
         ChangePlayerSkin(usingSkinID);
         skinSelecter.SetWheelAngle(usingSkinID);
 
 
-        //ƒvƒŒƒCƒ„[î•ñ‚ÌXV
+        //ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼æƒ…å ±ã®æ›´æ–°
         UpdatePlayerInfo();
 
 
-        //ƒ`ƒ…[ƒgƒŠƒAƒ‹–¢ƒNƒŠƒA‚È‚çƒvƒŒƒCƒ{ƒ^ƒ“‚ğƒƒbƒN
+        //ãƒãƒ¥ãƒ¼ãƒˆãƒªã‚¢ãƒ«æœªã‚¯ãƒªã‚¢ãªã‚‰ãƒ—ãƒ¬ã‚¤ãƒœã‚¿ãƒ³ã‚’ãƒ­ãƒƒã‚¯
         if (playerRank == 0)
             InputManager.Instance.SetPlayButtonLock(true);
 
 
-        //ƒ‰ƒ“ƒLƒ“ƒOXV
+        //ãƒ©ãƒ³ã‚­ãƒ³ã‚°æ›´æ–°
         onlineSuccess &= await RankingManager.UpdateRanking(RankingManager.RankingType.HighScore);
         onlineSuccess &= await RankingManager.UpdateRanking(RankingManager.RankingType.PlayerScore);
         await highScoreRankingBoard.UpdateRanking();
 
 
-        //ƒXƒ^ƒ~ƒi‚Ì”½‰f
+        //ã‚¹ã‚¿ãƒŸãƒŠã®åæ˜ 
         onlineSuccess &= UpdateStamina(await FSM.CheckResetAndGetStamina());
 
 
-        //ƒIƒ“ƒ‰ƒCƒ“ƒf[ƒ^æ“¾‚ª¸”s‚·‚ê‚Î’Ê’m
+        //ã‚ªãƒ³ãƒ©ã‚¤ãƒ³ãƒ‡ãƒ¼ã‚¿å–å¾—ãŒå¤±æ•—ã™ã‚Œã°é€šçŸ¥
         if (!onlineSuccess)
-            PopupUIManager.Instance.SetupMessageBand("ƒNƒ‰ƒEƒhƒf[ƒ^‚ğæ“¾‚Å‚«‚Ü‚¹‚ñ‚Å‚µ‚½B", 2);
+            PopupUIManager.Instance.SetupMessageBand("ã‚¯ãƒ©ã‚¦ãƒ‰ãƒ‡ãƒ¼ã‚¿ã‚’å–å¾—ã§ãã¾ã›ã‚“ã§ã—ãŸã€‚", 2);
     }
 
 
 
-    //LevelSelecter‚Ìƒpƒlƒ‹‚ğ’Ç‰Á
+    //LevelSelecterã®ãƒ‘ãƒãƒ«ã‚’è¿½åŠ 
     public void AddLevelPanel(int level)
     {
-        //ƒpƒlƒ‹‚ÌƒCƒ“ƒXƒ^ƒ“ƒX‚ğ¶¬
+        //ãƒ‘ãƒãƒ«ã®ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ã‚’ç”Ÿæˆ
         RectTransform newPanelRtf = Instantiate(levelPanelPrefab).GetComponent<RectTransform>();
 
-        //ƒXƒNƒ[ƒ‹ƒrƒ…[‚Ì—v‘f‚É
+        //ã‚¹ã‚¯ãƒ­ãƒ¼ãƒ«ãƒ“ãƒ¥ãƒ¼ã®è¦ç´ ã«
         newPanelRtf.SetParent(content_LevelSelecter);
         newPanelRtf.localScale = Vector3.one;
         newPanelRtf.anchoredPosition3D = newPanelRtf.anchoredPosition3D - Vector3.forward * newPanelRtf.anchoredPosition3D.z;
         newPanelRtf.localEulerAngles = Vector3.zero;
 
-        //“ü—ÍƒXƒNƒŠƒvƒg‚ğŠÇ—‰Â”\‚É
+        //å…¥åŠ›ã‚¹ã‚¯ãƒªãƒ—ãƒˆã‚’ç®¡ç†å¯èƒ½ã«
         Button_LevelSelector button_LevelSelecter = newPanelRtf.GetComponent<Button_LevelSelector>();
         button_LevelSelecter.SetLevel(level);
         button_LevelSelecters.Add(button_LevelSelecter);
 
-        //ƒpƒlƒ‹ƒIƒuƒWƒFƒNƒg‚ğŠÇ—‰Â”\‚É
+        //ãƒ‘ãƒãƒ«ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’ç®¡ç†å¯èƒ½ã«
         trainingPanels.Enqueue(newPanelRtf.gameObject);
     }
 
 
 
-    //ƒ‰ƒ“ƒLƒ“ƒOƒ‚[ƒh - ƒgƒŒ[ƒjƒ“ƒOƒ‚[ƒhØ‚è‘Ö‚¦
+    //ãƒ©ãƒ³ã‚­ãƒ³ã‚°ãƒ¢ãƒ¼ãƒ‰ - ãƒˆãƒ¬ãƒ¼ãƒ‹ãƒ³ã‚°ãƒ¢ãƒ¼ãƒ‰åˆ‡ã‚Šæ›¿ãˆ
     public void SetTrainingMode(bool isTraining)
     {
-        //İ’è‚ğ•ÏX
+        //è¨­å®šã‚’å¤‰æ›´
         this.isTraining = isTraining;
 
-        //ƒgƒŒ[ƒjƒ“ƒOƒ‚[ƒh‚Ö‘JˆÚ
+        //ãƒˆãƒ¬ãƒ¼ãƒ‹ãƒ³ã‚°ãƒ¢ãƒ¼ãƒ‰ã¸é·ç§»æ™‚
         if (isTraining)
         {
-            //ƒ{ƒ^ƒ“‚ÌƒeƒLƒXƒg‚ğ•ÏX
-            playButtonText.SetText("ƒvƒŒƒC - Lv." + trainingLevel);
+            //ãƒœã‚¿ãƒ³ã®ãƒ†ã‚­ã‚¹ãƒˆã‚’å¤‰æ›´
+            playButtonText.SetText("ãƒ—ãƒ¬ã‚¤ - Lv." + trainingLevel);
 
-            //ƒgƒŒ[ƒjƒ“ƒOƒ‚[ƒhƒ{ƒ^ƒ“‚ğ‰Ÿ‰º
+            //ãƒˆãƒ¬ãƒ¼ãƒ‹ãƒ³ã‚°ãƒ¢ãƒ¼ãƒ‰ãƒœã‚¿ãƒ³ã‚’æŠ¼ä¸‹
             button_LevelSelecters[trainingLevel - 1].PushButton();
 
-            //ƒŒƒxƒ‹ã¸ŠÔŠu‚ğ•ÏX
+            //ãƒ¬ãƒ™ãƒ«ä¸Šæ˜‡é–“éš”ã‚’å¤‰æ›´
             levelUpSpan = 5000;
 
-            //”wŒi‚Ì‘¬“x‚ğ•ÏX
+            //èƒŒæ™¯ã®é€Ÿåº¦ã‚’å¤‰æ›´
             TM.SetSpeed(5 + Mathf.Pow(trainingLevel, 0.7f) * 3);
             TM.moveSpeed = 5 + Mathf.Pow(trainingLevel, 0.7f) * 3;
 
-            //ƒXƒ^ƒ~ƒiÁ”ï•\¦‚ğ”ñ•\¦
+            //ã‚¹ã‚¿ãƒŸãƒŠæ¶ˆè²»è¡¨ç¤ºã‚’éè¡¨ç¤º
             playCost.SetActive(false);
         }
 
-        //ƒ‰ƒ“ƒLƒ“ƒOƒ‚[ƒh‚Ö‘JˆÚ
+        //ãƒ©ãƒ³ã‚­ãƒ³ã‚°ãƒ¢ãƒ¼ãƒ‰ã¸é·ç§»æ™‚
         else
         {
-            //ƒ{ƒ^ƒ“‚ÌƒeƒLƒXƒg‚ğ•ÏX
-            playButtonText.SetText("ƒvƒŒƒC");
+            //ãƒœã‚¿ãƒ³ã®ãƒ†ã‚­ã‚¹ãƒˆã‚’å¤‰æ›´
+            playButtonText.SetText("ãƒ—ãƒ¬ã‚¤");
 
-            //ƒŒƒxƒ‹ã¸ŠÔŠu‚ğ•ÏX
+            //ãƒ¬ãƒ™ãƒ«ä¸Šæ˜‡é–“éš”ã‚’å¤‰æ›´
             levelUpSpan = 2000;
 
-            //”wŒi‚Ì‘¬“x‚ğ•ÏX
+            //èƒŒæ™¯ã®é€Ÿåº¦ã‚’å¤‰æ›´
             TM.SetSpeed(8);
             TM.moveSpeed = 8;
 
-            //ƒXƒ^ƒ~ƒiÁ”ï•\¦‚ğ•\¦
+            //ã‚¹ã‚¿ãƒŸãƒŠæ¶ˆè²»è¡¨ç¤ºã‚’è¡¨ç¤º
             playCost.SetActive(true);
         }
     }
 
 
 
-    //ƒgƒŒ[ƒjƒ“ƒOƒ‚[ƒh‚ÌƒvƒŒƒCƒŒƒxƒ‹‚ğİ’è
+    //ãƒˆãƒ¬ãƒ¼ãƒ‹ãƒ³ã‚°ãƒ¢ãƒ¼ãƒ‰ã®ãƒ—ãƒ¬ã‚¤ãƒ¬ãƒ™ãƒ«ã‚’è¨­å®š
     public void SetTrainingLevel(int level)
     {
-        //Œ»İ‚Ì‘I‘ğ‚ğ‰ğœ
+        //ç¾åœ¨ã®é¸æŠã‚’è§£é™¤
         button_LevelSelecters[trainingLevel - 1].Initialize();
 
-        //ƒgƒŒ[ƒjƒ“ƒO‚ÌƒŒƒxƒ‹‚ğXV
+        //ãƒˆãƒ¬ãƒ¼ãƒ‹ãƒ³ã‚°ã®ãƒ¬ãƒ™ãƒ«ã‚’æ›´æ–°
         trainingLevel = level;
-        playButtonText.SetText("ƒvƒŒƒC - Lv." + level);
+        playButtonText.SetText("ãƒ—ãƒ¬ã‚¤ - Lv." + level);
 
-        //”wŒi‚Ì‘¬“x‚ğ•ÏX
+        //èƒŒæ™¯ã®é€Ÿåº¦ã‚’å¤‰æ›´
         TM.SetSpeed(5 + Mathf.Pow(level, 0.7f) * 3);
         TM.moveSpeed = 5 + Mathf.Pow(level, 0.7f) * 3;
     }
 
 
 
-    //ƒgƒŒ[ƒjƒ“ƒOƒ‚[ƒh‚ÌƒŒƒxƒ‹‚ğ’Ç‰Á
+    //ãƒˆãƒ¬ãƒ¼ãƒ‹ãƒ³ã‚°ãƒ¢ãƒ¼ãƒ‰ã®ãƒ¬ãƒ™ãƒ«ã‚’è¿½åŠ 
     public void AddTrainingLevel()
     {
-        //ƒNƒŠƒA‰ñ”•Û‘¶•Ï”‚Ì’Ç‰Á
+        //ã‚¯ãƒªã‚¢å›æ•°ä¿å­˜å¤‰æ•°ã®è¿½åŠ 
         trainingClearCounts.Add(0);
 
-        //Å‚“’BƒŒƒxƒ‹‚ğXV
+        //æœ€é«˜åˆ°é”ãƒ¬ãƒ™ãƒ«ã‚’æ›´æ–°
         highestTrainingLevel++;
 
-        //ƒgƒŒ[ƒjƒ“ƒOƒ‚[ƒhƒŒƒxƒ‹‘I‘ğƒpƒlƒ‹‚ğ’Ç‰Á
+        //ãƒˆãƒ¬ãƒ¼ãƒ‹ãƒ³ã‚°ãƒ¢ãƒ¼ãƒ‰ãƒ¬ãƒ™ãƒ«é¸æŠãƒ‘ãƒãƒ«ã‚’è¿½åŠ 
         AddLevelPanel(highestTrainingLevel);
 
-        //ƒgƒŒ[ƒjƒ“ƒOƒ‚[ƒh‚Ì‘I‘ğƒŒƒxƒ‹‚ğXV
+        //ãƒˆãƒ¬ãƒ¼ãƒ‹ãƒ³ã‚°ãƒ¢ãƒ¼ãƒ‰ã®é¸æŠãƒ¬ãƒ™ãƒ«ã‚’æ›´æ–°
         SetTrainingLevel(highestTrainingLevel);
         button_LevelSelecters[highestTrainingLevel - 1].PushButton();
     }
 
 
 
-    //ƒNƒŠƒA‰ñ”‚Ì‰ÁZ
+    //ã‚¯ãƒªã‚¢å›æ•°ã®åŠ ç®—
     public async void AddClearCount(int level)
     {
-        //ƒNƒŠƒA‰ñ”‚Ì‰ÁZ
+        //ã‚¯ãƒªã‚¢å›æ•°ã®åŠ ç®—
         trainingClearCounts[level - 1]++;
 
-        //ƒpƒlƒ‹‚É•\¦‚³‚ê‚Ä‚¢‚é‰ñ”‚Ì‰ÁZ
-        button_LevelSelecters[level - 1].clearTimesNumTMP.SetText(trainingClearCounts[level - 1] + "‰ñ");
+        //ãƒ‘ãƒãƒ«ã«è¡¨ç¤ºã•ã‚Œã¦ã„ã‚‹å›æ•°ã®åŠ ç®—
+        button_LevelSelecters[level - 1].clearTimesNumTMP.SetText(trainingClearCounts[level - 1] + "å›");
 
-        // Firestore‚É‘¦”½‰f
+        // Firestoreã«å³æ™‚åæ˜ 
         await FSM.SaveTrainingClearCount(level);
     }
 
 
 
-    //ƒXƒLƒ“‚ğ•ÏX
+    //ã‚¹ã‚­ãƒ³ã‚’å¤‰æ›´
     public void ChangePlayerSkin(int skinID)
     {
-        //GameManager‘¤‚Ìƒf[ƒ^‚ğXV
+        //GameManagerå´ã®ãƒ‡ãƒ¼ã‚¿ã‚’æ›´æ–°
         usingSkinID = skinID;
 
-        //ƒvƒŒƒrƒ…[‚Ìƒ‚ƒfƒ‹‚ğ‰B‚³‚È‚¢
+        //ãƒ—ãƒ¬ãƒ“ãƒ¥ãƒ¼ã®ãƒ¢ãƒ‡ãƒ«ã‚’éš ã•ãªã„
         skinModelCover.SetActive(false);
 
-        //ƒXƒLƒ“‚Ì•ÏX
+        //ã‚¹ã‚­ãƒ³ã®å¤‰æ›´
         playerCon.ChangeSkin(skinID);
 
-        //•\¦ƒXƒLƒ“–¼‚Ì•ÏX
+        //è¡¨ç¤ºã‚¹ã‚­ãƒ³åã®å¤‰æ›´
         skinNameText.SetText(SDB.skinData[skinID].name);
 
-        //UI‚ÌF‚ğ•ÏX
+        //UIã®è‰²ã‚’å¤‰æ›´
         ChangeUIColor(skinID);
 
-        //CrystalƒXƒLƒ“ƒƒbƒN‚Ì—áŠOˆ—
+        //Crystalã‚¹ã‚­ãƒ³ãƒ­ãƒƒã‚¯æ™‚ã®ä¾‹å¤–å‡¦ç†
         if (!isSkinUnlocked[skinID])
             if (skinID % 8 == 7)
             {
-                //ƒvƒŒƒrƒ…[‚Ìƒ‚ƒfƒ‹‚ğ‰B‚·
+                //ãƒ—ãƒ¬ãƒ“ãƒ¥ãƒ¼ã®ãƒ¢ãƒ‡ãƒ«ã‚’éš ã™
                 skinModelCover.SetActive(true);
 
-                //–¼‘O‚ğ•\¦‚µ‚È‚¢
-                skinNameText.SetText("HHH");
+                //åå‰ã‚’è¡¨ç¤ºã—ãªã„
+                skinNameText.SetText("ï¼Ÿï¼Ÿï¼Ÿ");
             }
     }
 
 
 
-    //UI‚ÌF‚Ì‚İ‚ğ•ÏX
+    //UIã®è‰²ã®ã¿ã‚’å¤‰æ›´
     public void ChangeUIColor(int skinID)
     {
-        //ƒpƒlƒ‹‘I‘ğ‚ÌF‚ğ•ÏX
+        //ãƒ‘ãƒãƒ«é¸æŠæ™‚ã®è‰²ã‚’å¤‰æ›´
         panelSelectedColor = SDB.skinData[skinID].UIColor;
 
-        //ƒXƒRƒAƒQ[ƒW‚ÌF‚ğ•ÏX
+        //ã‚¹ã‚³ã‚¢ã‚²ãƒ¼ã‚¸ã®è‰²ã‚’å¤‰æ›´
         scoreGageSprite.color = SDB.skinData[skinID].UIColor - Color.black * 0.4f;
 
-        //ŒoŒ±’lƒo[F‚Ì•ÏX
+        //çµŒé¨“å€¤ãƒãƒ¼è‰²ã®å¤‰æ›´
         expSprite.color = Color.Lerp(SDB.skinData[skinID].UIColor, Color.gray + Color.white * 0.3f, 0.3f);
         playerInfo_ExpScaleSprite.color =
             Color.Lerp(SDB.skinData[skinID].UIColor, Color.gray + Color.white * 0.3f, 0.3f);
 
-        //ƒ{ƒ^ƒ“‚ÌF‚ÌXV
+        //ãƒœã‚¿ãƒ³ã®è‰²ã®æ›´æ–°
         button_LevelSelecters[trainingLevel - 1].PushButton();
 
-        //‰¹—Êƒo[‚ÌF‚Ì•ÏX
+        //éŸ³é‡ãƒãƒ¼ã®è‰²ã®å¤‰æ›´
         volumeFillArea_BGM.color = Color.Lerp(SDB.skinData[skinID].UIColor, Color.gray + Color.white * 0.5f, 0.3f);
         volumeFillArea_SE.color = Color.Lerp(SDB.skinData[skinID].UIColor, Color.gray + Color.white * 0.5f, 0.3f);
 
-        //ƒ{ƒ^ƒ“”z’uUI‚ÌF•ÏX
+        //ãƒœã‚¿ãƒ³é…ç½®UIã®è‰²å¤‰æ›´
         buttonPatternSelectSquare.color = SDB.skinData[skinID].UIColor;
 
-        //ƒXƒ^ƒ~ƒi‚ÌF‚ğ•ÏX
+        //ã‚¹ã‚¿ãƒŸãƒŠã®è‰²ã‚’å¤‰æ›´
         staminaColor = Color.Lerp(SDB.skinData[skinID].UIColor, Color.gray, 0.2f);
         for (int i = 0; i < staminaSprite.Length; i++)
             if(staminaSprite[i].color != Color.clear)
@@ -523,29 +525,29 @@ public class GameManager : MonoBehaviour
 
 
 
-    //ƒXƒLƒ“‚ÌƒAƒ“ƒƒbƒN
+    //ã‚¹ã‚­ãƒ³ã®ã‚¢ãƒ³ãƒ­ãƒƒã‚¯
     public void UnlockSkin(int skinID)
     {
-        //Šù‚ÉƒƒbƒN‰ğœÏ‚İ‚È‚ç‰½‚à‚µ‚È‚¢
+        //æ—¢ã«ãƒ­ãƒƒã‚¯è§£é™¤æ¸ˆã¿ãªã‚‰ä½•ã‚‚ã—ãªã„
         if (isSkinUnlocked[skinID]) return;
 
-        //ƒAƒ“ƒƒbƒN‚ğ•Û‘¶
+        //ã‚¢ãƒ³ãƒ­ãƒƒã‚¯ã‚’ä¿å­˜
         isSkinUnlocked[skinID] = true;
 
-        //ƒXƒLƒ“ƒpƒlƒ‹‚ÌƒAƒ“ƒƒbƒN
+        //ã‚¹ã‚­ãƒ³ãƒ‘ãƒãƒ«ã®ã‚¢ãƒ³ãƒ­ãƒƒã‚¯
         skinSelecter.UnlockPanel(skinID);
     }
 
 
 
-    //ƒXƒLƒ“‚ÌƒƒbƒN‰ğœğŒ‚ğ¶¬
+    //ã‚¹ã‚­ãƒ³ã®ãƒ­ãƒƒã‚¯è§£é™¤æ¡ä»¶ã‚’ç”Ÿæˆ
     public string GetUnlockSkinCondition(int skinID)
     {
-        string condition = "ƒAƒ“ƒƒbƒNğŒF\n";
+        string condition = "ã‚¢ãƒ³ãƒ­ãƒƒã‚¯æ¡ä»¶ï¼š\n";
 
         if (skinID < 8)
         {
-            condition += "ƒvƒŒƒCƒ„[ƒ‰ƒ“ƒN";
+            condition += "ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ãƒ©ãƒ³ã‚¯";
             switch(skinID)
             {
                 case 0: condition += "0"; break;
@@ -557,11 +559,11 @@ public class GameManager : MonoBehaviour
                 case 6: condition += "50"; break;
                 case 7: condition += "100"; break;
             }
-            condition += "@“’B";
+            condition += "ã€€åˆ°é”";
         }
         else
         {
-            condition += "ƒgƒŒ[ƒjƒ“ƒOƒ‚[ƒhLv.";
+            condition += "ãƒˆãƒ¬ãƒ¼ãƒ‹ãƒ³ã‚°ãƒ¢ãƒ¼ãƒ‰Lv.";
             switch (skinID)
             {
                 case 8: condition += "1"; break;
@@ -573,7 +575,7 @@ public class GameManager : MonoBehaviour
                 case 14: condition += "15"; break;
                 case 15: condition += "20"; break;
             }
-            condition += "@ƒNƒŠƒA";
+            condition += "ã€€ã‚¯ãƒªã‚¢";
         }
 
         return condition;
@@ -581,7 +583,7 @@ public class GameManager : MonoBehaviour
 
 
 
-    //‘Šl“¾ŒoŒ±’l‚©‚çƒvƒŒƒCƒ„[ƒ‰ƒ“ƒN‚ğZo
+    //ç·ç²å¾—çµŒé¨“å€¤ã‹ã‚‰ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ãƒ©ãƒ³ã‚¯ã‚’ç®—å‡º
     public int CalculatePlayerRank(int totalExp)
     {
         int playerRank = 0;
@@ -597,10 +599,10 @@ public class GameManager : MonoBehaviour
 
 
 
-    //ƒXƒLƒ“ƒAƒ“ƒƒbƒNó‘Ô‚Ìƒ`ƒFƒbƒN
+    //ã‚¹ã‚­ãƒ³ã‚¢ãƒ³ãƒ­ãƒƒã‚¯çŠ¶æ…‹ã®ãƒã‚§ãƒƒã‚¯
     public void CheckSkinUnlock()
     {
-        //CubeƒXƒLƒ“‚Ìƒ`ƒFƒbƒN
+        //Cubeã‚¹ã‚­ãƒ³ã®ãƒã‚§ãƒƒã‚¯
         if (playerRank >= 0) UnlockSkin(0);
         if (playerRank >= 1) UnlockSkin(1);
         if (playerRank >= 10) UnlockSkin(2);
@@ -610,7 +612,7 @@ public class GameManager : MonoBehaviour
         if (playerRank >= 50) UnlockSkin(6);
         if (playerRank >= 100) UnlockSkin(7);
 
-        //SphereƒXƒLƒ“‚Ìƒ`ƒFƒbƒN
+        //Sphereã‚¹ã‚­ãƒ³ã®ãƒã‚§ãƒƒã‚¯
         if (highestTrainingLevel > 1) UnlockSkin(8);
         if (highestTrainingLevel > 2) UnlockSkin(9);
         if (highestTrainingLevel > 3) UnlockSkin(10);
@@ -623,47 +625,47 @@ public class GameManager : MonoBehaviour
 
 
 
-    //ƒgƒŒ[ƒjƒ“ƒOƒ‚[ƒhƒpƒlƒ‹‚ÌƒNƒŠƒA‰ñ”‚ÌXV
+    //ãƒˆãƒ¬ãƒ¼ãƒ‹ãƒ³ã‚°ãƒ¢ãƒ¼ãƒ‰ãƒ‘ãƒãƒ«ã®ã‚¯ãƒªã‚¢å›æ•°ã®æ›´æ–°
     public void UpdatePanelCount()
     {
         for (int levelIndex = 0; levelIndex < highestTrainingLevel; levelIndex++)
-            button_LevelSelecters[levelIndex].clearTimesNumTMP.SetText(trainingClearCounts[levelIndex] + "‰ñ");
+            button_LevelSelecters[levelIndex].clearTimesNumTMP.SetText(trainingClearCounts[levelIndex] + "å›");
     }
 
 
 
-    //ƒvƒŒƒCŒ‹‰Ê‚ÌƒZ[ƒu
+    //ãƒ—ãƒ¬ã‚¤çµæœã®ã‚»ãƒ¼ãƒ–
     public async Task SaveResult()
     {
-        #region ‘–s‹——£‚Ì‰ÁZ
+        #region èµ°è¡Œè·é›¢ã®åŠ ç®—
         int addDistance = 0;
-        //ƒ‰ƒ“ƒLƒ“ƒOƒ‚[ƒh‚Ìê‡‚ÍLV.1‚©‚ç‚Ì‹——£‚à‰ÁZ
+        //ãƒ©ãƒ³ã‚­ãƒ³ã‚°ãƒ¢ãƒ¼ãƒ‰ã®å ´åˆã¯LV.1ã‹ã‚‰ã®è·é›¢ã‚‚åŠ ç®—
         if (!isTraining)
             for (int calcLevel = 1; calcLevel < level; calcLevel++)
                 addDistance += (int)((5 + Mathf.Pow(calcLevel, 0.7f) * 3) * 20);
 
-        //ÅIƒŒƒxƒ‹‚Ì‘–s‹——£‚ğ‰ÁZ
+        //æœ€çµ‚ãƒ¬ãƒ™ãƒ«ã®èµ°è¡Œè·é›¢ã‚’åŠ ç®—
         addDistance += (int)((5 + Mathf.Pow(level, 0.7f) * 3) * (isTraining ? score / 100 : (score - (level - 1) * 2000) / 100));
 
-        //ƒ[ƒJƒ‹‚É”½‰f
+        //ãƒ­ãƒ¼ã‚«ãƒ«ã«åæ˜ 
         totalRunDistance += addDistance;
 
-        //ƒNƒ‰ƒEƒh‚É•Û‘¶
+        //ã‚¯ãƒ©ã‚¦ãƒ‰ã«ä¿å­˜
         FSM.SaveRunDistance(addDistance);
         #endregion
 
-        #region ŒoŒ±’l‚Ì‰ÁZ
-        //ƒQ[ƒ€ƒ‚[ƒh‚É‰‚¶‚½‰ÁZ—ÊZo
+        #region çµŒé¨“å€¤ã®åŠ ç®—
+        //ã‚²ãƒ¼ãƒ ãƒ¢ãƒ¼ãƒ‰ã«å¿œã˜ãŸåŠ ç®—é‡ç®—å‡º
         int addExp = isTraining ? addDistance / 10 : addDistance;
 
-        //ƒgƒŒ[ƒjƒ“ƒOƒ‚[ƒhŠ®‘–‚ÅŠ®‘–ƒ{[ƒiƒX‰ÁZ
+        //ãƒˆãƒ¬ãƒ¼ãƒ‹ãƒ³ã‚°ãƒ¢ãƒ¼ãƒ‰å®Œèµ°ã§å®Œèµ°ãƒœãƒ¼ãƒŠã‚¹åŠ ç®—
         if (score == 5000 && isTraining)
             addExp += level * 50;
 
-        //ƒ[ƒJƒ‹‚É”½‰f
+        //ãƒ­ãƒ¼ã‚«ãƒ«ã«åæ˜ 
         totalExp += addExp;
 
-        //ƒvƒŒƒCƒ„[ƒ‰ƒ“ƒN‚ğXV
+        //ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ãƒ©ãƒ³ã‚¯ã‚’æ›´æ–°
         requiredExp -= addExp;
         while (requiredExp <= 0)
         {
@@ -671,47 +673,47 @@ public class GameManager : MonoBehaviour
             requiredExp += (playerRank + 1) * 100;
         }
 
-        //ƒNƒ‰ƒEƒh‚É•Û‘¶
+        //ã‚¯ãƒ©ã‚¦ãƒ‰ã«ä¿å­˜
         FSM.SaveExperience(addExp);
         #endregion
 
-        //ƒvƒŒƒCƒ„[î•ñ‚ÌXV
+        //ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼æƒ…å ±ã®æ›´æ–°
         UpdatePlayerInfo();
 
-        //ƒgƒŒ[ƒjƒ“ƒOƒ‚[ƒh‚È‚çˆ—I—¹
+        //ãƒˆãƒ¬ãƒ¼ãƒ‹ãƒ³ã‚°ãƒ¢ãƒ¼ãƒ‰ãªã‚‰å‡¦ç†çµ‚äº†
         if (isTraining) return;
 
-        #region ƒnƒCƒXƒRƒA‚Ì•Û‘¶
-        //ƒnƒCƒXƒRƒA‚ğXV‚µ‚Ä‚¢‚ê‚Î
+        #region ãƒã‚¤ã‚¹ã‚³ã‚¢ã®ä¿å­˜
+        //ãƒã‚¤ã‚¹ã‚³ã‚¢ã‚’æ›´æ–°ã—ã¦ã„ã‚Œã°
         if (score > highScore)
         {
-            //ƒnƒCƒXƒRƒA‚ÌXV
+            //ãƒã‚¤ã‚¹ã‚³ã‚¢ã®æ›´æ–°
             highScore = score;
 
-            //ƒ[ƒJƒ‹‚É•Û‘¶
+            //ãƒ­ãƒ¼ã‚«ãƒ«ã«ä¿å­˜
             HighScoreManager.Save(highScore);
 
-            //ƒNƒ‰ƒEƒh‚É•Û‘¶i¸”s‚·‚ê‚Îƒtƒ‰ƒO‚ª—§‚Âj
+            //ã‚¯ãƒ©ã‚¦ãƒ‰ã«ä¿å­˜ï¼ˆå¤±æ•—ã™ã‚Œã°ãƒ•ãƒ©ã‚°ãŒç«‹ã¤ï¼‰
             await FSM.SaveHighScore(highScore);
         }
         #endregion
 
-        #region ƒvƒŒƒCƒ„[ƒXƒRƒA‚Ì•Û‘¶
-        //Queue‚ÉƒXƒRƒA‚ğŠi”[
+        #region ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã‚¹ã‚³ã‚¢ã®ä¿å­˜
+        //Queueã«ã‚¹ã‚³ã‚¢ã‚’æ ¼ç´
         rankingScoreQueue.Enqueue(score);
 
-        //ƒNƒ‰ƒEƒh‚É•Û‘¶
-        //ƒ[ƒJƒ‹‚Ö‚Ì•Û‘¶‚Íƒƒ\ƒbƒh“à
+        //ã‚¯ãƒ©ã‚¦ãƒ‰ã«ä¿å­˜
+        //ãƒ­ãƒ¼ã‚«ãƒ«ã¸ã®ä¿å­˜ã¯ãƒ¡ã‚½ãƒƒãƒ‰å†…
         await FSM.SavePlayerScore();
         #endregion
     }
     public void SaveResult(int getExp)
     {
-        #region ŒoŒ±’l‚Ì‰ÁZ
-        //ƒ[ƒJƒ‹‚É”½‰f
+        #region çµŒé¨“å€¤ã®åŠ ç®—
+        //ãƒ­ãƒ¼ã‚«ãƒ«ã«åæ˜ 
         totalExp += getExp;
 
-        //ƒvƒŒƒCƒ„[ƒ‰ƒ“ƒN‚ğXV
+        //ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ãƒ©ãƒ³ã‚¯ã‚’æ›´æ–°
         requiredExp -= getExp;
         while (requiredExp <= 0)
         {
@@ -719,22 +721,22 @@ public class GameManager : MonoBehaviour
             requiredExp += (playerRank + 1) * 100;
         }
 
-        //ƒNƒ‰ƒEƒh‚É•Û‘¶
+        //ã‚¯ãƒ©ã‚¦ãƒ‰ã«ä¿å­˜
         FSM.SaveExperience(getExp);
         #endregion
 
-        //ƒvƒŒƒCƒ„[î•ñ‚ÌXV
+        //ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼æƒ…å ±ã®æ›´æ–°
         UpdatePlayerInfo();
     }
 
 
 
-    //ƒ[ƒJƒ‹ƒf[ƒ^‚ğ”½‰f‚³‚¹‚½ƒvƒŒƒCƒ„[ƒXƒRƒA‚ğæ“¾
+    //ãƒ­ãƒ¼ã‚«ãƒ«ãƒ‡ãƒ¼ã‚¿ã‚’åæ˜ ã•ã›ãŸãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã‚¹ã‚³ã‚¢ã‚’å–å¾—
     public int GetPlayerScore()
     {
         int playerScore = this.playerScore;
 
-        // –¢”½‰f‚Ìƒf[ƒ^‚ğ”½‰f
+        // æœªåæ˜ ã®ãƒ‡ãƒ¼ã‚¿ã‚’åæ˜ 
         foreach (int resultScore in rankingScoreQueue)
         {
             playerScore += (resultScore - playerScore) / 10;
@@ -745,20 +747,20 @@ public class GameManager : MonoBehaviour
 
 
 
-    //ƒvƒŒƒCƒ„[î•ñ‚ÌXV
+    //ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼æƒ…å ±ã®æ›´æ–°
     public void UpdatePlayerInfo()
     {
         playerInfo_PlayerName.SetText(playerName);
-        playerInfo_PlayerRank.SetText("ƒvƒŒƒCƒ„[ƒ‰ƒ“ƒN@" + playerRank);
+        playerInfo_PlayerRank.SetText("ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ãƒ©ãƒ³ã‚¯ã€€" + playerRank);
         playerInfo_ExpScaleRtf.localScale = Vector3.one - Vector3.right * (requiredExp / (float)((playerRank + 1) * 100));
         playerInfo_TotalExp.SetText(totalExp + "Exp");
         playerInfo_RequiredExp.SetText(requiredExp.ToString());
-        playerInfo_TotalRunDistance.SetText("‘–‚Á‚½‹——£F" + totalRunDistance.ToString("N0") + "m");
+        playerInfo_TotalRunDistance.SetText("èµ°ã£ãŸè·é›¢ï¼š" + totalRunDistance.ToString("N0") + "m");
     }
 
 
 
-    //ƒAƒvƒŠ’†’f‚Ìˆ—
+    //ã‚¢ãƒ—ãƒªä¸­æ–­æ™‚ã®å‡¦ç†
     public void OnApplicationFocus(bool hasFocus)
     {
         if (!hasFocus)
@@ -770,7 +772,7 @@ public class GameManager : MonoBehaviour
 
 
 
-    //ƒXƒ^ƒ~ƒi•\¦‚ÌXV
+    //ã‚¹ã‚¿ãƒŸãƒŠè¡¨ç¤ºã®æ›´æ–°
     public bool UpdateStamina(int stamina)
     {
         for (int i = 1; i < staminaSprite.Length; i++)
@@ -788,11 +790,11 @@ public class GameManager : MonoBehaviour
 
 
 
-    //Å‘å’l’´‰ßƒXƒ^ƒ~ƒi•\¦‚ÌXV
+    //æœ€å¤§å€¤è¶…éã‚¹ã‚¿ãƒŸãƒŠè¡¨ç¤ºã®æ›´æ–°
     public void UpdateOverStamina(int stamina)
     {
         if (stamina > 3)
-            overStamina.SetText("{" + (stamina - 3));
+            overStamina.SetText("ï¼‹" + (stamina - 3));
         else
             overStamina.SetText("");
     }

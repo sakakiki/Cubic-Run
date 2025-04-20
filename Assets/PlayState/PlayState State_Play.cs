@@ -10,7 +10,7 @@ public class PlayStateState_Play : PlayStateStateBase
 
     public override void Enter()
     {
-        //áŠQ•¨¶¬‚ð—LŒø‰»
+        //éšœå®³ç‰©ç”Ÿæˆã‚’æœ‰åŠ¹åŒ–
         TM.isCreateObstacle = true;
     }
 
@@ -20,7 +20,7 @@ public class PlayStateState_Play : PlayStateStateBase
     {
         base.Update(deltaTime);
 
-        //Šî€ƒXƒRƒA‚É“ž’B‚·‚ê‚ÎƒXƒe[ƒg‘JˆÚ
+        //åŸºæº–ã‚¹ã‚³ã‚¢ã«åˆ°é”ã™ã‚Œã°ã‚¹ãƒ†ãƒ¼ãƒˆé·ç§»
         if (GM.score > levelEndScore - scoreCorrection)
         {
             if (GM.isTraining)

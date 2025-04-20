@@ -20,13 +20,13 @@ public class GameStateState_MenuToSkin : GameStateStateBase
 
     public override void Enter()
     {
-        //Œo‰ßŠÔƒŠƒZƒbƒg
+        //çµŒéæ™‚é–“ãƒªã‚»ãƒƒãƒˆ
         elapsedTime = 0;
 
-        //ƒXƒLƒ“ƒZƒŒƒNƒ^[ƒXƒNƒŠƒvƒg‚Ì—LŒø‰»
+        //ã‚¹ã‚­ãƒ³ã‚»ãƒ¬ã‚¯ã‚¿ãƒ¼ã‚¹ã‚¯ãƒªãƒ—ãƒˆã®æœ‰åŠ¹åŒ–
         GameManager.Instance.skinSelecter.enabled = true;
 
-        //ğŒ‚ğ–‚½‚µ‚Ä‚¢‚éƒXƒLƒ“‚ÌƒƒbƒN‰ğœ
+        //æ¡ä»¶ã‚’æº€ãŸã—ã¦ã„ã‚‹ã‚¹ã‚­ãƒ³ã®ãƒ­ãƒƒã‚¯è§£é™¤
         GM.CheckSkinUnlock();
     }
 
@@ -34,25 +34,25 @@ public class GameStateState_MenuToSkin : GameStateStateBase
 
     public override void Update(float deltaTime)
     {
-        //Œo‰ßŠÔ‰ÁZ
+        //çµŒéæ™‚é–“åŠ ç®—
         elapsedTime += deltaTime;
 
-        //’nŒ`‚ğŠÇ—
+        //åœ°å½¢ã‚’ç®¡ç†
         TM.ManageMovingTerrain();
 
-        //0.5•b‘Ò‹@
+        //0.5ç§’å¾…æ©Ÿ
         if (elapsedTime < 0.5) return;
 
-        //–‘OŒvZ
+        //äº‹å‰è¨ˆç®—
         float lerpValue = (elapsedTime - 0.5f) / 1.5f;
 
-        //UI‚ğ‰ñ“]
+        //UIã‚’å›è»¢
         menuHingeRtf_L.localEulerAngles = Vector3.Lerp(Vector3.zero, Vector3.up * -180, lerpValue);
         menuHingeRtf_R.localEulerAngles = Vector3.Lerp(Vector3.zero, Vector3.up * 180, lerpValue);
         skinHingeRtf_U.localEulerAngles = Vector3.Lerp(Vector3.right * -180, Vector3.zero, lerpValue);
         skinHingeRtf_B.localEulerAngles = Vector3.Lerp(Vector3.right * 180, Vector3.zero, Mathf.Pow(lerpValue, 0.3f));
 
-        //w’èŠÔŒo‰ß‚ÅƒXƒe[ƒg‘JˆÚ
+        //æŒ‡å®šæ™‚é–“çµŒéã§ã‚¹ãƒ†ãƒ¼ãƒˆé·ç§»
         if (elapsedTime > 2)
             stateMachine.ChangeState(stateMachine.state_Skin);
     }

@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class GameStateState_Tutorial : GameStateStateBase
 {
-    //ƒ`ƒ…[ƒgƒŠƒAƒ‹—pƒXƒe[ƒgƒ}ƒVƒ“
+    //ãƒãƒ¥ãƒ¼ãƒˆãƒªã‚¢ãƒ«ç”¨ã‚¹ãƒ†ãƒ¼ãƒˆãƒã‚·ãƒ³
     public TutorialStateStateMachine tutorialStateMachine { private set; get; }
 
     private static float playTimeScale;
@@ -22,7 +22,7 @@ public class GameStateState_Tutorial : GameStateStateBase
     {
         tutorialStateMachine = new TutorialStateStateMachine(stateMachine);
 
-        //ƒ|[ƒYó‘Ô‚ğ‰ğœ
+        //ãƒãƒ¼ã‚ºçŠ¶æ…‹ã‚’è§£é™¤
         InitializePauseState();
     }
 
@@ -30,23 +30,23 @@ public class GameStateState_Tutorial : GameStateStateBase
 
     public override void Enter()
     {
-        //ƒvƒŒƒC‰æ–Ê“ü—ÍUI‚Ì—LŒø‰»
+        //ãƒ—ãƒ¬ã‚¤ç”»é¢å…¥åŠ›UIã®æœ‰åŠ¹åŒ–
         IM.InputUISetActive_Play(true);
         IM.InputUISetActive_Player(true);
         IM.isPauseGame = false;
 
-        //ƒvƒŒƒC—pƒXƒe[ƒgƒ}ƒVƒ“‚Ìİ’è
+        //ãƒ—ãƒ¬ã‚¤ç”¨ã‚¹ãƒ†ãƒ¼ãƒˆãƒã‚·ãƒ³ã®è¨­å®š
         tutorialStateMachine.Initialize(TutorialStateStateBase.continueState);
 
-        //ƒvƒŒƒCƒ„[‚Ìƒ`ƒ…[ƒgƒŠƒAƒ‹—p‰Šú‰»
+        //ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®ãƒãƒ¥ãƒ¼ãƒˆãƒªã‚¢ãƒ«ç”¨åˆæœŸåŒ–
         if (tutorialStateMachine.currentState == tutorialStateMachine.state_Start)
             PlayerStateBase_Play.InitializeTutorial();
 
-        //’nŒ`‚ğŒ¸‘¬
+        //åœ°å½¢ã‚’æ¸›é€Ÿ
         TM.moveSpeed = 8;
         TM.SetSpeed(8);
 
-        //ƒvƒŒƒC—pBGM‚ªÄ¶‚³‚ê‚Ä‚¢‚È‚¯‚ê‚Î‚ÌÄ¶
+        //ãƒ—ãƒ¬ã‚¤ç”¨BGMãŒå†ç”Ÿã•ã‚Œã¦ã„ãªã‘ã‚Œã°ã®å†ç”Ÿ
         if (audioSource_BGM.clip != AM.BGM_Play_1)
         {
             audioSource_BGM.volume = AM.volume_BGM;
@@ -64,19 +64,19 @@ public class GameStateState_Tutorial : GameStateStateBase
         {
             case PauseState.Play:
 
-                //ƒ`ƒ…[ƒgƒŠƒAƒ‹—pƒXƒe[ƒgƒ}ƒVƒ“‚ÌUpdate‚ğÀs
+                //ãƒãƒ¥ãƒ¼ãƒˆãƒªã‚¢ãƒ«ç”¨ã‚¹ãƒ†ãƒ¼ãƒˆãƒã‚·ãƒ³ã®Updateã‚’å®Ÿè¡Œ
                 tutorialStateMachine.Update(deltaTime);
 
-                //ƒvƒŒƒC‰æ–ÊUI‚Ì“ü—Í‚Ìæ“¾
+                //ãƒ—ãƒ¬ã‚¤ç”»é¢UIã®å…¥åŠ›ã®å–å¾—
                 IM.GetInput_Play();
 
-                //ƒ|[ƒY
+                //ãƒãƒ¼ã‚º
                 if (IM.is_Play_Pause_Tap)
                 {
-                    //SE‚ÌÄ¶
+                    //SEã®å†ç”Ÿ
                     AudioManager.Instance.PlaySE(AudioManager.Instance.SE_Panel);
 
-                    //ƒ|[ƒYó‘Ô‚Ö
+                    //ãƒãƒ¼ã‚ºçŠ¶æ…‹ã¸
                     EnterPause();
                 }
                 break;
@@ -84,36 +84,36 @@ public class GameStateState_Tutorial : GameStateStateBase
 
             case PauseState.Pause:
 
-                //ƒ|[ƒY‰æ–Ê“ü—Í‚Ìæ“¾
+                //ãƒãƒ¼ã‚ºç”»é¢å…¥åŠ›ã®å–å¾—
                 IM.GetInput_Pause();
 
-                //“ü—Í‚É‰‚¶‚½‘JˆÚ
+                //å…¥åŠ›ã«å¿œã˜ãŸé·ç§»
                 if (IM.is_Pause_Continue_Push)
                 {
-                    //ƒ|[ƒY‰æ–ÊUI‚ğ”ñ•\¦E–³Œø‰»
+                    //ãƒãƒ¼ã‚ºç”»é¢UIã‚’éè¡¨ç¤ºãƒ»ç„¡åŠ¹åŒ–
                     IM.InputUISetActive_Pause(false);
                     GM.pauseUI.SetActive(false);
 
-                    //ƒvƒŒƒC‰æ–ÊUI‚ğ—LŒø‰»
+                    //ãƒ—ãƒ¬ã‚¤ç”»é¢UIã‚’æœ‰åŠ¹åŒ–
                     IM.InputUISetActive_Play(true);
                     IM.isPauseGame = false;
 
-                    //ƒIƒuƒWƒFƒNƒg‚ğ“®‚©‚·
+                    //ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’å‹•ã‹ã™
                     Time.timeScale = playTimeScale;
 
-                    //ƒ|[ƒYó‘Ô‚ğI—¹
+                    //ãƒãƒ¼ã‚ºçŠ¶æ…‹ã‚’çµ‚äº†
                     currentPauseState = PauseState.Play;
                 }
                 else if (IM.is_Pause_Retire_Push)
                 {
-                    //ƒ|[ƒY‰æ–ÊUI‚ğ”ñ•\¦E–³Œø‰»
+                    //ãƒãƒ¼ã‚ºç”»é¢UIã‚’éè¡¨ç¤ºãƒ»ç„¡åŠ¹åŒ–
                     IM.InputUISetActive_Pause(false);
                     GM.pauseUI.SetActive(false);
 
-                    //ƒIƒuƒWƒFƒNƒg‚ğ“®‚©‚·
+                    //ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’å‹•ã‹ã™
                     Time.timeScale = 1;
 
-                    //ƒƒjƒ…[‰æ–Ê‚Ö‘JˆÚ
+                    //ãƒ¡ãƒ‹ãƒ¥ãƒ¼ç”»é¢ã¸é·ç§»
                     stateMachine.ChangeState(stateMachine.state_PauseToMenu);
                 }
                 break;
@@ -127,21 +127,21 @@ public class GameStateState_Tutorial : GameStateStateBase
 
     public override void Exit()
     {
-        //ƒvƒŒƒC‰æ–Ê“ü—ÍUI‚Ì–³Œø‰»
+        //ãƒ—ãƒ¬ã‚¤ç”»é¢å…¥åŠ›UIã®ç„¡åŠ¹åŒ–
         IM.InputUISetActive_Play(false);
         IM.InputUISetActive_Player(false);
 
-        //ƒ|[ƒYó‘Ô‚ğ‰ğœ
+        //ãƒãƒ¼ã‚ºçŠ¶æ…‹ã‚’è§£é™¤
         InitializePauseState();
 
-        //‘€ì•û–@”ñ•\¦
+        //æ“ä½œæ–¹æ³•éè¡¨ç¤º
         PopupUIManager.Instance.DeleteMessageText();
 
-        //ƒ{ƒ^ƒ“•\¦‚ğ–ß‚·
+        //ãƒœã‚¿ãƒ³è¡¨ç¤ºã‚’æˆ»ã™
         for (int i = 0; i < IM.actionAllocation.Length; i++)
             IM.playButtonSet[IM.playButtonPatternNum].playButtonSprite[i].color = Color.clear;
 
-        //ƒ`ƒ…[ƒgƒŠƒAƒ‹—pƒXƒe[ƒgƒ}ƒVƒ“‚ÌExit‚ğÀs
+        //ãƒãƒ¥ãƒ¼ãƒˆãƒªã‚¢ãƒ«ç”¨ã‚¹ãƒ†ãƒ¼ãƒˆãƒã‚·ãƒ³ã®Exitã‚’å®Ÿè¡Œ
         tutorialStateMachine.currentState.Exit();
     }
 
@@ -149,7 +149,7 @@ public class GameStateState_Tutorial : GameStateStateBase
 
     private static void InitializePauseState()
     {
-        //ƒ|[ƒYó‘Ô‚ğ‰ğœ
+        //ãƒãƒ¼ã‚ºçŠ¶æ…‹ã‚’è§£é™¤
         currentPauseState = PauseState.Play;
     }
 
@@ -157,21 +157,21 @@ public class GameStateState_Tutorial : GameStateStateBase
 
     public static void EnterPause()
     {
-        //ƒvƒŒƒC‰æ–ÊUI‚ğ–³Œø‰»
+        //ãƒ—ãƒ¬ã‚¤ç”»é¢UIã‚’ç„¡åŠ¹åŒ–
         InputManager.Instance.InputUISetActive_Play(false);
         InputManager.Instance.isPauseGame = true;
 
-        //ƒ|[ƒY‰æ–ÊUI‚ğ•\¦E—LŒø‰»
+        //ãƒãƒ¼ã‚ºç”»é¢UIã‚’è¡¨ç¤ºãƒ»æœ‰åŠ¹åŒ–
         GameManager.Instance.pauseUI.SetActive(true);
         InputManager.Instance.InputUISetActive_Pause(true);
 
-        //TimeScale‚ğ•Û‘¶
+        //TimeScaleã‚’ä¿å­˜
         playTimeScale = Time.timeScale;
 
-        //ƒIƒuƒWƒFƒNƒg‚ğ’â~
+        //ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’åœæ­¢
         Time.timeScale = 0;
 
-        //ƒ|[ƒYó‘Ô‚Ö
+        //ãƒãƒ¼ã‚ºçŠ¶æ…‹ã¸
         currentPauseState = PauseState.Pause;
     }
 }

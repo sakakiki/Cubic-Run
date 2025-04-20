@@ -4,28 +4,28 @@ public class LoginStateState_Register : LoginStateStateBase
 
     public async override void Enter()
     {
-        //“½–¼”FØ‚ÆV‹KƒAƒJƒEƒ“ƒgì¬
+        //åŒ¿åèªè¨¼ã¨æ–°è¦ã‚¢ã‚«ã‚¦ãƒ³ãƒˆä½œæˆ
         switch (await AM.SignInAnonymously())
         {
-            //³íI—¹‚µ‚Ä‚¢‚ê‚ÎƒQ[ƒ€ŠJnˆ—‚Ö
+            //æ­£å¸¸çµ‚äº†ã—ã¦ã„ã‚Œã°ã‚²ãƒ¼ãƒ é–‹å§‹å‡¦ç†ã¸
             case 0: stateMachine.ChangeState(stateMachine.state_Exit); break;
 
-            //ƒlƒbƒgƒ[ƒNƒGƒ‰[‚È‚çƒƒbƒZ[ƒW•\¦
+            //ãƒãƒƒãƒˆãƒ¯ãƒ¼ã‚¯ã‚¨ãƒ©ãƒ¼ãªã‚‰ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸è¡¨ç¤º
             case 1:
                 PopupUIManager.Instance.SetupPopupMessage(
-                    "ƒlƒbƒgƒ[ƒNƒGƒ‰[",
-                    "ƒlƒbƒgƒ[ƒNã‚ÌƒGƒ‰[‚ª”­¶‚µ‚Ü‚µ‚½B\n" +
-                    "’ÊMŠÂ‹«‚ğŠm”F‚ÌãÄs‚µ‚Ä‚­‚¾‚³‚¢B",
+                    "ãƒãƒƒãƒˆãƒ¯ãƒ¼ã‚¯ã‚¨ãƒ©ãƒ¼",
+                    "ãƒãƒƒãƒˆãƒ¯ãƒ¼ã‚¯ä¸Šã®ã‚¨ãƒ©ãƒ¼ãŒç™ºç”Ÿã—ã¾ã—ãŸã€‚\n" +
+                    "é€šä¿¡ç’°å¢ƒã‚’ç¢ºèªã®ä¸Šå†è©¦è¡Œã—ã¦ãã ã•ã„ã€‚",
                     Enter); 
                 break;
 
-            //—\Šú‚¹‚ÊƒGƒ‰[‚È‚ç‚»‚Ì|‚ğ•\¦
+            //äºˆæœŸã›ã¬ã‚¨ãƒ©ãƒ¼ãªã‚‰ãã®æ—¨ã‚’è¡¨ç¤º
             case 9:
             default:
                 PopupUIManager.Instance.SetupPopupMessage(
-                    "’ÊMƒGƒ‰[",
-                    "ƒGƒ‰[‚ª”­¶‚µ‚Ü‚µ‚½B\n" +
-                    "ŠÔ‚ğ‹ó‚¯‚ÄÄs‚µ‚Ä‚­‚¾‚³‚¢B",
+                    "é€šä¿¡ã‚¨ãƒ©ãƒ¼",
+                    "ã‚¨ãƒ©ãƒ¼ãŒç™ºç”Ÿã—ã¾ã—ãŸã€‚\n" +
+                    "æ™‚é–“ã‚’ç©ºã‘ã¦å†è©¦è¡Œã—ã¦ãã ã•ã„ã€‚",
                     Enter); 
                 break;
         }

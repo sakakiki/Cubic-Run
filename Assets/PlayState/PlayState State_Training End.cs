@@ -8,7 +8,7 @@ public class PlayStateState_TrainingEnd: PlayStateStateBase
 
     public override void Enter()
     {
-        //áŠQ•¨¶¬‚ğ–³Œø‰»
+        //éšœå®³ç‰©ç”Ÿæˆã‚’ç„¡åŠ¹åŒ–
         TM.isCreateObstacle = false;
     }
 
@@ -18,36 +18,36 @@ public class PlayStateState_TrainingEnd: PlayStateStateBase
     {
         base.Update(deltaTime);
 
-        //Šî€ƒXƒRƒA‚É“’B‚·‚ê‚Î
+        //åŸºæº–ã‚¹ã‚³ã‚¢ã«åˆ°é”ã™ã‚Œã°
         if (GM.score >= 5000)
         {
-            //ƒXƒRƒA‚ğ•â³
+            //ã‚¹ã‚³ã‚¢ã‚’è£œæ­£
             GM.score = 5000;
             GM.scoreText.SetText("5000");
 
-            //ƒXƒRƒAƒQ[ƒW•â³
+            //ã‚¹ã‚³ã‚¢ã‚²ãƒ¼ã‚¸è£œæ­£
             GM.scoreGageTf.localScale = Vector3.one * 2;
 
-            //ƒNƒŠƒA‰ñ”‚ğ‰ÁZ
+            //ã‚¯ãƒªã‚¢å›æ•°ã‚’åŠ ç®—
             GM.AddClearCount(GM.level);
 
-            //ƒgƒŒ[ƒjƒ“ƒOƒ‚[ƒh‚ÌÅ‚ƒŒƒxƒ‹‚ğƒNƒŠƒA‚µ‚½‚È‚ç
+            //ãƒˆãƒ¬ãƒ¼ãƒ‹ãƒ³ã‚°ãƒ¢ãƒ¼ãƒ‰ã®æœ€é«˜ãƒ¬ãƒ™ãƒ«ã‚’ã‚¯ãƒªã‚¢ã—ãŸãªã‚‰
             if (GM.trainingLevel == GM.highestTrainingLevel)
             {
-                //ƒgƒŒ[ƒjƒ“ƒOƒ‚[ƒh‚ÌƒŒƒxƒ‹‚ğ’Ç‰Á
+                //ãƒˆãƒ¬ãƒ¼ãƒ‹ãƒ³ã‚°ãƒ¢ãƒ¼ãƒ‰ã®ãƒ¬ãƒ™ãƒ«ã‚’è¿½åŠ 
                 GM.AddTrainingLevel();
 
-                //ƒŠƒgƒ‰ƒCƒ{ƒ^ƒ“‚ÌƒeƒLƒXƒg‚ğ•ÏX
-                GM.retryButtonText.SetText("Lv." +  GM.trainingLevel + "‚Ö");
+                //ãƒªãƒˆãƒ©ã‚¤ãƒœã‚¿ãƒ³ã®ãƒ†ã‚­ã‚¹ãƒˆã‚’å¤‰æ›´
+                GM.retryButtonText.SetText("Lv." +  GM.trainingLevel + "ã¸");
             }
-            //ƒNƒŠƒAÏ‚İ‚ÌƒŒƒxƒ‹‚È‚ç
+            //ã‚¯ãƒªã‚¢æ¸ˆã¿ã®ãƒ¬ãƒ™ãƒ«ãªã‚‰
             else
             {
-                //ƒŠƒgƒ‰ƒCƒ{ƒ^ƒ“‚ÌƒeƒLƒXƒg‚ğ•ÏX
-                GM.retryButtonText.SetText("ƒŠƒgƒ‰ƒC");
+                //ãƒªãƒˆãƒ©ã‚¤ãƒœã‚¿ãƒ³ã®ãƒ†ã‚­ã‚¹ãƒˆã‚’å¤‰æ›´
+                GM.retryButtonText.SetText("ãƒªãƒˆãƒ©ã‚¤");
             } 
 
-            //ƒXƒe[ƒg‘JˆÚ
+            //ã‚¹ãƒ†ãƒ¼ãƒˆé·ç§»
             gameStateMachine.ChangeState(gameStateMachine.state_PlayToResult);
         }
     }
