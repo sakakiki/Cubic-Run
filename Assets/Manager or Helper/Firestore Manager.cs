@@ -828,6 +828,8 @@ public class FirestoreManager : MonoBehaviour
             UnsavedHighScoreFlagManager.Save(false);
             GM.highScore = 0;
             GM.rankingScoreQueue.Clear();
+            nextOnlineStaminaCheckTime = DateTime.MinValue;
+            staminaCache = 0;
             #endregion
 
             //正常終了
