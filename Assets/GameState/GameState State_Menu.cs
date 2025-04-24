@@ -23,9 +23,6 @@ public class GameStateState_Menu : GameStateStateBase
             audioSource_BGM.Play();
         }
 
-        //広告を表示
-        AdmobManager.Instance.LoadAndRenderNativeAd(GM.adRtf_Menu);
-
         //スタミナの更新
         GM.UpdateStamina(await FirestoreManager.Instance.CheckResetAndGetStamina());
     }
@@ -66,8 +63,5 @@ public class GameStateState_Menu : GameStateStateBase
     {
         //メニュー画面のUIを無効化
         IM.InputUISetActive_Menu(false);
-
-        //広告を破棄
-        AdmobManager.Instance.DestroyNativeAd();
     }
 }

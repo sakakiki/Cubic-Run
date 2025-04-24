@@ -49,7 +49,7 @@ public class PlayerState_Play_Squat : PlayerStateBase_Play
             rb.velocity = Vector2.up * (isActive_SmallJump ? 20 : 30);
 
             //SE再生
-            AM.PlaySE(AM.SE_Player);
+            AM.PlaySE(AM.SE_Player_Jump);
         }
 
         //攻撃入力でAttackステートに遷移

@@ -20,6 +20,9 @@ public class FirestoreManager : MonoBehaviour
     private const int maxStamina = 3; // 自動回復によるスタミナ最大値（広告視聴で超過回復可能）
     private const int resetStaminaHour = 4; // スタミナ回復時刻
 
+    private DateTime nextOnlineStaminaCheckTime = DateTime.MinValue; // 次回オンラインでスタミナをチェックする時間
+    private int staminaCache = 0; // ローカル保存するスタミナ
+
 
 
 
@@ -570,6 +573,10 @@ public class FirestoreManager : MonoBehaviour
     /// </summary>
     public async Task<int> CheckResetAndGetStamina()
     {
+        // ローカルに保存されたスタミナリセット日時からスタミナ回復の必要があるかをチェック
+        DateTime now = DateTime.Now;
+        if (now < nextOnlineStaminaCheckTime) 
+            return staminaCache;
         
 
 
@@ -605,11 +612,10 @@ public class FirestoreManager : MonoBehaviour
 
             //前回のスタミナ情報更新日時
             Timestamp lastUpdatedTimestamp = snapshot.GetValue<Timestamp>("lastUpdated");
-            DateTime lastUpdated = lastUpdatedTimestamp.ToDateTime();
+            DateTime lastUpdated = lastUpdatedTimestamp.ToDateTime().ToLocalTime();
 
             //直近のスタミナ回復日時
-            DateTime now = DateTime.UtcNow;
-            DateTime lastReset = new DateTime(now.Year, now.Month, now.Day, resetStaminaHour, 0, 0, DateTimeKind.Utc);
+            DateTime lastReset = new DateTime(now.Year, now.Month, now.Day, resetStaminaHour, 0, 0, DateTimeKind.Local);
             if (now.Hour < resetStaminaHour)
             {
                 lastReset = lastReset.AddDays(-1);
@@ -627,9 +633,20 @@ public class FirestoreManager : MonoBehaviour
                     adWatchCount = 0 }, 
                     SetOptions.MergeAll);
 
+                // 次回のオンラインスタミナ情報取得日時の保存
+                nextOnlineStaminaCheckTime = lastReset.AddDays(1);
+
+                // ローカルに保存するスタミナ
+                staminaCache = newStamina;
+
                 return newStamina;
             }
 
+            // 次回のオンラインスタミナ情報取得日時の保存
+            nextOnlineStaminaCheckTime = lastReset.AddDays(1);
+
+            // ローカルに保存するスタミナ
+            staminaCache = currentStamina;
 
             return currentStamina;
         }
@@ -673,6 +690,8 @@ public class FirestoreManager : MonoBehaviour
                 returnValue = currentStamina - 1;
                 return true;
             });
+
+            staminaCache = (int)MathF.Max(0, returnValue); // ローカルに保存するスタミナ
 
             return returnValue;
         }
@@ -724,6 +743,8 @@ public class FirestoreManager : MonoBehaviour
 
                 return true;
             });
+
+            staminaCache = (int)MathF.Max(0, returnValue); // ローカルに保存するスタミナ
 
             return returnValue;
         }

@@ -27,7 +27,7 @@ public class GameStateState_CheckStamina : GameStateStateBase
                 PopupUIManager.Instance.SetupPopup(
                     "スタミナ不足",
                     "スタミナがありません。\n\n広告を見てスタミナを2回復しますか？\n本日の回復可能回数：" + (3 - adWatchCount),
-                    AdmobManager.Instance.LoadAndShowRewardedAd,
+                    AdmobManager.Instance.LoadAndShowRewardedAd_Stamina,
                     BackToMenu);
             }
 

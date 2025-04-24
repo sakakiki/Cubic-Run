@@ -15,6 +15,7 @@ public class InputManager : MonoBehaviour
     [SerializeField] private Button_Push button_Menu_Volume;
     [SerializeField] private Button_Push button_Menu_Button;
     [SerializeField] private Button_Push button_Menu_Credit;
+    [SerializeField] private Button_Push_BindEvent button_Menu_StopAd;
     [SerializeField] private Button_Push button_Skin_OK;
     [SerializeField] private Button_Push button_Skin_Cancel;
     public bool isSkinSelect {  get; private set; }
@@ -94,6 +95,7 @@ public class InputManager : MonoBehaviour
         button_Menu_Volume.enabled = isActive;
         button_Menu_Button.enabled = isActive;
         button_Menu_Credit.enabled = isActive;
+        button_Menu_StopAd.enabled = isActive;
     }
 
     public void SetPlayButtonLock(bool isLock)

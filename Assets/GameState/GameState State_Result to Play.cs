@@ -12,7 +12,6 @@ public class GameStateState_ResultToPlay : GameStateStateBase
     private Color targetCoverColor;
     private bool isMoveTerrein;
     public RectTransform playHingeRtf_R;
-    private RectTransform resultHingeRtf_R;
     private RectTransform resultHingeRtf_B;
     private bool isResetScore;
     private Transform scoreGageTf;
@@ -26,7 +25,6 @@ public class GameStateState_ResultToPlay : GameStateStateBase
         startCoverColor = GM.screenCoverColor_Menu;
         targetCoverColor = GM.screenCoverColor_Play;
         playHingeRtf_R = GM.playHingeRtf_R;
-        resultHingeRtf_R = GM.resultHingeRtf_R;
         resultHingeRtf_B = GM.resultHingeRtf_B;
         scoreGageTf = GM.scoreGageTf;
     }
@@ -147,7 +145,6 @@ public class GameStateState_ResultToPlay : GameStateStateBase
 
         //UIを回転
         playHingeRtf_R.localEulerAngles = Vector3.Lerp(Vector3.up * -180, Vector3.zero, elapsedTime - 2);
-        resultHingeRtf_R.localEulerAngles = Vector3.Lerp(Vector3.zero, Vector3.up * -180, elapsedTime - 2);
         resultHingeRtf_B.localEulerAngles = Vector3.Lerp(Vector3.zero, Vector3.right * 180, lerpValue);
 
         //指定時間経過でステート遷移

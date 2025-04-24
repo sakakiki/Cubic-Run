@@ -50,6 +50,8 @@ public class GameManager : MonoBehaviour
     public Vector2 centerPos_PlayerArea;
     public Queue<int> newSkinQueue = new Queue<int>();
     public Color staminaColor { private set; get; }
+    public int adScore = 0;
+    public int adCount = 0;
     [Space(30)]
 
     [Header("インスペクターから設定")]
@@ -68,8 +70,6 @@ public class GameManager : MonoBehaviour
     public RectTransform[] playUIs_L;
     public RectTransform playHingeRtf_R;
     public RectTransform[] playUIs_R;
-    public RectTransform resultHingeRtf_R;
-    public RectTransform[] resultUIs_R;
     public RectTransform resultHingeRtf_B;
     public RectTransform[] resultUIs_B;
     public TextMeshProUGUI scoreText;
@@ -156,8 +156,6 @@ public class GameManager : MonoBehaviour
     public SpriteRenderer[] staminaSprite;
     [SerializeField] private TextMeshProUGUI overStamina;
     public RectTransform[] staminaRtf;
-    public RectTransform adRtf_Menu;
-    public RectTransform adRtf_Result;
     public GameObject loadingCube;
     public Transform loadingCubeTf;
 
@@ -218,8 +216,6 @@ public class GameManager : MonoBehaviour
             playUIs_L[i].SetParent(playHingeRtf_L);
         for (int i = 0; i < playUIs_R.Length; i++)
             playUIs_R[i].SetParent(playHingeRtf_R);
-        for (int i = 0; i < resultUIs_R.Length; i++)
-            resultUIs_R[i].SetParent(resultHingeRtf_R);
         for (int i = 0; i < resultUIs_B.Length; i++)
             resultUIs_B[i].SetParent(resultHingeRtf_B);
 
@@ -637,6 +633,10 @@ public class GameManager : MonoBehaviour
     //プレイ結果のセーブ
     public async Task SaveResult()
     {
+        // 広告再生に関する数値を保存
+        adScore += score;
+        adCount++;
+
         #region 走行距離の加算
         int addDistance = 0;
         //ランキングモードの場合はLV.1からの距離も加算

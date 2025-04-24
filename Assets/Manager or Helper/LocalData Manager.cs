@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.IO;
 using System.Collections.Generic;
+using System;
 
 
 
@@ -96,16 +97,35 @@ public static class VolumeBGMManager
 
 public static class VolumeSEManager
 {
-    private const string key = "volumeSE";
+    private const string key = "volumeBGM";
 
-    public static void Save(float volumeSE)
+    public static void Save(float volumeBGM)
     {
-        PlayerPrefs.SetFloat(key, volumeSE);
+        PlayerPrefs.SetFloat(key, volumeBGM);
         PlayerPrefs.Save();
     }
 
     public static float Load()
     {
         return PlayerPrefs.GetFloat(key, 1);
+    }
+}
+
+
+
+public static class AdEnableTimeManager
+{
+    private const string key = "enableTime";
+
+    public static void Save(DateTime time)
+    {
+        PlayerPrefs.SetString(key, time.ToString("o")); // ISO 8601形式で保存
+        PlayerPrefs.Save();
+    }
+
+    public static DateTime Load()
+    {
+        string checkTimeString = PlayerPrefs.GetString(key, DateTime.MinValue.ToString("o"));
+        return DateTime.Parse(checkTimeString, null, System.Globalization.DateTimeStyles.RoundtripKind);
     }
 }

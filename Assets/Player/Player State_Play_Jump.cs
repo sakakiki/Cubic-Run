@@ -34,7 +34,7 @@ public class PlayerState_Play_Jump : PlayerStateBase_Play
             if (rb.velocity.y > -25) rb.velocity = Vector2.down * 25;
 
             //SEçƒê∂
-            AM.PlaySE(AM.SE_Player);
+            //AM.PlaySE(AM.SE_Player_Jump);
 
             stateMachine.ChangeState(stateMachine.state_Play_SmallJump);
         }

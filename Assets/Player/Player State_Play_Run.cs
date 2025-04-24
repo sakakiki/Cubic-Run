@@ -28,7 +28,7 @@ public class PlayerState_Play_Run : PlayerStateBase_Play
             rb.velocity = Vector2.up * 30;
 
             //SE再生
-            AM.PlaySE(AM.SE_Player);
+            AM.PlaySE(AM.SE_Player_Jump);
         }
 
         //しゃがみ入力でSquatステートに遷移
@@ -37,7 +37,7 @@ public class PlayerState_Play_Run : PlayerStateBase_Play
             stateMachine.ChangeState(stateMachine.state_Play_Squat);
 
             //SE再生
-            AM.PlaySE(AM.SE_Player);
+            //AM.PlaySE(AM.SE_Player_Jump);
         }
 
         //攻撃入力でAttackステートに遷移

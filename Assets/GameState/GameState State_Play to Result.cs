@@ -13,7 +13,6 @@ public class GameStateState_PlayToResult : GameStateStateBase
     private Color startCoverColor;
     private Color targetCoverColor;
     public RectTransform playHingeRtf_R;
-    private RectTransform resultHingeRtf_R;
     private RectTransform resultHingeRtf_B;
     private AnimationCurve curveScorePosY;
     private RectTransform playerRankScaleRtf;
@@ -43,7 +42,6 @@ public class GameStateState_PlayToResult : GameStateStateBase
         startCoverColor = GM.screenCoverColor_Play;
         targetCoverColor = GM.screenCoverColor_Menu;
         playHingeRtf_R = GM.playHingeRtf_R;
-        resultHingeRtf_R = GM.resultHingeRtf_R;
         resultHingeRtf_B = GM.resultHingeRtf_B;
         curveScorePosY = GM.scorePosY_PlaytoResult;
         playerRankScaleRtf = GM.playerRankScaleRtf;
@@ -219,9 +217,10 @@ public class GameStateState_PlayToResult : GameStateStateBase
             audioSource_BGM.Play();
         }
 
-        //画面がタップされれば演出を飛ばす
+        //画面がタップされセーブ処理が完了していれば演出を飛ばす
         IM.GetInput_Screen();
-        if (IM.is_Screen_Tap) elapsedTime = 5;
+        if (IM.is_Screen_Tap && !isOnEnter)
+            elapsedTime = 5;
 
         //事前計算
         float lerpValue = (elapsedTime - 1) / 2;
@@ -242,7 +241,6 @@ public class GameStateState_PlayToResult : GameStateStateBase
 
         //UIを回転
         playHingeRtf_R.localEulerAngles = Vector3.Lerp(Vector3.zero, Vector3.up * -180, elapsedTime - 1);
-        resultHingeRtf_R.localEulerAngles = Vector3.Lerp(Vector3.up * -120, Vector3.zero, elapsedTime - 2);
         resultHingeRtf_B.localEulerAngles = Vector3.Lerp(Vector3.right * 120, Vector3.zero, elapsedTime - 2);
 
         if (elapsedTime < 3) return;

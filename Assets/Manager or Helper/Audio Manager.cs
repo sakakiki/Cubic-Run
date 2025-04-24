@@ -1,4 +1,3 @@
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -26,7 +25,8 @@ public class AudioManager : MonoBehaviour
     public AudioClip BGM_Result;
 
     public AudioClip SE_Button;
-    public AudioClip SE_Player;
+    public AudioClip SE_Player_Jump;
+    public AudioClip SE_Player_Hold;
     public AudioClip SE_GameOver;
     public AudioClip SE_Enemy;
     public AudioClip SE_Close;

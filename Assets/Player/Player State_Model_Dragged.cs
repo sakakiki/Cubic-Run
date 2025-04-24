@@ -52,6 +52,9 @@ public class PlayerState_Model_Dragged : PlayerStateBase_Model
 
         //プレイヤーの座標と中心の位置のズレを記憶
         centerOffset = playerCenterTf.position - tf.position;
+
+        //SE再生
+        AudioManager.Instance.PlaySE(AudioManager.Instance.SE_Player_Hold);
     }
 
     public override void Update()
