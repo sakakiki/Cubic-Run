@@ -47,7 +47,7 @@ public class GameStateState_UnlockSkin : GameStateStateBase
         unlockSkinMessage.color = Color.clear;
 
         //SEの再生
-        AudioManager.Instance.PlaySE(AudioManager.Instance.SE_SkinUnlock);
+        AudioManager.Instance.PlaySE(AudioManager.SE.SkinUnlock);
     }
 
 

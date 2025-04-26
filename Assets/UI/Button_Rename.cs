@@ -7,7 +7,7 @@ public class Button_Rename : MonoBehaviour, IPointerDownHandler
     public void OnPointerDown(PointerEventData eventData)
     {
         //SE再生
-        AudioManager.Instance.PlaySE(AudioManager.Instance.SE_Panel);
+        AudioManager.Instance.PlaySE(AudioManager.SE.Panel);
 
         PopupUIManager.Instance.SetupPopup(
             "プレイヤー名変更",

@@ -14,7 +14,7 @@ public class PlayerState_Play_Attack : PlayerStateBase_Play
         playerCon.SkinAttack.SetActive(true);
 
         //SE再生
-        //AM.PlaySE(AM.SE_Player_Jump);
+        AM.PlaySE(AudioManager.SE.Player_Attack);
     }
 
     public override void Update()
@@ -38,7 +38,7 @@ public class PlayerState_Play_Attack : PlayerStateBase_Play
                 stateMachine.ChangeState(stateMachine.state_Play_Squat);
 
                 //SE再生
-                //AM.PlaySE(AM.SE_Player_Jump);
+                AM.PlaySE(AudioManager.SE.Player_Squat);
             }
 
             //入力なしでRunステート
@@ -51,7 +51,7 @@ public class PlayerState_Play_Attack : PlayerStateBase_Play
             rb.velocity = Vector2.up * 30;
 
             //SE再生
-            AM.PlaySE(AM.SE_Player_Jump);
+            AM.PlaySE(AudioManager.SE.Player_Jump);
         }
 
         //しゃがみ入力でSquatステートに遷移
@@ -60,7 +60,7 @@ public class PlayerState_Play_Attack : PlayerStateBase_Play
             stateMachine.ChangeState(stateMachine.state_Play_Squat);
 
             //SE再生
-            //AM.PlaySE(AM.SE_Player_Jump);
+            AM.PlaySE(AudioManager.SE.Player_Squat);
         }
 
         //空中に出たらJumpステートへ遷移

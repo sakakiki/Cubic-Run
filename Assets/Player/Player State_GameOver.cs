@@ -47,7 +47,7 @@ public class PlayerState_GameOver : PlayerStateBase
         }
 
         //SEçƒê∂
-        AudioManager.Instance.PlaySE(AudioManager.Instance.SE_GameOver);
+        AudioManager.Instance.PlaySE(AudioManager.SE.GameOver);
     }
 
     public override void Update()

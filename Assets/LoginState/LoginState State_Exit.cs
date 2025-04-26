@@ -23,8 +23,8 @@ public class LoginStateState_Exit : LoginStateStateBase
         await GM.GameInitialize();
 
         //BGMを流し始める
-        AudioManager.Instance.audioSource_BGM.clip = AudioManager.Instance.BGM_Menu;
-        AudioManager.Instance.audioSource_BGM.Play();
+        AudioManager.Instance.SetBGMPlayVolume(1);
+        AudioManager.Instance.PlayBGM(AudioManager.BGM.Menu);
 
         //ローディングキューブを非表示
         GM.loadingCube.SetActive(false);

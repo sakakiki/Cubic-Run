@@ -56,7 +56,7 @@ public class GameStateState_CheckStamina : GameStateStateBase
             GM.UpdateOverStamina(remainingStamina);
 
         //SE再生
-        AM.PlaySE(AM.SE_UseStama);
+        AM.PlaySE(AudioManager.SE.UseStama);
 
         //問題なければステート遷移
         stateMachine.ChangeState(stateMachine.state_MenuToPlay);

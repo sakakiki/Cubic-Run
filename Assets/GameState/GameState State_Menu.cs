@@ -15,12 +15,11 @@ public class GameStateState_Menu : GameStateStateBase
         TM.isCreateObstacle = true;
 
         //BGMがメニュー画面のものでなければ変更して再生
-        if (audioSource_BGM.clip != AM.BGM_Menu)
+        if (AM.playngBGM != AudioManager.BGM.Menu)
         {
-            audioSource_BGM.volume = AM.volume_BGM;
-            audioSource_BGM.clip = AM.BGM_Menu;
+            AM.SetBGMPlayVolume(1);
+            AM.PlayBGM(AudioManager.BGM.Menu);
             AM.SetBGMSpeed(1);
-            audioSource_BGM.Play();
         }
 
         //スタミナの更新

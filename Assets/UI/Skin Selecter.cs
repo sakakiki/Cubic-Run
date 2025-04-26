@@ -215,7 +215,7 @@ public class SkinSelecter : MonoBehaviour, IPointerDownHandler, IDragHandler, IP
             else if (frontSkinID > 15) frontSkinID -= 16;
 
             //音を鳴らす処理
-            AM.PlaySE(AM.SE_SkinSelecter);
+            AM.PlaySE(AudioManager.SE.SkinSelecter);
 
             /* ここでパネルの更新処理をすればスキンを増やせる（他の処理の変更も必要） */
         }

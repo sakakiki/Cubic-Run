@@ -198,7 +198,7 @@ public class GameStateState_PlayToResult : GameStateStateBase
         if (elapsedTime < 1)
         {
             //BGMのボリューム変更
-            audioSource_BGM.volume = (1 - elapsedTime) * AM.volume_BGM;
+            AM.SetBGMPlayVolume(1 - elapsedTime);
 
             //残りの処理を飛ばす
             return;
@@ -211,10 +211,9 @@ public class GameStateState_PlayToResult : GameStateStateBase
             isAudioPlay = true;
 
             //BGM再生
-            audioSource_BGM.volume = AM.volume_BGM;
-            audioSource_BGM.clip = AM.BGM_Result;
+            AM.PlayBGM(AudioManager.BGM.Result);
+            AM.SetBGMPlayVolume(1);
             AM.SetBGMSpeed(1);
-            audioSource_BGM.Play();
         }
 
         //画面がタップされセーブ処理が完了していれば演出を飛ばす
@@ -263,7 +262,7 @@ public class GameStateState_PlayToResult : GameStateStateBase
 
             //SEの再生
             if (!isTutorial || addExp == 100)
-                AM.PlaySE(AM.SE_GetExp);
+                AM.PlaySE(AudioManager.SE.GetExp);
 
             if (!GM.isTraining && !isTutorial)
             {
@@ -295,7 +294,7 @@ public class GameStateState_PlayToResult : GameStateStateBase
             if (levelUpCount_local > levelUpCount_state)
             {
                 //SEの再生
-                AM.PlaySE(AM.SE_LevelUp);
+                AM.PlaySE(AudioManager.SE.LevelUp);
                 levelUpCount_state++;
             }
         }

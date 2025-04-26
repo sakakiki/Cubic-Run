@@ -44,7 +44,7 @@ public class Enemy : MonoBehaviour
                 rb.velocity = parentRb.velocity + Vector2.up * 10;
 
                 //SE再生
-                AudioManager.Instance.PlaySE(AudioManager.Instance.SE_Enemy);
+                AudioManager.Instance.PlaySE(AudioManager.SE.Enemy);
             }
             //それ以外ならプレイヤーをGameOverに
             else playerStateMachine.ChangeState(playerStateMachine.state_GameOver);

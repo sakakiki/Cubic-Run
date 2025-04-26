@@ -32,7 +32,7 @@ public abstract class GameStateState_OptionBase : GameStateStateBase
         if (IM.is_Option_Close_Tap)
         {
             //SEの再生
-            AudioManager.Instance.PlaySE(AudioManager.Instance.SE_Close);
+            AudioManager.Instance.PlaySE(AudioManager.SE.Close);
 
             stateMachine.ChangeState(stateMachine.state_Menu);
         }

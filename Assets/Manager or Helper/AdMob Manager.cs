@@ -78,6 +78,9 @@ public class AdmobManager : MonoBehaviour
                 {
                     Debug.LogError("Rewarded ad failed to load an ad " +
                                    "with error : " + error);
+                                   
+                    // 広告が準備できていないことの通知
+                    PopupUIManager.Instance.SetupMessageBand("広告の取得に失敗しました。", 2);
 
                     //メニュー画面に戻して終了
                     GameManager.Instance.gameStateMachine.ChangeState(GameManager.Instance.gameStateMachine.state_Menu);
@@ -94,8 +97,7 @@ public class AdmobManager : MonoBehaviour
                 {
                     // 広告が閉じられた後に音を復旧
                     AudioSettings.Reset(AudioSettings.GetConfiguration());
-                    AudioManager.Instance.audioSource_BGM.Play();
-                    AudioManager.Instance.audioSource_SE.Play();
+                    AudioManager.Instance.PlayBGM(AudioManager.BGM.Menu);
 
                     if (isGetRewarded)
                     {
@@ -124,8 +126,8 @@ public class AdmobManager : MonoBehaviour
         if (_rewardedAd != null && _rewardedAd.CanShowAd())
         {
             // オーディオの停止
-            AudioManager.Instance.audioSource_BGM.Stop();
-            AudioManager.Instance.audioSource_SE.Stop();
+            AudioManager.Instance.StopBGM();
+            AudioManager.Instance.StopSE();
 
             _rewardedAd.Show(async (Reward reward) =>
             {
@@ -194,6 +196,10 @@ public class AdmobManager : MonoBehaviour
                 {
                     Debug.LogError("Rewarded ad failed to load an ad " +
                                    "with error : " + error);
+
+                    // 広告が準備できていないことの通知
+                    PopupUIManager.Instance.SetupMessageBand("広告の取得に失敗しました。", 2);
+
                     return;
                 }
 
@@ -207,8 +213,7 @@ public class AdmobManager : MonoBehaviour
                 {
                     // 広告が閉じられた後に音を復旧
                     AudioSettings.Reset(AudioSettings.GetConfiguration());
-                    AudioManager.Instance.audioSource_BGM.Play();
-                    AudioManager.Instance.audioSource_SE.Play();
+                    AudioManager.Instance.PlayBGM(AudioManager.BGM.Menu);
 
                     if (isGetRewarded)
                     {
@@ -237,8 +242,8 @@ public class AdmobManager : MonoBehaviour
         if (_rewardedAd != null && _rewardedAd.CanShowAd())
         {
             // オーディオの停止
-            AudioManager.Instance.audioSource_BGM.Stop();
-            AudioManager.Instance.audioSource_SE.Stop();
+            AudioManager.Instance.StopBGM();
+            AudioManager.Instance.StopSE();
 
             _rewardedAd.Show((Reward reward) =>
             {
@@ -319,8 +324,7 @@ public class AdmobManager : MonoBehaviour
                 {
                     // 広告が閉じられた後に音を復旧
                     AudioSettings.Reset(AudioSettings.GetConfiguration());
-                    AudioManager.Instance.audioSource_BGM.Play();
-                    AudioManager.Instance.audioSource_SE.Play();
+                    AudioManager.Instance.PlayBGM(AudioManager.BGM.Result);
 
                     // GameManagerの広告関連の数値をリセット
                     GameManager.Instance.adScore = 0;
@@ -344,8 +348,8 @@ public class AdmobManager : MonoBehaviour
         if (_interstitialAd != null && _interstitialAd.CanShowAd())
         {
             // オーディオの停止
-            AudioManager.Instance.audioSource_BGM.Stop();
-            AudioManager.Instance.audioSource_SE.Stop();
+            AudioManager.Instance.StopBGM();
+            AudioManager.Instance.StopSE();
 
             // 広告の再生
             _interstitialAd.Show();

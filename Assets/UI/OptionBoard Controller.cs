@@ -29,9 +29,9 @@ public class OptionBoardController : MonoBehaviour, IPointerDownHandler
 
         //SEÇÃçƒê∂
         if (isOpen)
-            AudioManager.Instance.PlaySE(AudioManager.Instance.SE_Panel);
+            AudioManager.Instance.PlaySE(AudioManager.SE.Panel);
         if (!isOpen)
-            AudioManager.Instance.PlaySE(AudioManager.Instance.SE_Close);
+            AudioManager.Instance.PlaySE(AudioManager.SE.Close);
     }
 
 

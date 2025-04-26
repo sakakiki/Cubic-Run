@@ -58,7 +58,7 @@ public class GameStateState_MenuToTutorial : GameStateStateBase
             startCoverColor - Color.black * Mathf.Lerp(targetCoverColor.a, startCoverColor.a, lerpValue);
 
         //BGMのボリューム変更
-        audioSource_BGM.volume = (2 - elapsedTime) * AM.volume_BGM;
+        AM.SetBGMPlayVolume(2 - elapsedTime);
 
         //指定時間経過でステート遷移
         if (elapsedTime > 2)

@@ -47,12 +47,12 @@ public class GameStateState_Tutorial : GameStateStateBase
         TM.SetSpeed(8);
 
         //プレイ用BGMが再生されていなければの再生
-        if (audioSource_BGM.clip != AM.BGM_Play_1)
+        if (AM.playngBGM != AudioManager.BGM.Play_1)
         {
-            audioSource_BGM.volume = AM.volume_BGM;
-            audioSource_BGM.clip = AM.BGM_Play_1;
-            audioSource_BGM.Play();
-            AM.SetBGMSpeed(0.9f);
+            //BGMの再生
+            AudioManager.Instance.SetBGMPlayVolume(1);
+            AudioManager.Instance.PlayBGM(AudioManager.BGM.Play_1);
+            AudioManager.Instance.SetBGMSpeed(0.9f);
         }
     }
 
@@ -74,7 +74,7 @@ public class GameStateState_Tutorial : GameStateStateBase
                 if (IM.is_Play_Pause_Tap)
                 {
                     //SEの再生
-                    AudioManager.Instance.PlaySE(AudioManager.Instance.SE_Panel);
+                    AudioManager.Instance.PlaySE(AudioManager.SE.Panel);
 
                     //ポーズ状態へ
                     EnterPause();

@@ -1,5 +1,3 @@
-using UnityEngine;
-
 public abstract class GameStateStateBase
 {
     protected GameStateStateMachine stateMachine;
@@ -9,7 +7,6 @@ public abstract class GameStateStateBase
     protected AudioManager AM;
     protected PlayerController playerCon;
     protected PlayerStateMachine playerStateMachine;
-    protected AudioSource audioSource_BGM;
 
     public GameStateStateBase(GameStateStateMachine stateMachine)
     {
@@ -20,7 +17,6 @@ public abstract class GameStateStateBase
         AM = AudioManager.Instance;
         playerCon = GM.playerCon;
         playerStateMachine = playerCon.stateMachine;
-        audioSource_BGM = AudioManager.Instance.audioSource_BGM;
     }
 
     public abstract void Enter();

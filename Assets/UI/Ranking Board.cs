@@ -41,7 +41,7 @@ public class RankingBoard: MonoBehaviour, IPointerDownHandler
         if (gameStateMachine.currentState != gameStateMachine.state_Menu) return;
 
         //SEの再生
-        AudioManager.Instance.PlaySE(AudioManager.Instance.SE_Close);
+        AudioManager.Instance.PlaySE(AudioManager.SE.Close);
 
         //このスクリプトを無効化
         this.enabled = false;

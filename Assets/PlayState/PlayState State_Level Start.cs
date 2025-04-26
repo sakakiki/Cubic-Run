@@ -46,46 +46,41 @@ public class PlayStateState_LevelStart : PlayStateStateBase
         //BGMの切り替え
         if (GM.level <= 5)
         {
-            if (AudioManager.Instance.audioSource_BGM.clip != AudioManager.Instance.BGM_Play_1)
+            if (AudioManager.Instance.playngBGM != AudioManager.BGM.Play_1)
             {
-                AudioManager.Instance.audioSource_BGM.clip = AudioManager.Instance.BGM_Play_1;
-                AudioManager.Instance.audioSource_BGM.Play();
+                AudioManager.Instance.PlayBGM(AudioManager.BGM.Play_1);
             }
             AudioManager.Instance.SetBGMSpeed(Mathf.Lerp(0.9f, 1.1f, (GM.level - 1) / 4f));
         }
         else if (6 <= GM.level && GM.level <= 10)
         {
-            if (AudioManager.Instance.audioSource_BGM.clip != AudioManager.Instance.BGM_Play_2)
+            if (AudioManager.Instance.playngBGM != AudioManager.BGM.Play_2)
             {
-                AudioManager.Instance.audioSource_BGM.clip = AudioManager.Instance.BGM_Play_2;
-                AudioManager.Instance.audioSource_BGM.Play();
+                AudioManager.Instance.PlayBGM(AudioManager.BGM.Play_2);
             }
             AudioManager.Instance.SetBGMSpeed(Mathf.Lerp(1.05f, 1.25f, (GM.level - 6) / 4f));
         }
         else if (11 <= GM.level && GM.level <= 15)
         {
-            if (AudioManager.Instance.audioSource_BGM.clip != AudioManager.Instance.BGM_Play_3)
+            if (AudioManager.Instance.playngBGM != AudioManager.BGM.Play_3)
             {
-                AudioManager.Instance.audioSource_BGM.clip = AudioManager.Instance.BGM_Play_3;
-                AudioManager.Instance.audioSource_BGM.Play();
+                AudioManager.Instance.PlayBGM(AudioManager.BGM.Play_3);
             }
             AudioManager.Instance.SetBGMSpeed(Mathf.Lerp(1.1f, 1.25f, (GM.level - 11) / 4f));
         }
         else if (16 <= GM.level && GM.level <= 20)
         {
-            if (AudioManager.Instance.audioSource_BGM.clip != AudioManager.Instance.BGM_Play_4)
+            if (AudioManager.Instance.playngBGM != AudioManager.BGM.Play_4)
             {
-                AudioManager.Instance.audioSource_BGM.clip = AudioManager.Instance.BGM_Play_4;
-                AudioManager.Instance.audioSource_BGM.Play();
+                AudioManager.Instance.PlayBGM(AudioManager.BGM.Play_4);
             }
             AudioManager.Instance.SetBGMSpeed(Mathf.Lerp(1.1f, 1.2f, (GM.level - 16) / 4f));
         }
         else if (21 <= GM.level)
         {
-            if (AudioManager.Instance.audioSource_BGM.clip != AudioManager.Instance.BGM_Play_5)
+            if (AudioManager.Instance.playngBGM != AudioManager.BGM.Play_5)
             {
-                AudioManager.Instance.audioSource_BGM.clip = AudioManager.Instance.BGM_Play_5;
-                AudioManager.Instance.audioSource_BGM.Play();
+                AudioManager.Instance.PlayBGM(AudioManager.BGM.Play_5);
                 AudioManager.Instance.SetBGMSpeed(1);
             }
         }

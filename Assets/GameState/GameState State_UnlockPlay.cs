@@ -31,7 +31,7 @@ public class GameStateState_UnlockPlay : GameStateStateBase
         unlockPlayMessage.color = Color.clear;
 
         //SEの再生
-        AudioManager.Instance.PlaySE(AudioManager.Instance.SE_SkinUnlock);
+        AudioManager.Instance.PlaySE(AudioManager.SE.SkinUnlock);
 
         //プレイボタンをアンロック
         InputManager.Instance.SetPlayButtonLock(false);

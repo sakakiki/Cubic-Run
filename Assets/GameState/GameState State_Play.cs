@@ -46,7 +46,7 @@ public class GameStateState_Play : GameStateStateBase
         TM.SetSpeed(5 + Mathf.Pow(GM.level, 0.7f) * 3);
 
         //プレイ用BGMの再生
-        audioSource_BGM.volume = AM.volume_BGM;
+        AM.SetBGMPlayVolume(1);
     }
 
 
@@ -67,7 +67,7 @@ public class GameStateState_Play : GameStateStateBase
                 if (IM.is_Play_Pause_Tap)
                 {
                     //SEの再生
-                    AudioManager.Instance.PlaySE(AudioManager.Instance.SE_Panel);
+                    AudioManager.Instance.PlaySE(AudioManager.SE.Panel);
 
                     //ポーズ状態へ
                     EnterPause();

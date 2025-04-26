@@ -83,7 +83,7 @@ public class GameStateState_ResultToPlay : GameStateStateBase
         }
 
         //BGMのボリューム変更
-        audioSource_BGM.volume = (2.5f - elapsedTime) * AM.volume_BGM;
+        AM.SetBGMPlayVolume(2.5f - elapsedTime);
 
         //地形を管理
         //Player側の判定完了までは実行しない
