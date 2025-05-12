@@ -28,7 +28,7 @@ public class GameStateState_PauseToMenu : GameStateStateBase
 
 
 
-    public override void Enter()
+    public async override void Enter()
     {
         //経過時間リセット
         elapsedTime = 0;
@@ -53,9 +53,11 @@ public class GameStateState_PauseToMenu : GameStateStateBase
         TM.moveSpeed = 0;
         TM.SetSpeed(0);
 
-        //ランキングを更新
-        GM.highScoreRankingBoard.UpdateRanking();
-        GM.playerScoreRankingBoard.UpdateRanking();
+        //必要ならばランキングを更新
+        await RankingManager.CheckUpdateNecessity(RankingManager.RankingType.HighScore);
+        GM.highScoreRankingBoard.UpdateRankingDisplay();
+        await RankingManager.CheckUpdateNecessity(RankingManager.RankingType.PlayerScore);
+        GM.playerScoreRankingBoard.UpdateRankingDisplay();
     }
 
 

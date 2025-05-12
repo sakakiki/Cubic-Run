@@ -30,10 +30,31 @@ public class Button_Rename : MonoBehaviour, IPointerDownHandler
             case "正常終了":
                 GameManager.Instance.UpdatePlayerInfo();
                 PopupUIManager.Instance.SetupMessageBand("プレイヤー名の変更が完了しました。", 2);
-                await RankingManager.UpdateRanking(RankingManager.RankingType.HighScore);
-                await RankingManager.UpdateRanking(RankingManager.RankingType.PlayerScore);
-                GameManager.Instance.highScoreRankingBoard.UpdateRanking();
-                GameManager.Instance.playerScoreRankingBoard.UpdateRanking();
+
+                //ランクインしていればランキングを更新
+                if (RankingManager.userRankData_highScore.userRank <= 10)
+                {
+                    int index_highScore = RankingManager.userRankData_highScore.userRank - 1;
+                    RankingManager.rankingList_highScore[index_highScore]
+                         = (PopupUIManager.Instance.inputText1,
+                            RankingManager.rankingList_highScore[index_highScore].score,
+                            RankingManager.rankingList_highScore[index_highScore].experience,
+                            RankingManager.rankingList_highScore[index_highScore].skin
+                            );
+                    GameManager.Instance.highScoreRankingBoard.UpdateRankingDisplay();
+                }
+                if (RankingManager.userRankData_playerScore.userRank <= 10)
+                {
+                    int index_playerScore = RankingManager.userRankData_playerScore.userRank - 1;
+                    RankingManager.rankingList_playerScore[index_playerScore]
+                         = (PopupUIManager.Instance.inputText1,
+                            RankingManager.rankingList_playerScore[index_playerScore].score,
+                            RankingManager.rankingList_playerScore[index_playerScore].experience,
+                            RankingManager.rankingList_playerScore[index_playerScore].skin
+                            );
+                    GameManager.Instance.playerScoreRankingBoard.UpdateRankingDisplay();
+                }
+
                 break;
 
             case "異常終了":

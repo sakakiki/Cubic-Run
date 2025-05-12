@@ -112,7 +112,7 @@ public class TerrainManager : MonoBehaviour
         }
 
         //不要地形削除処理
-        if (activeTerrainTfQueue.Peek().position.x < -5)
+        if (activeTerrainTfQueue.Peek().position.x < -10)
             pool[activeTerrainNumQueue.Dequeue()].Release(activeTerrainTfQueue.Dequeue().gameObject);
     }
 

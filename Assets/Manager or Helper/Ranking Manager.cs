@@ -6,7 +6,7 @@ public class RankingManager : MonoBehaviour
 {
     public static int RankingCount = 10;   //ランキングの表示数
 
-    private static float rankingUpdateSpan = 60;   //ハイスコアランキング更新の最短間隔
+    private static float rankingUpdateSpan = 600;   //ハイスコアランキング更新の最短間隔
     private static float rankingUpdateTime_highScore = 0;
     private static float rankingUpdateTime_playerScore = 0;
 

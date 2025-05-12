@@ -76,13 +76,10 @@ public class AuthManager : MonoBehaviour
         {
             // 最新のユーザーデータを取得
             await UpdateUserData();
-
-            Debug.Log("ログイン済み　　アドレス登録： " + !string.IsNullOrEmpty(user.Email) + "　認証：" + user.IsEmailVerified);
             loginState = LoginState.Login;
         }
         else
         {
-            Debug.Log("ログインしていません");
             loginState = LoginState.NoAccount;
         }
     }
@@ -97,7 +94,6 @@ public class AuthManager : MonoBehaviour
         try
         {
             var result = await auth.SignInAnonymouslyAsync();
-            Debug.Log("匿名ログイン成功");
 
             //外部からの確認用
             loginState = LoginState.Login;
@@ -146,7 +142,6 @@ public class AuthManager : MonoBehaviour
 
             // 匿名アカウントとメールアカウントをリンク
             await user.LinkWithCredentialAsync(credential);
-            Debug.Log("匿名アカウントをメール認証に切り替え成功: " + email);
 
             // 認証メール送信
             await user.SendEmailVerificationAsync();
@@ -200,7 +195,6 @@ public class AuthManager : MonoBehaviour
             {
                 await FirestoreManager.Instance.DeleteDocument(user.UserId);
                 await user.DeleteAsync();
-                Debug.Log("匿名アカウントを削除しました。");
                 await UpdateUserData();
             }
 

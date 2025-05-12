@@ -34,11 +34,6 @@ public class FirestoreManager : MonoBehaviour
         //GameManagerの格納
         GM = GameManager.Instance;
 
-#if UNITY_EDITOR
-        Debug.Log("Skipping Firebase init in editor to avoid native plugin errors.");
-        return;
-#endif
-
         auth = FirebaseAuth.DefaultInstance;
         db = FirebaseFirestore.DefaultInstance;
 
@@ -56,8 +51,6 @@ public class FirestoreManager : MonoBehaviour
     {
         if (auth.CurrentUser == null)
         {
-            Debug.LogError("Firebase認証されていません");
-
             return "異常終了";
         }
 
@@ -126,7 +119,6 @@ public class FirestoreManager : MonoBehaviour
     {
         if (auth.CurrentUser == null)
         {
-            Debug.LogError("Firebase認証されていません");
             return;
         }
 
@@ -154,7 +146,6 @@ public class FirestoreManager : MonoBehaviour
     {
         if (auth.CurrentUser == null)
         {
-            Debug.LogError("Firebase認証されていません");
             return;
         }
 
@@ -179,8 +170,6 @@ public class FirestoreManager : MonoBehaviour
         }
         catch (Exception e)
         {
-            Debug.LogError("ハイスコアの保存に失敗: " + e.Message);
-
             //クラウドに未反映のフラグを立てる
             GM.isUnsavedHighScore = true;
             UnsavedHighScoreFlagManager.Save(true);
@@ -196,7 +185,6 @@ public class FirestoreManager : MonoBehaviour
     {
         if (auth.CurrentUser == null)
         {
-            Debug.LogError("Firebase認証されていません");
             return;
         }
 
@@ -237,16 +225,12 @@ public class FirestoreManager : MonoBehaviour
 
                 // ローカルの Queue の内容を更新
                 RankingScoreManager.Save(GM.rankingScoreQueue);
-                Debug.Log("Queueの情報をローカルストレージに保存しました");
             }
         }
         catch (Exception e)
         {
-            Debug.LogError($"プレイヤースコアの更新に失敗: {e.Message}");
-
             // ローカルの Queue の内容を更新（失敗時でも保存する）
             RankingScoreManager.Save(GM.rankingScoreQueue);
-            Debug.Log("Queueの情報をローカルストレージに保存しました");
         }
     }
 
@@ -262,7 +246,6 @@ public class FirestoreManager : MonoBehaviour
 
         if (auth.CurrentUser == null)
         {
-            Debug.LogError("Firebase認証されていません");
             return;
         }
 
@@ -279,7 +262,6 @@ public class FirestoreManager : MonoBehaviour
         }
         catch (Exception e)
         {
-            Debug.LogError($"レベル {level} のクリア回数の保存に失敗: " + e.Message);
         }
     }
 
@@ -295,7 +277,6 @@ public class FirestoreManager : MonoBehaviour
 
         if (auth.CurrentUser == null)
         {
-            Debug.LogError("Firebase認証されていません");
             return;
         }
 
@@ -308,7 +289,6 @@ public class FirestoreManager : MonoBehaviour
         }
         catch (Exception e)
         {
-            Debug.LogError("使用中スキンの保存に失敗: " + e.Message);
         }
     }
 
@@ -321,7 +301,6 @@ public class FirestoreManager : MonoBehaviour
     {
         if (auth.CurrentUser == null)
         {
-            Debug.LogError("Firebase認証されていません");
             return;
         }
 
@@ -336,7 +315,6 @@ public class FirestoreManager : MonoBehaviour
         }
         catch (Exception e)
         {
-            Debug.LogError("走行距離の保存に失敗: " + e.Message);
         }
     }
 
@@ -349,27 +327,8 @@ public class FirestoreManager : MonoBehaviour
     /// </summary>
     public async Task<bool> LoadAll()
     {
-        
-
-
-        
-#if UNITY_EDITOR
-        Debug.Log("Skipping Firebase init in editor to avoid native plugin errors.");
-        GM.playerName = "テストユーザー";
-        GM.totalExp = 100;
-        GM.highScore = 0;
-        GM.playerScore = 0;
-        GM.usingSkinID = 0;
-        GM.totalRunDistance = 0;
-        GM.trainingClearCounts = new List<int> { 0};
-        return false;
-#endif
-
-
-
         if (auth.CurrentUser == null)
         {
-            Debug.LogError("Firebase認証されていません");
             return false;
         }
 
@@ -388,8 +347,6 @@ public class FirestoreManager : MonoBehaviour
             }
             catch (Exception e)
             {
-                Debug.LogWarning($"クラウドデータの取得に失敗: {e.Message}。キャッシュデータを使用します。");
-
                 // クラウド取得に失敗した場合、キャッシュから取得（オフライン対応）
                 snapshot = await docRef.GetSnapshotAsync(Source.Cache);
             }
@@ -397,7 +354,6 @@ public class FirestoreManager : MonoBehaviour
             //データの存在をチェック
             if (!snapshot.Exists)
             {
-                Debug.LogWarning("[Firestore] プレイヤーデータが存在しません");
                 return false;
             }
             #endregion
@@ -480,7 +436,6 @@ public class FirestoreManager : MonoBehaviour
         }
         catch (Exception e)
         {
-            Debug.LogError("データのロードに失敗: " + e.Message);
             return false;
         }
 
@@ -520,7 +475,6 @@ public class FirestoreManager : MonoBehaviour
         }
         catch (Exception e)
         {
-            Debug.LogError($"[Firestore] ランキング取得に失敗: {e.Message}");
         }
 
         //取得失敗時はListを初期値で埋める
@@ -559,7 +513,6 @@ public class FirestoreManager : MonoBehaviour
         }
         catch (Exception e)
         {
-            Debug.LogError($"[Firestore] ユーザー順位取得に失敗: {e.Message}");
         }
 
         return (rank, percentile);
@@ -577,20 +530,9 @@ public class FirestoreManager : MonoBehaviour
         DateTime now = DateTime.Now;
         if (now < nextOnlineStaminaCheckTime) 
             return staminaCache;
-        
-
-
-        
-#if UNITY_EDITOR
-        Debug.Log("Skipping Firebase init in editor to avoid native plugin errors.");
-        return -1;
-#endif
-
-
 
         if (auth.CurrentUser == null)
         {
-            Debug.LogError("Firebase認証されていません");
             return -1; //異常終了
         }
 
@@ -652,7 +594,6 @@ public class FirestoreManager : MonoBehaviour
         }
         catch (Exception e)
         {
-            Debug.LogError("スタミナの取得に失敗: " + e.Message);
             return -1; //異常終了
         }
     }
@@ -664,7 +605,6 @@ public class FirestoreManager : MonoBehaviour
     {
         if (auth.CurrentUser == null)
         {
-            Debug.LogError("Firebase認証されていません");
             return -2; //異常終了
         }
 
@@ -697,7 +637,6 @@ public class FirestoreManager : MonoBehaviour
         }
         catch (Exception e)
         {
-            Debug.LogError("スタミナの消費に失敗: " + e.Message);
             return -2; //異常終了
         }
     }
@@ -709,7 +648,6 @@ public class FirestoreManager : MonoBehaviour
     {
         if (auth.CurrentUser == null)
         {
-            Debug.LogError("Firebase認証されていません");
             return -2; //異常終了
         }
 
@@ -750,7 +688,6 @@ public class FirestoreManager : MonoBehaviour
         }
         catch (Exception e)
         {
-            Debug.LogError("スタミナの回復に失敗: " + e.Message);
             return -2; //異常終了
         }
     }
@@ -764,7 +701,6 @@ public class FirestoreManager : MonoBehaviour
     {
         if (auth.CurrentUser == null)
         {
-            Debug.LogError("Firebase認証されていません");
             return 4; //異常終了
         }
 
@@ -788,7 +724,6 @@ public class FirestoreManager : MonoBehaviour
         }
         catch (Exception e)
         {
-            Debug.LogError("広告視聴回数の取得に失敗: " + e.Message);
             return 4; //異常終了
         }
     }
@@ -853,12 +788,9 @@ public class FirestoreManager : MonoBehaviour
         {
             DocumentReference docRef = db.Collection("users").Document(documentId);
             await docRef.DeleteAsync();
-            Debug.Log($"ドキュメント {documentId} を削除しました");
         }
         catch (System.Exception e)
         {
-            Debug.LogError($"ドキュメント削除エラー: {e.Message}");
-            Debug.Log(documentId);
         }
     }
 }

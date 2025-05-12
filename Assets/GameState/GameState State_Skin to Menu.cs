@@ -36,15 +36,37 @@ public class GameStateState_SkinToMenu : GameStateStateBase
         {
             //使用中のスキン情報をクラウドに保存
             await FirestoreManager.Instance.SaveUsingSkin();
-
-            //ランキングを更新
-            await RankingManager.UpdateRanking(RankingManager.RankingType.HighScore);
-            await RankingManager.UpdateRanking(RankingManager.RankingType.PlayerScore);
-            GM.highScoreRankingBoard.UpdateRanking();
-            GM.playerScoreRankingBoard.UpdateRanking();
+            
+            //ランクインしていればランキングを更新
+            if (RankingManager.userRankData_highScore.userRank <= 10)
+            {
+                int index_highScore = RankingManager.userRankData_highScore.userRank - 1;
+                RankingManager.rankingList_highScore[index_highScore]
+                        = (RankingManager.rankingList_highScore[index_highScore].name,
+                        RankingManager.rankingList_highScore[index_highScore].score,
+                        RankingManager.rankingList_highScore[index_highScore].experience,
+                        GM.usingSkinID
+                        );
+            }
+            if (RankingManager.userRankData_playerScore.userRank <= 10)
+            {
+                int index_playerScore = RankingManager.userRankData_playerScore.userRank - 1;
+                RankingManager.rankingList_playerScore[index_playerScore]
+                        = (RankingManager.rankingList_playerScore[index_playerScore].name,
+                        RankingManager.rankingList_playerScore[index_playerScore].score,
+                        RankingManager.rankingList_playerScore[index_playerScore].experience,
+                        GM.usingSkinID
+                        );
+            }
         }
         //リセットが必要ならUIの色だけ先に戻す
         else GM.ChangeUIColor(GM.previousSkinID);
+
+        //必要があればランキングを更新
+        await RankingManager.CheckUpdateNecessity(RankingManager.RankingType.HighScore);
+        GameManager.Instance.highScoreRankingBoard.UpdateRankingDisplay();
+        await RankingManager.CheckUpdateNecessity(RankingManager.RankingType.PlayerScore);
+        GameManager.Instance.playerScoreRankingBoard.UpdateRankingDisplay();
     }
 
 
@@ -87,10 +109,6 @@ public class GameStateState_SkinToMenu : GameStateStateBase
 
             //スキンの色を戻す
             GM.ChangePlayerSkin(GM.previousSkinID);
-
-            //ランキングを更新
-            GM.highScoreRankingBoard.UpdateRanking();
-            GM.playerScoreRankingBoard.UpdateRanking();
         }
 
         //指定時間経過でステート遷移

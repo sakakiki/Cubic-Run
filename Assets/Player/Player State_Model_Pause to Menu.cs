@@ -101,5 +101,12 @@ public class PlayerState_Model_PauseToMenu : PlayerStateBase_Model
 
         //回転を無効化
         rb.freezeRotation = true;
+
+        //スキン形状がスフィアならコライダー変更
+        if (SkinDataBase.Instance.skinData[GameManager.Instance.usingSkinID].bodyType == SkinData.BodyType.Sphere)
+        {
+            playerCon.boxCol.enabled = false;
+            playerCon.capsuleCol.enabled = true;
+        }
     }
 }

@@ -12,17 +12,17 @@ public class AdmobManager : MonoBehaviour
 
     // 広告ユニット
 #if UNITY_ANDROID
-    private string _adUnitId_interstitial = "ca-app-pub-3396760301690878/8715908439"; //テスト用
-    //private string _adUnitId_interstitial = "ca-app-pub-3396760301690878/9424445321";
+    private string _adUnitId_interstitial = "ca-app-pub-3940256099942544/1033173712"; //テスト用
+    //private string _adUnitId_interstitial = "ca-app-pub-3396760301690878/8715908439";
     private string _adUnitId_reward = "ca-app-pub-3940256099942544/5224354917"; //テスト用
     //private string _adUnitId_reward = "ca-app-pub-3396760301690878/6470855214";
 #elif UNITY_IPHONE
     private string _adUnitId_interstitial = "ca-app-pub-3940256099942544/4411468910"; //テスト用
-    //private string _adUnitId_interstitial = "ca-app-pub-3396760301690878/1028990103"
+    //private string _adUnitId_interstitial = "ca-app-pub-3396760301690878/1028990103";
     private string _adUnitId_reward = "ca-app-pub-3940256099942544/1712485313"; //テスト用
     //private string _adUnitId_reward = "ca-app-pub-3396760301690878/4206835717";
 #else
-    private string _adUnitId_nativeOverlay = "unused";
+    private string _adUnitId_interstitial = "unused";
     private string _adUnitId_reward = "unused";
 #endif
 
@@ -43,7 +43,6 @@ public class AdmobManager : MonoBehaviour
         MobileAds.Initialize(initializeStatus =>
         {
             isReady = true;
-            Debug.Log(initializeStatus);
         });
     }
 
@@ -61,24 +60,16 @@ public class AdmobManager : MonoBehaviour
             _rewardedAd = null;
         }
 
-        Debug.Log("広告ロード開始");
-
         // 広告を読み込むためのリクエストを作成
         var adRequest = new AdRequest();
-        Debug.Log("リクエストを作成");
 
         // 広告をロードするリクエストを送信
         RewardedAd.Load(_adUnitId_reward, adRequest,
             (RewardedAd ad, LoadAdError error) =>
             {
-                Debug.Log("コールバック到達");
-
                 // エラーがnullでないか広告がnullの場合、ロード失敗
                 if (error != null || ad == null)
                 {
-                    Debug.LogError("Rewarded ad failed to load an ad " +
-                                   "with error : " + error);
-                                   
                     // 広告が準備できていないことの通知
                     PopupUIManager.Instance.SetupMessageBand("広告の取得に失敗しました。", 2);
 
@@ -86,9 +77,6 @@ public class AdmobManager : MonoBehaviour
                     GameManager.Instance.gameStateMachine.ChangeState(GameManager.Instance.gameStateMachine.state_Menu);
                     return;
                 }
-
-                Debug.Log("Rewarded ad loaded with response : "
-                          + ad.GetResponseInfo());
 
                 _rewardedAd = ad;
 
@@ -103,6 +91,7 @@ public class AdmobManager : MonoBehaviour
                     {
                         // スタミナ回復の通知
                         PopupUIManager.Instance.SetupMessageBand("スタミナを2回復しました。", 2);
+                        AudioManager.Instance.PlaySE(AudioManager.SE.LevelUp);
                     }
 
                     //メニュー画面に戻して終了
@@ -131,9 +120,6 @@ public class AdmobManager : MonoBehaviour
 
             _rewardedAd.Show(async (Reward reward) =>
             {
-                // 報酬の付与
-                Debug.Log("Reward：" + reward.Type + " × " + reward.Amount);
-
                 //回復後のスタミナ残量を取得
                 int remainingStamina = await FirestoreManager.Instance.AddStamina(2);
 
@@ -179,32 +165,21 @@ public class AdmobManager : MonoBehaviour
             _rewardedAd = null;
         }
 
-        Debug.Log("広告ロード開始");
-
         // 広告を読み込むためのリクエストを作成
         var adRequest = new AdRequest();
-        Debug.Log("リクエストを作成");
 
         // 広告をロードするリクエストを送信
         RewardedAd.Load(_adUnitId_reward, adRequest,
             (RewardedAd ad, LoadAdError error) =>
             {
-                Debug.Log("コールバック到達");
-
                 // エラーがnullでないか広告がnullの場合、ロード失敗
                 if (error != null || ad == null)
                 {
-                    Debug.LogError("Rewarded ad failed to load an ad " +
-                                   "with error : " + error);
-
                     // 広告が準備できていないことの通知
                     PopupUIManager.Instance.SetupMessageBand("広告の取得に失敗しました。", 2);
 
                     return;
                 }
-
-                Debug.Log("Rewarded ad loaded with response : "
-                          + ad.GetResponseInfo());
 
                 _rewardedAd = ad;
 
@@ -300,22 +275,14 @@ public class AdmobManager : MonoBehaviour
         InterstitialAd.Load(_adUnitId_interstitial, adRequest,
             (InterstitialAd ad, LoadAdError error) =>
             {
-                Debug.Log("コールバック到達");
-
                 // エラーがnullでないか広告がnullの場合、ロード失敗
                 if (error != null || ad == null)
                 {
-                    Debug.LogError("Rewarded ad failed to load an ad " +
-                                   "with error : " + error);
-
                     // リザルト画面のUIを有効化して終了
                     InputManager.Instance.InputUISetActive_Result(true);
 
                     return;
                 }
-
-                Debug.Log("Rewarded ad loaded with response : "
-                          + ad.GetResponseInfo());
 
                 _interstitialAd = ad;
 

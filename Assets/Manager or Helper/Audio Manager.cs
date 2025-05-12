@@ -88,7 +88,7 @@ public class AudioManager : MonoBehaviour
         1.0f,
         0.6f,
         1.0f,
-        1.0f
+        1.0f,
     };
 
     public void Awake()

@@ -46,7 +46,11 @@ public class RankingBoard: MonoBehaviour, IPointerDownHandler
         //このスクリプトを無効化
         this.enabled = false;
 
-        await UpdateRanking();
+        //必要に応じてランキングを取得
+        await RankingManager.CheckUpdateNecessity(RankingType);
+
+        //ランキング表示を更新
+        UpdateRankingDisplay();
 
         //文字を濃く
         tabText.color = Color.black;
@@ -57,14 +61,11 @@ public class RankingBoard: MonoBehaviour, IPointerDownHandler
 
 
 
-    //情報の取得・表示の更新
-    public async Task UpdateRanking()
+    //表示の更新
+    public void UpdateRankingDisplay()
     {
         //スクリプトが有効状態なら何もしない
         if (this.enabled) return;
-
-        //頻度制限付きランキング更新
-        await RankingManager.CheckUpdateNecessity(RankingType);
 
         //ランキング表示位置を1位の場所に戻す
         contentFieldRtf.localPosition = Vector2.zero;

@@ -3,7 +3,6 @@ using UnityEngine;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine.UI;
-using System.Net.Http.Headers;
 
 //GameManagerは処理を優先実行
 [DefaultExecutionOrder(-1)]
@@ -52,6 +51,7 @@ public class GameManager : MonoBehaviour
     public Color staminaColor { private set; get; }
     public int adScore = 0;
     public int adCount = 0;
+    private bool isSetupUI = false;
     [Space(30)]
 
     [Header("インスペクターから設定")]
@@ -178,14 +178,6 @@ public class GameManager : MonoBehaviour
         if (Instance == null)
             Instance = this;
 
-        #region レターボックス
-        // 基準（縦方向）サイズと基準アスペクト比から基準横方向サイズを算出
-        var baseHorizontalSize = 5.622821f * 2560 / 1440;
-        // 基準横方向サイズと対象アスペクト比で対象縦方向サイズを算出
-        var verticalSize = baseHorizontalSize / Camera.main.aspect;
-        Camera.main.orthographicSize = verticalSize;
-        #endregion
-
         //目標フレームレート設定
         Application.targetFrameRate = defaultFrameRate;
     }
@@ -202,22 +194,6 @@ public class GameManager : MonoBehaviour
         //ステートマシンの作成・格納
         gameStateMachine = new GameStateStateMachine();
         gameStateMachine.Initialize(gameStateMachine.state_Login);
-
-        //UIをHingeに接続
-        for (int i = 0; i < menuUIs_L.Length; i++)
-            menuUIs_L[i].SetParent(menuHingeRtf_L);
-        for (int i = 0; i < menuUIs_R.Length; i++)
-            menuUIs_R[i].SetParent(menuHingeRtf_R);
-        for (int i = 0; i < skinUIs_B.Length; i++)
-            skinUIs_B[i].SetParent(skinHingeRtf_B);
-        for (int i = 0; i < skinUIs_U.Length; i++)
-            skinUIs_U[i].SetParent(skinHingeRtf_U);
-        for (int i = 0; i < playUIs_L.Length; i++)
-            playUIs_L[i].SetParent(playHingeRtf_L);
-        for (int i = 0; i < playUIs_R.Length; i++)
-            playUIs_R[i].SetParent(playHingeRtf_R);
-        for (int i = 0; i < resultUIs_B.Length; i++)
-            resultUIs_B[i].SetParent(resultHingeRtf_B);
 
         //プレイヤー移動可能エリアの中心の変更
         centerPos_PlayerArea = centerPos_World;
@@ -236,9 +212,32 @@ public class GameManager : MonoBehaviour
     //データのロードとゲームへの反映
     public async Task GameInitialize()
     {
-        //await AuthManager.Instance.Login("sakakiki.games@gmail.com", "Game3121Pass2222");
-        //await AuthManager.Instance.Reauthenticate("sakakiki.sousaku@gmail.com", "Game3121Pass2222");
-        //await AuthManager.Instance.UpdateUserEmail("sakakiki.games@gmail.com");
+        if (!isSetupUI) 
+        {
+            #region レターボックス
+            // 基準（縦方向）サイズと基準アスペクト比から基準横方向サイズを算出
+            var baseHorizontalSize = 5.622821f * 2560 / 1440;
+            // 基準横方向サイズと対象アスペクト比で対象縦方向サイズを算出
+            var verticalSize = baseHorizontalSize / Camera.main.aspect;
+            Camera.main.orthographicSize = verticalSize;
+            #endregion
+
+            //UIをHingeに接続
+            for (int i = 0; i < menuUIs_L.Length; i++)
+                menuUIs_L[i].SetParent(menuHingeRtf_L);
+            for (int i = 0; i < menuUIs_R.Length; i++)
+                menuUIs_R[i].SetParent(menuHingeRtf_R);
+            for (int i = 0; i < skinUIs_B.Length; i++)
+                skinUIs_B[i].SetParent(skinHingeRtf_B);
+            for (int i = 0; i < skinUIs_U.Length; i++)
+                skinUIs_U[i].SetParent(skinHingeRtf_U);
+            for (int i = 0; i < playUIs_L.Length; i++)
+                playUIs_L[i].SetParent(playHingeRtf_L);
+            for (int i = 0; i < playUIs_R.Length; i++)
+                playUIs_R[i].SetParent(playHingeRtf_R);
+            for (int i = 0; i < resultUIs_B.Length; i++)
+                resultUIs_B[i].SetParent(resultHingeRtf_B);
+        }
 
         //変数・オブジェクト・設定の初期化
         SetTrainingMode(false);
@@ -317,12 +316,15 @@ public class GameManager : MonoBehaviour
         //チュートリアル未クリアならプレイボタンをロック
         if (playerRank == 0)
             InputManager.Instance.SetPlayButtonLock(true);
+        //チュートリアルクリア済みならプレイボタンをアンロック
+        else
+            InputManager.Instance.SetPlayButtonLock(false);
 
 
         //ランキング更新
         onlineSuccess &= await RankingManager.UpdateRanking(RankingManager.RankingType.HighScore);
         onlineSuccess &= await RankingManager.UpdateRanking(RankingManager.RankingType.PlayerScore);
-        await highScoreRankingBoard.UpdateRanking();
+        highScoreRankingBoard.UpdateRankingDisplay();
 
 
         //スタミナの反映
