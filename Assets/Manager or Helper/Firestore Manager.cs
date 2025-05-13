@@ -111,29 +111,29 @@ public class FirestoreManager : MonoBehaviour
     }
 
     /// <summary>
-    /// 獲得経験値の加算を保存
+    /// 経験値と走行距離をまとめて保存
     /// [オフライン対応]
-    /// 累積加算
+    /// 両方とも累積加算
     /// </summary>
-    public async Task SaveExperience(int additionalExp)
+    public async Task SaveExperienceAndRunDistance(int additionalExp, int additionalDistance)
     {
         if (auth.CurrentUser == null)
-        {
             return;
-        }
 
-        DocumentReference docRef = db.Collection("users").Document(auth.CurrentUser.UserId);
+        DocumentReference docRef = db.Collection("users")
+                                    .Document(auth.CurrentUser.UserId);
 
         try
         {
+            // 一度の UpdateAsync で両方のフィールドを increment
             await docRef.UpdateAsync(new Dictionary<string, object>
-        {
-            { "experience", FieldValue.Increment(additionalExp) }
-        });
+            {
+                { "experience", FieldValue.Increment(additionalExp) },
+                { "runDistance", FieldValue.Increment(additionalDistance) }
+            });
         }
         catch (Exception e)
         {
-            Debug.LogError("経験値の保存に失敗: " + e.Message);
         }
     }
 
@@ -286,32 +286,6 @@ public class FirestoreManager : MonoBehaviour
 
             // 保存データ
             await docRef.SetAsync(new { usingSkin = skinID }, SetOptions.MergeAll);
-        }
-        catch (Exception e)
-        {
-        }
-    }
-
-    /// <summary>
-    /// 走行距離の加算を保存
-    /// [オフライン対応]
-    /// 累積加算
-    /// </summary>
-    public async Task SaveRunDistance(int additionalDistance)
-    {
-        if (auth.CurrentUser == null)
-        {
-            return;
-        }
-
-        DocumentReference docRef = db.Collection("users").Document(auth.CurrentUser.UserId);
-
-        try
-        {
-            await docRef.UpdateAsync(new Dictionary<string, object>
-        {
-            { "runDistance", FieldValue.Increment(additionalDistance) }
-        });
         }
         catch (Exception e)
         {
@@ -485,38 +459,41 @@ public class FirestoreManager : MonoBehaviour
     }
     
     /// <summary>
-    /// Firestoreからユーザーの順位と上位何%かを取得
+    /// Firestoreからユーザーの順位と上位何%かを取得（読み取り回数を最大2回に抑える）
     /// </summary>
     /// <param name="scoreType">"highScore" または "playerScore"</param>
     /// <param name="userScore">ユーザーのスコア</param>
     /// <returns>(順位, 上位%)</returns>
     public async Task<(int rank, float percentile)> GetUserRanking(string scoreType, int userScore)
     {
-        int rank = -1;  //順位が-1ならエラー
+        int rank = -1;
         float percentile = 0;
 
         try
         {
-            // ユーザーよりスコアが高い数を取得
-            Query countQuery = db.Collection("users").WhereGreaterThan(scoreType, userScore);
-            QuerySnapshot countSnapshot = await countQuery.GetSnapshotAsync(Source.Server);
-            int higherCount = countSnapshot.Count;
+            // ユーザーよりスコアが高い件数をCount()クエリで取得（1回の読み取り）
+            AggregateQuery countQuery = db.Collection("users")
+                .WhereGreaterThan(scoreType, userScore)
+                .Count;
 
-            // 総ユーザー数を取得
-            Query totalQuery = db.Collection("users");
-            QuerySnapshot totalSnapshot = await totalQuery.GetSnapshotAsync(Source.Server);
-            int totalUsers = totalSnapshot.Count;
+            AggregateQuerySnapshot countSnapshot = await countQuery.GetSnapshotAsync(AggregateSource.Server);
+            int higherCount = (int)countSnapshot.Count;
 
-            // ユーザーの順位とパーセンタイル計算
+            // 総ユーザー数を保存済みの「統計データ」ドキュメントから取得（1回の読み取り）
+            DocumentSnapshot metaSnapshot = await db.Collection("metadata").Document("gameInfo").GetSnapshotAsync(Source.Server);
+            int totalUsers = metaSnapshot.ContainsField("totalUsers") ? metaSnapshot.GetValue<int>("totalUsers") : 1;
+
             rank = higherCount + 1;
             percentile = (float)rank / (float)totalUsers * 100;
         }
         catch (Exception e)
         {
+            // ログ出力など
         }
 
         return (rank, percentile);
     }
+
 
 
 
@@ -735,7 +712,7 @@ public class FirestoreManager : MonoBehaviour
     /// <summary>
     /// 新規データ作成
     /// </summary>
-    public async Task<bool> SaveNewPlayerData()
+    public async Task<bool> SaveNewPlayerData(bool isAccoundAdd)
     {
         DocumentReference docRef = db.Collection("users").Document(auth.CurrentUser.UserId);
 
@@ -752,6 +729,23 @@ public class FirestoreManager : MonoBehaviour
         { "adWatchCount", 0 },
         { "lastUpdated", Timestamp.GetCurrentTimestamp() }
     };
+
+        //新規作成の場合はプレイヤー総数を加算
+        if (isAccoundAdd)
+        {
+            DocumentReference docRef_meta = db.Collection("metadata").Document("gameInfo");
+            try
+            {
+                await docRef_meta.UpdateAsync(new Dictionary<string, object>
+                {
+                    { "totalUsers", FieldValue.Increment(1) }
+                });
+            }
+            catch (Exception e)
+            {
+                
+            }
+        }   
 
         try
         {
@@ -791,6 +785,51 @@ public class FirestoreManager : MonoBehaviour
         }
         catch (System.Exception e)
         {
+
+        }
+
+        //プレイヤー総数の減算
+        DocumentReference docRef_meta = db.Collection("metadata").Document("gameInfo");
+        try
+        {
+            await docRef_meta.UpdateAsync(new Dictionary<string, object>
+            {
+                { "totalUsers", FieldValue.Increment(-1) }
+            });
+        }
+        catch (Exception e)
+        {
+            
+        }
+    }
+
+
+
+    /// <summary>
+    /// バージョンチェック
+    /// </summary>
+    public async Task<bool> CheckVersion()
+    {
+        int minimumVersion = 0;
+        try
+        {
+            // 最小バージョンを取得
+            DocumentSnapshot metaSnapshot = await db.Collection("metadata").Document("gameInfo").GetSnapshotAsync(Source.Server);
+            minimumVersion = metaSnapshot.ContainsField("minimumVersion") ? metaSnapshot.GetValue<int>("minimumVersion") : 0;
+        }
+        catch (Exception e)
+        {
+            return true; // オフラインと判断して通過
+        }
+
+        // 現在のバージョンと比較
+        if (GameManager.gameVersion >= minimumVersion)
+        {
+            return true; // バージョンが適合
+        }
+        else
+        {
+            return false; // バージョンが不適合
         }
     }
 }

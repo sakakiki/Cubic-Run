@@ -29,12 +29,6 @@ public class AuthManager : MonoBehaviour
     {
         if (Instance == null)
             Instance = this;
-        
-#if UNITY_EDITOR
-        Debug.Log("Skipping Firebase init in editor to avoid native plugin errors.");
-        loginState = LoginState.Login;
-        return;
-#endif
 
         auth = FirebaseAuth.DefaultInstance;
 
@@ -43,10 +37,6 @@ public class AuthManager : MonoBehaviour
 
         //未チェック状態で初期化
         loginState = LoginState.Unchecked;
-
-
-        //auth.SignOut();
-
     }
 
 
@@ -67,10 +57,9 @@ public class AuthManager : MonoBehaviour
     /// <summary>
     /// 認証情報が取得できれば自動ログインを実行
     /// </summary>
-    private async void AuthStateChanged(object sender, System.EventArgs eventArgs)
+    private async void AuthStateChanged(object sender, EventArgs eventArgs)
     {
         user = auth.CurrentUser;
-
 
         if (user != null)
         {
@@ -99,7 +88,7 @@ public class AuthManager : MonoBehaviour
             loginState = LoginState.Login;
 
             // Firestoreに新規データを作成
-            if (await FirestoreManager.Instance.SaveNewPlayerData())
+            if (await FirestoreManager.Instance.SaveNewPlayerData(true))
                 //正常終了
                 return 0;
         }

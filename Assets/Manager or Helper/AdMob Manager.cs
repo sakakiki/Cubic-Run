@@ -17,10 +17,10 @@ public class AdmobManager : MonoBehaviour
     private string _adUnitId_reward = "ca-app-pub-3940256099942544/5224354917"; //テスト用
     //private string _adUnitId_reward = "ca-app-pub-3396760301690878/6470855214";
 #elif UNITY_IPHONE
-    private string _adUnitId_interstitial = "ca-app-pub-3940256099942544/4411468910"; //テスト用
-    //private string _adUnitId_interstitial = "ca-app-pub-3396760301690878/1028990103";
-    private string _adUnitId_reward = "ca-app-pub-3940256099942544/1712485313"; //テスト用
-    //private string _adUnitId_reward = "ca-app-pub-3396760301690878/4206835717";
+    //private string _adUnitId_interstitial = "ca-app-pub-3940256099942544/4411468910"; //テスト用
+    private string _adUnitId_interstitial = "ca-app-pub-3396760301690878/1028990103";
+    //private string _adUnitId_reward = "ca-app-pub-3940256099942544/1712485313"; //テスト用
+    private string _adUnitId_reward = "ca-app-pub-3396760301690878/4206835717";
 #else
     private string _adUnitId_interstitial = "unused";
     private string _adUnitId_reward = "unused";

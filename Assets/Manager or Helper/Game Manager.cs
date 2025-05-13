@@ -8,6 +8,10 @@ using UnityEngine.UI;
 [DefaultExecutionOrder(-1)]
 public class GameManager : MonoBehaviour
 {
+    //ゲームのバージョン
+    public const int gameVersion = 5;
+
+
     //自身のインスタンス
     public static GameManager Instance;
 
@@ -652,8 +656,7 @@ public class GameManager : MonoBehaviour
         //ローカルに反映
         totalRunDistance += addDistance;
 
-        //クラウドに保存
-        FSM.SaveRunDistance(addDistance);
+        //クラウドには経験値と一緒に保存
         #endregion
 
         #region 経験値の加算
@@ -676,7 +679,7 @@ public class GameManager : MonoBehaviour
         }
 
         //クラウドに保存
-        FSM.SaveExperience(addExp);
+        FSM.SaveExperienceAndRunDistance(addExp, addDistance);
         #endregion
 
         //プレイヤー情報の更新
@@ -724,7 +727,7 @@ public class GameManager : MonoBehaviour
         }
 
         //クラウドに保存
-        FSM.SaveExperience(getExp);
+        FSM.SaveExperienceAndRunDistance(getExp, 0);
         #endregion
 
         //プレイヤー情報の更新

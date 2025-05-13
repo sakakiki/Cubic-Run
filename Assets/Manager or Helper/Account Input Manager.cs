@@ -386,7 +386,7 @@ public class AccountInputManager : MonoBehaviour
     }
     public async void DeleteData_Result()
     {
-        if (await FirestoreManager.Instance.SaveNewPlayerData())
+        if (await FirestoreManager.Instance.SaveNewPlayerData(false))
         {
             PopupUIManager.Instance.SetupPopupMessage(
                 "データ削除完了",

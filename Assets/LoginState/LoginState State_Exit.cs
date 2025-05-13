@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.Collections;
 
 public class LoginStateState_Exit : LoginStateStateBase
 {
@@ -13,41 +14,61 @@ public class LoginStateState_Exit : LoginStateStateBase
 
     public override async void Enter()
     {
-        //�f�[�^�̃��[�h�����܂ł̓Q�[�����J�n���Ȃ�
+        //データのロード完了まではゲームを開始しない
         isPlayable = false;
 
-        //�o�ߎ��Ԃ̃��Z�b�g
+        //経過時間のリセット
         elapsedTime = 0;
 
-        //���O�C���㏉���������s
+        //バージョンチェック
+        if (!await FirestoreManager.Instance.CheckVersion())
+        {
+            MissingVersion();
+            return;
+        }
+
+        //ログイン後初期処理実行
         await GM.GameInitialize();
 
-        //BGM�𗬂��n�߂�
+        //BGMを流し始める
         AudioManager.Instance.SetBGMPlayVolume(1);
         AudioManager.Instance.PlayBGM(AudioManager.BGM.Menu);
 
-        //���[�f�B���O�L���[�u���\��
+        //ローディングキューブを非表示
         GM.loadingCube.SetActive(false);
 
-        //�Q�[���v���C�\
+        //ゲームプレイ可能
         isPlayable = true;
     }
 
     public override void Update()
     {
-        //�Q�[���v���C�\�łȂ��Ȃ牽�����Ȃ�
+        //ゲームプレイ可能でないなら何もしない
         if (!isPlayable) return;
 
-        //�o�ߎ��Ԃ̉��Z
+        //経過時間の加算
         elapsedTime += Time.deltaTime;
 
-        //��ʃJ�o�[�̓����x�ύX
+        //画面カバーの透明度変更
         screenCover.color = Color.white - Color.black * elapsedTime/2;
 
-        //2�b�o�߂���΃X�e�[�g�J��
+        //2秒経過すればステート遷移
         if (elapsedTime > 2)
             gameStateMachine.ChangeState(gameStateMachine.state_Menu);
     }
 
     public override void Exit() { }
+
+    private void MissingVersion()
+    {
+        //ローディングキューブを非表示
+        GM.loadingCube.SetActive(false);
+
+        //現在のバージョンが最小バージョンに満たない場合は通知
+        PopupUIManager.Instance.SetupPopupMessage(
+            "バージョン不足",
+            "アプリのアップデートが必要です。\n\nストアから最新のバージョンに\nアップデートし、ゲームを\n再起動してください。",
+            Enter
+        );
+    }
 }
