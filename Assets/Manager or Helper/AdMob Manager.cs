@@ -12,10 +12,10 @@ public class AdmobManager : MonoBehaviour
 
     // 広告ユニット
 #if UNITY_ANDROID
-    private string _adUnitId_interstitial = "ca-app-pub-3940256099942544/1033173712"; //テスト用
-    //private string _adUnitId_interstitial = "ca-app-pub-3396760301690878/8715908439";
-    private string _adUnitId_reward = "ca-app-pub-3940256099942544/5224354917"; //テスト用
-    //private string _adUnitId_reward = "ca-app-pub-3396760301690878/6470855214";
+    //private string _adUnitId_interstitial = "ca-app-pub-3940256099942544/1033173712"; //テスト用
+    private string _adUnitId_interstitial = "ca-app-pub-3396760301690878/8715908439";
+    //private string _adUnitId_reward = "ca-app-pub-3940256099942544/5224354917"; //テスト用
+    private string _adUnitId_reward = "ca-app-pub-3396760301690878/6470855214";
 #elif UNITY_IPHONE
     //private string _adUnitId_interstitial = "ca-app-pub-3940256099942544/4411468910"; //テスト用
     private string _adUnitId_interstitial = "ca-app-pub-3396760301690878/1028990103";
@@ -278,6 +278,12 @@ public class AdmobManager : MonoBehaviour
                 // エラーがnullでないか広告がnullの場合、ロード失敗
                 if (error != null || ad == null)
                 {
+                    //広告再生リクエストを取り下げ
+                    GameStateState_Result.isAdNeeded = false;
+
+                    //ローディングキューブを非表示
+                    GameManager.Instance.loadingCube.SetActive(false);
+
                     // リザルト画面のUIを有効化して終了
                     InputManager.Instance.InputUISetActive_Result(true);
 
@@ -311,6 +317,15 @@ public class AdmobManager : MonoBehaviour
     /// </summary>
     private void ShowInterstitial()
     {
+        // 広告の再生リクエストが取り下げられていれば何もしない
+        if (!GameStateState_Result.isAdNeeded) return;
+            
+        //広告再生リクエストを取り下げ
+        GameStateState_Result.isAdNeeded = false;
+
+        //ローディングキューブを非表示
+        GameManager.Instance.loadingCube.SetActive(false);
+
         // 広告が再生可能か確認
         if (_interstitialAd != null && _interstitialAd.CanShowAd())
         {
