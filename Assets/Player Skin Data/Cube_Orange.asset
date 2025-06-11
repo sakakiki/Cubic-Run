@@ -14,6 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   name: Orange Cube
   bodyType: 0
-  skinColor: {r: 0.82641506, g: 0.45678532, b: 0.079522945, a: 1}
+  skinColor: {r: 0.9150943, g: 0.5140786, b: 0.09064613, a: 1}
   isEnabledMask: 0
   UIColor: {r: 0.90188676, g: 0.5000997, b: 0, a: 1}

@@ -58,9 +58,6 @@ public class SkinSelecter : MonoBehaviour, IPointerDownHandler, IDragHandler, IP
         //回転状態に変化
         isDragged = true;
 
-        //ボタンの無効化
-        IM.InputUISetActive_Skin(false);
-
         //現在値の記憶とQueueへの格納
         currentPointY = eventData.position.y;
         currentTime = Time.time;
@@ -92,7 +89,13 @@ public class SkinSelecter : MonoBehaviour, IPointerDownHandler, IDragHandler, IP
         }
 
         //停止状態を解除
-        isStop = false;
+        if (isStop)
+        {
+            isStop = false;
+
+            //ボタンの無効化
+            IM.InputUISetActive_Skin(false);
+        }
 
         //タップ位置
         float newScreenPointY = eventData.position.y;
@@ -276,7 +279,6 @@ public class SkinSelecter : MonoBehaviour, IPointerDownHandler, IDragHandler, IP
                 //スキンが有効なら
                 if (GM.isSkinUnlocked[frontSkinID])
                 {
-
                     //OKボタンの有効化
                     buttonOK.SetActive(true);
                 }

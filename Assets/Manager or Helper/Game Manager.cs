@@ -9,7 +9,7 @@ using UnityEngine.UI;
 public class GameManager : MonoBehaviour
 {
     //ゲームのバージョン
-    public const int gameVersion = 7;
+    public const int gameVersion = 8;
 
 
     //自身のインスタンス

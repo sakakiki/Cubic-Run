@@ -14,6 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   name: Pink Cube
   bodyType: 0
-  skinColor: {r: 0.7584905, g: 0.26761833, b: 0.7496194, a: 1}
+  skinColor: {r: 0.9254902, g: 0.3019608, b: 0.84705883, a: 1}
   isEnabledMask: 0
   UIColor: {r: 0.9245283, g: 0.095941514, b: 0.8340636, a: 1}

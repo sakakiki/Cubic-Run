@@ -110,5 +110,8 @@ public class PlayerState_Model_TrainingClear: PlayerStateBase_Model
             playerCon.boxCol.enabled = false;
             playerCon.capsuleCol.enabled = true;
         }
+        
+        //GameState側に地形判定用待機の不要通知
+        GameStateState_ResultToPlay.isPlayerCheck = true;
     }
 }

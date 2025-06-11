@@ -34,7 +34,7 @@ public class TutorialStateState_Attack_2 : TutorialStateStateBase
                 IM.playButtonSet[IM.playButtonPatternNum].playButtonSprite[i].color = Color.black * 0.8f;
 
         //操作方法表示
-        PopupUIManager.Instance.SetupMessageText("光っている部分をタップして攻撃状態に");
+        PopupUIManager.Instance.SetupMessageText("光っている部分を押して攻撃状態に");
     }
 
 

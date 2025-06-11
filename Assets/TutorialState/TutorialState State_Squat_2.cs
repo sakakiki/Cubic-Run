@@ -32,7 +32,7 @@ public class TutorialStateState_Squat_2 : TutorialStateStateBase
                 IM.playButtonSet[IM.playButtonPatternNum].playButtonSprite[i].color = Color.black * 0.8f;
 
         //操作方法表示
-        PopupUIManager.Instance.SetupMessageText("光っている部分をタップしてしゃがむ");
+        PopupUIManager.Instance.SetupMessageText("光っている部分を押してしゃがむ");
     }
 
 
