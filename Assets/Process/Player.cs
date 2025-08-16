@@ -16,37 +16,37 @@ public class Player : MonoBehaviour
 
     void Update()
     {
-        #region ƒWƒƒƒ“ƒvˆ—
+        #region ï¿½Wï¿½ï¿½ï¿½ï¿½ï¿½vï¿½ï¿½ï¿½ï¿½
         if (!isJump)
         {
             if (Input.GetKeyDown(KeyCode.UpArrow))
             {
-                rb.velocity += Vector2.up * (Input.GetKey(KeyCode.DownArrow) ? 20 : 30);
+                rb.linearVelocity += Vector2.up * (Input.GetKey(KeyCode.DownArrow) ? 20 : 30);
                 isJump = true;
             }
         }
         #endregion
 
-        #region ‚µ‚á‚ª‚İE‹}~‰ºˆ—
-        // ƒJ[ƒ\ƒ‹ƒL[‰º‚Ì‰Ÿ‰º‚ğŒŸ’m
+        #region ï¿½ï¿½ï¿½á‚ªï¿½İEï¿½}ï¿½~ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+        // ï¿½Jï¿½[ï¿½\ï¿½ï¿½ï¿½Lï¿½[ï¿½ï¿½ï¿½Ì‰ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½m
         if (Input.GetKeyDown(KeyCode.DownArrow))
         {
             transform.localScale = new Vector2(1, 0.5f);
 
             if (isJump)
             {
-                rb.velocity += Vector2.down * 30;
+                rb.linearVelocity += Vector2.down * 30;
             }
         }
 
-        // ƒJ[ƒ\ƒ‹ƒL[‰º‚Ì—£ã‚ğŒŸ’m
+        // ï¿½Jï¿½[ï¿½\ï¿½ï¿½ï¿½Lï¿½[ï¿½ï¿½ï¿½Ì—ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½m
         if (Input.GetKeyUp(KeyCode.DownArrow))
         {
             transform.localScale = Vector2.one;
         }
         #endregion
 
-        #region UŒ‚i•ÏŒ`jˆ—
+        #region ï¿½Uï¿½ï¿½ï¿½iï¿½ÏŒ`ï¿½jï¿½ï¿½ï¿½ï¿½
         SkinDefault.SetActive(!Input.GetKey(KeyCode.RightArrow));
         SkinAttack.SetActive(Input.GetKey(KeyCode.RightArrow));
         #endregion
@@ -54,7 +54,7 @@ public class Player : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        // ƒWƒƒƒ“ƒv’†”»’è‰ğœ
+        // ï¿½Wï¿½ï¿½ï¿½ï¿½ï¿½vï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
         isJump = false;
     }
 }

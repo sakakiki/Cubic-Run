@@ -15,7 +15,7 @@ public class GameManagerScript: MonoBehaviour
 
     private void Awake()
     {
-        #region ƒVƒ“ƒOƒ‹ƒgƒ“ƒpƒ^[ƒ“
+        #region ï¿½Vï¿½ï¿½ï¿½Oï¿½ï¿½ï¿½gï¿½ï¿½ï¿½pï¿½^ï¿½[ï¿½ï¿½
         if (Instance == null)
         {
             Instance = this;
@@ -28,7 +28,7 @@ public class GameManagerScript: MonoBehaviour
         #endregion
     }
 
-    #region ƒCƒ“ƒXƒyƒNƒ^[“o˜^
+    #region ï¿½Cï¿½ï¿½ï¿½Xï¿½yï¿½Nï¿½^ï¿½[ï¿½oï¿½^
     public int StartLevel = 1;
     public int LevelUpScore = 2000;
 
@@ -41,24 +41,24 @@ public class GameManagerScript: MonoBehaviour
 
     [SerializeField] private GameObject[] MenuButtons;
     /*
-    0:ƒvƒŒƒC
-    1:ƒ`ƒ…[ƒgƒŠƒAƒ‹
-    2:ƒXƒLƒ“
-    3:ƒIƒvƒVƒ‡ƒ“
+    0:ï¿½vï¿½ï¿½ï¿½C
+    1:ï¿½`ï¿½ï¿½ï¿½[ï¿½gï¿½ï¿½ï¿½Aï¿½ï¿½
+    2:ï¿½Xï¿½Lï¿½ï¿½
+    3:ï¿½Iï¿½vï¿½Vï¿½ï¿½ï¿½ï¿½
     */
 
     [SerializeField] private GameObject[] PauseButtons;
     /*
-    0:ƒRƒ“ƒeƒBƒjƒ…[
-    1:ƒŠƒ^ƒCƒA
-    2:ƒIƒvƒVƒ‡ƒ“
+    0:ï¿½Rï¿½ï¿½ï¿½eï¿½Bï¿½jï¿½ï¿½ï¿½[
+    1:ï¿½ï¿½ï¿½^ï¿½Cï¿½A
+    2:ï¿½Iï¿½vï¿½Vï¿½ï¿½ï¿½ï¿½
     */
 
     [SerializeField]
     private GameObject[] SkinSelectButtons;
     /*
     0:OK
-    1:ƒLƒƒƒ“ƒZƒ‹
+    1:ï¿½Lï¿½ï¿½ï¿½ï¿½ï¿½Zï¿½ï¿½
     */
 
     [SerializeField] private GameObject HingeLeft;
@@ -103,9 +103,9 @@ public class GameManagerScript: MonoBehaviour
     [SerializeField] private GameObject[] SkinSelecterBoards;
     #endregion
 
-    #region ƒXƒe[ƒgŠÇ—
+    #region ï¿½Xï¿½eï¿½[ï¿½gï¿½Ç—ï¿½
 
-    #region ƒQ[ƒ€ƒXƒe[ƒg
+    #region ï¿½Qï¿½[ï¿½ï¿½ï¿½Xï¿½eï¿½[ï¿½g
     public enum GameState
     {
         Menu,
@@ -129,7 +129,7 @@ public class GameManagerScript: MonoBehaviour
     }
     #endregion
 
-    #region ƒvƒŒƒCƒXƒe[ƒg
+    #region ï¿½vï¿½ï¿½ï¿½Cï¿½Xï¿½eï¿½[ï¿½g
     public enum PlayState
     {
         Play,
@@ -153,19 +153,19 @@ public class GameManagerScript: MonoBehaviour
     private float stateEnterTime;
     #endregion
 
-    #region ƒ†[ƒU[İ’è•Ï”
+    #region ï¿½ï¿½ï¿½[ï¿½Uï¿½[ï¿½İ’ï¿½Ïï¿½
     [SerializeField] private SkinData UseSkin;
     [System.NonSerialized] public int skinNumber;
     private GameObject MenuModel;
     private GameObject PlayerObjectSet;
     #endregion
 
-    #region ƒIƒuƒWƒFƒNƒgƒv[ƒ‹—p•Ï”
+    #region ï¿½Iï¿½uï¿½Wï¿½Fï¿½Nï¿½gï¿½vï¿½[ï¿½ï¿½ï¿½pï¿½Ïï¿½
     private ObjectPool<GameObject>[] Pool;
     private int createObjectNumber;
     #endregion
 
-    #region ƒIƒuƒXƒ^ƒNƒ‹§Œä—p•Ï”
+    #region ï¿½Iï¿½uï¿½Xï¿½^ï¿½Nï¿½ï¿½ï¿½ï¿½ï¿½ï¿½pï¿½Ïï¿½
     private float moveSpeed;
     private List<GameObject> obstacles = new List<GameObject>();
     private List<int> obstacleNumbers = new List<int>();
@@ -178,7 +178,7 @@ public class GameManagerScript: MonoBehaviour
     private float obstacleHeight;
     #endregion
 
-    #region UI§Œä—p•Ï”
+    #region UIï¿½ï¿½ï¿½ï¿½pï¿½Ïï¿½
     private Color colorChange = new Color(0, 0, 0, 1f);
     private TextMeshProUGUI scoreText;
     private TextMeshProUGUI levelText;
@@ -203,7 +203,7 @@ public class GameManagerScript: MonoBehaviour
     private Vector2 modelVelocity;
     #endregion
 
-    #region ƒvƒŒƒCˆ——p•Ï”
+    #region ï¿½vï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½pï¿½Ïï¿½
     [System.NonSerialized] public GameObject Player;
     private int level;
     private float playStartTime;
@@ -215,7 +215,7 @@ public class GameManagerScript: MonoBehaviour
     {
         Application.targetFrameRate = 60;
 
-        #region áŠQ•¨ƒIƒuƒWƒFƒNƒgƒv[ƒ‹
+        #region ï¿½ï¿½Qï¿½ï¿½ï¿½Iï¿½uï¿½Wï¿½Fï¿½Nï¿½gï¿½vï¿½[ï¿½ï¿½
         Pool = new ObjectPool<GameObject>[ObstacleSet.Length];
         for (int i = 0; i < ObstacleSet.Length; i++)
         {
@@ -229,7 +229,7 @@ public class GameManagerScript: MonoBehaviour
         }
         #endregion
 
-        #region •Ï”“o˜^
+        #region ï¿½Ïï¿½ï¿½oï¿½^
         scoreText = UISet_Play[1].transform.Find("Score").GetComponent<TextMeshProUGUI>();
         levelText = UISet_Play[2].GetComponent<TextMeshProUGUI>();
         scoreboardRectTransform = UISet_Play[0].GetComponent<RectTransform>();
@@ -239,7 +239,7 @@ public class GameManagerScript: MonoBehaviour
         centerPosition_top_left = new Vector2 (canvas.sizeDelta.x/2, -canvas.sizeDelta.y/2);
         #endregion
 
-        #region UI-HingeÚ‘±
+        #region UI-Hingeï¿½Ú‘ï¿½
         foreach(GameObject obj in ObjectSet_Menu_MoveToLeft)
         {
             obj.transform.SetParent(HingeLeft.transform);
@@ -250,7 +250,7 @@ public class GameManagerScript: MonoBehaviour
         }
         #endregion
 
-        #region ƒJƒEƒ“ƒgƒT[ƒNƒ‹”z’u
+        #region ï¿½Jï¿½Eï¿½ï¿½ï¿½gï¿½Tï¿½[ï¿½Nï¿½ï¿½ï¿½zï¿½u
         foreach (Transform countRect in CountCircle.transform)
         {
             countRect.GetComponent<RectTransform>().anchoredPosition =
@@ -275,17 +275,17 @@ public class GameManagerScript: MonoBehaviour
 
     void LateUpdate()
     {
-        #region ƒŒƒ^[ƒ{ƒbƒNƒX
-        // Šî€ic•ûŒüjƒTƒCƒY‚ÆŠî€ƒAƒXƒyƒNƒg”ä‚©‚çŠî€‰¡•ûŒüƒTƒCƒY‚ğZo
+        #region ï¿½ï¿½ï¿½^ï¿½[ï¿½{ï¿½bï¿½Nï¿½X
+        // ï¿½î€ï¿½iï¿½cï¿½ï¿½ï¿½ï¿½ï¿½jï¿½Tï¿½Cï¿½Yï¿½ÆŠî€ï¿½Aï¿½Xï¿½yï¿½Nï¿½gï¿½ä‚©ï¿½ï¿½î€ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Tï¿½Cï¿½Yï¿½ï¿½ï¿½Zï¿½o
         var baseHorizontalSize = 5.5f * 16/9;
-        // Šî€‰¡•ûŒüƒTƒCƒY‚Æ‘ÎÛƒAƒXƒyƒNƒg”ä‚Å‘ÎÛc•ûŒüƒTƒCƒY‚ğZo
+        // ï¿½î€ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Tï¿½Cï¿½Yï¿½Æ‘ÎÛƒAï¿½Xï¿½yï¿½Nï¿½gï¿½ï¿½Å‘ÎÛcï¿½ï¿½ï¿½ï¿½ï¿½Tï¿½Cï¿½Yï¿½ï¿½ï¿½Zï¿½o
         var verticalSize = baseHorizontalSize / Camera.main.aspect;
         Camera.main.orthographicSize = verticalSize;
         #endregion
 
         switch (currentGameState)
         {
-            #region ƒƒjƒ…[‰æ–Ê
+            #region ï¿½ï¿½ï¿½jï¿½ï¿½ï¿½[ï¿½ï¿½ï¿½
             case GameState.Menu:
                 if(gameStateEnter)
                 {
@@ -303,7 +303,7 @@ public class GameManagerScript: MonoBehaviour
                     MenuModel.SetActive(true);
                     modelRb.isKinematic = true;
                     MenuModel.transform.localScale = Vector3.one;
-                    modelRb.velocity = Vector3.zero;
+                    modelRb.linearVelocity = Vector3.zero;
                     modelRb.gravityScale = 5;
                     MenuModel.GetComponent<RectTransform>().anchoredPosition = Vector3.up * 200;
                     MenuModel.GetComponent<Collider2D>().enabled = true;
@@ -343,7 +343,7 @@ public class GameManagerScript: MonoBehaviour
 
 
 
-            #region ‰æ–Ê‘JˆÚiƒƒjƒ…[‰æ–Ê‚©‚ç‘JˆÚj
+            #region ï¿½ï¿½Ê‘Jï¿½Úiï¿½ï¿½ï¿½jï¿½ï¿½ï¿½[ï¿½ï¿½Ê‚ï¿½ï¿½ï¿½Jï¿½Új
             case GameState.ExitMenu:
                 if (gameStateEnter)
                 {
@@ -352,7 +352,7 @@ public class GameManagerScript: MonoBehaviour
                     processFlag = false;
                     if(connectedMode == GameState.Play || connectedMode == GameState.Tutorial)
                         foreach (GameObject obj in obstacles)
-                            obj.GetComponent<Rigidbody2D>().velocity = Vector3.left * 20;
+                            obj.GetComponent<Rigidbody2D>().linearVelocity = Vector3.left * 20;
                 }
 
                 if (connectedMode == GameState.Play || connectedMode == GameState.Tutorial)
@@ -376,12 +376,12 @@ public class GameManagerScript: MonoBehaviour
                             if (modelRb.isKinematic)
                             {
                                 modelRb.isKinematic = false;
-                                modelRb.velocity = Vector2.up * 7.2f;
+                                modelRb.linearVelocity = Vector2.up * 7.2f;
                             }
                             else
                             {
-                                modelRb.velocity = Vector2.up * 8.6f;
-                                modelRb.velocity += Vector2.left * (MenuModel.transform.position.x - 10) / 0.8f;
+                                modelRb.linearVelocity = Vector2.up * 8.6f;
+                                modelRb.linearVelocity += Vector2.left * (MenuModel.transform.position.x - 10) / 0.8f;
                             }
                         }
                         MenuModel.transform.localScale *= 1.005f;
@@ -392,7 +392,7 @@ public class GameManagerScript: MonoBehaviour
                         processFlag= true;
                         MenuModel.transform.localScale = new Vector2(0.9f, 1.1f);
                         MenuModel.GetComponent<Collider2D>().enabled = false;
-                        modelRb.velocity = Vector2.up * 50;
+                        modelRb.linearVelocity = Vector2.up * 50;
                     }
                 }
 
@@ -441,13 +441,13 @@ public class GameManagerScript: MonoBehaviour
 
 
 
-            #region ‰æ–Ê‘JˆÚiƒƒjƒ…[‰æ–Ê‚Ö‘JˆÚj
+            #region ï¿½ï¿½Ê‘Jï¿½Úiï¿½ï¿½ï¿½jï¿½ï¿½ï¿½[ï¿½ï¿½Ê‚Ö‘Jï¿½Új
             case GameState.EnterMenu:
 
                 switch (connectedMode)
                 {
 
-                    #region ’¼‘O‰æ–ÊFƒvƒŒƒCiƒ|[ƒYj
+                    #region ï¿½ï¿½ï¿½Oï¿½ï¿½ÊFï¿½vï¿½ï¿½ï¿½Cï¿½iï¿½|ï¿½[ï¿½Yï¿½j
                     case GameState.Play:
                         if (gameStateEnter)
                         {
@@ -457,8 +457,8 @@ public class GameManagerScript: MonoBehaviour
                             PauseUI.SetActive(false);
                             ScreenCover.GetComponent<SpriteRenderer>().color = new Color(1f, 1f, 1f, 0f);
                             foreach (GameObject obj in obstacles)
-                                obj.GetComponent<Rigidbody2D>().velocity = Vector2.zero;
-                            Player.GetComponent<Rigidbody2D>().velocity = Vector2.up * 60;
+                                obj.GetComponent<Rigidbody2D>().linearVelocity = Vector2.zero;
+                            Player.GetComponent<Rigidbody2D>().linearVelocity = Vector2.up * 60;
                             Player.GetComponent<Collider2D>().enabled = false;
                             Player.transform.localScale = new Vector3(0.9f, 1.1f, 1);
                         }
@@ -476,10 +476,10 @@ public class GameManagerScript: MonoBehaviour
                                 if (processFlag)
                                 {
                                     processFlag = false;
-                                    modelVelocity = Player.GetComponent<Rigidbody2D>().velocity;
+                                    modelVelocity = Player.GetComponent<Rigidbody2D>().linearVelocity;
                                     PlayerObjectSet.SetActive(false);
                                     foreach (GameObject obj in obstacles)
-                                        obj.GetComponent<Rigidbody2D>().velocity = Vector2.left * 8;
+                                        obj.GetComponent<Rigidbody2D>().linearVelocity = Vector2.left * 8;
                                 }
                                 break;
                             default:
@@ -488,13 +488,13 @@ public class GameManagerScript: MonoBehaviour
                                     processFlag = true;
                                     MenuModel.SetActive(true);
                                     MenuModel.transform.position = Vector2.up * 30 + Vector2.right * 10;
-                                    modelRb.velocity = Vector2.down * 50;
+                                    modelRb.linearVelocity = Vector2.down * 50;
                                     modelRb.isKinematic = false;
                                 }
                                 if (MenuModel.GetComponent<RectTransform>().anchoredPosition.y < 200)
                                 {
                                     MenuModel.GetComponent<RectTransform>().anchoredPosition = Vector2.up * 200;
-                                    modelRb.velocity = Vector2.zero;
+                                    modelRb.linearVelocity = Vector2.zero;
                                     modelRb.isKinematic = true;
                                 }
                                 break;
@@ -507,7 +507,7 @@ public class GameManagerScript: MonoBehaviour
                         break;
                     #endregion
 
-                    #region ’¼‘O‰æ–ÊFƒXƒLƒ“‘I‘ğ
+                    #region ï¿½ï¿½ï¿½Oï¿½ï¿½ÊFï¿½Xï¿½Lï¿½ï¿½ï¿½Iï¿½ï¿½
                     case GameState.SkinSelect:
                         if (gameStateEnter)
                         {
@@ -540,7 +540,7 @@ public class GameManagerScript: MonoBehaviour
                                     modelRb.isKinematic = false;
                                     modelRb.gravityScale = 2;
                                     MenuModel.transform.localScale = skinSelectScale;
-                                    modelRb.velocity = Vector2.up * 8.7f;
+                                    modelRb.linearVelocity = Vector2.up * 8.7f;
                                 }
                             }
                             else
@@ -555,7 +555,7 @@ public class GameManagerScript: MonoBehaviour
                                         MenuModel.transform.localScale = skinSelectScale;
                                         MenuModel.GetComponent<Collider2D>().enabled = false;
                                         MenuModel.transform.localScale = skinSelectScale;
-                                        modelRb.velocity = Vector2.up * 50;
+                                        modelRb.linearVelocity = Vector2.up * 50;
                                     }
                                 }
                                 else
@@ -563,7 +563,7 @@ public class GameManagerScript: MonoBehaviour
                                     if (processFlag)
                                     {
                                         processFlag = false;
-                                        modelVelocity = modelRb.velocity;
+                                        modelVelocity = modelRb.linearVelocity;
                                         MenuModel_Cube.transform.position = MenuModel.transform.position;
                                         MenuModel_Ball.transform.position = MenuModel.transform.position;
                                         MenuModel_Cube.transform.localScale = MenuModel.transform.localScale;
@@ -581,7 +581,7 @@ public class GameManagerScript: MonoBehaviour
                                         }
                                         modelRb = MenuModel.GetComponent<Rigidbody2D>();
                                         modelRb.isKinematic = false;
-                                        modelRb.velocity = -modelVelocity;
+                                        modelRb.linearVelocity = -modelVelocity;
                                         MenuModel.GetComponent<Collider2D>().enabled = false;
                                         MenuModel.GetComponent<RectTransform>().anchoredPosition += Vector2.up * 32;
                                         MenuModel.transform.Find("Menu Model Skin").GetComponent<SpriteRenderer>().color = UseSkin.skinColor;
@@ -614,7 +614,7 @@ public class GameManagerScript: MonoBehaviour
 
 
 
-                    #region ‰æ–Ê‘JˆÚiƒvƒŒƒC—pƒIƒuƒWƒFƒNƒg¶¬j
+                    #region ï¿½ï¿½Ê‘Jï¿½Úiï¿½vï¿½ï¿½ï¿½Cï¿½pï¿½Iï¿½uï¿½Wï¿½Fï¿½Nï¿½gï¿½ï¿½ï¿½ï¿½ï¿½j
             case GameState.GameStart:
                 if (gameStateEnter)
                 {
@@ -657,16 +657,16 @@ public class GameManagerScript: MonoBehaviour
 
 
 
-            #region ƒvƒŒƒC‰æ–Ê
+            #region ï¿½vï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½
             case GameState.Play:
-                #region ƒvƒŒƒC‰Šúİ’è
+                #region ï¿½vï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½ï¿½ï¿½İ’ï¿½
                 if (gameStateEnter)
                 {
                     gameStateEnter = false;
 
                     foreach (GameObject obj in obstacles)
                     {
-                        obj.GetComponent<Rigidbody2D>().velocity = Vector3.left * (5 + (float)Math.Pow(StartLevel, 0.7f) * 3);
+                        obj.GetComponent<Rigidbody2D>().linearVelocity = Vector3.left * (5 + (float)Math.Pow(StartLevel, 0.7f) * 3);
                     }
                     scoreboardRectTransform.anchoredPosition = Vector2.zero;
                     pauseButtonRectTransform.anchoredPosition = -pauseButtonPosition_Menu;
@@ -682,7 +682,7 @@ public class GameManagerScript: MonoBehaviour
 
                 switch (currentPlayState)
                 {
-                    #region ƒvƒŒƒC’†ˆ—
+                    #region ï¿½vï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
                     case PlayState.Play:
                         score = (int)((Time.time - playStartTime) * 100);
                         moveSpeed = 5 + Mathf.Pow(level, 0.7f) * 3;
@@ -697,7 +697,7 @@ public class GameManagerScript: MonoBehaviour
                         break;
                     #endregion
 
-                    #region ƒŒƒxƒ‹ã¸ˆ—
+                    #region ï¿½ï¿½ï¿½xï¿½ï¿½ï¿½ã¸ï¿½ï¿½ï¿½ï¿½
                     case PlayState.LevelUp:
                         if (playStateEnter)
                         {
@@ -762,7 +762,7 @@ public class GameManagerScript: MonoBehaviour
                         break;
                     #endregion
 
-                    #region ƒ|[ƒY‰æ–Ê
+                    #region ï¿½|ï¿½[ï¿½Yï¿½ï¿½ï¿½
                     case PlayState.Pause:
                         if (playStateEnter)
                         {
@@ -774,7 +774,7 @@ public class GameManagerScript: MonoBehaviour
                                 button.GetComponent<ButtonScript_Normal>().isButtonPushed = false;
                         }
 
-                        #region ƒRƒ“ƒeƒBƒjƒ…[ˆ—
+                        #region ï¿½Rï¿½ï¿½ï¿½eï¿½Bï¿½jï¿½ï¿½ï¿½[ï¿½ï¿½ï¿½ï¿½
                         if (PauseButtons[0].GetComponent<ButtonScript_Normal>().isButtonPushed)
                         {
                             switch (countinueCountDown)
@@ -818,7 +818,7 @@ public class GameManagerScript: MonoBehaviour
                         }
                         #endregion
 
-                        #region ƒŠƒ^ƒCƒAˆ—
+                        #region ï¿½ï¿½ï¿½^ï¿½Cï¿½Aï¿½ï¿½ï¿½ï¿½
                         else if (PauseButtons[1].GetComponent<ButtonScript_Normal>().isButtonPushed)
                         {
                             PauseButtons[1].GetComponent<ButtonScript_Normal>().isButtonPushed = false;
@@ -832,7 +832,7 @@ public class GameManagerScript: MonoBehaviour
                         break;
                     #endregion
 
-                    #region ƒQ[ƒ€ƒI[ƒo[ˆ—
+                    #region ï¿½Qï¿½[ï¿½ï¿½ï¿½Iï¿½[ï¿½oï¿½[ï¿½ï¿½ï¿½ï¿½
                     case PlayState.GameOver:
                         if (playStateEnter)
                         {
@@ -840,7 +840,7 @@ public class GameManagerScript: MonoBehaviour
 
                             foreach (GameObject obj in obstacles)
                             {
-                                obj.GetComponent<Rigidbody2D>().velocity = Vector3.zero;
+                                obj.GetComponent<Rigidbody2D>().linearVelocity = Vector3.zero;
                             }
                             if (Player.GetComponent<PlayerScript>().previousPlayerState != PlayerScript.PlayerState.Squat ||
                                 ! Player.GetComponent<PlayerScript>().isInTunnel)
@@ -849,7 +849,7 @@ public class GameManagerScript: MonoBehaviour
                                 Rigidbody2D playerRb = Player.GetComponent<Rigidbody2D>();
                                 playerRb.constraints = RigidbodyConstraints2D.None;
                                 playerRb.angularVelocity = moveSpeed * 20;
-                                playerRb.velocity = Vector2.up * 15 + Vector2.left * moveSpeed * 0.3f;
+                                playerRb.linearVelocity = Vector2.up * 15 + Vector2.left * moveSpeed * 0.3f;
                             }
                         }
                         break;
@@ -858,7 +858,7 @@ public class GameManagerScript: MonoBehaviour
 
                 DeleteObstacle();
 
-                #region ƒXƒRƒA•\¦ˆ—
+                #region ï¿½Xï¿½Rï¿½Aï¿½\ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
                 scoreText.text = "" + score;
                 #endregion
                 break;
@@ -866,7 +866,7 @@ public class GameManagerScript: MonoBehaviour
 
 
 
-            #region ƒXƒLƒ“ƒZƒŒƒNƒg
+            #region ï¿½Xï¿½Lï¿½ï¿½ï¿½Zï¿½ï¿½ï¿½Nï¿½g
             case GameState.SkinSelect:
                 if (gameStateEnter)
                 {
@@ -878,7 +878,7 @@ public class GameManagerScript: MonoBehaviour
                     MenuModel_Ball.transform.position = MenuModel.transform.position;
                     MenuModel_Cube.transform.localScale = MenuModel.transform.localScale;
                     MenuModel_Ball.transform.localScale = MenuModel.transform.localScale;
-                    modelRb.velocity = Vector2.zero;
+                    modelRb.linearVelocity = Vector2.zero;
                     previewSkin = UseSkin;
                     useSkinNumber = SkinSelecter.GetComponent<SkinSelecterScript>().skinNumber;
                     selectorEulerAngles = SkinSelecterWheel.transform.localEulerAngles;
@@ -930,21 +930,21 @@ public class GameManagerScript: MonoBehaviour
                 #endregion
         }
 
-        // ƒŠƒZƒbƒgiŠJ”­—pj
+        // ï¿½ï¿½ï¿½Zï¿½bï¿½gï¿½iï¿½Jï¿½ï¿½ï¿½pï¿½j
         {
             if (Input.GetKeyDown(KeyCode.Space)) ResetGame();
         }
     }
 
 
-    #region ƒIƒuƒWƒFƒNƒg¶¬ŠÖ”
+    #region ï¿½Iï¿½uï¿½Wï¿½Fï¿½Nï¿½gï¿½ï¿½ï¿½ï¿½ï¿½Öï¿½
     private GameObject ObstacleCreate(int obstacleNum, float positionX, float width, float height, float moveSpeed)
     {
         createObjectNumber = obstacleNum;
          GameObject _previousObstacle = Pool[obstacleNum].Get();
         _previousObstacle.transform.position = Vector3.right * positionX;
         _previousObstacle.transform.localScale = new Vector3(width, height, 1);
-        _previousObstacle.GetComponent<Rigidbody2D>().velocity = Vector3.left * moveSpeed;
+        _previousObstacle.GetComponent<Rigidbody2D>().linearVelocity = Vector3.left * moveSpeed;
         obstacles.Add(_previousObstacle); 
         obstacleNumbers.Add(obstacleNum);
         previousObstacle = _previousObstacle;
@@ -954,7 +954,7 @@ public class GameManagerScript: MonoBehaviour
     #endregion
 
 
-    #region áŠQ•¨ƒ‰ƒ“ƒ_ƒ€¶¬ŠÖ”
+    #region ï¿½ï¿½Qï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½_ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Öï¿½
     private void RandomObstacleCreate(float moveSpeed)
     {
         stageRightEdge = previousObstacle.transform.position.x + previousObstacle.transform.localScale.x;
@@ -1001,7 +1001,7 @@ public class GameManagerScript: MonoBehaviour
     #endregion
 
 
-    #region ƒIƒuƒWƒFƒNƒgíœŠÖ”
+    #region ï¿½Iï¿½uï¿½Wï¿½Fï¿½Nï¿½gï¿½íœï¿½Öï¿½
     private void DeleteObstacle()
     {
         if (obstacles.Count > 0)
@@ -1018,7 +1018,7 @@ public class GameManagerScript: MonoBehaviour
     }
     #endregion
 
-    #region ƒŠƒZƒbƒgŠÖ”iŠJ”­—pj
+    #region ï¿½ï¿½ï¿½Zï¿½bï¿½gï¿½Öï¿½ï¿½iï¿½Jï¿½ï¿½ï¿½pï¿½j
     private void ResetGame()
     {
         do

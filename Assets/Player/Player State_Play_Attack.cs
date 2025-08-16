@@ -6,14 +6,14 @@ public class PlayerState_Play_Attack : PlayerStateBase_Play
 
     public override void Enter()
     {
-        //ƒXƒP[ƒ‹C³
+        //ï¿½Xï¿½Pï¿½[ï¿½ï¿½ï¿½Cï¿½ï¿½
         tf.localScale = Vector2.one;
 
-        //ƒXƒLƒ“‚ÌØ‚è‘Ö‚¦
+        //ï¿½Xï¿½Lï¿½ï¿½ï¿½ÌØ‚ï¿½Ö‚ï¿½
         playerCon.SkinDefault.SetActive(false);
         playerCon.SkinAttack.SetActive(true);
 
-        //SEÄ¶
+        //SEï¿½Äï¿½
         AM.PlaySE(AudioManager.SE.Player_Attack);
     }
 
@@ -21,56 +21,56 @@ public class PlayerState_Play_Attack : PlayerStateBase_Play
     {
         base.Update();
 
-        //Update‚ª–³Œø‰»’†‚È‚ç‰½‚à‚µ‚È‚¢
+        //Updateï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½È‚ç‰½ï¿½ï¿½ï¿½ï¿½ï¿½È‚ï¿½
         if (!isActiveUpdate)
             return;
 
-        //ƒ|[ƒYó‘Ô‚È‚ç‰½‚à‚µ‚È‚¢
+        //ï¿½|ï¿½[ï¿½Yï¿½ï¿½Ô‚È‚ç‰½ï¿½ï¿½ï¿½ï¿½ï¿½È‚ï¿½
         if (GameStateState_Play.currentPauseState != GameStateState_Play.PauseState.Play)
             return;
 
-        //UŒ‚“ü—Í‰ğœ
+        //ï¿½Uï¿½ï¿½ï¿½ï¿½ï¿½Í‰ï¿½ï¿½ï¿½ï¿½ï¿½
         if (IM.is_Player_Attack_Release && isActive_Attack)
         {
-            //‚µ‚á‚ª‚İ“ü—Í‚ÅSquatƒXƒe[ƒg
+            //ï¿½ï¿½ï¿½á‚ªï¿½İ“ï¿½ï¿½Í‚ï¿½Squatï¿½Xï¿½eï¿½[ï¿½g
             if (IM.is_Player_Squat_Hold)
             {
                 stateMachine.ChangeState(stateMachine.state_Play_Squat);
 
-                //SEÄ¶
+                //SEï¿½Äï¿½
                 AM.PlaySE(AudioManager.SE.Player_Squat);
             }
 
-            //“ü—Í‚È‚µ‚ÅRunƒXƒe[ƒg
+            //ï¿½ï¿½ï¿½Í‚È‚ï¿½ï¿½ï¿½Runï¿½Xï¿½eï¿½[ï¿½g
             else stateMachine.ChangeState(stateMachine.state_Play_Run);
         }
 
-        //ƒWƒƒƒ“ƒvˆ—
+        //ï¿½Wï¿½ï¿½ï¿½ï¿½ï¿½vï¿½ï¿½ï¿½ï¿½
         else if (IM.is_Player_Jump_Push && isActive_Jump)
         {
-            rb.velocity = Vector2.up * 30;
+            rb.linearVelocity = Vector2.up * 30;
 
-            //SEÄ¶
+            //SEï¿½Äï¿½
             AM.PlaySE(AudioManager.SE.Player_Jump);
         }
 
-        //‚µ‚á‚ª‚İ“ü—Í‚ÅSquatƒXƒe[ƒg‚É‘JˆÚ
+        //ï¿½ï¿½ï¿½á‚ªï¿½İ“ï¿½ï¿½Í‚ï¿½Squatï¿½Xï¿½eï¿½[ï¿½gï¿½É‘Jï¿½ï¿½
         else if (IM.is_Player_Squat_Push)
         {
             stateMachine.ChangeState(stateMachine.state_Play_Squat);
 
-            //SEÄ¶
+            //SEï¿½Äï¿½
             AM.PlaySE(AudioManager.SE.Player_Squat);
         }
 
-        //‹ó’†‚Éo‚½‚çJumpƒXƒe[ƒg‚Ö‘JˆÚ
+        //ï¿½ó’†‚Éoï¿½ï¿½ï¿½ï¿½Jumpï¿½Xï¿½eï¿½[ï¿½gï¿½Ö‘Jï¿½ï¿½
         else if (!isGrounded)
             stateMachine.ChangeState(stateMachine.state_Play_Jump);
     }
 
     public override void Exit()
     {
-        //ƒXƒLƒ“‚ÌØ‚è‘Ö‚¦
+        //ï¿½Xï¿½Lï¿½ï¿½ï¿½ÌØ‚ï¿½Ö‚ï¿½
         playerCon.SkinDefault.SetActive(true);
         playerCon.SkinAttack.SetActive(false);
     }

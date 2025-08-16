@@ -10,20 +10,20 @@ public class PlayerState_Model_Jump : PlayerStateBase_Model
     {
         base.Enter();
 
-        //ˆÚ“®Žž‚ÌƒWƒƒƒ“ƒv‚ÌƒxƒNƒgƒ‹
+        //ï¿½Ú“ï¿½ï¿½ï¿½ï¿½ÌƒWï¿½ï¿½ï¿½ï¿½ï¿½vï¿½Ìƒxï¿½Nï¿½gï¿½ï¿½
         jumpVector = 
             Vector2.up * Random.Range(15f, 25f) + 
             Vector2.right * Mathf.Sign(lookDirection) * Random.Range(10f, 25f);
 
-        //‰‰ñƒWƒƒƒ“ƒv
-        rb.velocity = jumpVector;
+        //ï¿½ï¿½ï¿½ï¿½Wï¿½ï¿½ï¿½ï¿½ï¿½v
+        rb.linearVelocity = jumpVector;
     }
 
     public override void Update()
     {
         base.Update();
 
-        //ŽžŠÔŒo‰ß‚ÅƒXƒe[ƒg‘JˆÚ
+        //ï¿½ï¿½ï¿½ÔŒoï¿½ß‚ÅƒXï¿½eï¿½[ï¿½gï¿½Jï¿½ï¿½
         if (elapsedTime > 3)
             stateMachine.ChangeState(stateMachine.state_Model_LookAround);
     }

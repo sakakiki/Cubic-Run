@@ -27,29 +27,29 @@ public class Enemy : MonoBehaviour
 
     void Update()
     {
-        //ƒvƒŒƒC’†‚Å‚È‚¯‚ê‚Î‰½‚à‚µ‚È‚¢
+        //ï¿½vï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½Å‚È‚ï¿½ï¿½ï¿½Î‰ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½È‚ï¿½
         if (gameStateMachine.currentState != gameStateMachine.state_Play &&
             gameStateMachine.currentState != gameStateMachine.state_Tutorial) return;
 
-        //ÀsÏ‚İ‚È‚ç‰½‚à‚µ‚È‚¢
+        //ï¿½ï¿½ï¿½sï¿½Ï‚İ‚È‚ç‰½ï¿½ï¿½ï¿½ï¿½ï¿½È‚ï¿½
         if (!isActive) return;
 
-        //ƒvƒŒƒCƒ„[‚ÉÚG‚·‚éˆÊ’u‚Ü‚Å—ˆ‚½‚Æ‚«
+        //ï¿½vï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½[ï¿½ÉÚGï¿½ï¿½ï¿½ï¿½Ê’uï¿½Ü‚Å—ï¿½ï¿½ï¿½ï¿½Æ‚ï¿½
         if ((tf.position.x) < (playerTf.localScale.x / 2) && tf.position.x > -5)
         {
-            //ƒvƒŒƒCƒ„[‚ªAttackƒXƒe[ƒg‚È‚ç“|‚³‚ê‚é
+            //ï¿½vï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½[ï¿½ï¿½Attackï¿½Xï¿½eï¿½[ï¿½gï¿½È‚ï¿½|ï¿½ï¿½ï¿½ï¿½ï¿½
             if (playerStateMachine.currentState == playerStateMachine.state_Play_Attack)
             {
                 rb.isKinematic = false;
-                rb.velocity = parentRb.velocity + Vector2.up * 10;
+                rb.linearVelocity = parentRb.linearVelocity + Vector2.up * 10;
 
-                //SEÄ¶
+                //SEï¿½Äï¿½
                 AudioManager.Instance.PlaySE(AudioManager.SE.Enemy);
             }
-            //‚»‚êˆÈŠO‚È‚çƒvƒŒƒCƒ„[‚ğGameOver‚É
+            //ï¿½ï¿½ï¿½ï¿½ÈŠOï¿½È‚ï¿½vï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½[ï¿½ï¿½GameOverï¿½ï¿½
             else playerStateMachine.ChangeState(playerStateMachine.state_GameOver);
 
-            //ÀsÏ‚İ‚É‚·‚é
+            //ï¿½ï¿½ï¿½sï¿½Ï‚İ‚É‚ï¿½ï¿½ï¿½
             isActive = false;
         } 
     }

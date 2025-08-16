@@ -26,47 +26,47 @@ public class PlayerState_Model_Dragged : PlayerStateBase_Model
     {
         base.Enter();
 
-        //•¨—‰‰Z‚ğ–³Œø‰»
+        //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Zï¿½ğ–³Œï¿½ï¿½ï¿½
         rb.isKinematic = true;
 
-        //‰^“®‚ğ’â~
-        rb.velocity = Vector2.zero;
+        //ï¿½^ï¿½ï¿½ï¿½ï¿½ï¿½~
+        rb.linearVelocity = Vector2.zero;
         rb.angularVelocity = 0;
 
-        //‰ñ“]—Ê‚ğ‹L‰¯
+        //ï¿½ï¿½]ï¿½Ê‚ï¿½ï¿½Lï¿½ï¿½
         startAngle = tf.eulerAngles.z;
 
-        //ƒXƒP[ƒ‹•ÏX
+        //ï¿½Xï¿½Pï¿½[ï¿½ï¿½ï¿½ÏX
         tf.localScale = Vector3.one * 1.6f;
 
-        //–Ú‚ğŠJ‚¯‚é
+        //ï¿½Ú‚ï¿½ï¿½Jï¿½ï¿½ï¿½ï¿½
         eyeTf.localScale = Vector3.one;
         eyeCloseTimer = 5;
 
-        //‹Á‚¢‚½–Ú‚É
+        //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ú‚ï¿½
         playerCon.eyeDragged.SetActive(true);
 
-        //ƒhƒ‰ƒbƒOŠJn‚ÌˆÊ’uEƒ^ƒbƒ`ˆÊ’u‚ÌƒYƒŒ‚ğ‹L‰¯
+        //ï¿½hï¿½ï¿½ï¿½bï¿½Oï¿½Jï¿½nï¿½ï¿½ï¿½ÌˆÊ’uï¿½Eï¿½^ï¿½bï¿½`ï¿½Ê’uï¿½ÌƒYï¿½ï¿½ï¿½ï¿½ï¿½Lï¿½ï¿½
         startScreenPoint = mainCam.WorldToScreenPoint(tf.position);
         touchOffset = tf.position - mainCam.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, startScreenPoint.z));
 
-        //ƒvƒŒƒCƒ„[‚ÌÀ•W‚Æ’†S‚ÌˆÊ’u‚ÌƒYƒŒ‚ğ‹L‰¯
+        //ï¿½vï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½[ï¿½Ìï¿½ï¿½Wï¿½Æ’ï¿½ï¿½Sï¿½ÌˆÊ’uï¿½ÌƒYï¿½ï¿½ï¿½ï¿½ï¿½Lï¿½ï¿½
         centerOffset = playerCenterTf.position - tf.position;
 
-        //SEÄ¶
+        //SEï¿½Äï¿½
         AudioManager.Instance.PlaySE(AudioManager.SE.Player_Hold);
     }
 
     public override void Update()
     {
-        //Œo‰ßŠÔ‰ÁZ
+        //ï¿½oï¿½ßï¿½ï¿½Ô‰ï¿½ï¿½Z
         elapsedTime += Time.deltaTime;
 
-        //ƒ^ƒbƒ`iƒ}ƒEƒXj‚ÌÀ•W‚ğ‚à‚Æ‚ÉˆÚ“®æ‚ÌˆÊ’u‚ğŒvZ
+        //ï¿½^ï¿½bï¿½`ï¿½iï¿½}ï¿½Eï¿½Xï¿½jï¿½Ìï¿½ï¿½Wï¿½ï¿½ï¿½ï¿½ï¿½Æ‚ÉˆÚ“ï¿½ï¿½ï¿½ÌˆÊ’uï¿½ï¿½ï¿½vï¿½Z
         Vector3 currentScreenPoint = new Vector3(Input.mousePosition.x, Input.mousePosition.y, startScreenPoint.z);
         Vector3 newPosition = mainCam.ScreenToWorldPoint(currentScreenPoint) + touchOffset;
 
-        //‰æ–ÊŠO‚Éo‚½ê‡‚Í•â³
+        //ï¿½ï¿½ÊŠOï¿½Éoï¿½ï¿½ï¿½ê‡ï¿½Í•â³
         if (newPosition.y + centerOffset.y - tf.localScale.y / 2 < mainCamTf.position.y) 
             newPosition.y = mainCamTf.position.y - centerOffset.y + tf.localScale.y / 2;
         if (newPosition.x + centerOffset.x - tf.localScale.x / 2 < -5)
@@ -74,24 +74,24 @@ public class PlayerState_Model_Dragged : PlayerStateBase_Model
         else if (newPosition.x + centerOffset.x + tf.localScale.x / 2 > 15)
             newPosition.x = 15 - centerOffset.x - tf.localScale.x / 2;
 
-        //Œ»İ’l‚Ì‹L‰¯‚ÆQueue‚Ö‚ÌŠi”[
+        //ï¿½ï¿½ï¿½İ’lï¿½Ì‹Lï¿½ï¿½ï¿½ï¿½Queueï¿½Ö‚ÌŠiï¿½[
         currentTime = Time.time;
         currentPos = newPosition;
         timeQueue.Enqueue(currentTime);
         posQueue.Enqueue(currentPos);
 
-        //ˆÊ’u‚Æ‰ñ“]‚ğ•ÏX
+        //ï¿½Ê’uï¿½Æ‰ï¿½]ï¿½ï¿½ÏX
         rb.position = newPosition;
         rb.SetRotation(Mathf.Sin(Mathf.PI * elapsedTime * 4) * 2 + startAngle);
 
-        //Queue“à•s—vƒf[ƒ^íœ
+        //Queueï¿½ï¿½ï¿½sï¿½vï¿½fï¿½[ï¿½^ï¿½íœ
         while (Time.time - timeQueue.Peek() > 0.1)
         {
             timeQueue.Dequeue();
             posQueue.Dequeue();
         }
 
-        //ƒQ[ƒ€ƒXƒe[ƒg‚ª‘JˆÚ‚µ‚½‚È‚çƒXƒe[ƒg‘JˆÚ
+        //ï¿½Qï¿½[ï¿½ï¿½ï¿½Xï¿½eï¿½[ï¿½gï¿½ï¿½ï¿½Jï¿½Ú‚ï¿½ï¿½ï¿½ï¿½È‚ï¿½Xï¿½eï¿½[ï¿½gï¿½Jï¿½ï¿½
         if (gameStateMachine.currentState == gameStateMachine.state_MenuToPlay ||
             gameStateMachine.currentState == gameStateMachine.state_MenuToTutorial ||
             gameStateMachine.currentState == gameStateMachine.state_ResultToPlay)
@@ -102,22 +102,22 @@ public class PlayerState_Model_Dragged : PlayerStateBase_Model
 
     public override void Exit()
     {
-        //ƒXƒP[ƒ‹•ÏX
+        //ï¿½Xï¿½Pï¿½[ï¿½ï¿½ï¿½ÏX
         tf.localScale = Vector3.one * 1.5f;
 
-        //‹Á‚¢‚½–Ú‚ğ–ß‚·
+        //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ú‚ï¿½ß‚ï¿½
         playerCon.eyeDragged.SetActive(false);
 
-        //•¨—‰‰Z‚Ì—LŒø‰»
+        //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Zï¿½Ì—Lï¿½ï¿½ï¿½ï¿½
         rb.isKinematic = false; 
 
-        //‰ñ“]‚ğ—LŒø‰»
+        //ï¿½ï¿½]ï¿½ï¿½Lï¿½ï¿½ï¿½ï¿½
         rb.freezeRotation = false;
 
-        //‘¬“x•t—^
-        rb.velocity = (currentPos - posQueue.Dequeue()) / (currentTime - timeQueue.Dequeue()) / 2;
+        //ï¿½ï¿½ï¿½xï¿½tï¿½^
+        rb.linearVelocity = (currentPos - posQueue.Dequeue()) / (currentTime - timeQueue.Dequeue()) / 2;
 
-        //Queue“àƒf[ƒ^íœ
+        //Queueï¿½ï¿½ï¿½fï¿½[ï¿½^ï¿½íœ
         timeQueue.Clear();
         posQueue.Clear();
     }

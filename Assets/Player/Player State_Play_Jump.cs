@@ -8,11 +8,11 @@ public class PlayerState_Play_Jump : PlayerStateBase_Play
 
     public override void Enter()
     {
-        //“´ŒA“à‚Å“Vˆä‚ÉŠ±Â‚·‚é‚È‚çˆÊ’u‚ğ’²®
+        //ï¿½ï¿½ï¿½Aï¿½ï¿½ï¿½Å“Vï¿½ï¿½ÉŠï¿½ï¿½Â‚ï¿½ï¿½ï¿½È‚ï¿½Ê’uï¿½ğ’²ï¿½
         if (TerrainManager.Instance.currentTerrainNum == 5 && GameManager.Instance.playerTf.position.y > 1.6)
             GameManager.Instance.playerTf.position = Vector2.up * 1.6f;
 
-        //ƒWƒƒƒ“ƒv—pƒXƒP[ƒ‹‚É•ÏX
+        //ï¿½Wï¿½ï¿½ï¿½ï¿½ï¿½vï¿½pï¿½Xï¿½Pï¿½[ï¿½ï¿½ï¿½É•ÏX
         tf.localScale = jumpScale;
     }
 
@@ -20,33 +20,33 @@ public class PlayerState_Play_Jump : PlayerStateBase_Play
     {
         base.Update();
 
-        //Update‚ª–³Œø‰»’†‚È‚ç‰½‚à‚µ‚È‚¢
+        //Updateï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½È‚ç‰½ï¿½ï¿½ï¿½ï¿½ï¿½È‚ï¿½
         if (!isActiveUpdate)
             return;
 
-        //ƒ|[ƒYó‘Ô‚È‚ç‰½‚à‚µ‚È‚¢
+        //ï¿½|ï¿½[ï¿½Yï¿½ï¿½Ô‚È‚ç‰½ï¿½ï¿½ï¿½ï¿½ï¿½È‚ï¿½
         if (GameStateState_Play.currentPauseState != GameStateState_Play.PauseState.Play)
             return;
 
-        //‚µ‚á‚ª‚İƒ{ƒ^ƒ“‚ª‰Ÿ‚³‚ê‚½‚ç‹}~‰º
+        //ï¿½ï¿½ï¿½á‚ªï¿½İƒ{ï¿½^ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ê‚½ï¿½ï¿½}ï¿½~ï¿½ï¿½
         if (IM.is_Player_Squat_Push && isActive_Fall)
         {
-            if (rb.velocity.y > -25) rb.velocity = Vector2.down * 25;
+            if (rb.linearVelocity.y > -25) rb.linearVelocity = Vector2.down * 25;
 
-            //SEÄ¶
+            //SEï¿½Äï¿½
             AM.PlaySE(AudioManager.SE.Player_Squat);
 
             stateMachine.ChangeState(stateMachine.state_Play_SmallJump);
         }
 
-        //’…’n‚µ‚½‚çƒXƒe[ƒg‘JˆÚ
+        //ï¿½ï¿½ï¿½nï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Xï¿½eï¿½[ï¿½gï¿½Jï¿½ï¿½
         else if (isGrounded)
         {
-            //UŒ‚ƒ{ƒ^ƒ“‚ª‰Ÿ‚³‚ê‚Ä‚¢‚½‚çAttackƒXƒe[ƒg‚Ö
+            //ï¿½Uï¿½ï¿½ï¿½{ï¿½^ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä‚ï¿½ï¿½ï¿½ï¿½ï¿½Attackï¿½Xï¿½eï¿½[ï¿½gï¿½ï¿½
             if (IM.is_Player_Attack_Hold && isActive_Attack)
                 stateMachine.ChangeState(stateMachine.state_Play_Attack);
 
-            //“ü—Í‚ª–³‚¯‚ê‚ÎRunƒXƒe[ƒg‚Ö
+            //ï¿½ï¿½ï¿½Í‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Runï¿½Xï¿½eï¿½[ï¿½gï¿½ï¿½
             else stateMachine.ChangeState(stateMachine.state_Play_Run);
         }
     }

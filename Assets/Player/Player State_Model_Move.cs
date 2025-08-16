@@ -11,22 +11,22 @@ public class PlayerState_Model_Move : PlayerStateBase_Model
     {
         base.Enter();
 
-        //ˆÚ“®‚·‚éŽžŠÔ‚ðŒˆ’è
+        //ï¿½Ú“ï¿½ï¿½ï¿½ï¿½éŽžï¿½Ô‚ï¿½ï¿½ï¿½ï¿½ï¿½
         moveTime = Random.Range(2f, 6f);
 
-        //ˆÚ“®Žž‚ÌƒWƒƒƒ“ƒv‚ÌƒxƒNƒgƒ‹
+        //ï¿½Ú“ï¿½ï¿½ï¿½ï¿½ÌƒWï¿½ï¿½ï¿½ï¿½ï¿½vï¿½Ìƒxï¿½Nï¿½gï¿½ï¿½
         jumpVector = Vector2.up * 8 + Vector2.right * Mathf.Sign(lookDirection) * 3;
 
-        //‰‰ñƒWƒƒƒ“ƒv
-        rb.velocity = jumpVector;
+        //ï¿½ï¿½ï¿½ï¿½Wï¿½ï¿½ï¿½ï¿½ï¿½v
+        rb.linearVelocity = jumpVector;
     }
 
     public override void Update()
     {
         base.Update();
 
-        //’n–Ê‚É‚¢‚ê‚ÎƒWƒƒƒ“ƒv
-        if (isGrounded) rb.velocity = jumpVector;
+        //ï¿½nï¿½Ê‚É‚ï¿½ï¿½ï¿½ÎƒWï¿½ï¿½ï¿½ï¿½ï¿½v
+        if (isGrounded) rb.linearVelocity = jumpVector;
 
         if (elapsedTime > moveTime)
             stateMachine.ChangeStateDelay(stateMachine.state_Model_LookAround, 2);

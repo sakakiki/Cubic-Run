@@ -178,7 +178,7 @@ public class TerrainManager : MonoBehaviour
         //位置とスケールを調整し速度を付与
         previousTerrainTf.position = Vector2.right * (leftEdgePosX + width);
         previousTerrainTf.localScale = new Vector3(width, height, 1);
-        previousTerrainTf.GetComponent<Rigidbody2D>().velocity = Vector3.left * moveSpeed;
+        previousTerrainTf.GetComponent<Rigidbody2D>().linearVelocity = Vector3.left * moveSpeed;
 
         //管理用Queueに登録
         activeTerrainTfQueue.Enqueue(previousTerrainTf);
@@ -203,6 +203,6 @@ public class TerrainManager : MonoBehaviour
     public void SetSpeed(float speed)
     {
         foreach (Transform terrainTf in activeTerrainTfQueue)
-            terrainTf.GetComponent<Rigidbody2D>().velocity = Vector2.left * speed;
+            terrainTf.GetComponent<Rigidbody2D>().linearVelocity = Vector2.left * speed;
     }
 }

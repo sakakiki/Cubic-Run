@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class PlayerScript : MonoBehaviour
 {
-    #region “ü—Íæ“¾—p•Ï”
+    #region ï¿½ï¿½ï¿½Íæ“¾ï¿½pï¿½Ïï¿½
     [System.NonSerialized] public bool isInputUpPush;
     [System.NonSerialized] public bool isInputDownPush;
     [System.NonSerialized] public bool isInputDownHold;
@@ -15,7 +15,7 @@ public class PlayerScript : MonoBehaviour
     [System.NonSerialized] public bool isInputRightRelease;
     #endregion
 
-    #region ƒIƒuƒWƒFƒNƒg“o˜^
+    #region ï¿½Iï¿½uï¿½Wï¿½Fï¿½Nï¿½gï¿½oï¿½^
     [SerializeField] private GameObject SkinDefault;
     [SerializeField] private GameObject SkinAttack;
     [SerializeField] private GameObject TriggerFoot;
@@ -27,7 +27,7 @@ public class PlayerScript : MonoBehaviour
     [SerializeField] private ParticleSystem runningParticle;
     #endregion
 
-    #region ƒvƒŒƒCƒ„[ƒXƒe[ƒg
+    #region ï¿½vï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½[ï¿½Xï¿½eï¿½[ï¿½g
     public enum PlayerState
     {
         Run,
@@ -77,11 +77,11 @@ public class PlayerScript : MonoBehaviour
 
     private void OnEnable()
     {
-        #region ‰Šú‰»
+        #region ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
         currentPlayerState = PlayerState.Jump;
         gameObject.layer = 0;
         rb = GetComponent<Rigidbody2D>();
-        rb.velocity = Vector2.zero;
+        rb.linearVelocity = Vector2.zero;
         rb.constraints = 
             RigidbodyConstraints2D.FreezePositionX |
             RigidbodyConstraints2D.FreezeRotation;
@@ -98,7 +98,7 @@ public class PlayerScript : MonoBehaviour
 
     void Update()
     {
-        #region •Ï”‚Ìæ“¾
+        #region ï¿½Ïï¿½ï¿½Ìæ“¾
         isTouchGround = TriggerFoot.GetComponent<TriggerTouchCheck>().isTouch;
         isHit = TriggerFront.GetComponent<TriggerTouchCheck>().isTouch;
         HitObjects = TriggerFront.GetComponent<TriggerTouchCheck>().HitObjects;
@@ -108,7 +108,7 @@ public class PlayerScript : MonoBehaviour
         caveEnd = TriggerFoot.GetComponent <TriggerTouchCheck>().caveEnd;
         #endregion
 
-        #region “ü—Í‚Ìæ“¾
+        #region ï¿½ï¿½ï¿½Í‚Ìæ“¾
         isInputUpPush = Input.GetKeyDown(KeyCode.UpArrow);
         isInputDownPush = Input.GetKeyDown(KeyCode.DownArrow);
         isInputDownHold = Input.GetKey(KeyCode.DownArrow);
@@ -132,7 +132,7 @@ public class PlayerScript : MonoBehaviour
 
                 if (isHit) ChangePlayerState(PlayerState.GameOver);
                 else if (!isTouchGround) ChangePlayerState(PlayerState.Jump);
-                else if (isInputUpPush) rb.velocity = Vector2.up * 30;
+                else if (isInputUpPush) rb.linearVelocity = Vector2.up * 30;
                 else if (isInputDownPush) ChangePlayerState(PlayerState.Squat);
                 else if (isInputRightPush) ChangePlayerState (PlayerState.Attack);
                 break;
@@ -148,7 +148,7 @@ public class PlayerScript : MonoBehaviour
 
                 if (isHit) ChangePlayerState(PlayerState.GameOver);
                 else if(!isTouchGround) ChangePlayerState(isInTunnel ? PlayerState.GameOver : PlayerState.Jump);
-                else if (isInputUpPush) rb.velocity = Vector2.up * 20;
+                else if (isInputUpPush) rb.linearVelocity = Vector2.up * 20;
                 else if (isInputRightPush) ChangePlayerState(isInTunnel ? PlayerState.GameOver : PlayerState.Attack);
                 else if (isInputDownRelease) 
                     ChangePlayerState(isInTunnel ? PlayerState.GameOver : (isInputRightHold ? PlayerState.Attack : PlayerState.Run));
@@ -163,10 +163,10 @@ public class PlayerScript : MonoBehaviour
                 if(isInCave && !isInputDownHold && transform.position.y > 1.65f)
                 {
                     transform.localPosition = Vector2.up * 1.65f;
-                    if (rb.velocity.y > 0) rb.velocity = Vector2.zero;
+                    if (rb.linearVelocity.y > 0) rb.linearVelocity = Vector2.zero;
                 }
 
-                if (isInputDownPush && rb.velocity.y > -25) rb.velocity = Vector2.down * 25;
+                if (isInputDownPush && rb.linearVelocity.y > -25) rb.linearVelocity = Vector2.down * 25;
 
                 if (isHit || transform.position.y < -10) ChangePlayerState(PlayerState.GameOver);
                 else if (isTouchGround)
@@ -195,7 +195,7 @@ public class PlayerScript : MonoBehaviour
                     {
                         Rigidbody2D HitRb = HitObjects[0].GetComponent<Rigidbody2D>();
                         HitRb.isKinematic = false;
-                        HitRb.velocity = Vector2.up * 10;
+                        HitRb.linearVelocity = Vector2.up * 10;
                         HitObjects[0].GetComponent<BoxCollider2D>().enabled = false;
                     }
                     else
@@ -205,7 +205,7 @@ public class PlayerScript : MonoBehaviour
                     }
                 }
                 if (!isTouchGround) ChangePlayerState(PlayerState.Jump);
-                else if (isInputUpPush) rb.velocity = Vector2.up * 30;
+                else if (isInputUpPush) rb.linearVelocity = Vector2.up * 30;
                 else if (isInputDownPush) ChangePlayerState (PlayerState.Squat);
                 else if (isInputRightRelease) ChangePlayerState(isInputDownHold ? PlayerState.Squat : PlayerState.Run);
                 break;

@@ -24,74 +24,74 @@ public class PlayerState_Model_MenuToPlay : PlayerStateBase_Model
     {
         base.Enter();
 
-        //ƒtƒ‰ƒOƒŠƒZƒbƒg
+        //ï¿½tï¿½ï¿½ï¿½Oï¿½ï¿½ï¿½Zï¿½bï¿½g
         isMoving = false;
 
-        //•¨—‰‰Z‚Ì—LŒø‰»
+        //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Zï¿½Ì—Lï¿½ï¿½ï¿½ï¿½
         rb.isKinematic = false;
 
-        //‰Šú‰ñ“]—Ê‹L‰¯E•â³
+        //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½]ï¿½Ê‹Lï¿½ï¿½ï¿½Eï¿½â³
         startEulerAnglesZ = tf.eulerAngles.z;
         if (tf.eulerAngles.z > 180)
             startEulerAnglesZ -= 360;
 
-        //–Ú‚ÌˆÊ’u‚ğ‹L‰¯
+        //ï¿½Ú‚ÌˆÊ’uï¿½ï¿½ï¿½Lï¿½ï¿½
         eyeStartPos = eyeTf.localPosition;
         
-        //–Ú‚ğŠJ‚¯‚é
+        //ï¿½Ú‚ï¿½ï¿½Jï¿½ï¿½ï¿½ï¿½
         eyeTf.localScale = Vector3.one;
 
-        //‚Ü‚Á‚·‚®—§‚Á‚Ä‚¢‚ê‚Î¬‚³‚­A‚»‚¤‚Å‚È‚¯‚ê‚Î‘å‚«‚­ƒWƒƒƒ“ƒv
-        rb.velocity = Vector2.up * (Mathf.Abs(startEulerAnglesZ) < 1 ? 7 : 12);
+        //ï¿½Ü‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä‚ï¿½ï¿½ï¿½Îï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Aï¿½ï¿½ï¿½ï¿½ï¿½Å‚È‚ï¿½ï¿½ï¿½Î‘å‚«ï¿½ï¿½ï¿½Wï¿½ï¿½ï¿½ï¿½ï¿½v
+        rb.linearVelocity = Vector2.up * (Mathf.Abs(startEulerAnglesZ) < 1 ? 7 : 12);
     }
 
     public override void Update()
     {
-        //Œo‰ßŠÔ‰ÁZ
+        //ï¿½oï¿½ßï¿½ï¿½Ô‰ï¿½ï¿½Z
         elapsedTime += Time.deltaTime;
 
-        //–‘OŒvZ
+        //ï¿½ï¿½ï¿½Oï¿½vï¿½Z
         float lerpValue = elapsedTime - 1;
 
-        //‰ñ“]
+        //ï¿½ï¿½]
         rb.rotation = Mathf.Lerp(startEulerAnglesZ, 0, Mathf.Sqrt(elapsedTime * 2));
 
-        //–Ú‚ÌˆÊ’u’²®
+        //ï¿½Ú‚ÌˆÊ’uï¿½ï¿½ï¿½ï¿½
         if (elapsedTime < 0.5)
             eyeTf.localPosition = Vector2.Lerp(eyeStartPos, eyeStandbyPos, elapsedTime * 3);
         else eyeTf.localPosition = Vector2.Lerp(eyeStandbyPos, eyePlayPos, lerpValue);
 
         if (elapsedTime < 0.5) return;
 
-        //ƒXƒP[ƒ‹’²®
+        //ï¿½Xï¿½Pï¿½[ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
         if (elapsedTime < 1)
             tf.localScale = (Vector3.one - Vector3.up * (elapsedTime - 0.5f)) * 1.5f;
         else tf.localScale = Vector3.one * Mathf.Lerp(1.5f, 1, lerpValue);
 
         if (elapsedTime < 1) return;
 
-        //ƒWƒƒƒ“ƒvŠJnˆÊ’u‹L‰¯
+        //ï¿½Wï¿½ï¿½ï¿½ï¿½ï¿½vï¿½Jï¿½nï¿½Ê’uï¿½Lï¿½ï¿½
         if (!isMoving)
         {
-            //ˆ—ÀsÏ‚İ‚Ìƒtƒ‰ƒO‚ğ—§‚Ä‚é
+            //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½sï¿½Ï‚İ‚Ìƒtï¿½ï¿½ï¿½Oï¿½ğ—§‚Ä‚ï¿½
             isMoving = true;
 
-            //•¨—‰‰Z‚ğ–³Œø‰»
+            //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Zï¿½ğ–³Œï¿½ï¿½ï¿½
             rb.isKinematic = true;
 
-            //ˆÚ“®ŠÖ˜A‚Ì’l‚ğ‹L‰¯
+            //ï¿½Ú“ï¿½ï¿½Ö˜Aï¿½Ì’lï¿½ï¿½ï¿½Lï¿½ï¿½
             startPos = tf.position;
             posCorrectionY = 0;
             velocityY = 20;
         }
 
-        //ˆÚ“®ŠÖ˜A‰‰Z
+        //ï¿½Ú“ï¿½ï¿½Ö˜Aï¿½ï¿½ï¿½Z
         velocityY -= gravity * Time.deltaTime;
         posCorrectionY += velocityY * Time.deltaTime;
         if (posCorrectionY < 0) posCorrectionY = 0;
         tf.position = Vector2.Lerp(startPos, targetPos, lerpValue) + Vector2.up * posCorrectionY;
 
-        //ƒQ[ƒ€ƒXƒe[ƒg‚ªPlay‚©Tutorial‚È‚çƒXƒe[ƒg‘JˆÚ
+        //ï¿½Qï¿½[ï¿½ï¿½ï¿½Xï¿½eï¿½[ï¿½gï¿½ï¿½Playï¿½ï¿½Tutorialï¿½È‚ï¿½Xï¿½eï¿½[ï¿½gï¿½Jï¿½ï¿½
         if (gameStateMachine.currentState == gameStateMachine.state_Play ||
             gameStateMachine.currentState == gameStateMachine.state_Tutorial)
             stateMachine.ChangeState(stateMachine.state_Play_Run);
@@ -99,26 +99,26 @@ public class PlayerState_Model_MenuToPlay : PlayerStateBase_Model
 
     public override void Exit()
     {
-        //ƒvƒŒƒCƒ„[‚Ì“–‚½‚è”»’èE•`‰æƒŒƒCƒ„[•ÏX
+        //ï¿½vï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½[ï¿½Ì“ï¿½ï¿½ï¿½ï¿½è”»ï¿½ï¿½Eï¿½`ï¿½æƒŒï¿½Cï¿½ï¿½ï¿½[ï¿½ÏX
         playerCon.SetLayer(0);
         playerCon.SetSortingLayer("Player");
 
-        //ƒvƒŒƒCƒ„[‚ÌˆÊ’u‚ğŠm’è‚³‚¹‚é
+        //ï¿½vï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½[ï¿½ÌˆÊ’uï¿½ï¿½ï¿½mï¿½è‚³ï¿½ï¿½ï¿½ï¿½
         tf.position = targetPos;
 
-        //•¨—‰‰Z‚Ì—LŒø‰»
+        //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Zï¿½Ì—Lï¿½ï¿½ï¿½ï¿½
         rb.isKinematic = false;
 
-        //d—ÍƒXƒP[ƒ‹•â³
+        //ï¿½dï¿½ÍƒXï¿½Pï¿½[ï¿½ï¿½ï¿½â³
         rb.gravityScale = 10;
 
-        //‰ñ“]‚ğ–³Œø‰»
+        //ï¿½ï¿½]ï¿½ğ–³Œï¿½ï¿½ï¿½
         rb.freezeRotation = true;
 
-        //³–Ê‚ÌƒgƒŠƒK[‚ÌÚG”»’è‚ğƒŠƒZƒbƒg
+        //ï¿½ï¿½ï¿½Ê‚Ìƒgï¿½ï¿½ï¿½Kï¿½[ï¿½ÌÚGï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Zï¿½bï¿½g
         playerCon.trigerFront.Initialize();
 
-        //ƒXƒLƒ“Œ`ó‚ªƒXƒtƒBƒA‚È‚çƒRƒ‰ƒCƒ_[•ÏX
+        //ï¿½Xï¿½Lï¿½ï¿½ï¿½`ï¿½ó‚ªƒXï¿½tï¿½Bï¿½Aï¿½È‚ï¿½Rï¿½ï¿½ï¿½Cï¿½_ï¿½[ï¿½ÏX
         if (SkinDataBase.Instance.skinData[GameManager.Instance.usingSkinID].bodyType == SkinData.BodyType.Sphere)
         {
             playerCon.boxCol.enabled = true;

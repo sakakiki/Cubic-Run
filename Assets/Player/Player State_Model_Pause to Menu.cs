@@ -20,89 +20,89 @@ public class PlayerState_Model_PauseToMenu : PlayerStateBase_Model
 
     public override void Enter()
     {
-        //Œo‰ßŠÔ‚É•â³‚ğ‚©‚¯‚ÄƒŠƒZƒbƒg
+        //ï¿½oï¿½ßï¿½ï¿½Ô‚É•â³ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Äƒï¿½ï¿½Zï¿½bï¿½g
         elapsedTime = -1;
 
-        //ƒtƒ‰ƒOƒŠƒZƒbƒg
+        //ï¿½tï¿½ï¿½ï¿½Oï¿½ï¿½ï¿½Zï¿½bï¿½g
         isMoving = false;
 
-        //ƒXƒP[ƒ‹’²®
+        //ï¿½Xï¿½Pï¿½[ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
         tf.localScale = Vector3.one;
 
-        //ƒvƒŒƒCƒ„[‚ªƒgƒ“ƒlƒ‹“à‚È‚ç‰‰o‚ğ‘‚ß‚é
+        //ï¿½vï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½[ï¿½ï¿½ï¿½gï¿½ï¿½ï¿½lï¿½ï¿½ï¿½ï¿½ï¿½È‚ç‰‰ï¿½oï¿½ğ‘‚ß‚ï¿½
         if (TerrainManager.Instance.currentTerrainNum == 3)
             elapsedTime = 0;
 
-        //GameState‘¤‚É’nŒ`”»’èŠ®—¹‚Ì’Ê’m
+        //GameStateï¿½ï¿½ï¿½É’nï¿½`ï¿½ï¿½ï¿½èŠ®ï¿½ï¿½ï¿½Ì’Ê’m
         GameStateState_PauseToMenu.isPlayerCheck = true;
     }
 
     public override void Update()
     {
-        //Œo‰ßŠÔ‰ÁZ
+        //ï¿½oï¿½ßï¿½ï¿½Ô‰ï¿½ï¿½Z
         elapsedTime += Time.deltaTime;
 
-        //0.5•b‘Ò‹@
+        //0.5ï¿½bï¿½Ò‹@
         if (elapsedTime < -0.5) return;
 
-        //–‘OŒvZ
+        //ï¿½ï¿½ï¿½Oï¿½vï¿½Z
         float lerpValue = elapsedTime / 1.5f;
 
-        //ƒXƒP[ƒ‹’²®
+        //ï¿½Xï¿½Pï¿½[ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
         if (elapsedTime < 0)
             tf.localScale = Vector3.one - Vector3.up * (elapsedTime + 0.5f);
         else tf.localScale = Vector3.one * Mathf.Lerp(1, 1.5f, lerpValue);
 
-        //ƒWƒƒƒ“ƒvƒ^ƒCƒ~ƒ“ƒO‚Ü‚Å‘Ò‹@
+        //ï¿½Wï¿½ï¿½ï¿½ï¿½ï¿½vï¿½^ï¿½Cï¿½~ï¿½ï¿½ï¿½Oï¿½Ü‚Å‘Ò‹@
         if (elapsedTime < 0) return;
 
-        //ƒWƒƒƒ“ƒvŠJnˆ—
+        //ï¿½Wï¿½ï¿½ï¿½ï¿½ï¿½vï¿½Jï¿½nï¿½ï¿½ï¿½ï¿½
         if (!isMoving)
         {
-            //ˆ—ÀsÏ‚İ‚Ìƒtƒ‰ƒO‚ğ—§‚Ä‚é
+            //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½sï¿½Ï‚İ‚Ìƒtï¿½ï¿½ï¿½Oï¿½ğ—§‚Ä‚ï¿½
             isMoving = true;
 
-            //d—ÍƒXƒP[ƒ‹•â³
+            //ï¿½dï¿½ÍƒXï¿½Pï¿½[ï¿½ï¿½ï¿½â³
             rb.gravityScale = 5;
 
-            //•¨—‰‰Z‚ğ–³Œø‰»
+            //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Zï¿½ğ–³Œï¿½ï¿½ï¿½
             rb.isKinematic = true;
 
-            //ˆÚ“®ŠÖ˜A‚Ì’l‚ğ‹L‰¯
+            //ï¿½Ú“ï¿½ï¿½Ö˜Aï¿½Ì’lï¿½ï¿½ï¿½Lï¿½ï¿½
             startPos = tf.position;
             posCorrectionY = 0;
             velocityY = 15;
 
-            //ƒvƒŒƒCƒ„[‚Ì“–‚½‚è”»’èE•`‰æƒŒƒCƒ„[•ÏX
+            //ï¿½vï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½[ï¿½Ì“ï¿½ï¿½ï¿½ï¿½è”»ï¿½ï¿½Eï¿½`ï¿½æƒŒï¿½Cï¿½ï¿½ï¿½[ï¿½ÏX
             playerCon.SetLayer(5);
             playerCon.SetSortingLayer("Model");
         }
 
-        //–Ú‚ÌˆÊ’u’²®
+        //ï¿½Ú‚ÌˆÊ’uï¿½ï¿½ï¿½ï¿½
         eyeTf.localPosition = Vector2.Lerp(eyePlayPos, eyeStandbyPos, lerpValue);
 
-        //ˆÚ“®ŠÖ˜A‰‰Z
+        //ï¿½Ú“ï¿½ï¿½Ö˜Aï¿½ï¿½ï¿½Z
         velocityY -= gravity * Time.deltaTime;
         posCorrectionY += velocityY * Time.deltaTime;
         tf.position = Vector2.Lerp(startPos, targetPos, lerpValue) + Vector2.up * posCorrectionY;
 
-        //ƒQ[ƒ€ƒXƒe[ƒg‚ªMenu‚È‚çƒXƒe[ƒg‘JˆÚ
+        //ï¿½Qï¿½[ï¿½ï¿½ï¿½Xï¿½eï¿½[ï¿½gï¿½ï¿½Menuï¿½È‚ï¿½Xï¿½eï¿½[ï¿½gï¿½Jï¿½ï¿½
         if (gameStateMachine.currentState == gameStateMachine.state_Menu)
             stateMachine.ChangeState(stateMachine.state_Model_Kinematic);
     }
 
     public override void Exit()
     {
-        //ƒvƒŒƒCƒ„[‚ÌˆÊ’u‚ğŠm’è‚³‚¹‚é
+        //ï¿½vï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½[ï¿½ÌˆÊ’uï¿½ï¿½ï¿½mï¿½è‚³ï¿½ï¿½ï¿½ï¿½
         tf.position = targetPos;
 
-        //‘¬“x‚ğ0‚É
-        rb.velocity = Vector2.zero;
+        //ï¿½ï¿½ï¿½xï¿½ï¿½0ï¿½ï¿½
+        rb.linearVelocity = Vector2.zero;
 
-        //‰ñ“]‚ğ–³Œø‰»
+        //ï¿½ï¿½]ï¿½ğ–³Œï¿½ï¿½ï¿½
         rb.freezeRotation = true;
 
-        //ƒXƒLƒ“Œ`ó‚ªƒXƒtƒBƒA‚È‚çƒRƒ‰ƒCƒ_[•ÏX
+        //ï¿½Xï¿½Lï¿½ï¿½ï¿½`ï¿½ó‚ªƒXï¿½tï¿½Bï¿½Aï¿½È‚ï¿½Rï¿½ï¿½ï¿½Cï¿½_ï¿½[ï¿½ÏX
         if (SkinDataBase.Instance.skinData[GameManager.Instance.usingSkinID].bodyType == SkinData.BodyType.Sphere)
         {
             playerCon.boxCol.enabled = false;

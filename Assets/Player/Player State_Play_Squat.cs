@@ -12,7 +12,7 @@ public class PlayerState_Play_Squat : PlayerStateBase_Play
 
     public override void Enter()
     {
-        //ƒXƒP[ƒ‹C³
+        //ï¿½Xï¿½Pï¿½[ï¿½ï¿½ï¿½Cï¿½ï¿½
         tf.localScale = squatScale;
     }
 
@@ -20,43 +20,43 @@ public class PlayerState_Play_Squat : PlayerStateBase_Play
     {
         base.Update();
 
-        //Update‚ª–³Œø‰»’†‚È‚ç‰½‚à‚µ‚È‚¢
+        //Updateï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½È‚ç‰½ï¿½ï¿½ï¿½ï¿½ï¿½È‚ï¿½
         if (!isActiveUpdate)
             return;
 
-        //ƒ|[ƒYó‘Ô‚È‚ç‰½‚à‚µ‚È‚¢
+        //ï¿½|ï¿½[ï¿½Yï¿½ï¿½Ô‚È‚ç‰½ï¿½ï¿½ï¿½ï¿½ï¿½È‚ï¿½
         if (GameStateState_Play.currentPauseState != GameStateState_Play.PauseState.Play)
             return;
 
-        //‚µ‚á‚ª‚İ“ü—Í‰ğœ
+        //ï¿½ï¿½ï¿½á‚ªï¿½İ“ï¿½ï¿½Í‰ï¿½ï¿½ï¿½ï¿½ï¿½
         if (IM.is_Player_Squat_Release && isActive_Squat)
         {
-            //ƒgƒ“ƒlƒ‹“à‚È‚çƒQ[ƒ€ƒI[ƒo[
+            //ï¿½gï¿½ï¿½ï¿½lï¿½ï¿½ï¿½ï¿½ï¿½È‚ï¿½Qï¿½[ï¿½ï¿½ï¿½Iï¿½[ï¿½oï¿½[
             if (TM.currentTerrainNum == 3)
                 stateMachine.ChangeState(stateMachine.state_GameOver);
 
-            //UŒ‚“ü—Í‚ª‚ ‚ê‚ÎAttackƒXƒe[ƒg
+            //ï¿½Uï¿½ï¿½ï¿½ï¿½ï¿½Í‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Attackï¿½Xï¿½eï¿½[ï¿½g
             else if (IM.is_Player_Attack_Hold)
                 stateMachine.ChangeState(stateMachine.state_Play_Attack);
 
-            //“ü—Í‚È‚µ‚ÅRunƒXƒe[ƒg
+            //ï¿½ï¿½ï¿½Í‚È‚ï¿½ï¿½ï¿½Runï¿½Xï¿½eï¿½[ï¿½g
             else stateMachine.ChangeState(stateMachine.state_Play_Run);
         }
 
-        //ƒWƒƒƒ“ƒvˆ—
+        //ï¿½Wï¿½ï¿½ï¿½ï¿½ï¿½vï¿½ï¿½ï¿½ï¿½
         else if (IM.is_Player_Jump_Push && isActive_Jump)
         {
-            rb.velocity = Vector2.up * (isActive_SmallJump ? 20 : 30);
+            rb.linearVelocity = Vector2.up * (isActive_SmallJump ? 20 : 30);
 
-            //SEÄ¶
+            //SEï¿½Äï¿½
             AM.PlaySE(AudioManager.SE.Player_Jump);
         }
 
-        //UŒ‚“ü—Í‚ÅAttackƒXƒe[ƒg‚É‘JˆÚ
+        //ï¿½Uï¿½ï¿½ï¿½ï¿½ï¿½Í‚ï¿½Attackï¿½Xï¿½eï¿½[ï¿½gï¿½É‘Jï¿½ï¿½
         else if (IM.is_Player_Attack_Push && isActive_Attack)
             stateMachine.ChangeState(stateMachine.state_Play_Attack);
 
-        //‹ó’†‚Éo‚½‚çJumpƒXƒe[ƒg‚Ö‘JˆÚ
+        //ï¿½ó’†‚Éoï¿½ï¿½ï¿½ï¿½Jumpï¿½Xï¿½eï¿½[ï¿½gï¿½Ö‘Jï¿½ï¿½
         else if (!isGrounded)
             stateMachine.ChangeState(isActive_SmallJump ? stateMachine.state_Play_SmallJump : stateMachine.state_Play_Jump);
     }

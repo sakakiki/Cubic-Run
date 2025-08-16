@@ -6,7 +6,7 @@ public class PlayerState_Play_Run : PlayerStateBase_Play
 
     public override void Enter()
     {
-        //ƒXƒP[ƒ‹C³
+        //ï¿½Xï¿½Pï¿½[ï¿½ï¿½ï¿½Cï¿½ï¿½
         tf.localScale = Vector2.one;
     }
 
@@ -14,37 +14,37 @@ public class PlayerState_Play_Run : PlayerStateBase_Play
     {
         base.Update();
 
-        //Update‚ª–³Œø‰»’†‚È‚ç‰½‚à‚µ‚È‚¢
+        //Updateï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½È‚ç‰½ï¿½ï¿½ï¿½ï¿½ï¿½È‚ï¿½
         if (!isActiveUpdate)
             return;
 
-        //ƒ|[ƒYó‘Ô‚È‚ç‰½‚à‚µ‚È‚¢
+        //ï¿½|ï¿½[ï¿½Yï¿½ï¿½Ô‚È‚ç‰½ï¿½ï¿½ï¿½ï¿½ï¿½È‚ï¿½
         if (GameStateState_Play.currentPauseState != GameStateState_Play.PauseState.Play)
             return;
 
-        //ƒWƒƒƒ“ƒvˆ—
+        //ï¿½Wï¿½ï¿½ï¿½ï¿½ï¿½vï¿½ï¿½ï¿½ï¿½
         if (IM.is_Player_Jump_Push && isActive_Jump)
         {
-            rb.velocity = Vector2.up * 30;
+            rb.linearVelocity = Vector2.up * 30;
 
-            //SEÄ¶
+            //SEï¿½Äï¿½
             AM.PlaySE(AudioManager.SE.Player_Jump);
         }
 
-        //‚µ‚á‚ª‚İ“ü—Í‚ÅSquatƒXƒe[ƒg‚É‘JˆÚ
+        //ï¿½ï¿½ï¿½á‚ªï¿½İ“ï¿½ï¿½Í‚ï¿½Squatï¿½Xï¿½eï¿½[ï¿½gï¿½É‘Jï¿½ï¿½
         else if (IM.is_Player_Squat_Push && isActive_Squat)
         {
             stateMachine.ChangeState(stateMachine.state_Play_Squat);
 
-            //SEÄ¶
+            //SEï¿½Äï¿½
             AM.PlaySE(AudioManager.SE.Player_Squat);
         }
 
-        //UŒ‚“ü—Í‚ÅAttackƒXƒe[ƒg‚É‘JˆÚ
+        //ï¿½Uï¿½ï¿½ï¿½ï¿½ï¿½Í‚ï¿½Attackï¿½Xï¿½eï¿½[ï¿½gï¿½É‘Jï¿½ï¿½
         else if (IM.is_Player_Attack_Push && isActive_Attack)
             stateMachine.ChangeState(stateMachine.state_Play_Attack);
 
-        //‹ó’†‚Éo‚½‚çJumpƒXƒe[ƒg‚Ö‘JˆÚ
+        //ï¿½ó’†‚Éoï¿½ï¿½ï¿½ï¿½Jumpï¿½Xï¿½eï¿½[ï¿½gï¿½Ö‘Jï¿½ï¿½
         else if (!isGrounded)
             stateMachine.ChangeState(stateMachine.state_Play_Jump);
     }

@@ -1,0 +1,5 @@
+# ninja log v5
+116	216	1755332331410929443	/Users/sotetsu/Game/Unity/Cubic-Run/Library/Bee/Android/Prj/IL2CPP/Gradle/unityLibrary/build/intermediates/cxx/RelWithDebInfo/1u6j5b6f/obj/armeabi-v7a/libswappywrapper.so	77fa6a333a63d6e3
+0	115	1755332331310859898	FramePacing/CMakeFiles/swappywrapper.dir/UnitySwappyWrapper.cpp.o	a64329b782527be
+0	103	1755339252807543088	FramePacing/CMakeFiles/swappywrapper.dir/UnitySwappyWrapper.cpp.o	a64329b782527be
+103	191	1755339252893723090	/Users/sotetsu/Game/Unity/Cubic-Run/Library/Bee/Android/Prj/IL2CPP/Gradle/unityLibrary/build/intermediates/cxx/RelWithDebInfo/1u6j5b6f/obj/armeabi-v7a/libswappywrapper.so	77fa6a333a63d6e3

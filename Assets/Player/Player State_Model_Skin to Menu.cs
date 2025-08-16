@@ -21,22 +21,22 @@ public class PlayerState_Model_SkinToMenu : PlayerStateBase_Model
 
     public override void Enter()
     {
-        //Œo‰ßŠÔ‚ğƒŠƒZƒbƒg
+        //ï¿½oï¿½ßï¿½ï¿½Ô‚ï¿½ï¿½ï¿½ï¿½Zï¿½bï¿½g
         elapsedTime = 0;
 
-        //ƒtƒ‰ƒOƒŠƒZƒbƒg
+        //ï¿½tï¿½ï¿½ï¿½Oï¿½ï¿½ï¿½Zï¿½bï¿½g
         isMoving = false;
 
-        //–Ú‚ğŠJ‚¯‚é
+        //ï¿½Ú‚ï¿½ï¿½Jï¿½ï¿½ï¿½ï¿½
         eyeTf.localScale = Vector3.one;
 
-        //•¨—‰‰Z‚Ì—LŒø‰»
+        //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Zï¿½Ì—Lï¿½ï¿½ï¿½ï¿½
         rb.isKinematic = false;
 
-        //¬‚³‚­ƒWƒƒƒ“ƒv
-        rb.velocity = Vector2.up * 7;
+        //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Wï¿½ï¿½ï¿½ï¿½ï¿½v
+        rb.linearVelocity = Vector2.up * 7;
 
-        //‹[—•¨—‰‰Zƒpƒ‰ƒ[ƒ^İ’è
+        //ï¿½[ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Zï¿½pï¿½ï¿½ï¿½ï¿½ï¿½[ï¿½^ï¿½İ’ï¿½
         if (InputManager.Instance.isSkinSelect)
         {
             gravity = 30;
@@ -51,55 +51,55 @@ public class PlayerState_Model_SkinToMenu : PlayerStateBase_Model
 
     public override void Update()
     {
-        //Œo‰ßŠÔ‰ÁZ
+        //ï¿½oï¿½ßï¿½ï¿½Ô‰ï¿½ï¿½Z
         elapsedTime += Time.deltaTime;
 
-        //–‘OŒvZ
+        //ï¿½ï¿½ï¿½Oï¿½vï¿½Z
         float lerpValue = elapsedTime - 1;
 
-        //0.5•b‘Ò‹@
+        //0.5ï¿½bï¿½Ò‹@
         if ( elapsedTime < 0.5) return;
 
-        //ƒXƒP[ƒ‹’²®
+        //ï¿½Xï¿½Pï¿½[ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
         if (elapsedTime < 1)
             tf.localScale = (Vector3.one - Vector3.up * (elapsedTime - 0.5f)) * 2;
         else tf.localScale = Vector3.one * Mathf.Lerp(2, 1.5f, lerpValue);
 
         if (elapsedTime < 1) return;
 
-        //ƒWƒƒƒ“ƒvŠJnˆ—
+        //ï¿½Wï¿½ï¿½ï¿½ï¿½ï¿½vï¿½Jï¿½nï¿½ï¿½ï¿½ï¿½
         if (!isMoving)
         {
-            //ˆ—ÀsÏ‚İ‚Ìƒtƒ‰ƒO‚ğ—§‚Ä‚é
+            //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½sï¿½Ï‚İ‚Ìƒtï¿½ï¿½ï¿½Oï¿½ğ—§‚Ä‚ï¿½
             isMoving = true;
 
-            //•¨—‰‰Z‚ğ–³Œø‰»
+            //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Zï¿½ğ–³Œï¿½ï¿½ï¿½
             rb.isKinematic = true;
 
-            //ˆÚ“®ŠÖ˜A‚Ì’l‚ğ‹L‰¯
+            //ï¿½Ú“ï¿½ï¿½Ö˜Aï¿½Ì’lï¿½ï¿½ï¿½Lï¿½ï¿½
             startPos = tf.position;
             posCorrectionY = 0;
         }
 
-        //ˆÚ“®ŠÖ˜A‰‰Z
+        //ï¿½Ú“ï¿½ï¿½Ö˜Aï¿½ï¿½ï¿½Z
         velocityY -= gravity * Time.deltaTime;
         posCorrectionY += velocityY * Time.deltaTime;
         tf.position = Vector2.Lerp(startPos, targetPos, lerpValue) + Vector2.up * posCorrectionY;
 
-        //ƒQ[ƒ€ƒXƒe[ƒg‚ªMenu‚È‚çƒXƒe[ƒg‘JˆÚ
+        //ï¿½Qï¿½[ï¿½ï¿½ï¿½Xï¿½eï¿½[ï¿½gï¿½ï¿½Menuï¿½È‚ï¿½Xï¿½eï¿½[ï¿½gï¿½Jï¿½ï¿½
         if (gameStateMachine.currentState == gameStateMachine.state_Menu)
             stateMachine.ChangeState(stateMachine.state_Model_Kinematic);
     }
 
     public override void Exit()
     {
-        //ƒvƒŒƒCƒ„[‚ÌˆÊ’u‚ğŠm’è‚³‚¹‚é
+        //ï¿½vï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½[ï¿½ÌˆÊ’uï¿½ï¿½ï¿½mï¿½è‚³ï¿½ï¿½ï¿½ï¿½
         tf.position = targetPos;
 
-        //‘¬“x‚ğ0‚É
-        rb.velocity = Vector2.zero;
+        //ï¿½ï¿½ï¿½xï¿½ï¿½0ï¿½ï¿½
+        rb.linearVelocity = Vector2.zero;
 
-        //‰ñ“]‚ğ–³Œø‰»
+        //ï¿½ï¿½]ï¿½ğ–³Œï¿½ï¿½ï¿½
         rb.freezeRotation = true;
     }
 }

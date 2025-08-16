@@ -9,7 +9,7 @@ public class ModelScript : MonoBehaviour, IPointerDownHandler
     [SerializeField] private GameObject Eye;
 
 
-    #region ƒ‚ƒfƒ‹ƒXƒe[ƒg
+    #region ï¿½ï¿½ï¿½fï¿½ï¿½ï¿½Xï¿½eï¿½[ï¿½g
     public enum ModelState
     {
         Idle,
@@ -80,7 +80,7 @@ public class ModelScript : MonoBehaviour, IPointerDownHandler
 
                 if (moveStartTiming < Time.time)
                 {
-                    if (rb.velocity.y == 0)
+                    if (rb.linearVelocity.y == 0)
                     {
                         eyeRectTransform.anchoredPosition += lookDirection;
 
@@ -115,10 +115,10 @@ public class ModelScript : MonoBehaviour, IPointerDownHandler
                     moveVector = Vector2.up * 8 + Vector2.right * Math.Sign(eyeRectTransform.anchoredPosition.x) * 3;
                 }
 
-                if(moveStartTiming < Time.time && rb.velocity.y == 0)
+                if(moveStartTiming < Time.time && rb.linearVelocity.y == 0)
                 {
                     if (rb.isKinematic) rb.isKinematic = false;
-                    rb.velocity = moveVector;
+                    rb.linearVelocity = moveVector;
                     if (Math.Sign(eyeRectTransform.anchoredPosition.x) == Math.Sign(GetComponent<RectTransform>().anchoredPosition.x))
                     {
                         if (UnityEngine.Random.Range(0, 6) == 0)
@@ -168,7 +168,7 @@ public class ModelScript : MonoBehaviour, IPointerDownHandler
                     rb.angularVelocity = 0;
                     eyeRectTransform.anchoredPosition = Vector2.zero;
                     if (transform.rotation.eulerAngles.z > 5 && transform.rotation.eulerAngles.z < 355)
-                        rb.velocity = Vector2.up * 10;
+                        rb.linearVelocity = Vector2.up * 10;
                 }
 
                 if (transform.rotation.eulerAngles.z == 180) transform.eulerAngles += Vector3.forward * 10;
@@ -208,7 +208,7 @@ public class ModelScript : MonoBehaviour, IPointerDownHandler
             rb.isKinematic = false;
             if(transform.rotation.eulerAngles.z < 5 || transform.rotation.eulerAngles.z > 355)
             {
-                rb.velocity += Vector2.up * 8 + Vector2.right * (transform.position.x - Camera.main.ScreenToWorldPoint(eventData.position).x) * 3;
+                rb.linearVelocity += Vector2.up * 8 + Vector2.right * (transform.position.x - Camera.main.ScreenToWorldPoint(eventData.position).x) * 3;
                 ChangeModelState(ModelState.Idle);
             }
             else ChangeModelState(ModelState.Reset);

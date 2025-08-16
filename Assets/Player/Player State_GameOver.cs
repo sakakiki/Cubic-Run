@@ -9,56 +9,56 @@ public class PlayerState_GameOver : PlayerStateBase
 
     public override void Enter()
     {
-        //Œo‰ßŠÔ‚Ì‰Šú‰»
+        //ï¿½oï¿½ßï¿½ï¿½Ô‚Ìï¿½ï¿½ï¿½ï¿½ï¿½
         elapsedTime = 0;
 
-        //ƒQ[ƒ€ƒXƒe[ƒg‚Ì‘JˆÚ
-        //’ÊíƒvƒŒƒC‚È‚çƒŠƒUƒ‹ƒg‚Ö
+        //ï¿½Qï¿½[ï¿½ï¿½ï¿½Xï¿½eï¿½[ï¿½gï¿½Ì‘Jï¿½ï¿½
+        //ï¿½Êï¿½vï¿½ï¿½ï¿½Cï¿½È‚çƒŠï¿½Uï¿½ï¿½ï¿½gï¿½ï¿½
         if (TutorialStateStateBase.continueState == 
             ((GameStateState_Tutorial)gameStateMachine.state_Tutorial).tutorialStateMachine.state_Start)
             gameStateMachine.ChangeState(gameStateMachine.state_PlayToResult);
-        //ƒ`ƒ…[ƒgƒŠƒAƒ‹‚È‚çƒŠƒgƒ‰ƒC
+        //ï¿½`ï¿½ï¿½ï¿½[ï¿½gï¿½ï¿½ï¿½Aï¿½ï¿½ï¿½È‚çƒŠï¿½gï¿½ï¿½ï¿½C
         else
             gameStateMachine.ChangeState(gameStateMachine.state_TutorialRetry);
 
-        //ƒgƒ“ƒlƒ‹“à‚È‚çê—p‚ÌƒXƒP[ƒ‹‚É
+        //ï¿½gï¿½ï¿½ï¿½lï¿½ï¿½ï¿½ï¿½ï¿½È‚ï¿½ï¿½pï¿½ÌƒXï¿½Pï¿½[ï¿½ï¿½ï¿½ï¿½
         if (TerrainManager.Instance.currentTerrainNum == 3 && tf.position.y < 0.5)
             tf.localScale = tunnelScale;
 
-        //ƒgƒ“ƒlƒ‹ŠO‚©‚Â‰æ–Ê“à‚È‚ç’µ‚Ë•Ô‚èˆ—
+        //ï¿½gï¿½ï¿½ï¿½lï¿½ï¿½ï¿½Oï¿½ï¿½ï¿½Â‰ï¿½Ê“ï¿½ï¿½È‚ç’µï¿½Ë•Ô‚èˆï¿½ï¿½
         else if(tf.position.y > -5)
         {
             tf.localScale = Vector2.one;
             Rigidbody2D playerRb = GameManager.Instance.playerCon.rb;
             playerRb.constraints = RigidbodyConstraints2D.None;
             playerRb.angularVelocity = TerrainManager.Instance.moveSpeed * 20;
-            playerRb.velocity = Vector2.up * 15 + Vector2.left * TerrainManager.Instance.moveSpeed * 0.3f;
+            playerRb.linearVelocity = Vector2.up * 15 + Vector2.left * TerrainManager.Instance.moveSpeed * 0.3f;
         }
 
-        //ƒQ[ƒ€ƒI[ƒo[—pƒXƒLƒ“‚ÉØ‚è‘Ö‚¦
+        //ï¿½Qï¿½[ï¿½ï¿½ï¿½Iï¿½[ï¿½oï¿½[ï¿½pï¿½Xï¿½Lï¿½ï¿½ï¿½ÉØ‚ï¿½Ö‚ï¿½
         playerCon.SkinDefault.SetActive(false);
         playerCon.SkinGameOver.SetActive(true);
 
-        //ƒXƒLƒ“Œ`ó‚ªƒXƒtƒBƒA‚È‚çƒRƒ‰ƒCƒ_[•ÏX
+        //ï¿½Xï¿½Lï¿½ï¿½ï¿½`ï¿½ó‚ªƒXï¿½tï¿½Bï¿½Aï¿½È‚ï¿½Rï¿½ï¿½ï¿½Cï¿½_ï¿½[ï¿½ÏX
         if (SkinDataBase.Instance.skinData[GameManager.Instance.usingSkinID].bodyType == SkinData.BodyType.Sphere)
         {
             playerCon.boxCol.enabled = false;
             playerCon.capsuleCol.enabled = true;
         }
 
-        //SEÄ¶
+        //SEï¿½Äï¿½
         AudioManager.Instance.PlaySE(AudioManager.SE.GameOver);
         
-        //GameState‘¤‚É’nŒ`”»’è‚Ì‚½‚ß‚Ì‘Ò‹@–½—ß
+        //GameStateï¿½ï¿½ï¿½É’nï¿½`ï¿½ï¿½ï¿½ï¿½Ì‚ï¿½ï¿½ß‚Ì‘Ò‹@ï¿½ï¿½ï¿½ï¿½
         GameStateState_ResultToPlay.isPlayerCheck = false;
     }
 
     public override void Update()
     {
-        //Œo‰ßŠÔ‚Ì‰ÁZ
+        //ï¿½oï¿½ßï¿½ï¿½Ô‚Ì‰ï¿½ï¿½Z
         elapsedTime += Time.deltaTime;
 
-        //ƒQ[ƒ€ƒXƒe[ƒg‚Ì‘JˆÚ‚É‡‚í‚¹‚ÄƒXƒe[ƒg‘JˆÚ
+        //ï¿½Qï¿½[ï¿½ï¿½ï¿½Xï¿½eï¿½[ï¿½gï¿½Ì‘Jï¿½Ú‚Éï¿½ï¿½í‚¹ï¿½ÄƒXï¿½eï¿½[ï¿½gï¿½Jï¿½ï¿½
         if (gameStateMachine.currentState == gameStateMachine.state_ResultToMenu)
             stateMachine.ChangeState(stateMachine.state_Model_ResultToMenu);
         else if (gameStateMachine.currentState == gameStateMachine.state_ResultToPlay ||
@@ -68,7 +68,7 @@ public class PlayerState_GameOver : PlayerStateBase
 
     public override void Exit()
     {
-        //’ÊíƒXƒLƒ“‚ÉØ‚è‘Ö‚¦
+        //ï¿½Êï¿½Xï¿½Lï¿½ï¿½ï¿½ÉØ‚ï¿½Ö‚ï¿½
         playerCon.SkinDefault.SetActive(true);
         playerCon.SkinGameOver.SetActive(false);
     }

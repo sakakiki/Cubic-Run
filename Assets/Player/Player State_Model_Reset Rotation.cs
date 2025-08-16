@@ -10,36 +10,36 @@ public class PlayerState_Model_ResetRotation : PlayerStateBase_Model
     {
         base.Enter();
 
-        //‰Šú‰ñ“]—Ê‹L‰¯E•â³
+        //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½]ï¿½Ê‹Lï¿½ï¿½ï¿½Eï¿½â³
         startEulerAnglesZ = tf.eulerAngles.z;
         if (tf.eulerAngles.z > 180) 
             startEulerAnglesZ -= 360;
 
-        //‚Ü‚Á‚·‚®—§‚Á‚Ä‚¢‚ê‚ÎLookAround‚Ö
+        //ï¿½Ü‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä‚ï¿½ï¿½ï¿½ï¿½LookAroundï¿½ï¿½
         if (Mathf.Abs(startEulerAnglesZ) < 1)
             stateMachine.ChangeState(stateMachine.state_Model_LookAround);
-        //‚»‚¤‚Å‚È‚¯‚ê‚Îã‚ÉƒWƒƒƒ“ƒv
-        else rb.velocity = Vector2.up * 12;
+        //ï¿½ï¿½ï¿½ï¿½ï¿½Å‚È‚ï¿½ï¿½ï¿½Îï¿½ÉƒWï¿½ï¿½ï¿½ï¿½ï¿½v
+        else rb.linearVelocity = Vector2.up * 12;
     }
 
     public override void Update()
     {
         base.Update();
 
-        //‰ñ“]
+        //ï¿½ï¿½]
         rb.rotation = Mathf.Lerp(startEulerAnglesZ, 0, Mathf.Sqrt(elapsedTime * 2));
 
-        //ˆê’èŽžŠÔŒo‰ß‚ÅƒXƒe[ƒg‘JˆÚ
+        //ï¿½ï¿½èŽžï¿½ÔŒoï¿½ß‚ÅƒXï¿½eï¿½[ï¿½gï¿½Jï¿½ï¿½
         if (elapsedTime > 0.5) 
             stateMachine.ChangeStateDelay(stateMachine.state_Model_LookAround, 1.5f);
     }
 
     public override void Exit()
     {
-        //‰ñ“]‚ÌƒŠƒZƒbƒg
+        //ï¿½ï¿½]ï¿½Ìƒï¿½ï¿½Zï¿½bï¿½g
         rb.rotation = 0;
 
-        //‰ñ“]‚ð–³Œø‰»
+        //ï¿½ï¿½]ï¿½ð–³Œï¿½ï¿½ï¿½
         rb.freezeRotation = true;
     }
 }

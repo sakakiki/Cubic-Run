@@ -37,11 +37,11 @@ public class PlayerController : MonoBehaviour
 
     private void Start()
     {
-        //ƒXƒe[ƒgƒ}ƒVƒ“‚ÌƒCƒ“ƒXƒ^ƒ“ƒX‰»E‰Šú‰»
+        //ï¿½Xï¿½eï¿½[ï¿½gï¿½}ï¿½Vï¿½ï¿½ï¿½ÌƒCï¿½ï¿½ï¿½Xï¿½^ï¿½ï¿½ï¿½Xï¿½ï¿½ï¿½Eï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
         stateMachine = new PlayerStateMachine(this);
         stateMachine.Initialize(stateMachine.state_Model_Kinematic);
 
-        //GameState‚ÌƒXƒe[ƒgƒ}ƒVƒ“‚ğ“o˜^
+        //GameStateï¿½ÌƒXï¿½eï¿½[ï¿½gï¿½}ï¿½Vï¿½ï¿½ï¿½ï¿½oï¿½^
         gameStateMachine = GameManager.Instance.gameStateMachine;
     }
 
@@ -49,14 +49,14 @@ public class PlayerController : MonoBehaviour
 
     private void Update()
     {
-        //ƒXƒe[ƒg‚É‰‚¶‚½UpdateÀs
+        //ï¿½Xï¿½eï¿½[ï¿½gï¿½É‰ï¿½ï¿½ï¿½ï¿½ï¿½Updateï¿½ï¿½ï¿½s
         stateMachine.Update(); 
     }
 
 
 
 
-    //Collider‚ÌƒŒƒCƒ„[•ÏX
+    //Colliderï¿½Ìƒï¿½ï¿½Cï¿½ï¿½ï¿½[ï¿½ÏX
     public void SetLayer(int layerNum)
     {
         for (int i = 0; i < playerColliders.Length; i++)
@@ -65,59 +65,59 @@ public class PlayerController : MonoBehaviour
 
 
 
-    //•`‰æƒŒƒCƒ„[•ÏX
+    //ï¿½`ï¿½æƒŒï¿½Cï¿½ï¿½ï¿½[ï¿½ÏX
     public void SetSortingLayer(string layerName)
     {
-        //ƒXƒLƒ“‚Ì•`‰æ—Dæ“x•ÏX
+        //ï¿½Xï¿½Lï¿½ï¿½ï¿½Ì•`ï¿½ï¿½Dï¿½ï¿½xï¿½ÏX
         for (int i = 0; i < playerSkins.Length; i++)
             playerSkins[i].sortingLayerName = layerName;
 
-        //ƒ}ƒXƒN‚Ì”ÍˆÍ•ÏX
+        //ï¿½}ï¿½Xï¿½Nï¿½Ì”ÍˆÍ•ÏX
         playerMasks[0].backSortingLayerID = playerSkins[0].sortingLayerID;
         playerMasks[0].frontSortingLayerID = playerSkins[0].sortingLayerID;
     }
 
 
 
-    //ƒXƒLƒ“‚ğ•ÏX
+    //ï¿½Xï¿½Lï¿½ï¿½ï¿½ï¿½ÏX
     public void ChangeSkin(int skinID)
     {
-        //ƒXƒLƒ“ŠÖŒW‚Ì‘S‚Ä‚ÌF‚Ì•ÏX
+        //ï¿½Xï¿½Lï¿½ï¿½ï¿½ÖŒWï¿½Ì‘Sï¿½Ä‚ÌFï¿½Ì•ÏX
         for (int i = 0; i < playerColorParts.Length; i++)
             playerColorParts[i].color = SkinDataBase.Instance.skinData[skinID].skinColor;
 
-        //ƒ}ƒXƒN‚Ì—LŒøE–³Œø‚ÌØ‚è‘Ö‚¦
+        //ï¿½}ï¿½Xï¿½Nï¿½Ì—Lï¿½ï¿½ï¿½Eï¿½ï¿½ï¿½ï¿½ï¿½ÌØ‚ï¿½Ö‚ï¿½
         for (int i = 0; i < playerMasks.Length; i++)
             playerMasks[i].enabled = SkinDataBase.Instance.skinData[skinID].isEnabledMask;
 
-        //ƒXƒLƒ“‚ÌŒ`ó‚Ì•ÏX
-        //Œ`ó‚ªƒLƒ…[ƒu‚È‚ç
+        //ï¿½Xï¿½Lï¿½ï¿½ï¿½ÌŒ`ï¿½ï¿½Ì•ÏX
+        //ï¿½`ï¿½ó‚ªƒLï¿½ï¿½ï¿½[ï¿½uï¿½È‚ï¿½
         if (SkinDataBase.Instance.skinData[skinID].bodyType == SkinData.BodyType.Cube)
         {
-            //ƒRƒ‰ƒCƒ_[•ÏX
+            //ï¿½Rï¿½ï¿½ï¿½Cï¿½_ï¿½[ï¿½ÏX
             boxCol.enabled = true;
             capsuleCol.enabled = false;
 
-            //‰ñ“]R—Í•ÏX
-            rb.angularDrag = cubeAngularDrag;
+            //ï¿½ï¿½]ï¿½Rï¿½Í•ÏX
+            rb.angularDamping = cubeAngularDrag;
 
-            //•`‰æ•ÏX
+            //ï¿½`ï¿½ï¿½ÏX
             for (int i = 0; i < playerShapeParts_sprite.Length; i++)
                 playerShapeParts_sprite[i].sprite = squar;
             for (int i = 0; i < playerShapeParts_mask.Length; i++)
                 playerShapeParts_mask[i].sprite = squar;
         }
-        //Œ`ó‚ªƒXƒtƒBƒA‚È‚ç
+        //ï¿½`ï¿½ó‚ªƒXï¿½tï¿½Bï¿½Aï¿½È‚ï¿½
         else
         {
-            //ƒRƒ‰ƒCƒ_[•ÏX
+            //ï¿½Rï¿½ï¿½ï¿½Cï¿½_ï¿½[ï¿½ÏX
             boxCol.enabled = false;
             capsuleCol.enabled = true;
 
-            //‰ñ“]R—Í•ÏX
-            rb.angularDrag = sphereAngularDrag;
+            //ï¿½ï¿½]ï¿½Rï¿½Í•ÏX
+            rb.angularDamping = sphereAngularDrag;
 
-            //•`‰æ•ÏX
+            //ï¿½`ï¿½ï¿½ÏX
             for (int i = 0; i < playerShapeParts_sprite.Length; i++)
                 playerShapeParts_sprite[i].sprite = cicle;
             for (int i = 0; i < playerShapeParts_mask.Length; i++)
@@ -128,14 +128,14 @@ public class PlayerController : MonoBehaviour
 
 
 
-    //ƒƒjƒ…[‰æ–Ê‚Åƒ^ƒbƒv‚³‚ê‚½‚çƒXƒe[ƒg‘JˆÚ
+    //ï¿½ï¿½ï¿½jï¿½ï¿½ï¿½[ï¿½ï¿½Ê‚Åƒ^ï¿½bï¿½vï¿½ï¿½ï¿½ê‚½ï¿½ï¿½Xï¿½eï¿½[ï¿½gï¿½Jï¿½ï¿½
     public void OnMouseDown()
     {
         if (gameStateMachine.currentState == gameStateMachine.state_Menu)
             stateMachine.ChangeState(stateMachine.state_Model_Dragged);
     }
 
-    //ƒƒjƒ…[‰æ–Ê‚Å—£‚³‚ê‚½‚ç­‚µ‘Ò‹@‚µ‚Äp¨‚ğ–ß‚·
+    //ï¿½ï¿½ï¿½jï¿½ï¿½ï¿½[ï¿½ï¿½Ê‚Å—ï¿½ï¿½ï¿½ï¿½ê‚½ï¿½ç­ï¿½ï¿½ï¿½Ò‹@ï¿½ï¿½ï¿½Äpï¿½ï¿½ï¿½ï¿½ß‚ï¿½
     public void OnMouseUp()
     {
         if (gameStateMachine.currentState == gameStateMachine.state_Menu)

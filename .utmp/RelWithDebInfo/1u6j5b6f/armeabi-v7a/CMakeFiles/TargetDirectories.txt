@@ -1,0 +1,5 @@
+/Users/sotetsu/Game/Unity/Cubic-Run/.utmp/RelWithDebInfo/1u6j5b6f/armeabi-v7a/CMakeFiles/edit_cache.dir
+/Users/sotetsu/Game/Unity/Cubic-Run/.utmp/RelWithDebInfo/1u6j5b6f/armeabi-v7a/CMakeFiles/rebuild_cache.dir
+/Users/sotetsu/Game/Unity/Cubic-Run/.utmp/RelWithDebInfo/1u6j5b6f/armeabi-v7a/FramePacing/CMakeFiles/swappywrapper.dir
+/Users/sotetsu/Game/Unity/Cubic-Run/.utmp/RelWithDebInfo/1u6j5b6f/armeabi-v7a/FramePacing/CMakeFiles/edit_cache.dir
+/Users/sotetsu/Game/Unity/Cubic-Run/.utmp/RelWithDebInfo/1u6j5b6f/armeabi-v7a/FramePacing/CMakeFiles/rebuild_cache.dir
